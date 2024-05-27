@@ -28,7 +28,6 @@ https://satsuma.btcdir.org/download/
 * Taproot support on xpub screen 
 * add utxo button to xpub and tx listviews
 * check for errors/duplicates in sample bookmarks file (and add a few more)
-* remove old chart buttons
 */
 
 #region Using
@@ -109,9 +108,6 @@ namespace SATSuma
         #endregion
         #region address UTXO screen variables
         private int TotalAddressUTXORowsAdded; // keeps track of how many rows of Address UTXOs have been added to the listview
-        private string addressScreenConfUnconfOrAllUTXO = "chain"; // used to keep track of whether we're doing UTXO requests for conf, unconf, or all UTXOs
-        int rowsReturnedByAddressUTXOsAPI; // holds number of rows returned by api (differs betweem mempool.space and own node)
-        bool PartOfAnAllAddressUTXOsRequest; // 'all' transactions use an 'all' api for the first call, but afterwards mempoolConforAllTx is set to chain for remaining (confirmed) txs. This is used to keep headings, etc consistent
         private int addressUTXOsScrollPosition; // used to remember position in scrollable panel to return to that position after paint event
         private bool isUTXOSButtonPressed;
         private bool UTXOsDownButtonPressed;
@@ -248,13 +244,6 @@ namespace SATSuma
         bool numericUpDownBlockHeightToStartListFromWasEnabled = true; // Block List screen - store button state during queries to return to that state afterwards
         bool btnNumericUpDownBlockHeightToStartListFromUpWasEnabled = true; // Block List screen - store button state during queries to return to that state afterwards
         bool btnNumericUpDownBlockHeightToStartListFromDownWasEnabled = true; // Block List screen - store button state during queries to return to that state afterwards
-        bool btnChartBlockFeesWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
-        bool btnChartDifficultyWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
-        bool btnChartHashrateWasEnabled; // Chart screen - store button state during queries to return to that state afterwards
-        bool btnChartPriceWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
-        bool btnChartRewardWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
-        bool btnChartFeeRatesWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
-        bool btnChartCirculationWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartPeriod1mWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartPeriod1wWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartPeriod1yWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
@@ -265,8 +254,6 @@ namespace SATSuma
         bool btnChartPeriod3yWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartPeriod6mWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartPeriodAllWasEnabled; // Chart screen - store button state during queries to return to that state afterwards
-        bool btnChartBlockSizeWasEnabled; // Chart screen - store button state during queries to return to that state afterwards
-        bool btnChartUniqueAddressesWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnHashrateScaleLinearWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnHashrateScaleLogWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartDifficultyLinearWasEnabled; // Chart screen - store button state during queries to return to that state afterwards
@@ -275,14 +262,8 @@ namespace SATSuma
         bool btnChartAddressScaleLogWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnPriceChartScaleLogWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnPriceChartScaleLinearWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
-        bool btnChartUTXOWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
-        bool btnChartPoolsRankingWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
-        bool btnChartNodesByNetworkWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
-        bool btnChartNodesByCountryWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
-        bool btnChartLightningCapacityWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
-        bool btnChartLightningChannelsWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
-        bool btnChartMarketCapWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartMarketCapLogWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
+        bool btnChartMarketCapLinearWasEnabled = true;
         bool btnTransactionInputsUpWasEnabled; // Transaction screen - store button state during queries to return to that state afterwards
         bool btnTransactionInputDownWasEnabled; // Transaction screen - store button state during queries to return to that state afterwards
         bool btnTransactionOutputsUpWasEnabled; // Transaction screen - store button state during queries to return to that state afterwards
@@ -319,6 +300,7 @@ namespace SATSuma
         bool ignoreMouseMoveOnChart; // ignore mouse move event while chart is still drawing
         string chartPeriod = "all"; // holds the string needed to generate charts with different time periods
         string chartType; // keeps track of what type of chart is being displayed
+        int previouslyShownChart = 0; // combobox reverts to this if a disabled chart is selected
         #endregion
         #region expanding panels
         private int currentHeightExpandingPanel;
@@ -561,8 +543,9 @@ namespace SATSuma
                 btnChartPeriodAll.Enabled = false;
                 if (!comboBoxStartupScreen.Texts.StartsWith("chart - "))
                 {
-                    BtnChartFeeRates_ClickAsync(sender, e);
+                    ChartFeeRates();
                 }
+                previouslyShownChart = 0;
                 // prepopulate the DCA calculator
                 rjDatePickerDCAStartDate.MaxDate = DateTime.Today;
                 rjDatePickerDCAEndDate.MaxDate = DateTime.Today;
@@ -596,21 +579,21 @@ namespace SATSuma
                     { "lightning dashboard", () => BtnMenuLightningDashboard_ClickAsync(sender, e) },
                     { "bookmarks", () => BtnMenuBookmarks_ClickAsync(sender, e) },
                     { "directory", () => BtnMenuDirectory_ClickAsync(sender, e) },
-                    { "chart - fee rates", () => { BtnMenuCharts_ClickAsync(sender, e); BtnChartFeeRates_ClickAsync(sender, e); } },
-                    { "chart - block fees", () => { BtnMenuCharts_ClickAsync(sender, e); BtnChartBlockFees_ClickAsync(sender, e); } },
-                    { "chart - block reward", () => { BtnMenuCharts_ClickAsync(sender, e); BtnChartReward_ClickAsync(sender, e); } },
-                    { "chart - block size", () => { BtnMenuCharts_ClickAsync(sender, e); BtnChartBlockSize_ClickAsync(sender, e); } },
-                    { "chart - hashrate", () => { BtnMenuCharts_ClickAsync(sender, e); BtnChartHashrate_ClickAsync(sender, e); } },
-                    { "chart - difficulty", () => { BtnMenuCharts_ClickAsync(sender, e); BtnChartDifficulty_ClickAsync(sender, e); } },
-                    { "chart - circulation", () => { BtnMenuCharts_ClickAsync(sender, e); BtnChartCirculation_ClickAsync(sender, e); } },
-                    { "chart - addresses", () => { BtnMenuCharts_ClickAsync(sender, e); BtnChartUniqueAddresses_ClickAsync(sender, e); } },
-                    { "chart - UTXO's", () => { BtnMenuCharts_ClickAsync(sender, e); BtnChartUTXO_ClickAsync(sender, e); } },
-                    { "chart - pools ranking", () => { BtnMenuCharts_ClickAsync(sender, e); BtnChartPoolsRanking_ClickAsync(sender, e); } },
-                    { "chart - ⚡nodes by network", () => { BtnMenuCharts_ClickAsync(sender, e); BtnChartNodesByNetwork_ClickAsync(sender, e); } },
-                    { "chart - ⚡nodes by country", () => { BtnMenuCharts_ClickAsync(sender, e); BtnChartNodesByCountry_ClickAsync(sender, e); } },
-                    { "chart - ⚡channels", () => { BtnMenuCharts_ClickAsync(sender, e); BtnChartLightningChannels_ClickAsync(sender, e); } },
-                    { "chart - price", () => { BtnMenuCharts_ClickAsync(sender, e); BtnChartPrice_ClickAsync(sender, e); } },
-                    { "chart - market cap.", () => { BtnMenuCharts_ClickAsync(sender, e); BtnChartMarketCap_ClickAsync(sender, e); } },
+                    { "chart - fee rates", () => { BtnMenuCharts_ClickAsync(sender, e); ChartFeeRates(); } },
+                    { "chart - block fees", () => { BtnMenuCharts_ClickAsync(sender, e); ChartBlockFees(); } },
+                    { "chart - block reward", () => { BtnMenuCharts_ClickAsync(sender, e); ChartReward(); } },
+                    { "chart - block size", () => { BtnMenuCharts_ClickAsync(sender, e); ChartBlockSize(); } },
+                    { "chart - hashrate", () => { BtnMenuCharts_ClickAsync(sender, e); ChartHashrate(); } },
+                    { "chart - difficulty", () => { BtnMenuCharts_ClickAsync(sender, e); ChartDifficulty(); } },
+                    { "chart - circulation", () => { BtnMenuCharts_ClickAsync(sender, e); ChartCirculation(); } },
+                    { "chart - addresses", () => { BtnMenuCharts_ClickAsync(sender, e); ChartUniqueAddresses(); } },
+                    { "chart - UTXO's", () => { BtnMenuCharts_ClickAsync(sender, e); ChartUTXO(); } },
+                    { "chart - pools ranking", () => { BtnMenuCharts_ClickAsync(sender, e); ChartPoolsRanking(); } },
+                    { "chart - ⚡nodes by network", () => { BtnMenuCharts_ClickAsync(sender, e); ChartNodesByNetwork(); } },
+                    { "chart - ⚡nodes by country", () => { BtnMenuCharts_ClickAsync(sender, e); ChartNodesByCountry(); } },
+                    { "chart - ⚡channels", () => { BtnMenuCharts_ClickAsync(sender, e); ChartLightningChannels(); } },
+                    { "chart - price", () => { BtnMenuCharts_ClickAsync(sender, e); ChartPrice(); } },
+                    { "chart - market cap.", () => { BtnMenuCharts_ClickAsync(sender, e); ChartMarketCap(); } },
                     { "btc/fiat converter", () => BtnMenuPriceConverter_ClickAsync(sender, e)},
                     { "dca calculator", () => BtnMenuDCACalculator_ClickAsync(sender, e) }
                 };
@@ -1751,67 +1734,67 @@ namespace SATSuma
         #region chart icon clicks
         private void PictureBoxHashrateChart_Click(object sender, EventArgs e)
         {
-            BtnChartHashrate_ClickAsync(sender, e);
+            ChartHashrate();
             BtnMenuCharts_ClickAsync(sender, e);
         }
 
         private void PictureBoxDifficultyChart_Click(object sender, EventArgs e)
         {
-            BtnChartDifficulty_ClickAsync(sender, e);
+            ChartDifficulty();
             BtnMenuCharts_ClickAsync(sender, e);
         }
 
         private void PictureBoxPriceChart_Click(object sender, EventArgs e)
         {
-            BtnChartPrice_ClickAsync(sender, e);
+            ChartPrice();
             BtnMenuCharts_ClickAsync(sender, e);
         }
 
         private void PictureBoxPoolRankingChart_Click(object sender, EventArgs e)
         {
-            BtnChartPoolsRanking_ClickAsync(sender, e);
+            ChartPoolsRanking();
             BtnMenuCharts_ClickAsync(sender, e);
         }
 
         private void PictureBoxMarketCapChart_Click(object sender, EventArgs e)
         {
-            BtnChartMarketCap_ClickAsync(sender, e);
+            ChartMarketCap();
             BtnMenuCharts_ClickAsync(sender, e);
         }
 
         private void PictureBoxUniqueAddressesChart_Click(object sender, EventArgs e)
         {
-            BtnChartUniqueAddresses_ClickAsync(sender, e);
+            ChartUniqueAddresses();
             BtnMenuCharts_ClickAsync(sender, e);
         }
 
         private void PictureBoxFeeRangeChart_Click(object sender, EventArgs e)
         {
-            BtnChartFeeRates_ClickAsync(sender, e);
+            ChartFeeRates();
             BtnMenuCharts_ClickAsync(sender, e);
         }
 
         private void PictureBoxBlockFeesChart_Click(object sender, EventArgs e)
         {
-            BtnChartBlockFees_ClickAsync(sender, e);
+            ChartBlockFees();
             BtnMenuCharts_ClickAsync(sender, e);
         }
 
         private void PictureBoxLightningCapacityChart_Click(object sender, EventArgs e)
         {
-            BtnChartLightningCapacity_ClickAsync(sender, e);
+            ChartLightningCapacity();
             BtnMenuCharts_ClickAsync(sender, e);
         }
 
         private void PictureBoxLightningNodesChart_Click(object sender, EventArgs e)
         {
-            BtnChartNodesByNetwork_ClickAsync(sender, e);
+            ChartNodesByNetwork();
             BtnMenuCharts_ClickAsync(sender, e);
         }
 
         private void PictureBoxLightningChannelsChart_Click(object sender, EventArgs e)
         {
-            BtnChartLightningChannels_ClickAsync(sender, e);
+            ChartLightningChannels();
             BtnMenuCharts_ClickAsync(sender, e);
         }
 
@@ -3669,7 +3652,7 @@ namespace SATSuma
 
         #endregion
 
-        private void btnViewUTXOsFromAddressTX_Click(object sender, EventArgs e)
+        private void BtnViewUTXOsFromAddressTX_Click(object sender, EventArgs e)
         {
             textboxSubmittedAddressUTXO.Text = textboxSubmittedAddress.Text;
             BtnMenuAddressUTXO_ClickAsync(sender, e);
@@ -3827,152 +3810,39 @@ namespace SATSuma
                 var jsonData = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
                 var addressData = JObject.Parse(jsonData);
 
-                if (String.Compare(addressScreenConfUnconfOrAllUTXO, "chain") == 0 && !PartOfAnAllAddressUTXOsRequest)  //confirmed stats only. 'All' reverts to 'chain' after the first query, so we need to exclude those
+                if (addressData["chain_stats"]["tx_count"] != null && addressData["chain_stats"]["funded_txo_sum"] != null && addressData["chain_stats"]["funded_txo_count"] != null && addressData["chain_stats"]["spent_txo_sum"] != null && addressData["chain_stats"]["spent_txo_count"] != null)
                 {
-                    if (addressData["chain_stats"]["tx_count"] != null && addressData["chain_stats"]["funded_txo_sum"] != null && addressData["chain_stats"]["funded_txo_count"] != null && addressData["chain_stats"]["spent_txo_sum"] != null && addressData["chain_stats"]["spent_txo_count"] != null)
+                    label314.Invoke((MethodInvoker)delegate
                     {
-                        label314.Invoke((MethodInvoker)delegate
-                        {
-                            label314.Text = "Unspent transaction outputs";
-                        });
-                        lblAddressConfirmedSpentUTXO.Invoke((MethodInvoker)delegate
-                        {
-                            lblAddressConfirmedSpentUTXO.Text = $"{ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"]))}";
-                        });
-                        lblAddressConfirmedSpentUTXOFiat.Invoke((MethodInvoker)delegate
-                        {
-                            lblAddressConfirmedSpentUTXOFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(addressData["chain_stats"]["spent_txo_sum"]) / 100000000 * OneBTCinSelectedCurrency):N2}";
-                        });
-                        lblAddressConfirmedSpentOutputsUTXO.Invoke((MethodInvoker)delegate
-                        {
-                            lblAddressConfirmedSpentOutputsUTXO.Text = $"{addressData["chain_stats"]["spent_txo_count"]}";
-                        });
-                        var fundedTx = Convert.ToDouble(addressData["chain_stats"]["funded_txo_count"]);
-                        var spentTx = Convert.ToDouble(addressData["chain_stats"]["spent_txo_count"]);
-                        var confirmedReceived = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
-                        var confirmedSpent = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
-                        var confirmedUnspent = confirmedReceived - confirmedSpent;
-                        var unSpentTxOutputs = fundedTx - spentTx;
-                        lblAddressConfirmedUnspentUTXO.Invoke((MethodInvoker)delegate
-                        {
-                            lblAddressConfirmedUnspentUTXO.Text = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspent)).ToString();
-                        });
-
-                        lblAddressConfirmedUnspentUTXOFiat.Invoke((MethodInvoker)delegate
-                        {
-                            lblAddressConfirmedUnspentUTXOFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(confirmedUnspent) / 100000000 * OneBTCinSelectedCurrency):N2}";
-                        });
-                    }
-                }
-                if (String.Compare(addressScreenConfUnconfOrAllUTXO, "mempool") == 0) //mempool stats only
-                {
-                    if (addressData["mempool_stats"]["tx_count"] != null && addressData["mempool_stats"]["funded_txo_sum"] != null && addressData["mempool_stats"]["funded_txo_count"] != null && addressData["mempool_stats"]["funded_txo_sum"] != null && addressData["mempool_stats"]["spent_txo_sum"] != null && addressData["chain_stats"]["spent_txo_count"] != null)
+                        label314.Text = "Unspent transaction outputs";
+                    });
+                    lblAddressConfirmedSpentUTXO.Invoke((MethodInvoker)delegate
                     {
-                        label314.Invoke((MethodInvoker)delegate
-                        {
-                            label314.Text = "Unconfirmed unspent (balance)";
-                        });
-                        lblAddressConfirmedSpentUTXO.Invoke((MethodInvoker)delegate
-                        {
-                            lblAddressConfirmedSpentUTXO.Text = ConvertSatsToBitcoin(Convert.ToString(addressData["mempool_stats"]["spent_txo_sum"])).ToString();
-                        });
-                        lblAddressConfirmedSpentUTXOFiat.Invoke((MethodInvoker)delegate
-                        {
-                            lblAddressConfirmedSpentUTXOFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(addressData["mempool_stats"]["spent_txo_sum"]) / 100000000 * OneBTCinSelectedCurrency):N2}";
-                        });
-                        lblAddressConfirmedSpentOutputsUTXO.Invoke((MethodInvoker)delegate
-                        {
-                            lblAddressConfirmedSpentOutputsUTXO.Text = $"({addressData["mempool_stats"]["spent_txo_count"]} outputs)";
-                        });
-                        var fundedTx = Convert.ToDouble(addressData["mempool_stats"]["funded_txo_count"]);
-                        var spentTx = Convert.ToDouble(addressData["mempool_stats"]["spent_txo_count"]);
-                        var confirmedReceived = Convert.ToDouble(addressData["mempool_stats"]["funded_txo_sum"]);
-                        var confirmedSpent = Convert.ToDouble(addressData["mempool_stats"]["spent_txo_sum"]);
-                        var confirmedUnspent = confirmedReceived - confirmedSpent;
-                        var unSpentTxOutputs = fundedTx - spentTx;
-                        lblAddressConfirmedUnspentUTXO.Invoke((MethodInvoker)delegate
-                        {
-                            lblAddressConfirmedUnspentUTXO.Text = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspent)).ToString();
-                        });
-                        lblAddressConfirmedUnspentOutputsUTXO.Invoke((MethodInvoker)delegate
-                        {
-                            lblAddressConfirmedUnspentOutputsUTXO.Text = $"({unSpentTxOutputs} outputs)";
-                        });
-                        lblAddressConfirmedUnspentUTXOFiat.Invoke((MethodInvoker)delegate
-                        {
-                            lblAddressConfirmedUnspentUTXOFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(confirmedUnspent) / 100000000 * OneBTCinSelectedCurrency):N2}";
-                        });
-                    }
-                }
-                if (String.Compare(addressScreenConfUnconfOrAllUTXO, "all") == 0 || (String.Compare(addressScreenConfUnconfOrAllUTXO, "chain") == 0 && PartOfAnAllAddressUTXOsRequest)) // all TXs so will need to add chain and mempool amounts together before displaying. 
-                {
-                    if (addressData["mempool_stats"]["tx_count"] != null && addressData["mempool_stats"]["funded_txo_sum"] != null && addressData["mempool_stats"]["funded_txo_count"] != null && addressData["mempool_stats"]["funded_txo_sum"] != null && addressData["mempool_stats"]["spent_txo_sum"] != null && addressData["chain_stats"]["spent_txo_count"] != null && addressData["chain_stats"]["tx_count"] != null && addressData["chain_stats"]["funded_txo_sum"] != null && addressData["chain_stats"]["funded_txo_count"] != null && addressData["chain_stats"]["spent_txo_sum"] != null && addressData["chain_stats"]["spent_txo_count"] != null)
+                        lblAddressConfirmedSpentUTXO.Text = $"{ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"]))}";
+                    });
+                    lblAddressConfirmedSpentUTXOFiat.Invoke((MethodInvoker)delegate
                     {
-                        label314.Invoke((MethodInvoker)delegate
-                        {
-                            label314.Text = "Total unspent (balance)";
-                        });
-                        int chainTransactionCount = Convert.ToInt32(addressData["chain_stats"]["tx_count"]);
-                        int mempoolTransactionCount = Convert.ToInt32(addressData["mempool_stats"]["tx_count"]);
-                        int totalTransactionCount = chainTransactionCount + mempoolTransactionCount;
-                        long chainReceived = Convert.ToInt64(addressData["chain_stats"]["funded_txo_sum"]);
-                        long mempoolReceived = Convert.ToInt64(addressData["mempool_stats"]["funded_txo_sum"]);
-                        long totalReceived = chainReceived + mempoolReceived;
-                        decimal BTCtotalReceived = ConvertSatsToBitcoin(totalReceived.ToString());
-                        int chainReceivedOutputs = Convert.ToInt32(addressData["chain_stats"]["funded_txo_count"]);
-                        int mempoolReceivedOutputs = Convert.ToInt32(addressData["mempool_stats"]["funded_txo_count"]);
-                        int totalReceivedOutputs = chainReceivedOutputs + mempoolReceivedOutputs;
+                        lblAddressConfirmedSpentUTXOFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(addressData["chain_stats"]["spent_txo_sum"]) / 100000000 * OneBTCinSelectedCurrency):N2}";
+                    });
+                    lblAddressConfirmedSpentOutputsUTXO.Invoke((MethodInvoker)delegate
+                    {
+                        lblAddressConfirmedSpentOutputsUTXO.Text = $"{addressData["chain_stats"]["spent_txo_count"]}";
+                    });
+                    var fundedTx = Convert.ToDouble(addressData["chain_stats"]["funded_txo_count"]);
+                    var spentTx = Convert.ToDouble(addressData["chain_stats"]["spent_txo_count"]);
+                    var confirmedReceived = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
+                    var confirmedSpent = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
+                    var confirmedUnspent = confirmedReceived - confirmedSpent;
+                    var unSpentTxOutputs = fundedTx - spentTx;
+                    lblAddressConfirmedUnspentUTXO.Invoke((MethodInvoker)delegate
+                    {
+                        lblAddressConfirmedUnspentUTXO.Text = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspent)).ToString();
+                    });
 
-                        long chainSpent = Convert.ToInt64(addressData["chain_stats"]["spent_txo_sum"]);
-                        long mempoolSpent = Convert.ToInt64(addressData["mempool_stats"]["spent_txo_sum"]);
-                        long totalSpent = chainSpent + mempoolSpent;
-                        decimal BTCtotalSpent = ConvertSatsToBitcoin(totalSpent.ToString());
-                        lblAddressConfirmedSpentUTXO.Invoke((MethodInvoker)delegate
-                        {
-                            lblAddressConfirmedSpentUTXO.Text = Convert.ToString(BTCtotalSpent);
-                        });
-                        lblAddressConfirmedSpentUTXOFiat.Invoke((MethodInvoker)delegate
-                        {
-                            lblAddressConfirmedSpentUTXOFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(totalSpent) / 100000000 * OneBTCinSelectedCurrency):N2}";
-                        });
-                        int chainSpentOutputs = Convert.ToInt32(addressData["chain_stats"]["spent_txo_count"]);
-                        int mempoolSpentOutputs = Convert.ToInt32(addressData["mempool_stats"]["spent_txo_count"]);
-                        int totalSpentOutputs = chainSpentOutputs + mempoolSpentOutputs;
-                        lblAddressConfirmedSpentOutputsUTXO.Invoke((MethodInvoker)delegate
-                        {
-                            lblAddressConfirmedSpentOutputsUTXO.Text = $"({totalSpentOutputs} outputs)";
-                        });
-
-                        var chainFundedTx = Convert.ToDouble(addressData["chain_stats"]["funded_txo_count"]);
-                        var chainSpentTx = Convert.ToDouble(addressData["chain_stats"]["spent_txo_count"]);
-                        var chainReceived2 = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
-                        var chainSpent2 = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
-                        var mempoolFundedTx = Convert.ToDouble(addressData["mempool_stats"]["funded_txo_count"]);
-                        var mempoolSpentTx = Convert.ToDouble(addressData["mempool_stats"]["spent_txo_count"]);
-                        var mempoolReceived2 = Convert.ToDouble(addressData["mempool_stats"]["funded_txo_sum"]);
-                        var mempoolSpent2 = Convert.ToDouble(addressData["mempool_stats"]["spent_txo_sum"]);
-
-                        var chainUnspent = chainReceived2 - chainSpent2;
-                        var chainUnspentTxOutputs = chainFundedTx - chainSpentTx;
-                        var mempoolUnspent = mempoolReceived2 - mempoolSpent2;
-                        var mempoolUnspentTxOutputs = mempoolFundedTx - mempoolSpentTx;
-
-                        var totalUnspent = chainUnspent + mempoolUnspent;
-                        var totalUnspentTXOutputs = chainUnspentTxOutputs + mempoolUnspentTxOutputs;
-
-                        lblAddressConfirmedUnspentUTXO.Invoke((MethodInvoker)delegate
-                        {
-                            lblAddressConfirmedUnspentUTXO.Text = ConvertSatsToBitcoin(Convert.ToString(totalUnspent)).ToString();
-                        });
-                        lblAddressConfirmedUnspentOutputsUTXO.Invoke((MethodInvoker)delegate
-                        {
-                            lblAddressConfirmedUnspentOutputsUTXO.Text = $"({totalUnspentTXOutputs} outputs)";
-                        });
-                        lblAddressConfirmedUnspentUTXOFiat.Invoke((MethodInvoker)delegate
-                        {
-                            lblAddressConfirmedUnspentUTXOFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(totalUnspent) / 100000000 * OneBTCinSelectedCurrency):N2}";
-                        });
-                    }
+                    lblAddressConfirmedUnspentUTXOFiat.Invoke((MethodInvoker)delegate
+                    {
+                        lblAddressConfirmedUnspentUTXOFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(confirmedUnspent) / 100000000 * OneBTCinSelectedCurrency):N2}";
+                    });
                 }
             }
             catch (Exception ex)
@@ -4223,7 +4093,7 @@ namespace SATSuma
             }
         }
 
-        private void btnViewAddressTXFromUTXO_Click(object sender, EventArgs e)
+        private void BtnViewAddressTXFromUTXO_Click(object sender, EventArgs e)
         {
             textboxSubmittedAddress.Text = textboxSubmittedAddressUTXO.Text;
             BtnMenuAddress_ClickAsync(sender, e);
@@ -4473,7 +4343,7 @@ namespace SATSuma
         }
         #endregion
         #region listview scrolling
-        private void btnAddressUTXOScrollDown_Click(object sender, EventArgs e)
+        private void BtnAddressUTXOScrollDown_Click(object sender, EventArgs e)
         {
             try
             {
@@ -4492,7 +4362,7 @@ namespace SATSuma
             }
         }
 
-        private void btnAddressUTXOScrollDown_MouseDown(object sender, MouseEventArgs e)
+        private void BtnAddressUTXOScrollDown_MouseDown(object sender, MouseEventArgs e)
         {
             try
             {
@@ -4506,7 +4376,7 @@ namespace SATSuma
             }
         }
 
-        private void btnAddressUTXOScrollDown_MouseUp(object sender, MouseEventArgs e)
+        private void BtnAddressUTXOScrollDown_MouseUp(object sender, MouseEventArgs e)
         {
             try
             {
@@ -4522,7 +4392,7 @@ namespace SATSuma
             }
         }
 
-        private void btnAddressUTXOScrollUp_Click(object sender, EventArgs e)
+        private void BtnAddressUTXOScrollUp_Click(object sender, EventArgs e)
         {
             try
             {
@@ -4540,7 +4410,7 @@ namespace SATSuma
             }
         }
 
-        private void btnAddressUTXOScrollUp_MouseDown(object sender, MouseEventArgs e)
+        private void BtnAddressUTXOScrollUp_MouseDown(object sender, MouseEventArgs e)
         {
             try
             {
@@ -4554,7 +4424,7 @@ namespace SATSuma
             }
         }
 
-        private void btnAddressUTXOScrollUp_MouseUp(object sender, MouseEventArgs e)
+        private void BtnAddressUTXOScrollUp_MouseUp(object sender, MouseEventArgs e)
         {
             try
             {
@@ -4570,7 +4440,7 @@ namespace SATSuma
             }
         }
 
-        private void panelUTXOsContainer_Paint(object sender, PaintEventArgs e)
+        private void PanelUTXOsContainer_Paint(object sender, PaintEventArgs e)
         {
             try
             {
@@ -4634,17 +4504,17 @@ namespace SATSuma
         }
         #endregion
         #region disable keys
-        private void listViewAddressUTXOs_KeyDown(object sender, KeyEventArgs e)
+        private void ListViewAddressUTXOs_KeyDown(object sender, KeyEventArgs e)
         {
             e.Handled = true;
         }
 
-        private void listViewAddressUTXOs_KeyPress(object sender, KeyPressEventArgs e)
+        private void ListViewAddressUTXOs_KeyPress(object sender, KeyPressEventArgs e)
         {
             e.Handled = true;
         }
 
-        private void listViewAddressUTXOs_KeyUp(object sender, KeyEventArgs e)
+        private void ListViewAddressUTXOs_KeyUp(object sender, KeyEventArgs e)
         {
             e.Handled = true;
         }
@@ -5405,7 +5275,7 @@ namespace SATSuma
         {
             try
             {
-                BtnChartBlockSize_ClickAsync(sender, e);
+                ChartBlockSize();
                 BtnMenuCharts_ClickAsync(sender, e);
             }
             catch (Exception ex)
@@ -5418,7 +5288,7 @@ namespace SATSuma
         {
             try
             {
-                BtnChartReward_ClickAsync(sender, e);
+                ChartReward();
                 BtnMenuCharts_ClickAsync(sender, e);
             }
             catch (Exception ex)
@@ -5431,7 +5301,7 @@ namespace SATSuma
         {
             try
             {
-                BtnChartFeeRates_ClickAsync(sender, e);
+                ChartFeeRates();
                 BtnMenuCharts_ClickAsync(sender, e);
             }
             catch (Exception ex)
@@ -5444,7 +5314,7 @@ namespace SATSuma
         {
             try
             {
-                BtnChartBlockFees_ClickAsync(sender, e);
+                ChartBlockFees();
                 BtnMenuCharts_ClickAsync(sender, e);
             }
             catch (Exception ex)
@@ -5457,7 +5327,7 @@ namespace SATSuma
         {
             try
             {
-                BtnChartPoolsRanking_ClickAsync(sender, e);
+                ChartPoolsRanking();
                 BtnMenuCharts_ClickAsync(sender, e);
             }
             catch (Exception ex)
@@ -6819,32 +6689,32 @@ namespace SATSuma
         }
         #endregion
         #region disable keys
-        private void listViewTransactionInputs_KeyDown(object sender, KeyEventArgs e)
+        private void ListViewTransactionInputs_KeyDown(object sender, KeyEventArgs e)
         {
             e.Handled = true;
         }
 
-        private void listViewTransactionInputs_KeyPress(object sender, KeyPressEventArgs e)
+        private void ListViewTransactionInputs_KeyPress(object sender, KeyPressEventArgs e)
         {
             e.Handled = true;
         }
 
-        private void listViewTransactionInputs_KeyUp(object sender, KeyEventArgs e)
+        private void ListViewTransactionInputs_KeyUp(object sender, KeyEventArgs e)
         {
             e.Handled = true;
         }
 
-        private void listViewTransactionOutputs_KeyDown(object sender, KeyEventArgs e)
+        private void ListViewTransactionOutputs_KeyDown(object sender, KeyEventArgs e)
         {
             e.Handled = true;
         }
 
-        private void listViewTransactionOutputs_KeyPress(object sender, KeyPressEventArgs e)
+        private void ListViewTransactionOutputs_KeyPress(object sender, KeyPressEventArgs e)
         {
             e.Handled = true;
         }
 
-        private void listViewTransactionOutputs_KeyUp(object sender, KeyEventArgs e)
+        private void ListViewTransactionOutputs_KeyUp(object sender, KeyEventArgs e)
         {
             e.Handled = true;
         }
@@ -7575,7 +7445,7 @@ namespace SATSuma
         {
             try
             {
-                BtnChartDifficulty_ClickAsync(sender, e);
+                ChartDifficulty();
                 BtnMenuCharts_ClickAsync(sender, e);
             }
             catch (Exception ex)
@@ -7588,7 +7458,7 @@ namespace SATSuma
         {
             try
             {
-                BtnChartHashrate_ClickAsync(sender, e);
+                ChartHashrate();
                 BtnMenuCharts_ClickAsync(sender, e);
             }
             catch (Exception ex)
@@ -7601,7 +7471,7 @@ namespace SATSuma
         {
             try
             {
-                BtnChartBlockSize_ClickAsync(sender, e);
+                ChartBlockSize();
                 BtnMenuCharts_ClickAsync(sender, e);
             }
             catch (Exception ex)
@@ -7614,7 +7484,7 @@ namespace SATSuma
         {
             try
             {
-                BtnChartPoolsRanking_ClickAsync(sender, e);
+                ChartPoolsRanking();
                 BtnMenuCharts_ClickAsync(sender, e);
             }
             catch (Exception ex)
@@ -7627,7 +7497,7 @@ namespace SATSuma
         {
             try
             {
-                BtnChartBlockFees_ClickAsync(sender, e);
+                ChartBlockFees();
                 BtnMenuCharts_ClickAsync(sender, e);
             }
             catch (Exception ex)
@@ -7640,7 +7510,7 @@ namespace SATSuma
         {
             try
             {
-                BtnChartReward_ClickAsync(sender, e);
+                ChartReward();
                 BtnMenuCharts_ClickAsync(sender, e);
             }
             catch (Exception ex)
@@ -7653,7 +7523,7 @@ namespace SATSuma
         {
             try
             {
-                BtnChartFeeRates_ClickAsync(sender, e);
+                ChartFeeRates();
                 BtnMenuCharts_ClickAsync(sender, e);
             }
             catch (Exception ex)
@@ -7666,7 +7536,7 @@ namespace SATSuma
         {
             try
             {
-                BtnChartBlockFees_ClickAsync(sender, e);
+                ChartBlockFees();
                 BtnMenuCharts_ClickAsync(sender, e);
             }
             catch (Exception ex)
@@ -7679,7 +7549,7 @@ namespace SATSuma
         {
             try
             {
-                BtnChartFeeRates_ClickAsync(sender, e);
+                ChartFeeRates();
                 BtnMenuCharts_ClickAsync(sender, e);
             }
             catch (Exception ex)
@@ -9920,17 +9790,17 @@ namespace SATSuma
         }
         #endregion
         #region disable keys
-        private void listViewXpubAddresses_KeyDown(object sender, KeyEventArgs e)
+        private void ListViewXpubAddresses_KeyDown(object sender, KeyEventArgs e)
         {
             e.Handled = true;
         }
 
-        private void listViewXpubAddresses_KeyPress(object sender, KeyPressEventArgs e)
+        private void ListViewXpubAddresses_KeyPress(object sender, KeyPressEventArgs e)
         {
             e.Handled = true;
         }
 
-        private void listViewXpubAddresses_KeyUp(object sender, KeyEventArgs e)
+        private void ListViewXpubAddresses_KeyUp(object sender, KeyEventArgs e)
         {
             e.Handled = true;
         }
@@ -9938,94 +9808,92 @@ namespace SATSuma
         #endregion
 
         #region ⚡CHARTS SCREEN⚡
-        private void comboBoxChartSelect_OnSelectedIndexChanged(object sender, EventArgs e)
+        #region select chart
+        private void ComboBoxChartSelect_OnSelectedIndexChanged(object sender, EventArgs e)
         {
             if (comboBoxChartSelect.SelectedIndex == 0)
             {
-                BtnChartFeeRates_ClickAsync(sender, e);
+                ChartFeeRates();
             }
             if (comboBoxChartSelect.SelectedIndex == 1)
             {
-                BtnChartBlockFees_ClickAsync(sender, e);
+                ChartBlockFees();
             }
             if (comboBoxChartSelect.SelectedIndex == 2)
             {
-                BtnChartReward_ClickAsync(sender, e);
+                ChartReward();
             }
             if (comboBoxChartSelect.SelectedIndex == 3)
             {
-                BtnChartBlockSize_ClickAsync(sender, e);
+                ChartBlockSize();
             }
             if (comboBoxChartSelect.SelectedIndex == 4)
             {
-                BtnChartHashrate_ClickAsync(sender, e);
+                ChartHashrate();
             }
             if (comboBoxChartSelect.SelectedIndex == 5)
             {
-                BtnChartDifficulty_ClickAsync(sender, e);
+                ChartDifficulty();
             }
             if (comboBoxChartSelect.SelectedIndex == 6)
             {
-                BtnChartCirculation_ClickAsync(sender, e);
+                ChartCirculation();
             }
             if (comboBoxChartSelect.SelectedIndex == 7)
             {
-                BtnChartUniqueAddresses_ClickAsync(sender, e);
+                ChartUniqueAddresses();
             }
             if (comboBoxChartSelect.SelectedIndex == 8)
             {
-                BtnChartUTXO_ClickAsync(sender, e);
+                ChartUTXO();
             }
             if (comboBoxChartSelect.SelectedIndex == 9)
             {
-                BtnChartPoolsRanking_ClickAsync(sender, e);
+                ChartPoolsRanking();
             }
             if (comboBoxChartSelect.SelectedIndex == 10)
             {
-                BtnChartNodesByNetwork_ClickAsync(sender, e);
+                ChartNodesByNetwork();
             }
             if (comboBoxChartSelect.SelectedIndex == 11)
             {
-                BtnChartNodesByCountry_ClickAsync(sender, e);
+                ChartNodesByCountry();
             }
             if (comboBoxChartSelect.SelectedIndex == 12)
             {
-                BtnChartLightningCapacity_ClickAsync(sender, e);
+                ChartLightningCapacity();
             }
             if (comboBoxChartSelect.SelectedIndex == 13)
             {
-                BtnChartLightningChannels_ClickAsync(sender, e);
+                ChartLightningChannels();
             }
             if (comboBoxChartSelect.SelectedIndex == 14)
             {
-                BtnChartPrice_ClickAsync(sender,e);
+                ChartPrice();
             }
             if (comboBoxChartSelect.SelectedIndex == 15)
             {
-                BtnChartMarketCap_ClickAsync(sender, e);
+                ChartMarketCap();
             }
         }
+        #endregion
+        #region individual charts
         #region chart - pools ranking
-        private async void BtnChartPoolsRanking_ClickAsync(object sender, EventArgs e)
+        private async void ChartPoolsRanking()
         {
             try
             {
-                if (comboBoxChartSelect.Texts != "🔗 pools ranking")
+                comboBoxChartSelect.Invoke((MethodInvoker)delegate
                 {
-                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
-                    {
-                        comboBoxChartSelect.Texts = "🔗 pools ranking";
-                    });
-                }
+                    comboBoxChartSelect.Texts = "🔗 pools ranking";
+                });
+                previouslyShownChart = comboBoxChartSelect.SelectedIndex;
                 ActiveChart = "PoolsRanking";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
                 formsPlot1.Visible = false;
                 formsPlot3.Visible = false;
                 chartType = "poolranking";
-
-                EnableAllCharts();
-                btnChartPoolsRanking.Enabled = false;
 
                 DisableIrrelevantTimePeriods();
 
@@ -10173,29 +10041,25 @@ namespace SATSuma
         }
         #endregion
         #region chart - fee rates
-        private async void BtnChartFeeRates_ClickAsync(object sender, EventArgs e)
+        private async void ChartFeeRates()
         {
             try
             {
-                if (comboBoxChartSelect.Texts != "🔗 fee rates")
+                comboBoxChartSelect.Invoke((MethodInvoker)delegate
                 {
-                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
-                    {
-                        comboBoxChartSelect.Texts = "🔗 fee rates";
-                    });
-                }
+                    comboBoxChartSelect.Texts = "🔗 fee rates";
+                });
+                previouslyShownChart = comboBoxChartSelect.SelectedIndex;
                 ActiveChart = "FeeRates";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
                 formsPlot2.Visible = false;
                 formsPlot3.Visible = false;
                 chartType = "feerates";
-                EnableAllCharts();
-                btnChartFeeRates.Enabled = false;
                 DisableIrrelevantTimePeriods();
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title($"Block fee rates - {chartPeriod}", size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Block fee rates - time period: {chartPeriod}", size: (int)(13 * UIScale), bold: false);
                 PrepareLinearScaleChart();
 
                 ToggleLoadingAnimation("enable");
@@ -10300,17 +10164,15 @@ namespace SATSuma
 
         #endregion
         #region chart - nodes by network
-        private async void BtnChartNodesByNetwork_ClickAsync(object sender, EventArgs e)
+        private async void ChartNodesByNetwork()
         {
             try
             {
-                if (comboBoxChartSelect.Texts != "⚡ nodes by network")
+                comboBoxChartSelect.Invoke((MethodInvoker)delegate
                 {
-                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
-                    {
-                        comboBoxChartSelect.Texts = "⚡ nodes by network";
-                    });
-                }
+                    comboBoxChartSelect.Texts = "⚡ nodes by network";
+                });
+                previouslyShownChart = comboBoxChartSelect.SelectedIndex;
                 ActiveChart = "NodesByNetwork";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -10324,14 +10186,12 @@ namespace SATSuma
                     chartPeriod = "all";
                     btnChartPeriodAll.Enabled = false;
                 }
-                EnableAllCharts();
-                btnChartNodesByNetwork.Enabled = false;
-
+                
                 DisableIrrelevantTimePeriods();
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title($"Number of Lightning nodes by network - {chartPeriod}", size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Number of Lightning nodes by network - time period: {chartPeriod}", size: (int)(13 * UIScale), bold: false);
 
                 PrepareLinearScaleChart();
 
@@ -10418,17 +10278,15 @@ namespace SATSuma
         }
         #endregion
         #region chart - hashrate linear and log
-        private async void BtnChartHashrate_ClickAsync(object sender, EventArgs e)
+        private async void ChartHashrate()
         {
             try
             {
-                if (comboBoxChartSelect.Texts != "🔗 hashrate")
+                comboBoxChartSelect.Invoke((MethodInvoker)delegate
                 {
-                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
-                    {
-                        comboBoxChartSelect.Texts = "🔗 hashrate";
-                    });
-                }
+                    comboBoxChartSelect.Texts = "🔗 hashrate";
+                });
+                previouslyShownChart = comboBoxChartSelect.SelectedIndex;
                 ActiveChart = "Hashrate";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -10446,13 +10304,11 @@ namespace SATSuma
                     chartPeriod = "all";
                     btnChartPeriodAll.Enabled = false;
                 }
-                EnableAllCharts();
-                btnChartHashrate.Enabled = false;
                 DisableIrrelevantTimePeriods();
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title($"Hashrate (exahash per second) - {chartPeriod}", size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Hashrate (exahash per second) - time period: {chartPeriod}", size: (int)(13 * UIScale), bold: false);
 
                 PrepareLinearScaleChart();
 
@@ -10524,17 +10380,15 @@ namespace SATSuma
             }
         }
 
-        private async void BtnHashrateScaleLog_ClickAsync(object sender, EventArgs e)
+        private async void ChartHashrateLog()
         {
             try
             {
-                if (comboBoxChartSelect.Texts != "🔗 hashrate")
+                comboBoxChartSelect.Invoke((MethodInvoker)delegate
                 {
-                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
-                    {
-                        comboBoxChartSelect.Texts = "🔗 hashrate";
-                    });
-                }
+                    comboBoxChartSelect.Texts = "🔗 hashrate";
+                });
+                previouslyShownChart = comboBoxChartSelect.SelectedIndex;
                 ActiveChart = "HashrateLog";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -10553,8 +10407,6 @@ namespace SATSuma
                     btnChartPeriodAll.Enabled = false;
                 }
 
-                EnableAllCharts();
-                btnChartHashrate.Enabled = false;
                 DisableIrrelevantTimePeriods();
 
                 ToggleLoadingAnimation("enable");
@@ -10562,7 +10414,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title($"Hashrate (terrahash per second) - {chartPeriod} (log scale)", size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Hashrate (terrahash per second) - time period: {chartPeriod} (log scale)", size: (int)(13 * UIScale), bold: false);
                 LightUpNodeLight();
                 // get a series of historic dates/hashrates/difficulties
                 var HashrateAndDifficultyJson = await _hashrateAndDifficultyService.GetHashrateAndDifficultyAsync(chartPeriod).ConfigureAwait(true);
@@ -10652,17 +10504,15 @@ namespace SATSuma
         }
         #endregion
         #region chart - lightning capacity
-        private async void BtnChartLightningCapacity_ClickAsync(object sender, EventArgs e)
+        private async void ChartLightningCapacity()
         {
             try
             {
-                if (comboBoxChartSelect.Texts != "⚡ nodes by capacity")
+                comboBoxChartSelect.Invoke((MethodInvoker)delegate
                 {
-                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
-                    {
-                        comboBoxChartSelect.Texts = "⚡ nodes by capacity";
-                    });
-                }
+                    comboBoxChartSelect.Texts = "⚡ nodes by capacity";
+                });
+                previouslyShownChart = comboBoxChartSelect.SelectedIndex;
                 ActiveChart = "LightningCapacity";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -10678,13 +10528,11 @@ namespace SATSuma
                     btnChartPeriodAll.Enabled = false;
                 }
 
-                EnableAllCharts();
-                btnChartLightningCapacity.Enabled = false;
                 DisableIrrelevantTimePeriods();
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title($"Lightning network capacity - {chartPeriod}", size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Lightning network capacity - time period: {chartPeriod}", size: (int)(13 * UIScale), bold: false);
                 PrepareLinearScaleChart();
 
                 ToggleLoadingAnimation("enable");
@@ -10756,17 +10604,15 @@ namespace SATSuma
         }
         #endregion
         #region chart - lightning channels
-        private async void BtnChartLightningChannels_ClickAsync(object sender, EventArgs e)
+        private async void ChartLightningChannels()
         {
             try
             {
-                if (comboBoxChartSelect.Texts != "⚡ channels")
+                comboBoxChartSelect.Invoke((MethodInvoker)delegate
                 {
-                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
-                    {
-                        comboBoxChartSelect.Texts = "⚡ channels";
-                    });
-                }
+                    comboBoxChartSelect.Texts = "⚡ channels";
+                });
+                previouslyShownChart = comboBoxChartSelect.SelectedIndex;
                 ActiveChart = "LightningChannels";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -10782,13 +10628,11 @@ namespace SATSuma
                     btnChartPeriodAll.Enabled = false;
                 }
 
-                EnableAllCharts();
-                btnChartLightningChannels.Enabled = false;
                 DisableIrrelevantTimePeriods();
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title($"Lightning network channels - {chartPeriod}", size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Lightning network channels - time period: {chartPeriod}", size: (int)(13 * UIScale), bold: false);
                 PrepareLinearScaleChart();
 
                 ToggleLoadingAnimation("enable");
@@ -10860,17 +10704,15 @@ namespace SATSuma
         }
         #endregion
         #region chart - nodes by country
-        private async void BtnChartNodesByCountry_ClickAsync(object sender, EventArgs e)
+        private async void ChartNodesByCountry()
         {
             try
             {
-                if (comboBoxChartSelect.Texts != "⚡ nodes by country")
+                comboBoxChartSelect.Invoke((MethodInvoker)delegate
                 {
-                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
-                    {
-                        comboBoxChartSelect.Texts = "⚡ nodes by country";
-                    });
-                }
+                    comboBoxChartSelect.Texts = "⚡ nodes by country";
+                });
+                previouslyShownChart = comboBoxChartSelect.SelectedIndex;
                 ActiveChart = "NodesByCountry";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -10878,8 +10720,6 @@ namespace SATSuma
                 formsPlot2.Visible = false;
                 chartType = "nodesbycountry";
 
-                EnableAllCharts();
-                btnChartNodesByCountry.Enabled = false;
                 DisableIrrelevantTimePeriods();
 
                 // clear any previous graph
@@ -10960,17 +10800,15 @@ namespace SATSuma
         }
         #endregion
         #region chart - block reward
-        private async void BtnChartReward_ClickAsync(object sender, EventArgs e)
+        private async void ChartReward()
         {
             try
             {
-                if (comboBoxChartSelect.Texts != "🔗 block reward")
+                comboBoxChartSelect.Invoke((MethodInvoker)delegate
                 {
-                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
-                    {
-                        comboBoxChartSelect.Texts = "🔗 block reward";
-                    });
-                }
+                    comboBoxChartSelect.Texts = "🔗 block reward";
+                });
+                previouslyShownChart = comboBoxChartSelect.SelectedIndex;
                 ActiveChart = "Reward";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -10978,8 +10816,6 @@ namespace SATSuma
                 formsPlot3.Visible = false;
                 chartType = "reward";
 
-                EnableAllCharts();
-                btnChartReward.Enabled = false;
                 DisableIrrelevantTimePeriods();
 
                 ToggleLoadingAnimation("enable");
@@ -10987,7 +10823,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title($"Block rewards (block subsidy plus fees) - {chartPeriod}", size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Block rewards (block subsidy plus fees) - time period: {chartPeriod}", size: (int)(13 * UIScale), bold: false);
                 PrepareLinearScaleChart();
 
                 HttpClient client = new HttpClient();
@@ -11053,17 +10889,15 @@ namespace SATSuma
         }
         #endregion
         #region chart - block fees
-        private async void BtnChartBlockFees_ClickAsync(object sender, EventArgs e)
+        private async void ChartBlockFees()
         {
             try
             {
-                if (comboBoxChartSelect.Texts != "🔗 block fees")
+                comboBoxChartSelect.Invoke((MethodInvoker)delegate
                 {
-                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
-                    {
-                        comboBoxChartSelect.Texts = "🔗 block fees";
-                    });
-                }
+                    comboBoxChartSelect.Texts = "🔗 block fees";
+                });
+                previouslyShownChart = comboBoxChartSelect.SelectedIndex;
                 ActiveChart = "BlockFees";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -11071,8 +10905,6 @@ namespace SATSuma
                 formsPlot3.Visible = false;
                 chartType = "blockfees";
 
-                EnableAllCharts();
-                btnChartBlockFees.Enabled = false;
                 DisableIrrelevantTimePeriods();
 
                 ToggleLoadingAnimation("enable");
@@ -11080,7 +10912,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title($"Average total fees per block - {chartPeriod}", size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Average total fees per block - time period: {chartPeriod}", size: (int)(13 * UIScale), bold: false);
                 PrepareLinearScaleChart();
 
                 HttpClient client = new HttpClient();
@@ -11144,17 +10976,15 @@ namespace SATSuma
         }
         #endregion
         #region chart - difficulty linear and log
-        private async void BtnChartDifficulty_ClickAsync(object sender, EventArgs e)
+        private async void ChartDifficulty()
         {
             try
             {
-                if (comboBoxChartSelect.Texts != "🔗 difficulty")
+                comboBoxChartSelect.Invoke((MethodInvoker)delegate
                 {
-                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
-                    {
-                        comboBoxChartSelect.Texts = "🔗 difficulty";
-                    });
-                }
+                    comboBoxChartSelect.Texts = "🔗 difficulty";
+                });
+                previouslyShownChart = comboBoxChartSelect.SelectedIndex;
                 ActiveChart = "Difficulty";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -11174,8 +11004,6 @@ namespace SATSuma
                     btnChartPeriodAll.Enabled = false;
                 }
 
-                EnableAllCharts();
-                btnChartDifficulty.Enabled = false;
                 DisableIrrelevantTimePeriods();
 
                 ToggleLoadingAnimation("enable");
@@ -11183,7 +11011,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title($"Difficulty - {chartPeriod}", size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Difficulty - time period: {chartPeriod}", size: (int)(13 * UIScale), bold: false);
                 PrepareLinearScaleChart();
 
                 // get a series of historic dates/hashrates/difficulties
@@ -11249,17 +11077,15 @@ namespace SATSuma
             }
         }
 
-        private async void BtnChartDifficultyLog_ClickAsync(object sender, EventArgs e)
+        private async void ChartDifficultyLog()
         {
             try
             {
-                if (comboBoxChartSelect.Texts != "🔗 difficulty")
+                comboBoxChartSelect.Invoke((MethodInvoker)delegate
                 {
-                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
-                    {
-                        comboBoxChartSelect.Texts = "🔗 difficulty";
-                    });
-                }
+                    comboBoxChartSelect.Texts = "🔗 difficulty";
+                });
+                previouslyShownChart = comboBoxChartSelect.SelectedIndex;
                 ActiveChart = "DifficultyLog";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -11278,8 +11104,6 @@ namespace SATSuma
                     btnChartPeriodAll.Enabled = false;
                 }
 
-                EnableAllCharts();
-                btnChartDifficulty.Enabled = false;
                 DisableIrrelevantTimePeriods();
 
                 ToggleLoadingAnimation("enable");
@@ -11287,7 +11111,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title($"Difficulty - {chartPeriod} (log scale)", size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Difficulty - time period: {chartPeriod} (log scale)", size: (int)(13 * UIScale), bold: false);
                 LightUpNodeLight();
                 // get a series of historic dates/hashrates/difficulties
                 var HashrateAndDifficultyJson = await _hashrateAndDifficultyService.GetHashrateAndDifficultyAsync(chartPeriod).ConfigureAwait(true);
@@ -11377,17 +11201,21 @@ namespace SATSuma
         }
         #endregion
         #region chart - unique addresses linear and log
-        private async void BtnChartUniqueAddresses_ClickAsync(object sender, EventArgs e)
+        private async void ChartUniqueAddresses()
         {
             try
             {
-                if (comboBoxChartSelect.Texts != "🔗 addresses")
+                if (!RunBlockchainInfoAPI)
                 {
-                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
-                    {
-                        comboBoxChartSelect.Texts = "🔗 addresses";
-                    });
+                    comboBoxChartSelect.SelectedIndex = previouslyShownChart;
+                    return;
                 }
+
+                comboBoxChartSelect.Invoke((MethodInvoker)delegate
+                {
+                    comboBoxChartSelect.Texts = "🔗 addresses";
+                });
+                previouslyShownChart = comboBoxChartSelect.SelectedIndex;
                 ActiveChart = "UniqueAddresses";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -11405,8 +11233,6 @@ namespace SATSuma
                     chartPeriod = "all";
                     btnChartPeriodAll.Enabled = false;
                 }
-                EnableAllCharts();
-                btnChartUniqueAddresses.Enabled = false;
                 DisableIrrelevantTimePeriods();
 
                 ToggleLoadingAnimation("enable");
@@ -11414,7 +11240,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title($"Unique addresses - {chartPeriod}", size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Unique addresses - time period: {chartPeriod}", size: (int)(13 * UIScale), bold: false);
                 PrepareLinearScaleChart();
                 // get a series of historic price data
                 var UniqueAddressesDataJson = await _uniqueAddressesDataService.GetUniqueAddressesDataAsync(chartPeriod).ConfigureAwait(true);
@@ -11477,17 +11303,21 @@ namespace SATSuma
             }
         }
 
-        private async void BtnChartUniqueAddressesLog_ClickAsync(object sender, EventArgs e)
+        private async void ChartUniqueAddressesLog()
         {
             try
             {
-                if (comboBoxChartSelect.Texts != "🔗 addresses")
+                if (!RunBlockchainInfoAPI)
                 {
-                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
-                    {
-                        comboBoxChartSelect.Texts = "🔗 addresses";
-                    });
+                    comboBoxChartSelect.SelectedIndex = previouslyShownChart;
+                    return;
                 }
+
+                comboBoxChartSelect.Invoke((MethodInvoker)delegate
+                {
+                    comboBoxChartSelect.Texts = "🔗 addresses";
+                });
+                previouslyShownChart = comboBoxChartSelect.SelectedIndex;
                 ActiveChart = "UniqueAddressesLog";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -11506,8 +11336,6 @@ namespace SATSuma
                     btnChartPeriodAll.Enabled = false;
                 }
 
-                EnableAllCharts();
-                btnChartUniqueAddresses.Enabled = false;
                 DisableIrrelevantTimePeriods();
 
                 ToggleLoadingAnimation("enable");
@@ -11515,7 +11343,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title($"Unique addresses - {chartPeriod} (log scale)", size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Unique addresses - time period: {chartPeriod} (log scale)", size: (int)(13 * UIScale), bold: false);
 
                 // get a series of historic price data
                 var UniqueAddressesDataJson = await _uniqueAddressesDataService.GetUniqueAddressesDataAsync(chartPeriod).ConfigureAwait(true);
@@ -11603,17 +11431,24 @@ namespace SATSuma
         }
         #endregion
         #region chart - price linear and log
-        private async void BtnChartPrice_ClickAsync(object sender, EventArgs e)
+        private async void ChartPrice()
         {
             try
             {
-                if (comboBoxChartSelect.Texts != "💲 price")
+                if (!RunBlockchainInfoAPI)
                 {
                     comboBoxChartSelect.Invoke((MethodInvoker)delegate
                     {
-                        comboBoxChartSelect.Texts = "💲 price";
+                        comboBoxChartSelect.SelectedIndex = previouslyShownChart;
                     });
+                    return;
                 }
+
+                comboBoxChartSelect.Invoke((MethodInvoker)delegate
+                {
+                    comboBoxChartSelect.Texts = "💲 price";
+                });
+                previouslyShownChart = comboBoxChartSelect.SelectedIndex;
                 ActiveChart = "Price";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -11632,8 +11467,6 @@ namespace SATSuma
                     btnChartPeriodAll.Enabled = false;
                 }
 
-                EnableAllCharts();
-                btnChartPrice.Enabled = false;
                 DisableIrrelevantTimePeriods();
 
                 ToggleLoadingAnimation("enable");
@@ -11641,7 +11474,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title($"Average USD market price across major bitcoin exchanges - {chartPeriod}", size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Average USD market price across major bitcoin exchanges - time period: {chartPeriod}", size: (int)(13 * UIScale), bold: false);
                 formsPlot1.Plot.YAxis.Label("Price (USD)", size: (int)(12 * UIScale), bold: false);
                 PrepareLinearScaleChart();
 
@@ -11740,17 +11573,21 @@ namespace SATSuma
             }
         }
 
-        private async void BtnChartPriceLog_ClickAsync(object sender, EventArgs e)
+        private async void ChartPriceLog()
         {
             try
             {
-                if (comboBoxChartSelect.Texts != "💲 price")
+                if (!RunBlockchainInfoAPI)
                 {
-                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
-                    {
-                        comboBoxChartSelect.Texts = "💲 price";
-                    });
+                    comboBoxChartSelect.SelectedIndex = previouslyShownChart;
+                    return;
                 }
+
+                comboBoxChartSelect.Invoke((MethodInvoker)delegate
+                {
+                    comboBoxChartSelect.Texts = "💲 price";
+                });
+                previouslyShownChart = comboBoxChartSelect.SelectedIndex;
                 ActiveChart = "PriceLog";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -11769,8 +11606,6 @@ namespace SATSuma
                     btnChartPeriodAll.Enabled = false;
                 }
 
-                EnableAllCharts();
-                btnChartPrice.Enabled = false;
                 DisableIrrelevantTimePeriods();
 
                 ToggleLoadingAnimation("enable");
@@ -11778,7 +11613,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title($"Average USD market price across major bitcoin exchanges - {chartPeriod} (log scale)", size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Average USD market price across major bitcoin exchanges - time period: {chartPeriod} (log scale)", size: (int)(13 * UIScale), bold: false);
                 formsPlot1.Plot.YAxis.Label("Price (USD)", size: (int)(12 * UIScale), bold: false);
                 // get a series of historic price data
                 var HistoricPriceDataJson = await _historicPriceDataService.GetHistoricPriceDataAsync(chartPeriod).ConfigureAwait(true);
@@ -11899,17 +11734,21 @@ namespace SATSuma
         }
         #endregion
         #region chart - market cap linear and log
-        private async void BtnChartMarketCap_ClickAsync(object sender, EventArgs e)
+        private async void ChartMarketCap()
         {
             try
             {
-                if (comboBoxChartSelect.Texts != "💲 market cap.")
+                if (!RunBlockchainInfoAPI)
                 {
-                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
-                    {
-                        comboBoxChartSelect.Texts = "💲 market cap.";
-                    });
+                    comboBoxChartSelect.SelectedIndex = previouslyShownChart;
+                    return;
                 }
+
+                comboBoxChartSelect.Invoke((MethodInvoker)delegate
+                {
+                    comboBoxChartSelect.Texts = "💲 market cap.";
+                });
+                previouslyShownChart = comboBoxChartSelect.SelectedIndex;
                 ActiveChart = "MarketCap";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -11928,8 +11767,6 @@ namespace SATSuma
                     btnChartPeriodAll.Enabled = false;
                 }
 
-                EnableAllCharts();
-                btnChartMarketCap.Enabled = false;
                 btnChartMarketCapScaleLinear.Enabled = false;
                 DisableIrrelevantTimePeriods();
 
@@ -11938,7 +11775,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title($"Market capitalization in USD - {chartPeriod}", size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Market capitalization in USD - time period: {chartPeriod}", size: (int)(13 * UIScale), bold: false);
                 formsPlot1.Plot.YAxis.Label("Market Capitalization (USD)", size: (int)(12 * UIScale), bold: false);
                 PrepareLinearScaleChart();
 
@@ -12038,17 +11875,21 @@ namespace SATSuma
             }
         }
 
-        private async void BtnChartMarketCapScaleLog_ClickAsync(object sender, EventArgs e)
+        private async void ChartMarketCapLog()
         {
             try
             {
-                if (comboBoxChartSelect.Texts != "💲 market cap.")
+                if (!RunBlockchainInfoAPI)
                 {
-                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
-                    {
-                        comboBoxChartSelect.Texts = "💲 market cap.";
-                    });
+                    comboBoxChartSelect.SelectedIndex = previouslyShownChart;
+                    return;
                 }
+
+                comboBoxChartSelect.Invoke((MethodInvoker)delegate
+                {
+                    comboBoxChartSelect.Texts = "💲 market cap.";
+                });
+                previouslyShownChart = comboBoxChartSelect.SelectedIndex;
                 ActiveChart = "MarketCapLog";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -12067,8 +11908,6 @@ namespace SATSuma
                     btnChartPeriodAll.Enabled = false;
                 }
 
-                EnableAllCharts();
-                btnChartMarketCap.Enabled = false;
                 btnChartMarketCapScaleLog.Enabled = false;
                 DisableIrrelevantTimePeriods();
 
@@ -12077,7 +11916,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title($"Market capitalization in USD - {chartPeriod} (log scale)", size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Market capitalization in USD - time period: {chartPeriod} (log scale)", size: (int)(13 * UIScale), bold: false);
                 formsPlot1.Plot.YAxis.Label("Market Capitalization (USD)", size: (int)(12 * UIScale), bold: false);
                 // get a series of market cap data
                 var MarketCapDataJson = await _marketCapDataService.GetMarketCapDataAsync(chartPeriod).ConfigureAwait(true);
@@ -12198,17 +12037,21 @@ namespace SATSuma
         }
         #endregion
         #region chart - utxo count linear and log
-        private async void BtnChartUTXO_ClickAsync(object sender, EventArgs e)
+        private async void ChartUTXO()
         {
             try
             {
-                if (comboBoxChartSelect.Texts != "🔗 UTXO's")
+                if (!RunBlockchainInfoAPI)
                 {
-                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
-                    {
-                        comboBoxChartSelect.Texts = "🔗 UTXO's";
-                    });
+                    comboBoxChartSelect.SelectedIndex = previouslyShownChart;
+                    return;
                 }
+
+                comboBoxChartSelect.Invoke((MethodInvoker)delegate
+                {
+                    comboBoxChartSelect.Texts = "🔗 UTXO's";
+                });
+                previouslyShownChart = comboBoxChartSelect.SelectedIndex;
                 ActiveChart = "UTXO";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -12227,8 +12070,6 @@ namespace SATSuma
                     btnChartPeriodAll.Enabled = false;
                 }
 
-                EnableAllCharts();
-                btnChartUTXO.Enabled = false;
                 DisableIrrelevantTimePeriods();
 
                 ToggleLoadingAnimation("enable");
@@ -12236,7 +12077,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title($"Total number of valid unspent transaction outputs - {chartPeriod}", size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Total number of valid unspent transaction outputs - time period: {chartPeriod}", size: (int)(13 * UIScale), bold: false);
                 PrepareLinearScaleChart();
 
                 // get a series of historic price data
@@ -12299,18 +12140,22 @@ namespace SATSuma
                 HandleException(ex, "Generating UTXO chart");
             }
         }
-
-        private async void BtnChartUTXOScaleLog_ClickAsync(object sender, EventArgs e)
+        
+        private async void ChartUTXOLog()
         {
             try
             {
-                if (comboBoxChartSelect.Texts != "🔗 UTXO's")
+                if (!RunBlockchainInfoAPI)
                 {
-                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
-                    {
-                        comboBoxChartSelect.Texts = "🔗 UTXO's";
-                    });
+                    comboBoxChartSelect.SelectedIndex = previouslyShownChart;
+                    return;
                 }
+
+                comboBoxChartSelect.Invoke((MethodInvoker)delegate
+                {
+                    comboBoxChartSelect.Texts = "🔗 UTXO's";
+                });
+                previouslyShownChart = comboBoxChartSelect.SelectedIndex;
                 ActiveChart = "UTXOLog";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -12318,7 +12163,7 @@ namespace SATSuma
                 formsPlot3.Visible = false;
                 btnChartUTXOScaleLinear.Enabled = true;
                 btnChartUTXOScaleLog.Enabled = false;
-                chartType = "pricelog";
+                chartType = "utxolog";
 
                 if (String.Compare(chartPeriod, "24h") == 0
                 || String.Compare(chartPeriod, "3d") == 0
@@ -12329,8 +12174,6 @@ namespace SATSuma
                     btnChartPeriodAll.Enabled = false;
                 }
 
-                EnableAllCharts();
-                btnChartUTXO.Enabled = false;
                 DisableIrrelevantTimePeriods();
 
                 ToggleLoadingAnimation("enable");
@@ -12338,7 +12181,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title($"Total number of valid unspent transaction outputs - {chartPeriod} (log scale)", size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Total number of valid unspent transaction outputs - time period: {chartPeriod} (log scale)", size: (int)(13 * UIScale), bold: false);
 
                 // get a series of historic price data
                 var UTXODataJson = await _utxoDataService.GetUTXODataAsync(chartPeriod).ConfigureAwait(true);
@@ -12425,17 +12268,15 @@ namespace SATSuma
         }
         #endregion
         #region chart - block size
-        private async void BtnChartBlockSize_ClickAsync(object sender, EventArgs e)
+        private async void ChartBlockSize()
         {
             try
             {
-                if (comboBoxChartSelect.Texts != "🔗 block size")
+                comboBoxChartSelect.Invoke((MethodInvoker)delegate
                 {
-                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
-                    {
-                        comboBoxChartSelect.Texts = "🔗 block size";
-                    });
-                }
+                    comboBoxChartSelect.Texts = "🔗 block size";
+                });
+                previouslyShownChart = comboBoxChartSelect.SelectedIndex;
                 ActiveChart = "BlockSize";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -12443,13 +12284,11 @@ namespace SATSuma
                 formsPlot3.Visible = false;
                 chartType = "blocksize";
 
-                EnableAllCharts();
-                btnChartBlockSize.Enabled = false;
                 DisableIrrelevantTimePeriods();
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title($"Block size - {chartPeriod}", size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Block size - time period: {chartPeriod}", size: (int)(13 * UIScale), bold: false);
                 PrepareLinearScaleChart();
 
                 ToggleLoadingAnimation("enable");
@@ -12518,17 +12357,20 @@ namespace SATSuma
         }
         #endregion
         #region chart - circulation
-        private async void BtnChartCirculation_ClickAsync(object sender, EventArgs e)
+        private async void ChartCirculation()
         {
             try
             {
-                if (comboBoxChartSelect.Texts != "🔗 circulation")
+                if (!RunBlockchainInfoAPI)
                 {
-                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
-                    {
-                        comboBoxChartSelect.Texts = "🔗 circulation";
-                    });
+                    comboBoxChartSelect.SelectedIndex = previouslyShownChart;
+                    return;
                 }
+                comboBoxChartSelect.Invoke((MethodInvoker)delegate
+                {
+                    comboBoxChartSelect.Texts = "🔗 circulation";
+                });
+                previouslyShownChart = comboBoxChartSelect.SelectedIndex;
                 ActiveChart = "Circulation";
                 ShowChartLoadingPanel();
                 HideAllChartKeysAndPanels();
@@ -12545,8 +12387,6 @@ namespace SATSuma
                     btnChartPeriodAll.Enabled = false;
                 }
 
-                EnableAllCharts();
-                btnChartCirculation.Enabled = false;
                 DisableIrrelevantTimePeriods();
 
                 ToggleLoadingAnimation("enable");
@@ -12554,7 +12394,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 ClearAllChartData();
-                formsPlot1.Plot.Title($"Bitcoin circulation - {chartPeriod}", size: (int)(13 * UIScale), bold: false);
+                formsPlot1.Plot.Title($"Bitcoin circulation - time period: {chartPeriod}", size: (int)(13 * UIScale), bold: false);
                 PrepareLinearScaleChart();
 
                 // get a series of historic dates and amounts of btc in circulation
@@ -12645,7 +12485,7 @@ namespace SATSuma
             }
         }
         #endregion
-        
+        #endregion
         #region show/hide chart loading panel
         private void ShowChartLoadingPanel()
         {
@@ -12674,24 +12514,6 @@ namespace SATSuma
         }
         #endregion
         #region disable/enable charts, time periods, hide panels, etc
-        private void EnableAllCharts()
-        {
-            try
-            {
-                Control[] controlsToEnable = { btnChartHashrate, btnChartDifficulty, btnChartFeeRates, btnChartPrice, btnChartReward, btnChartBlockFees, btnChartCirculation, btnChartBlockSize, btnChartUniqueAddresses, btnChartNodesByNetwork, btnChartLightningCapacity, btnChartLightningChannels, btnChartUTXO, btnChartNodesByCountry, btnChartPoolsRanking, btnChartMarketCap };
-                foreach (Control control in controlsToEnable)
-                {
-                    control.Invoke((MethodInvoker)delegate
-                    {
-                        control.Enabled = true;
-                    });
-                }
-            }
-            catch (WebException ex)
-            {
-                HandleException(ex, "EnableAllCharts");
-            }
-        }
 
         private void ClearAllChartData()
         {
@@ -12981,14 +12803,6 @@ namespace SATSuma
                 {
                     ignoreMouseMoveOnChart = true;
                     // get current state of buttons before disabling them
-                    btnChartBlockFeesWasEnabled = btnChartBlockFees.Enabled;
-                    btnChartDifficultyWasEnabled = btnChartDifficulty.Enabled;
-                    btnChartHashrateWasEnabled = btnChartHashrate.Enabled;
-                    btnChartPriceWasEnabled = btnChartPrice.Enabled;
-                    btnChartRewardWasEnabled = btnChartReward.Enabled;
-                    btnChartFeeRatesWasEnabled = btnChartFeeRates.Enabled;
-                    btnChartCirculationWasEnabled = btnChartCirculation.Enabled;
-                    btnChartBlockSizeWasEnabled = btnChartBlockSize.Enabled;
                     btnChartPeriod1mWasEnabled = btnChartPeriod1m.Enabled;
                     btnChartPeriod1wWasEnabled = btnChartPeriod1w.Enabled;
                     btnChartPeriod1yWasEnabled = btnChartPeriod1y.Enabled;
@@ -12999,30 +12813,23 @@ namespace SATSuma
                     btnChartPeriod3yWasEnabled = btnChartPeriod3y.Enabled;
                     btnChartPeriod6mWasEnabled = btnChartPeriod6m.Enabled;
                     btnChartPeriodAllWasEnabled = btnChartPeriodAll.Enabled;
-                    btnChartUniqueAddressesWasEnabled = btnChartUniqueAddresses.Enabled;
                     btnHashrateScaleLogWasEnabled = btnHashrateScaleLog.Enabled;
                     btnHashrateScaleLinearWasEnabled = btnHashrateScaleLinear.Enabled;
                     btnChartAddressScaleLinearWasEnabled = btnChartAddressScaleLinear.Enabled;
                     btnChartAddressScaleLogWasEnabled = btnChartAddressScaleLog.Enabled;
                     btnPriceChartScaleLogWasEnabled = btnPriceChartScaleLog.Enabled;
                     btnPriceChartScaleLinearWasEnabled = btnPriceChartScaleLinear.Enabled;
-                    btnChartUTXOWasEnabled = btnChartUTXO.Enabled;
-                    btnChartPoolsRankingWasEnabled = btnChartPoolsRanking.Enabled;
-                    btnChartNodesByNetworkWasEnabled = btnChartNodesByNetwork.Enabled;
-                    btnChartNodesByCountryWasEnabled = btnChartNodesByCountry.Enabled;
-                    btnChartLightningCapacityWasEnabled = btnChartLightningCapacity.Enabled;
-                    btnChartLightningChannelsWasEnabled = btnChartLightningChannels.Enabled;
-                    btnChartMarketCapWasEnabled = btnChartMarketCap.Enabled;
                     btnChartMarketCapLogWasEnabled = btnChartMarketCapScaleLog.Enabled;
+                    btnChartMarketCapLinearWasEnabled = btnChartMarketCapScaleLinear.Enabled;
                     btnChartDifficultyLinearWasEnabled = btnChartDifficultyLinear.Enabled;
                     btnChartDifficultyLogWasEnabled = btnChartDifficultyLog.Enabled;
 
                     //disable them all
 
-                    Control[] disableTheseControls = { btnChartBlockFees, btnChartDifficulty, btnChartHashrate, btnChartPrice, btnChartReward, btnChartFeeRates, btnChartCirculation, btnChartPeriod1m, btnChartPeriod1w, btnChartPeriod1y,
-                        btnChartPeriod24h, btnChartPeriod2y, btnChartPeriod3d, btnChartPeriod3m, btnChartPeriod3y, btnChartPeriod6m, btnChartPeriodAll, btnChartBlockSize, btnChartUniqueAddresses, btnHashrateScaleLinear,
-                        btnHashrateScaleLog, btnChartAddressScaleLinear, btnChartAddressScaleLog, btnPriceChartScaleLog, btnPriceChartScaleLinear, btnChartUTXO, btnChartPoolsRanking, btnChartNodesByNetwork, btnChartNodesByCountry,
-                        btnChartLightningCapacity, btnChartLightningChannels, btnChartMarketCap, btnChartMarketCapScaleLog, btnChartDifficultyLinear, btnChartDifficultyLog };
+                    Control[] disableTheseControls = { btnChartPeriod1m, btnChartPeriod1w, btnChartPeriod1y,
+                        btnChartPeriod24h, btnChartPeriod2y, btnChartPeriod3d, btnChartPeriod3m, btnChartPeriod3y, btnChartPeriod6m, btnChartPeriodAll, btnHashrateScaleLinear,
+                        btnHashrateScaleLog, btnChartAddressScaleLinear, btnChartAddressScaleLog, btnPriceChartScaleLog, btnPriceChartScaleLinear, 
+                        btnChartMarketCapScaleLog, btnChartMarketCapScaleLinear, btnChartDifficultyLinear, btnChartDifficultyLog };
                     foreach (Control control in disableTheseControls)
                     {
                         control.Invoke((MethodInvoker)delegate
@@ -13034,14 +12841,6 @@ namespace SATSuma
                 else
                 {
                     // use previously saved states to reinstate buttons
-                    btnChartBlockFees.Enabled = btnChartBlockFeesWasEnabled;
-                    btnChartDifficulty.Enabled = btnChartDifficultyWasEnabled;
-                    btnChartHashrate.Enabled = btnChartHashrateWasEnabled;
-                    btnChartPrice.Enabled = btnChartPriceWasEnabled;
-                    btnChartReward.Enabled = btnChartRewardWasEnabled;
-                    btnChartFeeRates.Enabled = btnChartFeeRatesWasEnabled;
-                    btnChartCirculation.Enabled = btnChartCirculationWasEnabled;
-                    btnChartBlockSize.Enabled = btnChartBlockSizeWasEnabled;
                     btnChartPeriod1m.Enabled = btnChartPeriod1mWasEnabled;
                     btnChartPeriod1w.Enabled = btnChartPeriod1wWasEnabled;
                     btnChartPeriod1y.Enabled = btnChartPeriod1yWasEnabled;
@@ -13052,21 +12851,14 @@ namespace SATSuma
                     btnChartPeriod3y.Enabled = btnChartPeriod3yWasEnabled;
                     btnChartPeriod6m.Enabled = btnChartPeriod6mWasEnabled;
                     btnChartPeriodAll.Enabled = btnChartPeriodAllWasEnabled;
-                    btnChartUniqueAddresses.Enabled = btnChartUniqueAddressesWasEnabled;
                     btnChartAddressScaleLinear.Enabled = btnChartAddressScaleLinearWasEnabled;
                     btnChartAddressScaleLog.Enabled = btnChartAddressScaleLogWasEnabled;
                     btnHashrateScaleLinear.Enabled = btnHashrateScaleLinearWasEnabled;
                     btnHashrateScaleLog.Enabled = btnHashrateScaleLogWasEnabled;
                     btnPriceChartScaleLog.Enabled = btnPriceChartScaleLogWasEnabled;
                     btnPriceChartScaleLinear.Enabled = btnPriceChartScaleLinearWasEnabled;
-                    btnChartUTXO.Enabled = btnChartUTXOWasEnabled;
-                    btnChartPoolsRanking.Enabled = btnChartPoolsRankingWasEnabled;
-                    btnChartNodesByNetwork.Enabled = btnChartNodesByNetworkWasEnabled;
-                    btnChartNodesByCountry.Enabled = btnChartNodesByCountryWasEnabled;
-                    btnChartLightningCapacity.Enabled = btnChartLightningCapacityWasEnabled;
-                    btnChartLightningChannels.Enabled = btnChartLightningChannelsWasEnabled;
-                    btnChartMarketCap.Enabled = btnChartMarketCapWasEnabled;
                     btnChartMarketCapScaleLog.Enabled = btnChartMarketCapLogWasEnabled;
+                    btnChartMarketCapScaleLinear.Enabled = btnChartMarketCapLinearWasEnabled;
                     btnChartDifficultyLinear.Enabled = btnChartDifficultyLinearWasEnabled;
                     btnChartDifficultyLog.Enabled = btnChartDifficultyLogWasEnabled;
                     ignoreMouseMoveOnChart = false;
@@ -13087,7 +12879,8 @@ namespace SATSuma
         {
             try
             {
-                Control[] disableTheseControls = { btnChartCirculation, btnChartMarketCap, btnChartPrice, btnChartUniqueAddresses, btnChartUTXO, lblChartCirculation, lblHeaderPriceChart, lblPriceChart, lblConverterChart, lblMarketCapChart, lblUniqueAddressesChart, lblHeaderConverterChart, lblHeaderMarketCapChart };
+                //Control[] disableTheseControls = { btnChartCirculation, btnChartMarketCap, btnChartPrice, btnChartUniqueAddresses, btnChartUTXO, lblChartCirculation, lblHeaderPriceChart, lblPriceChart, lblConverterChart, lblMarketCapChart, lblUniqueAddressesChart, lblHeaderConverterChart, lblHeaderMarketCapChart };
+                Control[] disableTheseControls = { lblChartCirculation, lblHeaderPriceChart, lblPriceChart, lblConverterChart, lblMarketCapChart, lblUniqueAddressesChart, lblHeaderConverterChart, lblHeaderMarketCapChart };
                 foreach (Control control in disableTheseControls)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -13095,19 +12888,25 @@ namespace SATSuma
                         control.Enabled = false;
                     });
                 }
+
+                comboBoxChartSelect.Items[6] = "🔗 circulation (disabled)";
+                comboBoxChartSelect.Items[15] = "💲 market cap.(disabled)";
+                comboBoxChartSelect.Items[14] = "💲 price (disabled)";
+                comboBoxChartSelect.Items[7] = "🔗 addresses (disabled)";
+                comboBoxChartSelect.Items[8] = "🔗 UTXO's (disabled)";
             }
             catch (Exception ex)
             {
                 HandleException(ex, "Disabling non-mempool.space charts");
             }
-
         }
 
         private void EnableChartsThatUseBlockchainInfoAPI()
         {
             try
             {
-                Control[] disableTheseControls = { btnChartCirculation, btnChartMarketCap, btnChartPrice, btnChartUniqueAddresses, btnChartUTXO, lblChartCirculation, lblHeaderPriceChart, lblPriceChart, lblConverterChart, lblMarketCapChart, lblUniqueAddressesChart, lblHeaderConverterChart, lblHeaderMarketCapChart };
+                //Control[] disableTheseControls = { btnChartCirculation, btnChartMarketCap, btnChartPrice, btnChartUniqueAddresses, btnChartUTXO, lblChartCirculation, lblHeaderPriceChart, lblPriceChart, lblConverterChart, lblMarketCapChart, lblUniqueAddressesChart, lblHeaderConverterChart, lblHeaderMarketCapChart };
+                Control[] disableTheseControls = { lblChartCirculation, lblHeaderPriceChart, lblPriceChart, lblConverterChart, lblMarketCapChart, lblUniqueAddressesChart, lblHeaderConverterChart, lblHeaderMarketCapChart };
                 foreach (Control control in disableTheseControls)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -13116,6 +12915,11 @@ namespace SATSuma
                     });
                 }
 
+                comboBoxChartSelect.Items[6] = "🔗 circulation";
+                comboBoxChartSelect.Items[15] = "💲 market cap.";
+                comboBoxChartSelect.Items[14] = "💲 price";
+                comboBoxChartSelect.Items[7] = "🔗 addresses";
+                comboBoxChartSelect.Items[8] = "🔗 UTXO's";
             }
             catch (Exception ex)
             {
@@ -13148,6 +12952,67 @@ namespace SATSuma
             }
         }
         #endregion
+        #region linear/log buttons
+        private void btnChartUTXOScaleLinear_Click(object sender, EventArgs e)
+        {
+            ChartUTXO();
+        }
+
+        private void btnChartUTXOScaleLog_Click(object sender, EventArgs e)
+        {
+            ChartUTXOLog();
+        }
+
+        private void btnChartDifficultyLinear_Click(object sender, EventArgs e)
+        {
+            ChartDifficulty();
+        }
+
+        private void btnChartDifficultyLog_Click(object sender, EventArgs e)
+        {
+            ChartDifficultyLog();
+        }
+
+        private void btnChartMarketCapScaleLinear_Click(object sender, EventArgs e)
+        {
+            ChartMarketCap();
+        }
+
+        private void btnChartMarketCapScaleLog_Click(object sender, EventArgs e)
+        {
+            ChartMarketCapLog();
+        }
+
+        private void btnHashrateScaleLinear_Click(object sender, EventArgs e)
+        {
+            ChartHashrate();
+        }
+
+        private void btnHashrateScaleLog_Click(object sender, EventArgs e)
+        {
+            ChartHashrateLog();
+        }
+
+        private void btnPriceChartScaleLinear_Click(object sender, EventArgs e)
+        {
+            ChartPrice();
+        }
+
+        private void btnPriceChartScaleLog_Click(object sender, EventArgs e)
+        {
+            ChartPriceLog();
+        }
+
+        private void btnChartAddressScaleLinear_Click(object sender, EventArgs e)
+        {
+            ChartUniqueAddresses();
+        }
+
+        private void btnChartAddressScaleLog_Click(object sender, EventArgs e)
+        {
+            ChartUniqueAddressesLog();
+        }
+        #endregion
         #region change chart time period
         private void BtnChartPeriod_Click(object sender, EventArgs e)
         {
@@ -13169,74 +13034,89 @@ namespace SATSuma
                         control.Enabled = true;
                     }
                 }
-
+                if (String.Compare(chartType, "utxo") == 0)
+                {
+                    ChartUTXO();
+                }
+                if (String.Compare(chartType, "utxolog") == 0)
+                {
+                    ChartUTXOLog();
+                }
                 if (String.Compare(chartType, "hashrate") == 0)
                 {
-                    BtnChartHashrate_ClickAsync(sender, e);
+                    ChartHashrate();
                 }
                 if (String.Compare(chartType, "hashratelog") == 0)
                 {
-                    BtnHashrateScaleLog_ClickAsync(sender, e);
+                    ChartHashrateLog();
                 }
                 if (String.Compare(chartType, "blockfees") == 0)
                 {
-                    BtnChartBlockFees_ClickAsync(sender, e);
+                    ChartBlockFees();
                 }
                 if (String.Compare(chartType, "difficulty") == 0)
                 {
-                    BtnChartDifficulty_ClickAsync(sender, e);
+                    ChartDifficulty();
                 }
                 if (String.Compare(chartType, "difficultylog") == 0)
                 {
-                    BtnChartDifficultyLog_ClickAsync(sender, e);
+                    ChartDifficultyLog();
                 }
                 if (String.Compare(chartType, "price") == 0)
                 {
-                    BtnChartPrice_ClickAsync(sender, e);
+                    ChartPrice();
                 }
                 if (String.Compare(chartType, "pricelog") == 0)
                 {
-                    BtnChartPriceLog_ClickAsync(sender, e);
+                    ChartPriceLog();
                 }
                 if (String.Compare(chartType, "reward") == 0)
                 {
-                    BtnChartReward_ClickAsync(sender, e);
+                    ChartReward();
                 }
                 if (String.Compare(chartType, "feerates") == 0)
                 {
-                    BtnChartFeeRates_ClickAsync(sender, e);
+                    ChartFeeRates();
                 }
                 if (String.Compare(chartType, "blocksize") == 0)
                 {
-                    BtnChartBlockSize_ClickAsync(sender, e);
+                    ChartBlockSize();
                 }
                 if (String.Compare(chartType, "addresses") == 0)
                 {
-                    BtnChartUniqueAddresses_ClickAsync(sender, e);
+                    ChartUniqueAddresses();
                 }
                 if (String.Compare(chartType, "addresseslog") == 0)
                 {
-                    BtnChartUniqueAddressesLog_ClickAsync(sender, e);
+                    ChartUniqueAddressesLog();
                 }
                 if (String.Compare(chartType, "poolranking") == 0)
                 {
-                    BtnChartPoolsRanking_ClickAsync(sender, e);
+                    ChartPoolsRanking();
                 }
                 if (String.Compare(chartType, "lightningnodesbynetwork") == 0)
                 {
-                    BtnChartNodesByNetwork_ClickAsync(sender, e);
+                    ChartNodesByNetwork();
                 }
                 if (String.Compare(chartType, "lightningcapacity") == 0)
                 {
-                    BtnChartLightningCapacity_ClickAsync(sender, e);
+                    ChartLightningCapacity();
                 }
                 if (String.Compare(chartType, "lightningchannels") == 0)
                 {
-                    BtnChartLightningChannels_ClickAsync(sender, e);
+                    ChartLightningChannels();
                 }
                 if (String.Compare(chartType, "marketcap") == 0)
                 {
-                    BtnChartMarketCap_ClickAsync(sender, e);
+                    ChartMarketCap();
+                }
+                if (String.Compare(chartType, "marketcaplog") == 0)
+                {
+                    ChartMarketCapLog();
+                }
+                if (String.Compare(chartType, "circulation") == 0)
+                {
+                    ChartCirculation();
                 }
             }
             catch (Exception ex)
@@ -14772,17 +14652,17 @@ namespace SATSuma
         }
         #endregion
         #region disable keys
-        private void listViewBookmarks_KeyDown(object sender, KeyEventArgs e)
+        private void ListViewBookmarks_KeyDown(object sender, KeyEventArgs e)
         {
             e.Handled = true;
         }
 
-        private void listViewBookmarks_KeyPress(object sender, KeyPressEventArgs e)
+        private void ListViewBookmarks_KeyPress(object sender, KeyPressEventArgs e)
         {
             e.Handled = true;
         }
 
-        private void listViewBookmarks_KeyUp(object sender, KeyEventArgs e)
+        private void ListViewBookmarks_KeyUp(object sender, KeyEventArgs e)
         {
             e.Handled = true;
         }
@@ -21500,177 +21380,133 @@ namespace SATSuma
             if (String.Compare(ActiveChart, "FeeRates") == 0)
             {
                 formsPlot1.Plot.Clear();
-                object sender = btnChartFeeRates;
-                EventArgs e = EventArgs.Empty;
-                BtnChartFeeRates_ClickAsync(sender, e);
+                ChartFeeRates();
             }
 
             if (String.Compare(ActiveChart, "BlockFees") == 0)
             {
                 formsPlot1.Plot.Clear();
-                object sender = btnChartBlockFees;
-                EventArgs e = EventArgs.Empty;
-                BtnChartBlockFees_ClickAsync(sender, e);
+                ChartBlockFees();
             }
 
             if (String.Compare(ActiveChart, "Reward") == 0)
             {
                 formsPlot1.Plot.Clear();
-                object sender = btnChartReward;
-                EventArgs e = EventArgs.Empty;
-                BtnChartReward_ClickAsync(sender, e);
+                ChartReward();
             }
 
             if (String.Compare(ActiveChart, "BlockSize") == 0)
             {
                 formsPlot1.Plot.Clear();
-                object sender = btnChartBlockSize;
-                EventArgs e = EventArgs.Empty;
-                BtnChartBlockSize_ClickAsync(sender, e);
+                ChartBlockSize();
             }
 
             if (String.Compare(ActiveChart, "Hashrate") == 0)
             {
                 formsPlot1.Plot.Clear();
-                object sender = btnChartHashrate;
-                EventArgs e = EventArgs.Empty;
-                BtnChartHashrate_ClickAsync(sender, e);
+                ChartHashrate();
             }
 
             if (String.Compare(ActiveChart, "HashrateLog") == 0)
             {
                 formsPlot1.Plot.Clear();
-                object sender = btnChartHashrate;
-                EventArgs e = EventArgs.Empty;
-                BtnChartHashrate_ClickAsync(sender, e);
+                ChartHashrate();
             }
 
             if (String.Compare(ActiveChart, "Difficulty") == 0)
             {
                 formsPlot1.Plot.Clear();
-                object sender = btnChartDifficulty;
-                EventArgs e = EventArgs.Empty;
-                BtnChartDifficulty_ClickAsync(sender, e);
+                ChartDifficulty();
             }
 
             if (String.Compare(ActiveChart, "DifficultyLog") == 0)
             {
                 formsPlot1.Plot.Clear();
-                object sender = btnChartDifficulty;
-                EventArgs e = EventArgs.Empty;
-                BtnChartDifficulty_ClickAsync(sender, e);
+                ChartDifficulty();
             }
 
             if (String.Compare(ActiveChart, "Circulation") == 0)
             {
                 formsPlot1.Plot.Clear();
-                object sender = btnChartCirculation;
-                EventArgs e = EventArgs.Empty;
-                BtnChartCirculation_ClickAsync(sender, e);
+                ChartCirculation();
             }
 
             if (String.Compare(ActiveChart, "UniqueAddresses") == 0)
             {
                 formsPlot1.Plot.Clear();
-                object sender = btnChartUniqueAddresses;
-                EventArgs e = EventArgs.Empty;
-                BtnChartUniqueAddresses_ClickAsync(sender, e);
+                ChartUniqueAddresses();
             }
 
             if (String.Compare(ActiveChart, "UniqueAddressesLog") == 0)
             {
                 formsPlot1.Plot.Clear();
-                object sender = btnChartUniqueAddresses;
-                EventArgs e = EventArgs.Empty;
-                BtnChartUniqueAddresses_ClickAsync(sender, e);
+                ChartUniqueAddresses();
             }
 
             if (String.Compare(ActiveChart, "UTXO") == 0)
             {
                 formsPlot1.Plot.Clear();
-                object sender = btnChartUTXO;
-                EventArgs e = EventArgs.Empty;
-                BtnChartUTXO_ClickAsync(sender, e);
+                ChartUTXO();
             }
 
             if (String.Compare(ActiveChart, "UTXOLog") == 0)
             {
                 formsPlot1.Plot.Clear();
-                object sender = btnChartUTXO;
-                EventArgs e = EventArgs.Empty;
-                BtnChartUTXO_ClickAsync(sender, e);
+                ChartUTXO();
             }
 
             if (String.Compare(ActiveChart, "PoolsRanking") == 0)
             {
                 formsPlot2.Plot.Clear();
-                object sender = btnChartPoolsRanking;
-                EventArgs e = EventArgs.Empty;
-                BtnChartPoolsRanking_ClickAsync(sender, e);
+                ChartPoolsRanking();
             }
 
             if (String.Compare(ActiveChart, "NodesByNetwork") == 0)
             {
                 formsPlot1.Plot.Clear();
-                object sender = btnChartNodesByNetwork;
-                EventArgs e = EventArgs.Empty;
-                BtnChartNodesByNetwork_ClickAsync(sender, e);
+                ChartNodesByNetwork();
             }
 
             if (String.Compare(ActiveChart, "NodesByCountry") == 0)
             {
                 formsPlot3.Plot.Clear();
-                object sender = btnChartNodesByCountry;
-                EventArgs e = EventArgs.Empty;
-                BtnChartNodesByCountry_ClickAsync(sender, e);
+                ChartNodesByCountry();
             }
 
             if (String.Compare(ActiveChart, "LightningCapacity") == 0)
             {
                 formsPlot1.Plot.Clear();
-                object sender = btnChartLightningCapacity;
-                EventArgs e = EventArgs.Empty;
-                BtnChartLightningCapacity_ClickAsync(sender, e);
+                ChartLightningCapacity();
             }
 
             if (String.Compare(ActiveChart, "LightningChannels") == 0)
             {
                 formsPlot1.Plot.Clear();
-                object sender = btnChartLightningChannels;
-                EventArgs e = EventArgs.Empty;
-                BtnChartLightningChannels_ClickAsync(sender, e);
+                ChartLightningChannels();
             }
 
             if (String.Compare(ActiveChart, "Price") == 0)
             {
                 formsPlot1.Plot.Clear();
-                object sender = btnChartPrice;
-                EventArgs e = EventArgs.Empty;
-                BtnChartPrice_ClickAsync(sender, e);
+                ChartPrice();
             }
 
             if (String.Compare(ActiveChart, "PriceLog") == 0)
             {
                 formsPlot1.Plot.Clear();
-                object sender = btnChartPrice;
-                EventArgs e = EventArgs.Empty;
-                BtnChartPrice_ClickAsync(sender, e);
+                ChartPrice();
             }
 
             if (String.Compare(ActiveChart, "MarketCap") == 0)
             {
                 formsPlot1.Plot.Clear();
-                object sender = btnChartMarketCap;
-                EventArgs e = EventArgs.Empty;
-                BtnChartMarketCap_ClickAsync(sender, e);
+                ChartMarketCap();
             }
 
             if (String.Compare(ActiveChart, "MarketCapLog") == 0)
             {
                 formsPlot1.Plot.Clear();
-                object sender = btnChartMarketCap;
-                EventArgs e = EventArgs.Empty;
-                BtnChartMarketCap_ClickAsync(sender, e);
+                ChartMarketCap();
             }
         }
 
@@ -21803,7 +21639,7 @@ namespace SATSuma
                 }
 
                 // chart
-                RJButton[] chartButtonBorders = { btnChartFeeRates, btnChartBlockFees, btnChartReward, btnChartBlockSize, btnChartHashrate, btnChartDifficulty, btnChartCirculation, btnChartUniqueAddresses, btnChartUTXO, btnChartPoolsRanking, btnChartNodesByNetwork, btnChartNodesByCountry, btnChartLightningCapacity, btnChartLightningChannels, btnChartPrice, btnChartMarketCap, btnSaveChart, btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll, btnChartDifficultyLog, btnChartDifficultyLinear, btnHashrateScaleLog, btnHashrateScaleLinear, btnChartMarketCapScaleLog, btnChartMarketCapScaleLinear, btnPriceChartScaleLog, btnPriceChartScaleLinear, btnChartUTXOScaleLog, btnChartUTXOScaleLinear, btnChartAddressScaleLog, btnChartAddressScaleLinear };
+                RJButton[] chartButtonBorders = { btnSaveChart, btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll, btnChartDifficultyLog, btnChartDifficultyLinear, btnHashrateScaleLog, btnHashrateScaleLinear, btnChartMarketCapScaleLog, btnChartMarketCapScaleLinear, btnPriceChartScaleLog, btnPriceChartScaleLinear, btnChartUTXOScaleLog, btnChartUTXOScaleLinear, btnChartAddressScaleLog, btnChartAddressScaleLinear };
                 foreach (RJButton button in chartButtonBorders)
                 {
                     button.Invoke((MethodInvoker)delegate
@@ -22040,7 +21876,7 @@ namespace SATSuma
                     });
                 }
                 //charts
-                Control[] listChartsButtonsTextToColor = { btnChartFeeRates, btnChartBlockFees, btnChartReward, btnChartBlockSize, btnChartHashrate, btnChartDifficulty, btnChartCirculation, btnChartUniqueAddresses, btnChartUTXO, btnChartPoolsRanking, btnChartNodesByNetwork, btnChartNodesByCountry, btnChartLightningCapacity, btnChartLightningChannels, btnChartPrice, btnChartMarketCap, btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll, btnPriceChartScaleLinear, btnPriceChartScaleLog, btnChartMarketCapScaleLinear, btnChartMarketCapScaleLog, btnChartUTXOScaleLinear, btnChartUTXOScaleLog, btnChartAddressScaleLinear, btnChartAddressScaleLog, btnSaveChart, btnChartDifficultyLinear, btnChartDifficultyLog, btnHashrateScaleLinear, btnHashrateScaleLog };
+                Control[] listChartsButtonsTextToColor = { btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll, btnPriceChartScaleLinear, btnPriceChartScaleLog, btnChartMarketCapScaleLinear, btnChartMarketCapScaleLog, btnChartUTXOScaleLinear, btnChartUTXOScaleLog, btnChartAddressScaleLinear, btnChartAddressScaleLog, btnSaveChart, btnChartDifficultyLinear, btnChartDifficultyLog, btnHashrateScaleLinear, btnHashrateScaleLog };
                 foreach (Control control in listChartsButtonsTextToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -22888,7 +22724,7 @@ namespace SATSuma
                     });
                 }
                 //charts
-                Control[] listChartsButtonsToColor = { btnChartFeeRates, btnChartBlockFees, btnChartReward, btnChartBlockSize, btnChartHashrate, btnChartDifficulty, btnChartCirculation, btnChartUniqueAddresses, btnChartUTXO, btnChartPoolsRanking, btnChartNodesByNetwork, btnChartNodesByCountry, btnChartLightningCapacity, btnChartLightningChannels, btnChartPrice, btnChartMarketCap, btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll, btnPriceChartScaleLinear, btnPriceChartScaleLog, btnChartMarketCapScaleLinear, btnChartMarketCapScaleLog, btnChartUTXOScaleLinear, btnChartUTXOScaleLog, btnChartAddressScaleLinear, btnChartAddressScaleLog, btnSaveChart, btnHashrateScaleLinear, btnHashrateScaleLog, btnChartDifficultyLinear, btnChartDifficultyLog };
+                Control[] listChartsButtonsToColor = { btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll, btnPriceChartScaleLinear, btnPriceChartScaleLog, btnChartMarketCapScaleLinear, btnChartMarketCapScaleLog, btnChartUTXOScaleLinear, btnChartUTXOScaleLog, btnChartAddressScaleLinear, btnChartAddressScaleLog, btnSaveChart, btnHashrateScaleLinear, btnHashrateScaleLog, btnChartDifficultyLinear, btnChartDifficultyLog };
                 foreach (Control control in listChartsButtonsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24604,8 +24440,8 @@ namespace SATSuma
                         if (RunBitcoinExplorerAPI || RunCoingeckoAPI || RunMempoolSpacePriceAPI)
                         {
                             OneBTCinSelectedCurrency = Convert.ToDecimal(PriceEUR);
-                            mCap = $"${mCapEUR:N2}";
-                            price = $"${PriceEUR}";
+                            mCap = $"€{mCapEUR:N2}";
+                            price = $"€{PriceEUR}";
                             satsPerUnit = satsEUR;
                         }
                         else
@@ -24637,8 +24473,8 @@ namespace SATSuma
                         if (RunBitcoinExplorerAPI || RunCoingeckoAPI || RunMempoolSpacePriceAPI)
                         {
                             OneBTCinSelectedCurrency = Convert.ToDecimal(PriceGBP);
-                            mCap = $"${mCapGBP:N2}";
-                            price = $"${PriceGBP}";
+                            mCap = $"£{mCapGBP:N2}";
+                            price = $"£{PriceGBP}";
                             satsPerUnit = satsGBP;
                         }
                         else
@@ -24942,7 +24778,6 @@ namespace SATSuma
                         lblHeaderPriceChange.Visible = false;
                     });
                     UpdateLabelValueAsync(lblHeaderPriceChange, "0"); // don't show a value for price change
-
                 }
             }
             catch (WebException ex)
@@ -28428,27 +28263,27 @@ namespace SATSuma
                 });
                 #region update the market charts
                 //if either the price or marketcap charts were active, refresh them with the new currency, just in case they were visible at the time
-                if (!btnChartPrice.Enabled)
+                if ( comboBoxChartSelect.Texts == "💲 price")
                 {
                     if (!btnPriceChartScaleLog.Enabled)
                     {
-                        BtnChartPriceLog_ClickAsync(sender, e);
+                        ChartPriceLog();
                     }
                     else
                     {
-                        BtnChartPrice_ClickAsync(sender, e);
+                        ChartPrice();
                     }
                     return;
                 }
-                if (!btnChartMarketCap.Enabled)
+                if (comboBoxChartSelect.Texts == "💲 market cap.")
                 {
                     if (!btnChartMarketCapScaleLog.Enabled)
                     {
-                        BtnChartMarketCapScaleLog_ClickAsync(sender, e);
+                        ChartMarketCapLog();
                     }
                     else
                     {
-                        BtnChartMarketCap_ClickAsync(sender, e);
+                        ChartMarketCap();
                     }
                     return;
                 }
@@ -28486,27 +28321,27 @@ namespace SATSuma
                 });
                 #region update the market charts
                 //if either the price or marketcap charts were active, refresh them with the new currency, just in case they were visible at the time
-                if (!btnChartPrice.Enabled)
+                if (comboBoxChartSelect.Texts == "💲 price")
                 {
                     if (!btnPriceChartScaleLog.Enabled)
                     {
-                        BtnChartPriceLog_ClickAsync(sender, e);
+                        ChartPriceLog();
                     }
                     else
                     {
-                        BtnChartPrice_ClickAsync(sender, e);
+                        ChartPrice();
                     }
                     return;
                 }
-                if (!btnChartMarketCap.Enabled)
+                if (comboBoxChartSelect.Texts == "💲 market cap.")
                 {
                     if (!btnChartMarketCapScaleLog.Enabled)
                     {
-                        BtnChartMarketCapScaleLog_ClickAsync(sender, e);
+                        ChartMarketCapLog();
                     }
                     else
                     {
-                        BtnChartMarketCap_ClickAsync(sender, e);
+                        ChartMarketCap();
                     }
                     return;
                 }
@@ -28544,27 +28379,27 @@ namespace SATSuma
                 });
                 #region update the market charts
                 //if either the price or marketcap charts were active, refresh them with the new currency, just in case they were visible at the time
-                if (!btnChartPrice.Enabled)
+                if (comboBoxChartSelect.Texts == "💲 price")
                 {
                     if (!btnPriceChartScaleLog.Enabled)
                     {
-                        BtnChartPriceLog_ClickAsync(sender, e);
+                        ChartPriceLog();
                     }
                     else
                     {
-                        BtnChartPrice_ClickAsync(sender, e);
+                        ChartPrice();
                     }
                     return;
                 }
-                if (!btnChartMarketCap.Enabled)
+                if (comboBoxChartSelect.Texts == "💲 market cap.")
                 {
                     if (!btnChartMarketCapScaleLog.Enabled)
                     {
-                        BtnChartMarketCapScaleLog_ClickAsync(sender, e);
+                        ChartMarketCapLog();
                     }
                     else
                     {
-                        BtnChartMarketCap_ClickAsync(sender, e);
+                        ChartMarketCap();
                     }
                     return;
                 }
@@ -28602,27 +28437,27 @@ namespace SATSuma
                 });
                 #region update the market charts
                 //if either the price or marketcap charts were active, refresh them with the new currency, just in case they were visible at the time
-                if (!btnChartPrice.Enabled)
+                if (comboBoxChartSelect.Texts == "💲 price")
                 {
                     if (!btnPriceChartScaleLog.Enabled)
                     {
-                        BtnChartPriceLog_ClickAsync(sender, e);
+                        ChartPriceLog();
                     }
                     else
                     {
-                        BtnChartPrice_ClickAsync(sender, e);
+                        ChartPrice();
                     }
                     return;
                 }
-                if (!btnChartMarketCap.Enabled)
+                if (comboBoxChartSelect.Texts == "💲 market cap.")
                 {
                     if (!btnChartMarketCapScaleLog.Enabled)
                     {
-                        BtnChartMarketCapScaleLog_ClickAsync(sender, e);
+                        ChartMarketCapLog();
                     }
                     else
                     {
-                        BtnChartMarketCap_ClickAsync(sender, e);
+                        ChartMarketCap();
                     }
                     return;
                 }
@@ -28726,7 +28561,7 @@ namespace SATSuma
                         });
                     }
                     #endregion
-                    #region recalculate fiat values on address screen
+                    #region recalculate fiat values on address tx screen
                     if (String.Compare(lblAddressConfirmedUnspent.Text, "no data") != 0 && String.Compare(lblAddressConfirmedUnspent.Text, "") != 0)
                     {
                         lblAddressConfirmedUnspentFiat.Invoke((MethodInvoker)delegate
@@ -28746,6 +28581,22 @@ namespace SATSuma
                         lblAddressConfirmedReceivedFiat.Invoke((MethodInvoker)delegate
                         {
                             lblAddressConfirmedReceivedFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(lblAddressConfirmedReceived.Text) * OneBTCinSelectedCurrency):N2}";
+                        });
+                    }
+                    #endregion
+                    #region recalculate fiat values on address utxo screen
+                    if (String.Compare(lblAddressConfirmedUnspentUTXO.Text, "no data") != 0 && String.Compare(lblAddressConfirmedUnspentUTXO.Text, "") != 0)
+                    {
+                        lblAddressConfirmedUnspentUTXOFiat.Invoke((MethodInvoker)delegate
+                        {
+                            lblAddressConfirmedUnspentUTXOFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(lblAddressConfirmedUnspentUTXO.Text) * OneBTCinSelectedCurrency):N2}";
+                        });
+                    }
+                    if (String.Compare(lblAddressConfirmedSpentUTXO.Text, "no data") != 0 && String.Compare(lblAddressConfirmedSpentUTXO.Text, "") != 0)
+                    {
+                        lblAddressConfirmedSpentUTXOFiat.Invoke((MethodInvoker)delegate
+                        {
+                            lblAddressConfirmedSpentUTXOFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(lblAddressConfirmedSpentUTXO.Text) * OneBTCinSelectedCurrency):N2}";
                         });
                     }
                     #endregion
@@ -29122,7 +28973,7 @@ namespace SATSuma
         {
             try
             {
-                BtnChartHashrate_ClickAsync(sender, e);
+                ChartHashrate();
                 BtnMenuCharts_ClickAsync(sender, e);
             }
             catch (Exception ex)
@@ -29135,7 +28986,7 @@ namespace SATSuma
         {
             try
             {
-                BtnChartPrice_ClickAsync(sender, e);
+                ChartPrice();
                 BtnMenuCharts_ClickAsync(sender, e);
             }
             catch (Exception ex)
@@ -29148,7 +28999,7 @@ namespace SATSuma
         {
             try
             {
-                BtnChartFeeRates_ClickAsync(sender, e);
+                ChartFeeRates();
                 BtnMenuCharts_ClickAsync(sender, e);
             }
             catch (Exception ex)
@@ -29161,7 +29012,7 @@ namespace SATSuma
         {
             try
             {
-                BtnChartCirculation_ClickAsync(sender, e);
+                ChartCirculation();
                 BtnMenuCharts_ClickAsync(sender, e);
             }
             catch (Exception ex)
@@ -29174,7 +29025,7 @@ namespace SATSuma
         {
             try
             {
-                BtnChartBlockSize_ClickAsync(sender, e);
+                ChartBlockSize();
                 BtnMenuCharts_ClickAsync(sender, e);
             }
             catch (Exception ex)
@@ -29199,7 +29050,7 @@ namespace SATSuma
         {
             try
             {
-                BtnChartMarketCap_ClickAsync(sender, e);
+                ChartMarketCap();
                 BtnMenuCharts_ClickAsync(sender, e);
             }
             catch (Exception ex)
@@ -30493,6 +30344,8 @@ namespace SATSuma
                 return InitialBlockReward / (decimal)Math.Pow(2, halvings);
             }
         }
+
+
 
 
 

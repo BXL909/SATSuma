@@ -913,37 +913,21 @@
             this.panelChartMarketCapScaleButtons = new System.Windows.Forms.Panel();
             this.btnChartMarketCapScaleLog = new CustomControls.RJControls.RJButton();
             this.btnChartMarketCapScaleLinear = new CustomControls.RJControls.RJButton();
-            this.btnChartMarketCap = new CustomControls.RJControls.RJButton();
             this.panelChartLoading = new System.Windows.Forms.Panel();
             this.label233 = new System.Windows.Forms.Label();
             this.label232 = new System.Windows.Forms.Label();
             this.pictureBoxChartLoadingAnimation = new System.Windows.Forms.PictureBox();
-            this.btnChartLightningChannels = new CustomControls.RJControls.RJButton();
-            this.btnChartLightningCapacity = new CustomControls.RJControls.RJButton();
-            this.btnChartNodesByCountry = new CustomControls.RJControls.RJButton();
             this.panelPriceScaleButtons = new System.Windows.Forms.Panel();
             this.btnPriceChartScaleLog = new CustomControls.RJControls.RJButton();
             this.btnPriceChartScaleLinear = new CustomControls.RJControls.RJButton();
-            this.btnChartNodesByNetwork = new CustomControls.RJControls.RJButton();
-            this.btnChartPoolsRanking = new CustomControls.RJControls.RJButton();
             this.panelChartUTXOScaleButtons = new System.Windows.Forms.Panel();
             this.btnChartUTXOScaleLog = new CustomControls.RJControls.RJButton();
             this.btnChartUTXOScaleLinear = new CustomControls.RJControls.RJButton();
-            this.btnChartUTXO = new CustomControls.RJControls.RJButton();
             this.panelUniqueAddressesScaleButtons = new System.Windows.Forms.Panel();
             this.btnChartAddressScaleLog = new CustomControls.RJControls.RJButton();
             this.btnChartAddressScaleLinear = new CustomControls.RJControls.RJButton();
-            this.btnChartUniqueAddresses = new CustomControls.RJControls.RJButton();
-            this.btnChartBlockSize = new CustomControls.RJControls.RJButton();
-            this.btnChartCirculation = new CustomControls.RJControls.RJButton();
-            this.btnChartFeeRates = new CustomControls.RJControls.RJButton();
-            this.btnChartBlockFees = new CustomControls.RJControls.RJButton();
             this.panel78 = new System.Windows.Forms.Panel();
             this.label217 = new System.Windows.Forms.Label();
-            this.btnChartReward = new CustomControls.RJControls.RJButton();
-            this.btnChartPrice = new CustomControls.RJControls.RJButton();
-            this.btnChartDifficulty = new CustomControls.RJControls.RJButton();
-            this.btnChartHashrate = new CustomControls.RJControls.RJButton();
             this.formsPlot3 = new ScottPlot.FormsPlot();
             this.btnChartPeriodAll = new CustomControls.RJControls.RJButton();
             this.formsPlot2 = new ScottPlot.FormsPlot();
@@ -6465,7 +6449,7 @@
             this.toolTipGeneralUse.SetToolTip(this.btnViewUTXOsFromAddressTX, "View confirmed and \r\nXXunconfirmed transactions");
             this.btnViewUTXOsFromAddressTX.UseVisualStyleBackColor = false;
             this.btnViewUTXOsFromAddressTX.Visible = false;
-            this.btnViewUTXOsFromAddressTX.Click += new System.EventHandler(this.btnViewUTXOsFromAddressTX_Click);
+            this.btnViewUTXOsFromAddressTX.Click += new System.EventHandler(this.BtnViewUTXOsFromAddressTX_Click);
             // 
             // btnFirstAddressTransaction
             // 
@@ -7942,9 +7926,9 @@
             this.listViewTransactionInputs.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.AllListViews_DrawColumnHeader);
             this.listViewTransactionInputs.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ListViewTransactionInputs_DrawSubItem);
             this.listViewTransactionInputs.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.ListViewTransactionInputs_ItemSelectionChanged);
-            this.listViewTransactionInputs.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listViewTransactionInputs_KeyDown);
-            this.listViewTransactionInputs.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.listViewTransactionInputs_KeyPress);
-            this.listViewTransactionInputs.KeyUp += new System.Windows.Forms.KeyEventHandler(this.listViewTransactionInputs_KeyUp);
+            this.listViewTransactionInputs.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ListViewTransactionInputs_KeyDown);
+            this.listViewTransactionInputs.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ListViewTransactionInputs_KeyPress);
+            this.listViewTransactionInputs.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ListViewTransactionInputs_KeyUp);
             // 
             // panel25
             // 
@@ -8046,9 +8030,9 @@
             this.listViewTransactionOutputs.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.AllListViews_DrawColumnHeader);
             this.listViewTransactionOutputs.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ListViewTransactionOutputs_DrawSubItem);
             this.listViewTransactionOutputs.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.ListViewTransactionOutputs_ItemSelectionChanged);
-            this.listViewTransactionOutputs.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listViewTransactionOutputs_KeyDown);
-            this.listViewTransactionOutputs.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.listViewTransactionOutputs_KeyPress);
-            this.listViewTransactionOutputs.KeyUp += new System.Windows.Forms.KeyEventHandler(this.listViewTransactionOutputs_KeyUp);
+            this.listViewTransactionOutputs.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ListViewTransactionOutputs_KeyDown);
+            this.listViewTransactionOutputs.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ListViewTransactionOutputs_KeyPress);
+            this.listViewTransactionOutputs.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ListViewTransactionOutputs_KeyUp);
             // 
             // panel125
             // 
@@ -8600,9 +8584,9 @@
             this.listViewXpubAddresses.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.AllListViews_DrawColumnHeader);
             this.listViewXpubAddresses.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ListViewXpubAddresses_DrawSubItem);
             this.listViewXpubAddresses.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.ListViewXpubAddresses_ItemSelectionChanged);
-            this.listViewXpubAddresses.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listViewXpubAddresses_KeyDown);
-            this.listViewXpubAddresses.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.listViewXpubAddresses_KeyPress);
-            this.listViewXpubAddresses.KeyUp += new System.Windows.Forms.KeyEventHandler(this.listViewXpubAddresses_KeyUp);
+            this.listViewXpubAddresses.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ListViewXpubAddresses_KeyDown);
+            this.listViewXpubAddresses.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ListViewXpubAddresses_KeyPress);
+            this.listViewXpubAddresses.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ListViewXpubAddresses_KeyUp);
             // 
             // panel126
             // 
@@ -10083,9 +10067,9 @@
             this.listViewBookmarks.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.AllListViews_DrawColumnHeader);
             this.listViewBookmarks.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ListViewBookmarks_DrawSubItem);
             this.listViewBookmarks.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.ListViewBookmarks_ItemSelectionChanged);
-            this.listViewBookmarks.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listViewBookmarks_KeyDown);
-            this.listViewBookmarks.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.listViewBookmarks_KeyPress);
-            this.listViewBookmarks.KeyUp += new System.Windows.Forms.KeyEventHandler(this.listViewBookmarks_KeyUp);
+            this.listViewBookmarks.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ListViewBookmarks_KeyDown);
+            this.listViewBookmarks.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ListViewBookmarks_KeyPress);
+            this.listViewBookmarks.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ListViewBookmarks_KeyUp);
             // 
             // panel100
             // 
@@ -14240,28 +14224,12 @@
             this.panelCharts.Controls.Add(this.panelChartDifficultyScaleButtons);
             this.panelCharts.Controls.Add(this.panelHashrateScaleButtons);
             this.panelCharts.Controls.Add(this.panelChartMarketCapScaleButtons);
-            this.panelCharts.Controls.Add(this.btnChartMarketCap);
             this.panelCharts.Controls.Add(this.btnSaveChart);
             this.panelCharts.Controls.Add(this.panelChartLoading);
-            this.panelCharts.Controls.Add(this.btnChartLightningChannels);
-            this.panelCharts.Controls.Add(this.btnChartLightningCapacity);
-            this.panelCharts.Controls.Add(this.btnChartNodesByCountry);
             this.panelCharts.Controls.Add(this.panelPriceScaleButtons);
-            this.panelCharts.Controls.Add(this.btnChartNodesByNetwork);
-            this.panelCharts.Controls.Add(this.btnChartPoolsRanking);
             this.panelCharts.Controls.Add(this.panelChartUTXOScaleButtons);
-            this.panelCharts.Controls.Add(this.btnChartUTXO);
             this.panelCharts.Controls.Add(this.panelUniqueAddressesScaleButtons);
-            this.panelCharts.Controls.Add(this.btnChartUniqueAddresses);
-            this.panelCharts.Controls.Add(this.btnChartBlockSize);
-            this.panelCharts.Controls.Add(this.btnChartCirculation);
-            this.panelCharts.Controls.Add(this.btnChartFeeRates);
-            this.panelCharts.Controls.Add(this.btnChartBlockFees);
             this.panelCharts.Controls.Add(this.panel78);
-            this.panelCharts.Controls.Add(this.btnChartReward);
-            this.panelCharts.Controls.Add(this.btnChartPrice);
-            this.panelCharts.Controls.Add(this.btnChartDifficulty);
-            this.panelCharts.Controls.Add(this.btnChartHashrate);
             this.panelCharts.Controls.Add(this.formsPlot3);
             this.panelCharts.Controls.Add(this.btnChartPeriodAll);
             this.panelCharts.Controls.Add(this.formsPlot2);
@@ -14354,7 +14322,7 @@
             this.comboBoxChartSelect.Size = new System.Drawing.Size(143, 24);
             this.comboBoxChartSelect.TabIndex = 254;
             this.comboBoxChartSelect.Texts = "🔗 fee rates";
-            this.comboBoxChartSelect.OnSelectedIndexChanged += new System.EventHandler(this.comboBoxChartSelect_OnSelectedIndexChanged);
+            this.comboBoxChartSelect.OnSelectedIndexChanged += new System.EventHandler(this.ComboBoxChartSelect_OnSelectedIndexChanged);
             // 
             // panelChartDifficultyScaleButtons
             // 
@@ -14389,7 +14357,7 @@
             this.btnChartDifficultyLog.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartDifficultyLog, "Logarithmic scale chart");
             this.btnChartDifficultyLog.UseVisualStyleBackColor = false;
-            this.btnChartDifficultyLog.Click += new System.EventHandler(this.BtnChartDifficultyLog_ClickAsync);
+            this.btnChartDifficultyLog.Click += new System.EventHandler(this.btnChartDifficultyLog_Click);
             // 
             // btnChartDifficultyLinear
             // 
@@ -14414,7 +14382,7 @@
             this.btnChartDifficultyLinear.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartDifficultyLinear, "Linear scale chart");
             this.btnChartDifficultyLinear.UseVisualStyleBackColor = false;
-            this.btnChartDifficultyLinear.Click += new System.EventHandler(this.BtnChartDifficulty_ClickAsync);
+            this.btnChartDifficultyLinear.Click += new System.EventHandler(this.btnChartDifficultyLinear_Click);
             // 
             // panelHashrateScaleButtons
             // 
@@ -14449,7 +14417,7 @@
             this.btnHashrateScaleLog.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnHashrateScaleLog, "Logarithmic scale chart");
             this.btnHashrateScaleLog.UseVisualStyleBackColor = false;
-            this.btnHashrateScaleLog.Click += new System.EventHandler(this.BtnHashrateScaleLog_ClickAsync);
+            this.btnHashrateScaleLog.Click += new System.EventHandler(this.btnHashrateScaleLog_Click);
             // 
             // btnHashrateScaleLinear
             // 
@@ -14474,7 +14442,7 @@
             this.btnHashrateScaleLinear.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnHashrateScaleLinear, "Linear scale chart");
             this.btnHashrateScaleLinear.UseVisualStyleBackColor = false;
-            this.btnHashrateScaleLinear.Click += new System.EventHandler(this.BtnChartHashrate_ClickAsync);
+            this.btnHashrateScaleLinear.Click += new System.EventHandler(this.btnHashrateScaleLinear_Click);
             // 
             // panelChartMarketCapScaleButtons
             // 
@@ -14510,7 +14478,7 @@
             this.btnChartMarketCapScaleLog.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartMarketCapScaleLog, "Logarithmic scale chart");
             this.btnChartMarketCapScaleLog.UseVisualStyleBackColor = false;
-            this.btnChartMarketCapScaleLog.Click += new System.EventHandler(this.BtnChartMarketCapScaleLog_ClickAsync);
+            this.btnChartMarketCapScaleLog.Click += new System.EventHandler(this.btnChartMarketCapScaleLog_Click);
             // 
             // btnChartMarketCapScaleLinear
             // 
@@ -14535,33 +14503,7 @@
             this.btnChartMarketCapScaleLinear.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartMarketCapScaleLinear, "Linear scale chart");
             this.btnChartMarketCapScaleLinear.UseVisualStyleBackColor = false;
-            this.btnChartMarketCapScaleLinear.Click += new System.EventHandler(this.BtnChartMarketCap_ClickAsync);
-            // 
-            // btnChartMarketCap
-            // 
-            this.btnChartMarketCap.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartMarketCap.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartMarketCap.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnChartMarketCap.BorderRadius = 7;
-            this.btnChartMarketCap.BorderSize = 0;
-            this.btnChartMarketCap.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnChartMarketCap.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnChartMarketCap.FlatAppearance.BorderSize = 0;
-            this.btnChartMarketCap.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChartMarketCap.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChartMarketCap.ForeColor = System.Drawing.Color.White;
-            this.btnChartMarketCap.Location = new System.Drawing.Point(764, 480);
-            this.btnChartMarketCap.Margin = new System.Windows.Forms.Padding(0);
-            this.btnChartMarketCap.Name = "btnChartMarketCap";
-            this.btnChartMarketCap.Size = new System.Drawing.Size(100, 22);
-            this.btnChartMarketCap.TabIndex = 274;
-            this.btnChartMarketCap.TabStop = false;
-            this.btnChartMarketCap.Text = "market cap.";
-            this.btnChartMarketCap.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartMarketCap, resources.GetString("btnChartMarketCap.ToolTip"));
-            this.btnChartMarketCap.UseVisualStyleBackColor = false;
-            this.btnChartMarketCap.Visible = false;
-            this.btnChartMarketCap.Click += new System.EventHandler(this.BtnChartMarketCap_ClickAsync);
+            this.btnChartMarketCapScaleLinear.Click += new System.EventHandler(this.btnChartMarketCapScaleLinear_Click);
             // 
             // panelChartLoading
             // 
@@ -14611,83 +14553,6 @@
             this.pictureBoxChartLoadingAnimation.TabIndex = 250;
             this.pictureBoxChartLoadingAnimation.TabStop = false;
             // 
-            // btnChartLightningChannels
-            // 
-            this.btnChartLightningChannels.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartLightningChannels.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartLightningChannels.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnChartLightningChannels.BorderRadius = 7;
-            this.btnChartLightningChannels.BorderSize = 0;
-            this.btnChartLightningChannels.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnChartLightningChannels.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnChartLightningChannels.FlatAppearance.BorderSize = 0;
-            this.btnChartLightningChannels.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChartLightningChannels.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChartLightningChannels.ForeColor = System.Drawing.Color.White;
-            this.btnChartLightningChannels.Location = new System.Drawing.Point(764, 399);
-            this.btnChartLightningChannels.Margin = new System.Windows.Forms.Padding(0);
-            this.btnChartLightningChannels.Name = "btnChartLightningChannels";
-            this.btnChartLightningChannels.Size = new System.Drawing.Size(100, 22);
-            this.btnChartLightningChannels.TabIndex = 272;
-            this.btnChartLightningChannels.TabStop = false;
-            this.btnChartLightningChannels.Text = "channels";
-            this.btnChartLightningChannels.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartLightningChannels, resources.GetString("btnChartLightningChannels.ToolTip"));
-            this.btnChartLightningChannels.UseVisualStyleBackColor = false;
-            this.btnChartLightningChannels.Visible = false;
-            this.btnChartLightningChannels.Click += new System.EventHandler(this.BtnChartLightningChannels_ClickAsync);
-            // 
-            // btnChartLightningCapacity
-            // 
-            this.btnChartLightningCapacity.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartLightningCapacity.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartLightningCapacity.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnChartLightningCapacity.BorderRadius = 7;
-            this.btnChartLightningCapacity.BorderSize = 0;
-            this.btnChartLightningCapacity.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnChartLightningCapacity.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnChartLightningCapacity.FlatAppearance.BorderSize = 0;
-            this.btnChartLightningCapacity.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChartLightningCapacity.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChartLightningCapacity.ForeColor = System.Drawing.Color.White;
-            this.btnChartLightningCapacity.Location = new System.Drawing.Point(764, 373);
-            this.btnChartLightningCapacity.Margin = new System.Windows.Forms.Padding(0);
-            this.btnChartLightningCapacity.Name = "btnChartLightningCapacity";
-            this.btnChartLightningCapacity.Size = new System.Drawing.Size(100, 22);
-            this.btnChartLightningCapacity.TabIndex = 271;
-            this.btnChartLightningCapacity.TabStop = false;
-            this.btnChartLightningCapacity.Text = "capacity";
-            this.btnChartLightningCapacity.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartLightningCapacity, resources.GetString("btnChartLightningCapacity.ToolTip"));
-            this.btnChartLightningCapacity.UseVisualStyleBackColor = false;
-            this.btnChartLightningCapacity.Visible = false;
-            this.btnChartLightningCapacity.Click += new System.EventHandler(this.BtnChartLightningCapacity_ClickAsync);
-            // 
-            // btnChartNodesByCountry
-            // 
-            this.btnChartNodesByCountry.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartNodesByCountry.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartNodesByCountry.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnChartNodesByCountry.BorderRadius = 7;
-            this.btnChartNodesByCountry.BorderSize = 0;
-            this.btnChartNodesByCountry.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnChartNodesByCountry.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnChartNodesByCountry.FlatAppearance.BorderSize = 0;
-            this.btnChartNodesByCountry.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChartNodesByCountry.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChartNodesByCountry.ForeColor = System.Drawing.Color.White;
-            this.btnChartNodesByCountry.Location = new System.Drawing.Point(764, 347);
-            this.btnChartNodesByCountry.Margin = new System.Windows.Forms.Padding(0);
-            this.btnChartNodesByCountry.Name = "btnChartNodesByCountry";
-            this.btnChartNodesByCountry.Size = new System.Drawing.Size(100, 22);
-            this.btnChartNodesByCountry.TabIndex = 269;
-            this.btnChartNodesByCountry.TabStop = false;
-            this.btnChartNodesByCountry.Text = "countries";
-            this.btnChartNodesByCountry.TextColor = System.Drawing.Color.White;
-            this.btnChartNodesByCountry.UseVisualStyleBackColor = false;
-            this.btnChartNodesByCountry.Visible = false;
-            this.btnChartNodesByCountry.Click += new System.EventHandler(this.BtnChartNodesByCountry_ClickAsync);
-            // 
             // panelPriceScaleButtons
             // 
             this.panelPriceScaleButtons.BackColor = System.Drawing.Color.Transparent;
@@ -14721,7 +14586,7 @@
             this.btnPriceChartScaleLog.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnPriceChartScaleLog, "Logarithmic scale chart");
             this.btnPriceChartScaleLog.UseVisualStyleBackColor = false;
-            this.btnPriceChartScaleLog.Click += new System.EventHandler(this.BtnChartPriceLog_ClickAsync);
+            this.btnPriceChartScaleLog.Click += new System.EventHandler(this.btnPriceChartScaleLog_Click);
             // 
             // btnPriceChartScaleLinear
             // 
@@ -14746,58 +14611,7 @@
             this.btnPriceChartScaleLinear.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnPriceChartScaleLinear, "Linear scale chart");
             this.btnPriceChartScaleLinear.UseVisualStyleBackColor = false;
-            this.btnPriceChartScaleLinear.Click += new System.EventHandler(this.BtnChartPrice_ClickAsync);
-            // 
-            // btnChartNodesByNetwork
-            // 
-            this.btnChartNodesByNetwork.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartNodesByNetwork.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartNodesByNetwork.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnChartNodesByNetwork.BorderRadius = 7;
-            this.btnChartNodesByNetwork.BorderSize = 0;
-            this.btnChartNodesByNetwork.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnChartNodesByNetwork.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnChartNodesByNetwork.FlatAppearance.BorderSize = 0;
-            this.btnChartNodesByNetwork.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChartNodesByNetwork.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChartNodesByNetwork.ForeColor = System.Drawing.Color.White;
-            this.btnChartNodesByNetwork.Location = new System.Drawing.Point(764, 321);
-            this.btnChartNodesByNetwork.Margin = new System.Windows.Forms.Padding(0);
-            this.btnChartNodesByNetwork.Name = "btnChartNodesByNetwork";
-            this.btnChartNodesByNetwork.Size = new System.Drawing.Size(100, 22);
-            this.btnChartNodesByNetwork.TabIndex = 267;
-            this.btnChartNodesByNetwork.TabStop = false;
-            this.btnChartNodesByNetwork.Text = "networks";
-            this.btnChartNodesByNetwork.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartNodesByNetwork, resources.GetString("btnChartNodesByNetwork.ToolTip"));
-            this.btnChartNodesByNetwork.UseVisualStyleBackColor = false;
-            this.btnChartNodesByNetwork.Visible = false;
-            this.btnChartNodesByNetwork.Click += new System.EventHandler(this.BtnChartNodesByNetwork_ClickAsync);
-            // 
-            // btnChartPoolsRanking
-            // 
-            this.btnChartPoolsRanking.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartPoolsRanking.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartPoolsRanking.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnChartPoolsRanking.BorderRadius = 7;
-            this.btnChartPoolsRanking.BorderSize = 0;
-            this.btnChartPoolsRanking.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnChartPoolsRanking.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnChartPoolsRanking.FlatAppearance.BorderSize = 0;
-            this.btnChartPoolsRanking.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChartPoolsRanking.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChartPoolsRanking.ForeColor = System.Drawing.Color.White;
-            this.btnChartPoolsRanking.Location = new System.Drawing.Point(764, 267);
-            this.btnChartPoolsRanking.Margin = new System.Windows.Forms.Padding(0);
-            this.btnChartPoolsRanking.Name = "btnChartPoolsRanking";
-            this.btnChartPoolsRanking.Size = new System.Drawing.Size(100, 22);
-            this.btnChartPoolsRanking.TabIndex = 265;
-            this.btnChartPoolsRanking.TabStop = false;
-            this.btnChartPoolsRanking.Text = "pool rankings";
-            this.btnChartPoolsRanking.TextColor = System.Drawing.Color.White;
-            this.btnChartPoolsRanking.UseVisualStyleBackColor = false;
-            this.btnChartPoolsRanking.Visible = false;
-            this.btnChartPoolsRanking.Click += new System.EventHandler(this.BtnChartPoolsRanking_ClickAsync);
+            this.btnPriceChartScaleLinear.Click += new System.EventHandler(this.btnPriceChartScaleLinear_Click);
             // 
             // panelChartUTXOScaleButtons
             // 
@@ -14832,7 +14646,7 @@
             this.btnChartUTXOScaleLog.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartUTXOScaleLog, "Logarithmic scale chart");
             this.btnChartUTXOScaleLog.UseVisualStyleBackColor = false;
-            this.btnChartUTXOScaleLog.Click += new System.EventHandler(this.BtnChartUTXOScaleLog_ClickAsync);
+            this.btnChartUTXOScaleLog.Click += new System.EventHandler(this.btnChartUTXOScaleLog_Click);
             // 
             // btnChartUTXOScaleLinear
             // 
@@ -14857,33 +14671,7 @@
             this.btnChartUTXOScaleLinear.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartUTXOScaleLinear, "Linear scale chart");
             this.btnChartUTXOScaleLinear.UseVisualStyleBackColor = false;
-            this.btnChartUTXOScaleLinear.Click += new System.EventHandler(this.BtnChartUTXO_ClickAsync);
-            // 
-            // btnChartUTXO
-            // 
-            this.btnChartUTXO.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartUTXO.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartUTXO.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnChartUTXO.BorderRadius = 7;
-            this.btnChartUTXO.BorderSize = 0;
-            this.btnChartUTXO.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnChartUTXO.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnChartUTXO.FlatAppearance.BorderSize = 0;
-            this.btnChartUTXO.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChartUTXO.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChartUTXO.ForeColor = System.Drawing.Color.White;
-            this.btnChartUTXO.Location = new System.Drawing.Point(764, 241);
-            this.btnChartUTXO.Margin = new System.Windows.Forms.Padding(0);
-            this.btnChartUTXO.Name = "btnChartUTXO";
-            this.btnChartUTXO.Size = new System.Drawing.Size(100, 22);
-            this.btnChartUTXO.TabIndex = 264;
-            this.btnChartUTXO.TabStop = false;
-            this.btnChartUTXO.Text = "UTXO\'s";
-            this.btnChartUTXO.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartUTXO, resources.GetString("btnChartUTXO.ToolTip"));
-            this.btnChartUTXO.UseVisualStyleBackColor = false;
-            this.btnChartUTXO.Visible = false;
-            this.btnChartUTXO.Click += new System.EventHandler(this.BtnChartUTXO_ClickAsync);
+            this.btnChartUTXOScaleLinear.Click += new System.EventHandler(this.btnChartUTXOScaleLinear_Click);
             // 
             // panelUniqueAddressesScaleButtons
             // 
@@ -14915,11 +14703,10 @@
             this.btnChartAddressScaleLog.TabIndex = 262;
             this.btnChartAddressScaleLog.TabStop = false;
             this.btnChartAddressScaleLog.Text = "log";
-            this.btnChartAddressScaleLog.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartAddressScaleLog.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartAddressScaleLog, "Logarithmic scale chart");
             this.btnChartAddressScaleLog.UseVisualStyleBackColor = false;
-            this.btnChartAddressScaleLog.Click += new System.EventHandler(this.BtnChartUniqueAddressesLog_ClickAsync);
+            this.btnChartAddressScaleLog.Click += new System.EventHandler(this.btnChartAddressScaleLog_Click);
             // 
             // btnChartAddressScaleLinear
             // 
@@ -14941,141 +14728,10 @@
             this.btnChartAddressScaleLinear.TabIndex = 261;
             this.btnChartAddressScaleLinear.TabStop = false;
             this.btnChartAddressScaleLinear.Text = "lin";
-            this.btnChartAddressScaleLinear.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnChartAddressScaleLinear.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartAddressScaleLinear, "Linear scale chart");
             this.btnChartAddressScaleLinear.UseVisualStyleBackColor = false;
-            this.btnChartAddressScaleLinear.Click += new System.EventHandler(this.BtnChartUniqueAddresses_ClickAsync);
-            // 
-            // btnChartUniqueAddresses
-            // 
-            this.btnChartUniqueAddresses.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartUniqueAddresses.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartUniqueAddresses.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnChartUniqueAddresses.BorderRadius = 7;
-            this.btnChartUniqueAddresses.BorderSize = 0;
-            this.btnChartUniqueAddresses.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnChartUniqueAddresses.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnChartUniqueAddresses.FlatAppearance.BorderSize = 0;
-            this.btnChartUniqueAddresses.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChartUniqueAddresses.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChartUniqueAddresses.ForeColor = System.Drawing.Color.White;
-            this.btnChartUniqueAddresses.Location = new System.Drawing.Point(764, 215);
-            this.btnChartUniqueAddresses.Margin = new System.Windows.Forms.Padding(0);
-            this.btnChartUniqueAddresses.Name = "btnChartUniqueAddresses";
-            this.btnChartUniqueAddresses.Size = new System.Drawing.Size(100, 22);
-            this.btnChartUniqueAddresses.TabIndex = 259;
-            this.btnChartUniqueAddresses.TabStop = false;
-            this.btnChartUniqueAddresses.Text = "addresses";
-            this.btnChartUniqueAddresses.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartUniqueAddresses, resources.GetString("btnChartUniqueAddresses.ToolTip"));
-            this.btnChartUniqueAddresses.UseVisualStyleBackColor = false;
-            this.btnChartUniqueAddresses.Visible = false;
-            this.btnChartUniqueAddresses.Click += new System.EventHandler(this.BtnChartUniqueAddresses_ClickAsync);
-            // 
-            // btnChartBlockSize
-            // 
-            this.btnChartBlockSize.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartBlockSize.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartBlockSize.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnChartBlockSize.BorderRadius = 7;
-            this.btnChartBlockSize.BorderSize = 0;
-            this.btnChartBlockSize.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnChartBlockSize.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnChartBlockSize.FlatAppearance.BorderSize = 0;
-            this.btnChartBlockSize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChartBlockSize.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChartBlockSize.ForeColor = System.Drawing.Color.White;
-            this.btnChartBlockSize.Location = new System.Drawing.Point(764, 111);
-            this.btnChartBlockSize.Margin = new System.Windows.Forms.Padding(0);
-            this.btnChartBlockSize.Name = "btnChartBlockSize";
-            this.btnChartBlockSize.Size = new System.Drawing.Size(100, 22);
-            this.btnChartBlockSize.TabIndex = 258;
-            this.btnChartBlockSize.TabStop = false;
-            this.btnChartBlockSize.Text = "block size";
-            this.btnChartBlockSize.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartBlockSize, resources.GetString("btnChartBlockSize.ToolTip"));
-            this.btnChartBlockSize.UseVisualStyleBackColor = false;
-            this.btnChartBlockSize.Visible = false;
-            this.btnChartBlockSize.Click += new System.EventHandler(this.BtnChartBlockSize_ClickAsync);
-            // 
-            // btnChartCirculation
-            // 
-            this.btnChartCirculation.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartCirculation.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartCirculation.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnChartCirculation.BorderRadius = 7;
-            this.btnChartCirculation.BorderSize = 0;
-            this.btnChartCirculation.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnChartCirculation.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnChartCirculation.FlatAppearance.BorderSize = 0;
-            this.btnChartCirculation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChartCirculation.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChartCirculation.ForeColor = System.Drawing.Color.White;
-            this.btnChartCirculation.Location = new System.Drawing.Point(764, 189);
-            this.btnChartCirculation.Margin = new System.Windows.Forms.Padding(0);
-            this.btnChartCirculation.Name = "btnChartCirculation";
-            this.btnChartCirculation.Size = new System.Drawing.Size(100, 22);
-            this.btnChartCirculation.TabIndex = 179;
-            this.btnChartCirculation.TabStop = false;
-            this.btnChartCirculation.Text = "circulation";
-            this.btnChartCirculation.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartCirculation, resources.GetString("btnChartCirculation.ToolTip"));
-            this.btnChartCirculation.UseVisualStyleBackColor = false;
-            this.btnChartCirculation.Visible = false;
-            this.btnChartCirculation.Click += new System.EventHandler(this.BtnChartCirculation_ClickAsync);
-            // 
-            // btnChartFeeRates
-            // 
-            this.btnChartFeeRates.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartFeeRates.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartFeeRates.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnChartFeeRates.BorderRadius = 7;
-            this.btnChartFeeRates.BorderSize = 0;
-            this.btnChartFeeRates.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnChartFeeRates.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnChartFeeRates.FlatAppearance.BorderSize = 0;
-            this.btnChartFeeRates.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChartFeeRates.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChartFeeRates.ForeColor = System.Drawing.Color.White;
-            this.btnChartFeeRates.Location = new System.Drawing.Point(764, 33);
-            this.btnChartFeeRates.Margin = new System.Windows.Forms.Padding(0);
-            this.btnChartFeeRates.Name = "btnChartFeeRates";
-            this.btnChartFeeRates.Size = new System.Drawing.Size(100, 22);
-            this.btnChartFeeRates.TabIndex = 178;
-            this.btnChartFeeRates.TabStop = false;
-            this.btnChartFeeRates.Text = "fee rates";
-            this.btnChartFeeRates.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartFeeRates, resources.GetString("btnChartFeeRates.ToolTip"));
-            this.btnChartFeeRates.UseVisualStyleBackColor = false;
-            this.btnChartFeeRates.Visible = false;
-            this.btnChartFeeRates.Click += new System.EventHandler(this.BtnChartFeeRates_ClickAsync);
-            // 
-            // btnChartBlockFees
-            // 
-            this.btnChartBlockFees.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartBlockFees.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartBlockFees.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnChartBlockFees.BorderRadius = 7;
-            this.btnChartBlockFees.BorderSize = 0;
-            this.btnChartBlockFees.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnChartBlockFees.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnChartBlockFees.FlatAppearance.BorderSize = 0;
-            this.btnChartBlockFees.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChartBlockFees.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChartBlockFees.ForeColor = System.Drawing.Color.White;
-            this.btnChartBlockFees.Location = new System.Drawing.Point(764, 59);
-            this.btnChartBlockFees.Margin = new System.Windows.Forms.Padding(0);
-            this.btnChartBlockFees.Name = "btnChartBlockFees";
-            this.btnChartBlockFees.Size = new System.Drawing.Size(100, 22);
-            this.btnChartBlockFees.TabIndex = 166;
-            this.btnChartBlockFees.TabStop = false;
-            this.btnChartBlockFees.Text = "block fees";
-            this.btnChartBlockFees.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartBlockFees, resources.GetString("btnChartBlockFees.ToolTip"));
-            this.btnChartBlockFees.UseVisualStyleBackColor = false;
-            this.btnChartBlockFees.Visible = false;
-            this.btnChartBlockFees.Click += new System.EventHandler(this.BtnChartBlockFees_ClickAsync);
+            this.btnChartAddressScaleLinear.Click += new System.EventHandler(this.btnChartAddressScaleLinear_Click);
             // 
             // panel78
             // 
@@ -15103,110 +14759,6 @@
             this.label217.TabIndex = 153;
             this.label217.Text = "Chart period";
             this.label217.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // btnChartReward
-            // 
-            this.btnChartReward.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartReward.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartReward.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnChartReward.BorderRadius = 7;
-            this.btnChartReward.BorderSize = 0;
-            this.btnChartReward.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnChartReward.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnChartReward.FlatAppearance.BorderSize = 0;
-            this.btnChartReward.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChartReward.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChartReward.ForeColor = System.Drawing.Color.White;
-            this.btnChartReward.Location = new System.Drawing.Point(764, 85);
-            this.btnChartReward.Margin = new System.Windows.Forms.Padding(0);
-            this.btnChartReward.Name = "btnChartReward";
-            this.btnChartReward.Size = new System.Drawing.Size(100, 22);
-            this.btnChartReward.TabIndex = 165;
-            this.btnChartReward.TabStop = false;
-            this.btnChartReward.Text = "block reward";
-            this.btnChartReward.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartReward, resources.GetString("btnChartReward.ToolTip"));
-            this.btnChartReward.UseVisualStyleBackColor = false;
-            this.btnChartReward.Visible = false;
-            this.btnChartReward.Click += new System.EventHandler(this.BtnChartReward_ClickAsync);
-            // 
-            // btnChartPrice
-            // 
-            this.btnChartPrice.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartPrice.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartPrice.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnChartPrice.BorderRadius = 7;
-            this.btnChartPrice.BorderSize = 0;
-            this.btnChartPrice.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnChartPrice.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnChartPrice.FlatAppearance.BorderSize = 0;
-            this.btnChartPrice.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChartPrice.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChartPrice.ForeColor = System.Drawing.Color.White;
-            this.btnChartPrice.Location = new System.Drawing.Point(764, 454);
-            this.btnChartPrice.Margin = new System.Windows.Forms.Padding(0);
-            this.btnChartPrice.Name = "btnChartPrice";
-            this.btnChartPrice.Size = new System.Drawing.Size(100, 22);
-            this.btnChartPrice.TabIndex = 164;
-            this.btnChartPrice.TabStop = false;
-            this.btnChartPrice.Text = "price";
-            this.btnChartPrice.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartPrice, resources.GetString("btnChartPrice.ToolTip"));
-            this.btnChartPrice.UseVisualStyleBackColor = false;
-            this.btnChartPrice.Visible = false;
-            this.btnChartPrice.Click += new System.EventHandler(this.BtnChartPrice_ClickAsync);
-            // 
-            // btnChartDifficulty
-            // 
-            this.btnChartDifficulty.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartDifficulty.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartDifficulty.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnChartDifficulty.BorderRadius = 7;
-            this.btnChartDifficulty.BorderSize = 0;
-            this.btnChartDifficulty.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnChartDifficulty.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnChartDifficulty.FlatAppearance.BorderSize = 0;
-            this.btnChartDifficulty.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChartDifficulty.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChartDifficulty.ForeColor = System.Drawing.Color.White;
-            this.btnChartDifficulty.Location = new System.Drawing.Point(764, 163);
-            this.btnChartDifficulty.Margin = new System.Windows.Forms.Padding(0);
-            this.btnChartDifficulty.Name = "btnChartDifficulty";
-            this.btnChartDifficulty.Size = new System.Drawing.Size(100, 22);
-            this.btnChartDifficulty.TabIndex = 163;
-            this.btnChartDifficulty.TabStop = false;
-            this.btnChartDifficulty.Text = "difficulty";
-            this.btnChartDifficulty.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartDifficulty, resources.GetString("btnChartDifficulty.ToolTip"));
-            this.btnChartDifficulty.UseVisualStyleBackColor = false;
-            this.btnChartDifficulty.Visible = false;
-            this.btnChartDifficulty.Click += new System.EventHandler(this.BtnChartDifficulty_ClickAsync);
-            // 
-            // btnChartHashrate
-            // 
-            this.btnChartHashrate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartHashrate.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartHashrate.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnChartHashrate.BorderRadius = 7;
-            this.btnChartHashrate.BorderSize = 0;
-            this.btnChartHashrate.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnChartHashrate.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnChartHashrate.FlatAppearance.BorderSize = 0;
-            this.btnChartHashrate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChartHashrate.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChartHashrate.ForeColor = System.Drawing.Color.White;
-            this.btnChartHashrate.Location = new System.Drawing.Point(764, 137);
-            this.btnChartHashrate.Margin = new System.Windows.Forms.Padding(0);
-            this.btnChartHashrate.Name = "btnChartHashrate";
-            this.btnChartHashrate.Size = new System.Drawing.Size(100, 22);
-            this.btnChartHashrate.TabIndex = 162;
-            this.btnChartHashrate.TabStop = false;
-            this.btnChartHashrate.Text = "hashrate";
-            this.btnChartHashrate.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartHashrate, resources.GetString("btnChartHashrate.ToolTip"));
-            this.btnChartHashrate.UseVisualStyleBackColor = false;
-            this.btnChartHashrate.Visible = false;
-            this.btnChartHashrate.Click += new System.EventHandler(this.BtnChartHashrate_ClickAsync);
             // 
             // formsPlot3
             // 
@@ -19494,9 +19046,9 @@
             this.btnAddressUTXOScrollDown.Text = "▼";
             this.btnAddressUTXOScrollDown.TextColor = System.Drawing.Color.White;
             this.btnAddressUTXOScrollDown.UseVisualStyleBackColor = false;
-            this.btnAddressUTXOScrollDown.Click += new System.EventHandler(this.btnAddressUTXOScrollDown_Click);
-            this.btnAddressUTXOScrollDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnAddressUTXOScrollDown_MouseDown);
-            this.btnAddressUTXOScrollDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnAddressUTXOScrollDown_MouseUp);
+            this.btnAddressUTXOScrollDown.Click += new System.EventHandler(this.BtnAddressUTXOScrollDown_Click);
+            this.btnAddressUTXOScrollDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnAddressUTXOScrollDown_MouseDown);
+            this.btnAddressUTXOScrollDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnAddressUTXOScrollDown_MouseUp);
             // 
             // btnAddressUTXOScrollUp
             // 
@@ -19519,9 +19071,9 @@
             this.btnAddressUTXOScrollUp.Text = "▲";
             this.btnAddressUTXOScrollUp.TextColor = System.Drawing.Color.White;
             this.btnAddressUTXOScrollUp.UseVisualStyleBackColor = false;
-            this.btnAddressUTXOScrollUp.Click += new System.EventHandler(this.btnAddressUTXOScrollUp_Click);
-            this.btnAddressUTXOScrollUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnAddressUTXOScrollUp_MouseDown);
-            this.btnAddressUTXOScrollUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnAddressUTXOScrollUp_MouseUp);
+            this.btnAddressUTXOScrollUp.Click += new System.EventHandler(this.BtnAddressUTXOScrollUp_Click);
+            this.btnAddressUTXOScrollUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnAddressUTXOScrollUp_MouseDown);
+            this.btnAddressUTXOScrollUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnAddressUTXOScrollUp_MouseUp);
             // 
             // btnViewAddressTXFromUTXO
             // 
@@ -19544,7 +19096,7 @@
             this.btnViewAddressTXFromUTXO.Text = "view transactions";
             this.btnViewAddressTXFromUTXO.TextColor = System.Drawing.Color.White;
             this.btnViewAddressTXFromUTXO.UseVisualStyleBackColor = false;
-            this.btnViewAddressTXFromUTXO.Click += new System.EventHandler(this.btnViewAddressTXFromUTXO_Click);
+            this.btnViewAddressTXFromUTXO.Click += new System.EventHandler(this.BtnViewAddressTXFromUTXO_Click);
             // 
             // label303
             // 
@@ -19600,7 +19152,7 @@
             this.panelUTXOsContainer.Name = "panelUTXOsContainer";
             this.panelUTXOsContainer.Size = new System.Drawing.Size(544, 490);
             this.panelUTXOsContainer.TabIndex = 283;
-            this.panelUTXOsContainer.Paint += new System.Windows.Forms.PaintEventHandler(this.panelUTXOsContainer_Paint);
+            this.panelUTXOsContainer.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelUTXOsContainer_Paint);
             // 
             // listViewAddressUTXOs
             // 
@@ -19631,9 +19183,9 @@
             this.listViewAddressUTXOs.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.AllListViews_DrawColumnHeader);
             this.listViewAddressUTXOs.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ListViewAddressUTXOs_DrawSubItem);
             this.listViewAddressUTXOs.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.ListViewAddressUTXOs_ItemSelectionChanged);
-            this.listViewAddressUTXOs.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listViewAddressUTXOs_KeyDown);
-            this.listViewAddressUTXOs.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.listViewAddressUTXOs_KeyPress);
-            this.listViewAddressUTXOs.KeyUp += new System.Windows.Forms.KeyEventHandler(this.listViewAddressUTXOs_KeyUp);
+            this.listViewAddressUTXOs.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ListViewAddressUTXOs_KeyDown);
+            this.listViewAddressUTXOs.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ListViewAddressUTXOs_KeyPress);
+            this.listViewAddressUTXOs.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ListViewAddressUTXOs_KeyUp);
             // 
             // panel137
             // 
@@ -19812,10 +19364,10 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
+            this.Controls.Add(this.panelAddressUTXO);
             this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelXpub);
-            this.Controls.Add(this.panelAddressUTXO);
             this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelBookmarks);
@@ -20877,10 +20429,6 @@
         private CustomControls.RJControls.RJButton btnViewBookmark;
         private CustomControls.RJControls.RJButton btnBookmarkUnlock;
         private CustomControls.RJControls.RJButton btnDecryptBookmark;
-        private CustomControls.RJControls.RJButton btnChartHashrate;
-        private CustomControls.RJControls.RJButton btnChartDifficulty;
-        private CustomControls.RJControls.RJButton btnChartPrice;
-        private CustomControls.RJControls.RJButton btnChartReward;
         private CustomControls.RJControls.RJButton btnChartPeriod24h;
         private CustomControls.RJControls.RJButton btnChartPeriod3d;
         private CustomControls.RJControls.RJButton btnChartPeriodAll;
@@ -20891,17 +20439,6 @@
         private CustomControls.RJControls.RJButton btnChartPeriod3m;
         private CustomControls.RJControls.RJButton btnChartPeriod1m;
         private CustomControls.RJControls.RJButton btnChartPeriod1w;
-        private CustomControls.RJControls.RJButton btnChartFeeRates;
-        private CustomControls.RJControls.RJButton btnChartCirculation;
-        private CustomControls.RJControls.RJButton btnChartBlockSize;
-        private CustomControls.RJControls.RJButton btnChartUniqueAddresses;
-        private CustomControls.RJControls.RJButton btnChartUTXO;
-        private CustomControls.RJControls.RJButton btnChartPoolsRanking;
-        private CustomControls.RJControls.RJButton btnChartNodesByNetwork;
-        private CustomControls.RJControls.RJButton btnChartNodesByCountry;
-        private CustomControls.RJControls.RJButton btnChartLightningCapacity;
-        private CustomControls.RJControls.RJButton btnChartLightningChannels;
-        private CustomControls.RJControls.RJButton btnChartMarketCap;
         private CustomControls.RJControls.RJButton btnSaveChart;
         private CustomControls.RJControls.RJButton btnCancelAddToBookmarks;
         private CustomControls.RJControls.RJButton btnCommitToBookmarks;
@@ -21408,7 +20945,6 @@
         private CustomControls.RJControls.RJComboBox comboBoxChartSelect;
         private System.Windows.Forms.Panel panel139;
         private System.Windows.Forms.Label label114;
-        private CustomControls.RJControls.RJButton btnChartBlockFees;
     }
 }
 

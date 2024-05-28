@@ -28,6 +28,8 @@ https://satsuma.btcdir.org/download/
 * Taproot support on xpub screen 
 * add utxo button to xpub and tx listviews
 * check for errors/duplicates in sample bookmarks file (and add a few more)
+* help page for address utxo screen
+* rename address help screen to address tx
 */
 
 #region Using
@@ -21515,7 +21517,7 @@ namespace SATSuma
             if (firstTimeLoadingScreen)
             {
                 firstTimeLoadingScreen = false;
-                await Task.Delay(8000).ConfigureAwait(true);
+                await Task.Delay(6000).ConfigureAwait(true);
             }
             else
             {
@@ -26921,7 +26923,7 @@ namespace SATSuma
             {
                 btnMenuCreateTheme.BackgroundImage = null;
             });
-            Control[] buttonsToEnable = { btnMenuSettings, btnMenuXpub, btnMenuAddress, btnMenuTransaction, btnMenuBookmarks, btnMenuCreateTheme, btnMenuDirectory, btnMenuBitcoinDashboard, btnMenuBlockList, btnMenuLightningDashboard, btnMenuBlock };
+            Control[] buttonsToEnable = { btnMenuSettings, btnMenuXpub, btnMenuAddress, btnMenuAddressUTXO, btnMenuTransaction, btnMenuBookmarks, btnMenuCreateTheme, btnMenuDirectory, btnMenuBitcoinDashboard, btnMenuBlockList, btnMenuLightningDashboard, btnMenuBlock };
             foreach (Control control in buttonsToEnable)
             {
                 control.Invoke((MethodInvoker)delegate

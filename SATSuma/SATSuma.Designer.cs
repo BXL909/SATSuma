@@ -4919,7 +4919,6 @@
             this.panelLightningDashboard.Name = "panelLightningDashboard";
             this.panelLightningDashboard.Size = new System.Drawing.Size(773, 556);
             this.panelLightningDashboard.TabIndex = 88;
-            this.toolTipForLblHeaderPrice.SetToolTip(this.panelLightningDashboard, "Node alias");
             this.panelLightningDashboard.VisibleChanged += new System.EventHandler(this.HideBookmarksShowFees);
             this.panelLightningDashboard.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelLightningDashboard_Paint);
             // 
@@ -18809,7 +18808,7 @@
             this.lblAddressConfirmedUnspentOutputsUTXO.Size = new System.Drawing.Size(70, 17);
             this.lblAddressConfirmedUnspentOutputsUTXO.TabIndex = 135;
             this.lblAddressConfirmedUnspentOutputsUTXO.Text = "(no data)";
-            this.toolTipGeneralUse.SetToolTip(this.lblAddressConfirmedUnspentOutputsUTXO, "Number of confirmed \r\nXXunspent outputs");
+            this.toolTipGeneralUse.SetToolTip(this.lblAddressConfirmedUnspentOutputsUTXO, "Number of unspent \r\nXXoutputs (UTXO\'s)");
             this.lblAddressConfirmedUnspentOutputsUTXO.Visible = false;
             // 
             // lblAddressConfirmedSpentOutputsUTXO
@@ -18821,7 +18820,7 @@
             this.lblAddressConfirmedSpentOutputsUTXO.Size = new System.Drawing.Size(70, 17);
             this.lblAddressConfirmedSpentOutputsUTXO.TabIndex = 134;
             this.lblAddressConfirmedSpentOutputsUTXO.Text = "(no data)";
-            this.toolTipGeneralUse.SetToolTip(this.lblAddressConfirmedSpentOutputsUTXO, "Number of confirmed \r\nXXspent outputs");
+            this.toolTipGeneralUse.SetToolTip(this.lblAddressConfirmedSpentOutputsUTXO, "Number of spent\r\nXXoutputs (UTXO\'s)");
             this.lblAddressConfirmedSpentOutputsUTXO.Visible = false;
             // 
             // lblAddressConfirmedUnspentUTXO
@@ -18834,7 +18833,7 @@
             this.lblAddressConfirmedUnspentUTXO.Size = new System.Drawing.Size(15, 17);
             this.lblAddressConfirmedUnspentUTXO.TabIndex = 129;
             this.lblAddressConfirmedUnspentUTXO.Text = "0";
-            this.toolTipGeneralUse.SetToolTip(this.lblAddressConfirmedUnspentUTXO, "Confirmed amount of \r\nXXunspent bitcoin");
+            this.toolTipGeneralUse.SetToolTip(this.lblAddressConfirmedUnspentUTXO, "Value of all currently held\r\nXXunspent outputs (UTXO\'s)");
             this.lblAddressConfirmedUnspentUTXO.Visible = false;
             // 
             // lblAddressConfirmedSpentUTXO
@@ -18847,7 +18846,7 @@
             this.lblAddressConfirmedSpentUTXO.Size = new System.Drawing.Size(15, 17);
             this.lblAddressConfirmedSpentUTXO.TabIndex = 127;
             this.lblAddressConfirmedSpentUTXO.Text = "0";
-            this.toolTipGeneralUse.SetToolTip(this.lblAddressConfirmedSpentUTXO, "Confirmed amount of \r\nXXspent bitcoin");
+            this.toolTipGeneralUse.SetToolTip(this.lblAddressConfirmedSpentUTXO, "Value of spent\r\nXXoutputs (UTXO\'s)");
             this.lblAddressConfirmedSpentUTXO.Visible = false;
             // 
             // btnViewBlockFromAddressUTXO
@@ -18886,7 +18885,7 @@
             this.lblLargestUTXO.Size = new System.Drawing.Size(70, 17);
             this.lblLargestUTXO.TabIndex = 286;
             this.lblLargestUTXO.Text = "(no data)";
-            this.toolTipGeneralUse.SetToolTip(this.lblLargestUTXO, "Number of confirmed \r\nXXunspent outputs");
+            this.toolTipGeneralUse.SetToolTip(this.lblLargestUTXO, "Largest unspent output\r\nXX(UTXO) currently held");
             this.lblLargestUTXO.Visible = false;
             // 
             // lblSmallestUTXO
@@ -18898,7 +18897,7 @@
             this.lblSmallestUTXO.Size = new System.Drawing.Size(70, 17);
             this.lblSmallestUTXO.TabIndex = 288;
             this.lblSmallestUTXO.Text = "(no data)";
-            this.toolTipGeneralUse.SetToolTip(this.lblSmallestUTXO, "Number of confirmed \r\nXXunspent outputs");
+            this.toolTipGeneralUse.SetToolTip(this.lblSmallestUTXO, "Smallest unspent output\r\nXX(UTXO) currently held\r\n");
             this.lblSmallestUTXO.Visible = false;
             // 
             // timer50thSec
@@ -19365,11 +19364,12 @@
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
             this.Controls.Add(this.panelAddressUTXO);
+            this.Controls.Add(this.panelBitcoinDashboard);
+            this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelAddress);
-            this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelBlockList);
@@ -19377,7 +19377,6 @@
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelPriceConverter);
             this.Controls.Add(this.panelDCACalculator);
-            this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.panelPriceSourceIndicators);
             this.Controls.Add(this.progressBarRefreshData);
             this.Controls.Add(this.lblHeaderPriceChange);

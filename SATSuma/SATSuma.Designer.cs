@@ -17515,12 +17515,13 @@
             // panelLeftPanel
             // 
             this.panelLeftPanel.BackColor = System.Drawing.Color.Transparent;
+            this.panelLeftPanel.Controls.Add(this.btnCurrency);
+            this.panelLeftPanel.Controls.Add(this.btnThemeMenu);
             this.panelLeftPanel.Controls.Add(this.lblMenuArrow);
             this.panelLeftPanel.Controls.Add(this.btnMenuCharts);
             this.panelLeftPanel.Controls.Add(this.btnMenuXpub);
             this.panelLeftPanel.Controls.Add(this.btnMenuTransaction);
             this.panelLeftPanel.Controls.Add(this.btnMenuAddressUTXO);
-            this.panelLeftPanel.Controls.Add(this.btnThemeMenu);
             this.panelLeftPanel.Controls.Add(this.btnMenuDirectory);
             this.panelLeftPanel.Controls.Add(this.btnMenuPriceConverter);
             this.panelLeftPanel.Controls.Add(this.btnMenuDCACalculator);
@@ -17536,7 +17537,6 @@
             this.panelLeftPanel.Controls.Add(this.btnMenuLightningDashboard);
             this.panelLeftPanel.Controls.Add(this.panel129);
             this.panelLeftPanel.Controls.Add(this.panel128);
-            this.panelLeftPanel.Controls.Add(this.btnCurrency);
             this.panelLeftPanel.Controls.Add(this.panelCurrency);
             this.panelLeftPanel.Controls.Add(this.panel30);
             this.panelLeftPanel.Controls.Add(this.lblUpdaterLight);
@@ -19363,15 +19363,15 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
+            this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelAddressUTXO);
+            this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelXpub);
-            this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelBookmarks);
-            this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelAppearance);

@@ -193,7 +193,8 @@
             this.comboBoxDocumentation.Items.AddRange(new object[] {
             "blocks",
             "block",
-            "address",
+            "address transactions",
+            "address utxo\'s",
             "transaction",
             "xpub",
             "charts",

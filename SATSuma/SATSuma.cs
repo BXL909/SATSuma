@@ -27,10 +27,7 @@ https://satsuma.btcdir.org/download/
 * Stuff to do:
 * Taproot support on xpub screen 
 * add utxo button to xpub and tx listviews
-* check for errors/duplicates in sample bookmarks file (and add a few more)
-* help page for address utxo screen
-* rename address help screen to address tx
-*/
+ */
 
 #region Using
 using NBitcoin;
@@ -3555,7 +3552,7 @@ namespace SATSuma
                 }
 
                 Control[] controlsToShow = { lblAddressTXPositionInList, label59, label61, label67, label63, panel123, panel124, listViewAddressTransactions, lblAddressConfirmedUnspent, lblAddressConfirmedUnspentOutputs, lblAddressConfirmedTransactionCount, lblAddressConfirmedReceived, lblAddressConfirmedReceivedOutputs, lblAddressConfirmedSpent, lblAddressConfirmedSpentOutputs, 
-                    lblAddressConfirmedReceivedFiat, lblAddressConfirmedSpentFiat, lblAddressConfirmedUnspentFiat, btnShowAllTX, btnShowConfirmedTX, btnShowUnconfirmedTX, lblAddressType, panel41, panel42, panel43, panel44, panel132, listViewAddressTransactions, btnViewUTXOsFromAddressTX };
+                    btnShowAllTX, btnShowConfirmedTX, btnShowUnconfirmedTX, lblAddressType, panel41, panel42, panel43, panel44, panel132, listViewAddressTransactions, btnViewUTXOsFromAddressTX };
                 foreach (Control control in controlsToShow)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -3563,6 +3560,14 @@ namespace SATSuma
                         control.Visible = true;
                     });
                 }
+
+                if (lblHeaderPrice.Text != "disabled")
+                {
+                    lblAddressConfirmedReceivedFiat.Visible = true;
+                    lblAddressConfirmedSpentFiat.Visible = true;
+                    lblAddressConfirmedUnspentFiat.Visible = true;
+                }
+
                 if (String.Compare(NodeURL, "https://mempool.space/api/") == 0 || String.Compare(NodeURL, "https://mempool.space/testnet/api/") == 0)
                 {
                     rowsReturnedByAddressTransactionsAPI = 25;
@@ -4272,7 +4277,7 @@ namespace SATSuma
                 if (lblAddressTypeUTXO.Visible)
                 {
                     Control[] controlsToHide = { lblLargestUTXO, lblSmallestUTXO, label230, label308, panel143, panel134, lblAddressUTXOPositionInList, label314, panelUTXOsContainer, panel137, listViewAddressUTXOs, lblAddressConfirmedUnspentUTXO, lblAddressConfirmedUnspentOutputsUTXO, 
-                        lblAddressConfirmedSpentUTXO, lblAddressConfirmedSpentOutputsUTXO, lblAddressConfirmedSpentUTXOFiat, lblAddressConfirmedUnspentUTXOFiat, lblAddressTypeUTXO, panel135, panel141, btnViewAddressTXFromUTXO, label303, label313, label315, panel136, label309 };
+                        lblAddressConfirmedSpentUTXO, lblAddressConfirmedSpentOutputsUTXO, lblAddressTypeUTXO, panel135, panel141, btnViewAddressTXFromUTXO, label303, label313, label315, panel136, label309, lblAddressConfirmedSpentUTXOFiat, lblAddressConfirmedUnspentUTXOFiat };
                     foreach (Control control in controlsToHide)
                     {
                         control.Invoke((MethodInvoker)delegate
@@ -4292,8 +4297,8 @@ namespace SATSuma
         {
             try
             {
-                Control[] controlsToShow = { lblLargestUTXO, lblSmallestUTXO, label230, label308, panel143, panel134, lblAddressUTXOPositionInList, label314, panel137, panelUTXOsContainer, listViewAddressUTXOs, lblAddressConfirmedUnspentUTXO, lblAddressConfirmedUnspentOutputsUTXO, lblAddressConfirmedUnspentUTXOFiat, lblAddressConfirmedSpentUTXO, lblAddressConfirmedSpentOutputsUTXO,
-                     lblAddressConfirmedSpentUTXOFiat, lblAddressTypeUTXO, panel135, panel141, btnViewAddressTXFromUTXO, label303, label313, label315, panel136, label309  };
+                Control[] controlsToShow = { lblLargestUTXO, lblSmallestUTXO, label230, label308, panel143, panel134, lblAddressUTXOPositionInList, label314, panel137, panelUTXOsContainer, listViewAddressUTXOs, lblAddressConfirmedUnspentUTXO, lblAddressConfirmedUnspentOutputsUTXO, lblAddressConfirmedSpentUTXO, lblAddressConfirmedSpentOutputsUTXO,
+                     lblAddressTypeUTXO, panel135, panel141, btnViewAddressTXFromUTXO, label303, label313, label315, panel136, label309  };
                 foreach (Control control in controlsToShow)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -4301,6 +4306,13 @@ namespace SATSuma
                         control.Visible = true;
                     });
                 }
+
+                if (lblHeaderPrice.Text != "disabled")
+                {
+                    lblAddressConfirmedSpentUTXOFiat.Visible = true;
+                    lblAddressConfirmedUnspentUTXOFiat.Visible = true;
+                }
+
                 listViewAddressUTXOs.BringToFront();
             }
             catch (Exception ex)
@@ -9586,12 +9598,6 @@ namespace SATSuma
                     panelXpubContainer.VerticalScroll.Value = XpubAddressesScrollPosition;
                     lblHeaderBlockAge.Focus();
                 }
-                /*
-                if (panelXpubContainer.VerticalScroll.Value < panelXpubContainer.VerticalScroll.Maximum)
-                {
-                    panelXpubContainer.VerticalScroll.Value++;
-                }
-                */
             }
             catch (Exception ex)
             {
@@ -9641,12 +9647,6 @@ namespace SATSuma
                     panelXpubContainer.VerticalScroll.Value = XpubAddressesScrollPosition;
                     lblHeaderBlockAge.Focus();
                 }
-                /*
-                if (panelXpubContainer.VerticalScroll.Value > panelXpubContainer.VerticalScroll.Minimum)
-                {
-                    panelXpubContainer.VerticalScroll.Value--;
-                }
-                */
             }
             catch (Exception ex)
             {
@@ -9702,14 +9702,6 @@ namespace SATSuma
                             }
                             panelXpubContainer.VerticalScroll.Value = XpubAddressesScrollPosition;
                         }
-                        /*
-                        if (panelXpubContainer.VerticalScroll.Value < panelXpubContainer.VerticalScroll.Maximum - 5)
-                        {
-                            panelXpubContainer.VerticalScroll.Value = panelXpubContainer.VerticalScroll.Value + 5;
-                            XpubAddressesScrollPosition = panelXpubContainer.VerticalScroll.Value; // store the scroll position to reposition on the paint event
-                        }
-                        XpubScrollTimer.Interval = 1; // set a faster interval while the button is held down
-                        */
                     }
                     else if (XpubUpButtonPressed)
                     {
@@ -9719,14 +9711,6 @@ namespace SATSuma
                             XpubAddressesScrollPosition -= rowHeight;
                             panelXpubContainer.VerticalScroll.Value = XpubAddressesScrollPosition;
                         }
-                        /*
-                        if (panelXpubContainer.VerticalScroll.Value > panelXpubContainer.VerticalScroll.Minimum + 5)
-                        {
-                            panelXpubContainer.VerticalScroll.Value = panelXpubContainer.VerticalScroll.Value - 5;
-                            XpubAddressesScrollPosition = panelXpubContainer.VerticalScroll.Value; // store the scroll position to reposition on the paint event
-                        }
-                        XpubScrollTimer.Interval = 1; // set a faster interval while the button is held down
-                        */
                     }
                 }
                 else
@@ -9754,12 +9738,6 @@ namespace SATSuma
                     panelXpubContainer.VerticalScroll.Value = 0;
                     XpubAddressesScrollPosition = 0;
                 }
-                /*
-                if (btnViewAddressFromXpub.Visible) // user must have clicked a row given that the button is visible
-                {
-                    panelXpubContainer.VerticalScroll.Value = XpubAddressesScrollPosition; //return the scroll position to where it was when clicked (it jumps to top otherwise)
-                }
-                */
             }
             catch (Exception ex)
             {
@@ -25089,7 +25067,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listFiatConversionsToHide = { lblNextBlockTotalFeesFiat, lblBlockListTotalFeesInNextBlockFiat, lblBlockRewardFiat, lblBlockRewardAfterHalvingFiat, lblBlockListBlockRewardFiat, lbl24HourBTCSentFiat, lblAddressConfirmedReceivedFiat, lblAddressConfirmedSpentFiat, lblAddressConfirmedUnspentFiat, lblTotalFeesFiat, lblRewardFiat, lblTransactionFeeFiat, lblTotalInputValueFiat, lblTotalOutputValueFiat, lblXpubConfirmedReceivedFiat, lblXpubConfirmedSpentFiat, lblXpubConfirmedUnspentFiat,
+                Control[] listFiatConversionsToHide = { lblAddressConfirmedUnspentUTXOFiat, lblAddressConfirmedSpentUTXOFiat, lblNextBlockTotalFeesFiat, lblBlockListTotalFeesInNextBlockFiat, lblBlockRewardFiat, lblBlockRewardAfterHalvingFiat, lblBlockListBlockRewardFiat, lbl24HourBTCSentFiat, lblAddressConfirmedReceivedFiat, lblAddressConfirmedSpentFiat, lblAddressConfirmedUnspentFiat, lblTotalFeesFiat, lblRewardFiat, lblTransactionFeeFiat, lblTotalInputValueFiat, lblTotalOutputValueFiat, lblXpubConfirmedReceivedFiat, lblXpubConfirmedSpentFiat, lblXpubConfirmedUnspentFiat,
                     lblTotalCapacityFiat, lblClearnetCapacityFiat, lblTorCapacityFiat, lblUnknownCapacityFiat, lblAverageCapacityFiat, lblAverageFeeRateFiat, lblAverageBaseFeeMtokensFiat, lblMedCapacityFiat, lblMedFeeRateFiat, lblMedBaseFeeTokensFiat, capacityLabelFiat1, capacityLabelFiat2, capacityLabelFiat3, capacityLabelFiat4, capacityLabelFiat5, capacityLabelFiat6, capacityLabelFiat7, capacityLabelFiat8, capacityLabelFiat9, capacityLabelFiat10};
                 foreach (Control control in listFiatConversionsToHide)
                 {
@@ -25121,7 +25099,7 @@ namespace SATSuma
                                 control.Visible = true;
                             });
                         }
-                        if (panel41.Visible)
+                        if (panel41.Visible) // address transactions screen
                         {
                             lblAddressConfirmedUnspentFiat.Invoke((MethodInvoker)delegate
                             {
@@ -25134,6 +25112,17 @@ namespace SATSuma
                             lblAddressConfirmedSpentFiat.Invoke((MethodInvoker)delegate
                             {
                                 lblAddressConfirmedSpentFiat.Visible = true;
+                            });
+                        }
+                        if (panel141.Visible) // address utxo screen
+                        {
+                            lblAddressConfirmedUnspentUTXOFiat.Invoke((MethodInvoker)delegate
+                            {
+                                lblAddressConfirmedUnspentUTXOFiat.Visible = true;
+                            });
+                            lblAddressConfirmedSpentUTXOFiat.Invoke((MethodInvoker)delegate
+                            {
+                                lblAddressConfirmedSpentUTXOFiat.Visible = true;
                             });
                         }
                     }
@@ -25753,6 +25742,19 @@ namespace SATSuma
                     if (decimal.TryParse(lblAddressConfirmedSpent.Text, out decimal confirmedSpent))
                     {
                         UpdateLabelValueAsync(lblAddressConfirmedSpentFiat, $"{lblHeaderPrice.Text[0]}{(confirmedSpent * OneBTCinSelectedCurrency):N2}");
+                    }
+                }
+
+                // address utxo screen
+                if (listViewAddressUTXOs.Visible) // only do this stuff if there's actually a valid address on the address screen
+                {
+                    if (decimal.TryParse(lblAddressConfirmedUnspentUTXO.Text, out decimal confirmedUnspent))
+                    {
+                        UpdateLabelValueAsync(lblAddressConfirmedUnspentUTXOFiat, $"{lblHeaderPrice.Text[0]}{(confirmedUnspent * OneBTCinSelectedCurrency):N2}");
+                    }
+                    if (decimal.TryParse(lblAddressConfirmedSpentUTXO.Text, out decimal confirmedSpent))
+                    {
+                        UpdateLabelValueAsync(lblAddressConfirmedSpentUTXOFiat, $"{lblHeaderPrice.Text[0]}{(confirmedSpent * OneBTCinSelectedCurrency):N2}");
                     }
                 }
 
@@ -28585,6 +28587,39 @@ namespace SATSuma
                             lblAddressConfirmedReceivedFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(lblAddressConfirmedReceived.Text) * OneBTCinSelectedCurrency):N2}";
                         });
                     }
+                    if (AddressQRCodePicturebox.Visible)
+                    {
+                        if (lblHeaderPrice.Text != "disabled")
+                        {
+                            lblAddressConfirmedReceivedFiat.Invoke((MethodInvoker)delegate
+                            {
+                                lblAddressConfirmedReceivedFiat.Visible = true;
+                            });
+                            lblAddressConfirmedSpentFiat.Invoke((MethodInvoker)delegate
+                            {
+                                lblAddressConfirmedSpentFiat.Visible = true;
+                            });
+                            lblAddressConfirmedUnspentFiat.Invoke((MethodInvoker)delegate
+                            {
+                                lblAddressConfirmedUnspentFiat.Visible = true;
+                            });
+                        }
+                        else
+                        {
+                            lblAddressConfirmedReceivedFiat.Invoke((MethodInvoker)delegate
+                            {
+                                lblAddressConfirmedReceivedFiat.Visible = false;
+                            });
+                            lblAddressConfirmedSpentFiat.Invoke((MethodInvoker)delegate
+                            {
+                                lblAddressConfirmedSpentFiat.Visible = false;
+                            });
+                            lblAddressConfirmedUnspentFiat.Invoke((MethodInvoker)delegate
+                            {
+                                lblAddressConfirmedUnspentFiat.Visible = false;
+                            });
+                        }
+                    }
                     #endregion
                     #region recalculate fiat values on address utxo screen
                     if (String.Compare(lblAddressConfirmedUnspentUTXO.Text, "no data") != 0 && String.Compare(lblAddressConfirmedUnspentUTXO.Text, "") != 0)
@@ -28600,6 +28635,34 @@ namespace SATSuma
                         {
                             lblAddressConfirmedSpentUTXOFiat.Text = $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(lblAddressConfirmedSpentUTXO.Text) * OneBTCinSelectedCurrency):N2}";
                         });
+                    }
+                    if (AddressQRCodePictureboxUTXO.Visible)
+                    {
+                        if (lblHeaderPrice.Text != "disabled")
+                        {
+                            lblAddressConfirmedSpentUTXOFiat.Invoke((MethodInvoker)delegate
+                            {
+                                lblAddressConfirmedSpentUTXOFiat.Visible = true;
+                            });
+                            lblAddressConfirmedUnspentUTXOFiat.Invoke((MethodInvoker)delegate
+                            {
+                                lblAddressConfirmedUnspentUTXOFiat.Visible = true;
+                            });
+                        }
+                        else
+                        {
+                            if (lblHeaderPrice.Text != "disabled")
+                            {
+                                lblAddressConfirmedSpentUTXOFiat.Invoke((MethodInvoker)delegate
+                                {
+                                    lblAddressConfirmedSpentUTXOFiat.Visible = false;
+                                });
+                                lblAddressConfirmedUnspentUTXOFiat.Invoke((MethodInvoker)delegate
+                                {
+                                    lblAddressConfirmedUnspentUTXOFiat.Visible = false;
+                                });
+                            }
+                        }
                     }
                     #endregion
                     #region recalculate fiat values on block screen
@@ -29075,6 +29138,11 @@ namespace SATSuma
         public Panel GetPanelAddress() // enables help screen to get state (visible) of panel to determine which help text to show
         {
             return this.panelAddress;
+        }
+
+        public Panel GetPanelAddressUTXO() // enables help screen to get state (visible) of panel to determine which help text to show
+        {
+            return this.panelAddressUTXO;
         }
 
         public Panel GetPanelBitcoinDashboard() // enables help screen to get state (visible) of panel to determine which help text to show

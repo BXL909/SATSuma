@@ -27,7 +27,7 @@ https://satsuma.btcdir.org/download/
 * Stuff to do:
 * Taproot support on xpub screen 
 * add utxo button to xpub and tx listviews
-* CAPITALISE HEADINGS ON SCREENS BELOW DIRECTORY
+* colour of disabled apply theme button in menu
  */
 
 #region Using
@@ -4676,7 +4676,7 @@ namespace SATSuma
                     }
                     lblBlockBlockHeight.Invoke((MethodInvoker)delegate
                     {
-                        lblBlockBlockHeight.Text = $"Block {numericUpDownSubmittedBlockNumber.Text}";
+                        lblBlockBlockHeight.Text = $"BLOCK {numericUpDownSubmittedBlockNumber.Text}";
                         lblBlockBlockHeight.Location = new Point((panel105.Width / 2) - (lblBlockBlockHeight.Width / 2), lblBlockBlockHeight.Location.Y);
                     });
 
@@ -17388,7 +17388,7 @@ namespace SATSuma
                     lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                     {
                         lblCurrencyMenuHighlightedButtonText.Text = "GBP £";
-                        lblCurrencyMenuHighlightedButtonText.Location = new Point(btnGBP.Location.X + (int)(14 * UIScale), btnGBP.Location.Y + (int)(5 * UIScale));
+                        lblCurrencyMenuHighlightedButtonText.Location = new Point(btnGBP.Location.X + (int)(10 * UIScale), btnGBP.Location.Y);
                     });
                     ClearCurrencyMenuMarkers();
                     btnGBP.Invoke((MethodInvoker)delegate
@@ -17407,7 +17407,7 @@ namespace SATSuma
                     lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                     {
                         lblCurrencyMenuHighlightedButtonText.Text = "USD $";
-                        lblCurrencyMenuHighlightedButtonText.Location = new Point(btnUSD.Location.X + (int)(14 * UIScale), btnUSD.Location.Y + (int)(5 * UIScale));
+                        lblCurrencyMenuHighlightedButtonText.Location = new Point(btnUSD.Location.X + (int)(10 * UIScale), btnUSD.Location.Y);
                     });
                     ClearCurrencyMenuMarkers();
                     btnUSD.Invoke((MethodInvoker)delegate
@@ -17426,7 +17426,7 @@ namespace SATSuma
                     lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                     {
                         lblCurrencyMenuHighlightedButtonText.Text = "EUR €";
-                        lblCurrencyMenuHighlightedButtonText.Location = new Point(btnEUR.Location.X + (int)(14 * UIScale), btnEUR.Location.Y + (int)(5 * UIScale));
+                        lblCurrencyMenuHighlightedButtonText.Location = new Point(btnEUR.Location.X + (int)(10 * UIScale), btnEUR.Location.Y);
                     });
                     ClearCurrencyMenuMarkers();
                     btnEUR.Invoke((MethodInvoker)delegate
@@ -17445,7 +17445,7 @@ namespace SATSuma
                     lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                     {
                         lblCurrencyMenuHighlightedButtonText.Text = "XAU 🪙";
-                        lblCurrencyMenuHighlightedButtonText.Location = new Point(btnXAU.Location.X + (int)(14 * UIScale), btnXAU.Location.Y + (int)(5 * UIScale));
+                        lblCurrencyMenuHighlightedButtonText.Location = new Point(btnXAU.Location.X + (int)(10 * UIScale), btnXAU.Location.Y);
                     });
                     ClearCurrencyMenuMarkers();
                     btnXAU.Invoke((MethodInvoker)delegate
@@ -17746,7 +17746,7 @@ namespace SATSuma
                             lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                             {
                                 lblThemeMenuHighlightedButtonText.Text = "genesis";
-                                lblThemeMenuHighlightedButtonText.Location = new Point(BtnMenuThemeGenesis.Location.X + (int)(14 * UIScale), BtnMenuThemeGenesis.Location.Y + (int)(5 * UIScale));
+                                lblThemeMenuHighlightedButtonText.Location = new Point(BtnMenuThemeGenesis.Location.X + (int)(14 * UIScale), BtnMenuThemeGenesis.Location.Y);
                             });
                             ClearThemeMenuMarkers();
                             BtnMenuThemeGenesis.Invoke((MethodInvoker)delegate
@@ -17771,7 +17771,7 @@ namespace SATSuma
                                 lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                                 {
                                     lblThemeMenuHighlightedButtonText.Text = "franklin";
-                                    lblThemeMenuHighlightedButtonText.Location = new Point(btnMenuThemeFranklin.Location.X + (int)(14 * UIScale), btnMenuThemeFranklin.Location.Y + (int)(5 * UIScale));
+                                    lblThemeMenuHighlightedButtonText.Location = new Point(btnMenuThemeFranklin.Location.X + (int)(14 * UIScale), btnMenuThemeFranklin.Location.Y);
                                 });
                                 ClearThemeMenuMarkers();
                                 btnMenuThemeFranklin.Invoke((MethodInvoker)delegate
@@ -17796,7 +17796,7 @@ namespace SATSuma
                                     lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                                     {
                                         lblThemeMenuHighlightedButtonText.Text = "satsuma";
-                                        lblThemeMenuHighlightedButtonText.Location = new Point(btnMenuThemeSatsuma.Location.X + (int)(14 * UIScale), btnMenuThemeSatsuma.Location.Y + (int)(5 * UIScale));
+                                        lblThemeMenuHighlightedButtonText.Location = new Point(btnMenuThemeSatsuma.Location.X + (int)(14 * UIScale), btnMenuThemeSatsuma.Location.Y);
                                     });
                                     ClearThemeMenuMarkers();
                                     btnMenuThemeSatsuma.Invoke((MethodInvoker)delegate
@@ -17821,7 +17821,7 @@ namespace SATSuma
                                         lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                                         {
                                             lblThemeMenuHighlightedButtonText.Text = "stack sats";
-                                            lblThemeMenuHighlightedButtonText.Location = new Point(btnMenuThemeStackSats.Location.X + (int)(14 * UIScale), btnMenuThemeStackSats.Location.Y + (int)(5 * UIScale));
+                                            lblThemeMenuHighlightedButtonText.Location = new Point(btnMenuThemeStackSats.Location.X + (int)(14 * UIScale), btnMenuThemeStackSats.Location.Y);
                                         });
                                         ClearThemeMenuMarkers();
                                         btnMenuThemeStackSats.Invoke((MethodInvoker)delegate
@@ -17846,7 +17846,7 @@ namespace SATSuma
                                             lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                                             {
                                                 lblThemeMenuHighlightedButtonText.Text = "honey badger";
-                                                lblThemeMenuHighlightedButtonText.Location = new Point(btnMenuThemeHoneyBadger.Location.X + (int)(14 * UIScale), btnMenuThemeHoneyBadger.Location.Y + (int)(5 * UIScale));
+                                                lblThemeMenuHighlightedButtonText.Location = new Point(btnMenuThemeHoneyBadger.Location.X + (int)(14 * UIScale), btnMenuThemeHoneyBadger.Location.Y);
                                             });
                                             ClearThemeMenuMarkers();
                                             btnMenuThemeHoneyBadger.Invoke((MethodInvoker)delegate
@@ -17871,7 +17871,7 @@ namespace SATSuma
                                                 lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                                                 {
                                                     lblThemeMenuHighlightedButtonText.Text = "symbol";
-                                                    lblThemeMenuHighlightedButtonText.Location = new Point(btnMenuThemeSymbol.Location.X + (int)(14 * UIScale), btnMenuThemeSymbol.Location.Y + (int)(5 * UIScale));
+                                                    lblThemeMenuHighlightedButtonText.Location = new Point(btnMenuThemeSymbol.Location.X + (int)(14 * UIScale), btnMenuThemeSymbol.Location.Y);
                                                 });
                                                 ClearThemeMenuMarkers();
                                                 btnMenuThemeSymbol.Invoke((MethodInvoker)delegate
@@ -17889,7 +17889,7 @@ namespace SATSuma
                                                 {
                                                     lblThemeMenuHighlightedButtonText.Visible = false;
                                                     lblThemeMenuHighlightedButtonText.Text = $"{theme.ThemeName}!";
-                                                    lblThemeMenuHighlightedButtonText.Location = new Point(btnMenuApplyCustomTheme.Location.X + (int)(14 * UIScale), btnMenuApplyCustomTheme.Location.Y + (int)(5 * UIScale));
+                                                    lblThemeMenuHighlightedButtonText.Location = new Point(btnMenuApplyCustomTheme.Location.X + (int)(14 * UIScale), btnMenuApplyCustomTheme.Location.Y);
                                                 });
                                                 ClearThemeMenuMarkers();
                                                 btnMenuApplyCustomTheme.Invoke((MethodInvoker)delegate
@@ -18321,7 +18321,7 @@ namespace SATSuma
                 {
                     lblThemeMenuHighlightedButtonText.Visible = true;
                     lblThemeMenuHighlightedButtonText.Text = "genesis";
-                    lblThemeMenuHighlightedButtonText.Location = new Point(BtnMenuThemeGenesis.Location.X + (int)(14 * UIScale), BtnMenuThemeGenesis.Location.Y + (int)(5 * UIScale));
+                    lblThemeMenuHighlightedButtonText.Location = new Point(BtnMenuThemeGenesis.Location.X + (int)(14 * UIScale), BtnMenuThemeGenesis.Location.Y);
                 });
                 ClearThemeMenuMarkers();
                 BtnMenuThemeGenesis.Invoke((MethodInvoker)delegate
@@ -18374,7 +18374,7 @@ namespace SATSuma
                 {
                     lblThemeMenuHighlightedButtonText.Visible = true;
                     lblThemeMenuHighlightedButtonText.Text = "franklin";
-                    lblThemeMenuHighlightedButtonText.Location = new Point(btnMenuThemeFranklin.Location.X + (int)(14 * UIScale), btnMenuThemeFranklin.Location.Y + (int)(5 * UIScale));
+                    lblThemeMenuHighlightedButtonText.Location = new Point(btnMenuThemeFranklin.Location.X + (int)(14 * UIScale), btnMenuThemeFranklin.Location.Y);
                 });
                 ClearThemeMenuMarkers();
                 btnMenuThemeFranklin.Invoke((MethodInvoker)delegate
@@ -18427,7 +18427,7 @@ namespace SATSuma
                 {
                     lblThemeMenuHighlightedButtonText.Visible = true;
                     lblThemeMenuHighlightedButtonText.Text = "satsuma";
-                    lblThemeMenuHighlightedButtonText.Location = new Point(btnMenuThemeSatsuma.Location.X + (int)(14 * UIScale), btnMenuThemeSatsuma.Location.Y + (int)(5 * UIScale));
+                    lblThemeMenuHighlightedButtonText.Location = new Point(btnMenuThemeSatsuma.Location.X + (int)(14 * UIScale), btnMenuThemeSatsuma.Location.Y);
                 });
                 ClearThemeMenuMarkers();
                 btnMenuThemeSatsuma.Invoke((MethodInvoker)delegate
@@ -18480,7 +18480,7 @@ namespace SATSuma
                 {
                     lblThemeMenuHighlightedButtonText.Visible = true;
                     lblThemeMenuHighlightedButtonText.Text = "honey badger";
-                    lblThemeMenuHighlightedButtonText.Location = new Point(btnMenuThemeHoneyBadger.Location.X + (int)(14 * UIScale), btnMenuThemeHoneyBadger.Location.Y + (int)(5 * UIScale));
+                    lblThemeMenuHighlightedButtonText.Location = new Point(btnMenuThemeHoneyBadger.Location.X + (int)(14 * UIScale), btnMenuThemeHoneyBadger.Location.Y);
                 });
                 ClearThemeMenuMarkers();
                 btnMenuThemeHoneyBadger.Invoke((MethodInvoker)delegate
@@ -18533,7 +18533,7 @@ namespace SATSuma
                 {
                     lblThemeMenuHighlightedButtonText.Visible = true;
                     lblThemeMenuHighlightedButtonText.Text = "stack sats";
-                    lblThemeMenuHighlightedButtonText.Location = new Point(btnMenuThemeStackSats.Location.X + (int)(14 * UIScale), btnMenuThemeStackSats.Location.Y + (int)(5 * UIScale));
+                    lblThemeMenuHighlightedButtonText.Location = new Point(btnMenuThemeStackSats.Location.X + (int)(14 * UIScale), btnMenuThemeStackSats.Location.Y);
                 });
                 ClearThemeMenuMarkers();
                 btnMenuThemeStackSats.Invoke((MethodInvoker)delegate
@@ -18586,7 +18586,7 @@ namespace SATSuma
                 {
                     lblThemeMenuHighlightedButtonText.Visible = true;
                     lblThemeMenuHighlightedButtonText.Text = "symbol";
-                    lblThemeMenuHighlightedButtonText.Location = new Point(btnMenuThemeSymbol.Location.X + (int)(14 * UIScale), btnMenuThemeSymbol.Location.Y + (int)(5 * UIScale));
+                    lblThemeMenuHighlightedButtonText.Location = new Point(btnMenuThemeSymbol.Location.X + (int)(14 * UIScale), btnMenuThemeSymbol.Location.Y);
                 });
                 ClearThemeMenuMarkers();
                 btnMenuThemeSymbol.Invoke((MethodInvoker)delegate
@@ -18732,7 +18732,7 @@ namespace SATSuma
                             lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                             {
                                 lblThemeMenuHighlightedButtonText.Text = theme.ThemeName;
-                                lblThemeMenuHighlightedButtonText.Location = new Point(btnMenuApplyCustomTheme.Location.X + (int)(14 * UIScale), btnMenuApplyCustomTheme.Location.Y + (int)(5 * UIScale));
+                                lblThemeMenuHighlightedButtonText.Location = new Point(btnMenuApplyCustomTheme.Location.X + (int)(14 * UIScale), btnMenuApplyCustomTheme.Location.Y);
                             });
                             ClearThemeMenuMarkers();
                             btnMenuApplyCustomTheme.Invoke((MethodInvoker)delegate
@@ -20786,7 +20786,7 @@ namespace SATSuma
                                     lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                                     {
                                         lblThemeMenuHighlightedButtonText.Text = theme.ThemeName;
-                                        lblThemeMenuHighlightedButtonText.Location = new Point(btnMenuApplyCustomTheme.Location.X + (int)(14 * UIScale), btnMenuApplyCustomTheme.Location.Y + (int)(5 * UIScale));
+                                        lblThemeMenuHighlightedButtonText.Location = new Point(btnMenuApplyCustomTheme.Location.X + (int)(14 * UIScale), btnMenuApplyCustomTheme.Location.Y);
                                     });
                                     ClearThemeMenuMarkers();
                                     btnMenuApplyCustomTheme.Invoke((MethodInvoker)delegate
@@ -24926,11 +24926,11 @@ namespace SATSuma
 
             if (panelToExpandVert == panelCurrency)
             {
-                panelMaxHeight = (int)(103 * UIScale);
+                panelMaxHeight = (int)(82 * UIScale);
             }
             if (panelToExpandVert == panelThemeMenu)
             {
-                panelMaxHeight = (int)(257 * UIScale);
+                panelMaxHeight = (int)(207 * UIScale);
             }
             if (currentHeightExpandingPanel >= panelMaxHeight) // expanding is complete
             {
@@ -26979,7 +26979,7 @@ namespace SATSuma
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuArrow.Height = (int)(20 * UIScale);
+                    lblMenuArrow.Height = (int)(18 * UIScale);
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuBitcoinDashboard.Location.Y);
                     lblMenuArrow.Visible = true;
                 });
@@ -27056,7 +27056,7 @@ namespace SATSuma
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuArrow.Height = (int)(24 * UIScale);
+                    lblMenuArrow.Height = (int)(18 * UIScale);
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuLightningDashboard.Location.Y);
                     lblMenuArrow.Visible = true;
                 });
@@ -27134,7 +27134,7 @@ namespace SATSuma
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuArrow.Height = (int)(24 * UIScale);
+                    lblMenuArrow.Height = (int)(18 * UIScale);
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuCharts.Location.Y);
                     lblMenuArrow.Visible = true;
                 });
@@ -27211,7 +27211,7 @@ namespace SATSuma
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuArrow.Height = (int)(20 * UIScale);
+                    lblMenuArrow.Height = (int)(18 * UIScale);
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuAddress.Location.Y);
                     lblMenuArrow.Visible = true;
                 });
@@ -27300,7 +27300,7 @@ namespace SATSuma
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuArrow.Height = (int)(20 * UIScale);
+                    lblMenuArrow.Height = (int)(18 * UIScale);
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuAddressUTXO.Location.Y);
                     lblMenuArrow.Visible = true;
                 });
@@ -27383,7 +27383,7 @@ namespace SATSuma
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuArrow.Height = (int)(20 * UIScale);
+                    lblMenuArrow.Height = (int)(18 * UIScale);
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuBlock.Location.Y);
                     lblMenuArrow.Visible = true;
                 });
@@ -27477,7 +27477,7 @@ namespace SATSuma
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuArrow.Height = (int)(20 * UIScale);
+                    lblMenuArrow.Height = (int)(18 * UIScale);
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuXpub.Location.Y);
                     lblMenuArrow.Visible = true;
                 });
@@ -27553,7 +27553,7 @@ namespace SATSuma
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuArrow.Height = (int)(20 * UIScale);
+                    lblMenuArrow.Height = (int)(18 * UIScale);
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuBlockList.Location.Y);
                     lblMenuArrow.Visible = true;
                 });
@@ -27638,7 +27638,7 @@ namespace SATSuma
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuArrow.Height = (int)(20 * UIScale);
+                    lblMenuArrow.Height = (int)(18 * UIScale);
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuTransaction.Location.Y);
                     lblMenuArrow.Visible = true;
                 });
@@ -27715,7 +27715,7 @@ namespace SATSuma
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuArrow.Height = (int)(20 * UIScale);
+                    lblMenuArrow.Height = (int)(18 * UIScale);
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuBookmarks.Location.Y);
                     lblMenuArrow.Visible = true;
                 });
@@ -27792,7 +27792,7 @@ namespace SATSuma
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuArrow.Height = (int)(20 * UIScale);
+                    lblMenuArrow.Height = (int)(18 * UIScale);
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuPriceConverter.Location.Y);
                     lblMenuArrow.Visible = true;
                 });
@@ -27869,7 +27869,7 @@ namespace SATSuma
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuArrow.Height = (int)(20 * UIScale);
+                    lblMenuArrow.Height = (int)(18 * UIScale);
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuDCACalculator.Location.Y);
                     lblMenuArrow.Visible = true;
                 });
@@ -27945,7 +27945,7 @@ namespace SATSuma
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuArrow.Height = (int)(24 * UIScale);
+                    lblMenuArrow.Height = (int)(18 * UIScale);
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuDirectory.Location.Y);
                     lblMenuArrow.Visible = true;
                 });
@@ -28022,7 +28022,7 @@ namespace SATSuma
                 });
                 lblMenuArrow.Invoke((MethodInvoker)delegate
                 {
-                    lblMenuArrow.Height = (int)(24 * UIScale);
+                    lblMenuArrow.Height = (int)(18 * UIScale);
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuSettings.Location.Y);
                     lblMenuArrow.Visible = true;
                 });
@@ -28259,7 +28259,7 @@ namespace SATSuma
                 lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblCurrencyMenuHighlightedButtonText.Text = "USD $";
-                    lblCurrencyMenuHighlightedButtonText.Location = new Point(btnUSD.Location.X + (int)(14 * UIScale), btnUSD.Location.Y + (int)(5 * UIScale));
+                    lblCurrencyMenuHighlightedButtonText.Location = new Point(btnUSD.Location.X + (int)(10 * UIScale), btnUSD.Location.Y);
                 });
                 ClearCurrencyMenuMarkers();
                 btnUSD.Invoke((MethodInvoker)delegate
@@ -28317,7 +28317,7 @@ namespace SATSuma
                 lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblCurrencyMenuHighlightedButtonText.Text = "EUR €";
-                    lblCurrencyMenuHighlightedButtonText.Location = new Point(btnEUR.Location.X + (int)(14 * UIScale), btnEUR.Location.Y + (int)(5 * UIScale));
+                    lblCurrencyMenuHighlightedButtonText.Location = new Point(btnEUR.Location.X + (int)(10 * UIScale), btnEUR.Location.Y);
                 });
                 ClearCurrencyMenuMarkers();
                 btnEUR.Invoke((MethodInvoker)delegate
@@ -28375,7 +28375,7 @@ namespace SATSuma
                 lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblCurrencyMenuHighlightedButtonText.Text = "GBP £";
-                    lblCurrencyMenuHighlightedButtonText.Location = new Point(btnGBP.Location.X + (int)(14 * UIScale), btnGBP.Location.Y + (int)(5 * UIScale));
+                    lblCurrencyMenuHighlightedButtonText.Location = new Point(btnGBP.Location.X + (int)(10 * UIScale), btnGBP.Location.Y);
                 });
                 ClearCurrencyMenuMarkers();
                 btnGBP.Invoke((MethodInvoker)delegate
@@ -28433,7 +28433,7 @@ namespace SATSuma
                 lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblCurrencyMenuHighlightedButtonText.Text = "XAU 🪙";
-                    lblCurrencyMenuHighlightedButtonText.Location = new Point(btnXAU.Location.X + (int)(14 * UIScale), btnXAU.Location.Y + (int)(5 * UIScale));
+                    lblCurrencyMenuHighlightedButtonText.Location = new Point(btnXAU.Location.X + (int)(10 * UIScale), btnXAU.Location.Y);
                 });
                 ClearCurrencyMenuMarkers();
                 btnXAU.Invoke((MethodInvoker)delegate

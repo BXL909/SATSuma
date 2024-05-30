@@ -27,6 +27,7 @@ https://satsuma.btcdir.org/download/
 * Stuff to do:
 * Taproot support on xpub screen 
 * add utxo button to xpub and tx listviews
+* CAPITALISE HEADINGS ON SCREENS BELOW DIRECTORY
  */
 
 #region Using
@@ -2681,19 +2682,19 @@ namespace SATSuma
                     {
                         label61.Invoke((MethodInvoker)delegate
                         {
-                            label61.Text = "Confirmed unspent (balance)";
+                            label61.Text = "CONFIRMED UNSPENT (BALANCE)";
                         });
                         label59.Invoke((MethodInvoker)delegate
                         {
-                            label59.Text = "Confirmed transaction count";
+                            label59.Text = "CONFIRMED TRANSACTION COUNT";
                         });
                         label67.Invoke((MethodInvoker)delegate
                         {
-                            label67.Text = "Confirmed received";
+                            label67.Text = "CONFIRMED RECEIVED";
                         });
                         label63.Invoke((MethodInvoker)delegate
                         {
-                            label63.Text = "Confirmed spent";
+                            label63.Text = "CONFIRMED SPENT";
                         });
                         lblAddressConfirmedTransactionCount.Invoke((MethodInvoker)delegate
                         {
@@ -2749,19 +2750,19 @@ namespace SATSuma
                     {
                         label61.Invoke((MethodInvoker)delegate
                         {
-                            label61.Text = "Unconfirmed unspent (balance)";
+                            label61.Text = "UNCONFIRMED UNSPENT (BALANCE)";
                         });
                         label59.Invoke((MethodInvoker)delegate
                         {
-                            label59.Text = "Unconfirmed transaction count";
+                            label59.Text = "UNCONFIRMED TRANSACTION COUNT";
                         });
                         label67.Invoke((MethodInvoker)delegate
                         {
-                            label67.Text = "Unconfirmed received";
+                            label67.Text = "UNCONFIRMED RECEIVED";
                         });
                         label63.Invoke((MethodInvoker)delegate
                         {
-                            label63.Text = "Unconfirmed spent";
+                            label63.Text = "UNCONFIRMED SPENT";
                         });
                         lblAddressConfirmedTransactionCount.Invoke((MethodInvoker)delegate
                         {
@@ -2817,19 +2818,19 @@ namespace SATSuma
                     {
                         label61.Invoke((MethodInvoker)delegate
                         {
-                            label61.Text = "Total unspent (balance)";
+                            label61.Text = "TOTAL UNSPENT (BALANCE)";
                         });
                         label59.Invoke((MethodInvoker)delegate
                         {
-                            label59.Text = "Total transaction count";
+                            label59.Text = "TOTAL TRANSACTION COUNT";
                         });
                         label67.Invoke((MethodInvoker)delegate
                         {
-                            label67.Text = "Total received";
+                            label67.Text = "TOTAL RECEIVED";
                         });
                         label63.Invoke((MethodInvoker)delegate
                         {
-                            label63.Text = "Total spent";
+                            label63.Text = "TOTAL SPENT";
                         });
                         int chainTransactionCount = Convert.ToInt32(addressData["chain_stats"]["tx_count"]);
                         int mempoolTransactionCount = Convert.ToInt32(addressData["mempool_stats"]["tx_count"]);
@@ -3821,7 +3822,7 @@ namespace SATSuma
                 {
                     label314.Invoke((MethodInvoker)delegate
                     {
-                        label314.Text = "Unspent transaction outputs";
+                        label314.Text = "UNSPENT TRANSACTION OUTPUTS";
                     });
                     lblAddressConfirmedSpentUTXO.Invoke((MethodInvoker)delegate
                     {
@@ -7013,7 +7014,7 @@ namespace SATSuma
                         });
                         label6.Invoke((MethodInvoker)delegate
                         {
-                            label6.Text = $"Blocks {blocklist.Last()} - {blocklist.First()}";
+                            label6.Text = $"BLOCKS {blocklist.Last()} - {blocklist.First()}";
                         });
                     }
                     else
@@ -7407,7 +7408,7 @@ namespace SATSuma
                                 });
                                 lblBlockListBlockHeight.Invoke((MethodInvoker)delegate
                                 {
-                                    lblBlockListBlockHeight.Text = $"Block height: {blocks[0].Height}";
+                                    lblBlockListBlockHeight.Text = $"BLOCK HEIGHT: {blocks[0].Height}";
                                 });
                                 lblBlockListPoolRanking.Invoke((MethodInvoker)delegate
                                 {

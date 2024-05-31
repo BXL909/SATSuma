@@ -18250,6 +18250,7 @@ namespace SATSuma
         {
             try
             {
+                CloseHelpAboutMenu();
                 CloseCurrencyMenu();
                 panelThemeMenu.BringToFront();
                 btnThemeMenu.BringToFront();
@@ -18285,6 +18286,7 @@ namespace SATSuma
                     {
                         lblApplyThemeButtonDisabledMask.Visible = false;
                     });
+                    /*
                     if (lblThemeMenuHighlightedButtonText.Visible)
                     {
                         lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -18292,6 +18294,7 @@ namespace SATSuma
                             lblThemeMenuHighlightedButtonText.Visible = false;
                         });
                     }
+                    */
                 }
                 
                 firstTimeCustomThemeIndexChanged = false;
@@ -22415,7 +22418,7 @@ namespace SATSuma
                     });
                 }
                 // main menu
-                Control[] listMenuHeadingsToColor = { label210, label213, label214, label215, label216 };
+                Control[] listMenuHeadingsToColor = { lblOpenHelpAboutMenu, lblOpenPreferences, label214, label215, label216 };
                 foreach (Control control in listMenuHeadingsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24931,6 +24934,10 @@ namespace SATSuma
             if (panelToExpandVert == panelThemeMenu)
             {
                 panelMaxHeight = (int)(207 * UIScale);
+            }
+            if (panelToExpandVert == panelHelpAboutMenu)
+            {
+                panelMaxHeight = (int)(45 * UIScale);
             }
             if (currentHeightExpandingPanel >= panelMaxHeight) // expanding is complete
             {
@@ -28084,6 +28091,58 @@ namespace SATSuma
             }
         }
 
+        private void lblOpenPreferences_Click(object sender, EventArgs e)
+        {
+            if (lblOpenPreferences.Text == "PREFERENCES ▼")
+            {
+                lblOpenPreferences.Invoke((MethodInvoker)delegate
+                {
+                    lblOpenPreferences.Text = "PREFERENCES ▲";
+                });
+                CloseCurrencyMenu();
+                CloseThemeMenu();
+                CloseHelpAboutMenu();
+                panelOpenHelpAboutMenu.Invoke((MethodInvoker)delegate
+                {
+                    panelOpenHelpAboutMenu.Location = new Point(panelOpenHelpAboutMenu.Location.X, panelOpenHelpAboutMenu.Location.Y + (int)(54 * UIScale));
+                });
+                panelHelpAboutMenu.Invoke((MethodInvoker)delegate
+                {
+                    panelHelpAboutMenu.Location = new Point(panelHelpAboutMenu.Location.X, panelHelpAboutMenu.Location.Y + (int)(54 * UIScale));
+                });
+                btnMenuSettings.Visible = true;
+                btnThemeMenu.Visible = true;
+                btnCurrency.Visible = true;
+            }
+            else
+            {
+                ClosePreferencesMenu();
+            }
+        }
+
+        private void lblOpenHelpAboutMenu_Click(object sender, EventArgs e)
+        {
+            CloseThemeMenu();
+            CloseCurrencyMenu();
+            ClosePreferencesMenu();
+            lblOpenHelpAboutMenu.Invoke((MethodInvoker)delegate
+            {
+                lblOpenHelpAboutMenu.Text = "HELP, UPDATE ▲";
+            });
+            if (panelHelpAboutMenu.Height == 0)
+            {
+                //expand the panel
+                currentHeightExpandingPanel = panelHelpAboutMenu.Height;
+                StartExpandingPanelVert(panelHelpAboutMenu);
+            }
+            else
+            {
+                CloseHelpAboutMenu();
+            }
+        }
+
+
+
         #endregion
         #region show help screen
         private void BtnMenuHelp_Click(object sender, EventArgs e)
@@ -28225,6 +28284,7 @@ namespace SATSuma
             try
             {
                 CloseThemeMenu();
+                CloseHelpAboutMenu();
                 btnCurrency.BringToFront();
                 if (panelCurrency.Height == 0)
                 {
@@ -29231,6 +29291,49 @@ namespace SATSuma
             catch (Exception ex)
             {
                 HandleException(ex, "CloseCurrencyMenu");
+            }
+        }
+
+        private void CloseHelpAboutMenu()
+        {
+            try
+            {
+                panelHelpAboutMenu.Invoke((MethodInvoker)delegate
+                {
+                    panelHelpAboutMenu.Height = 0;
+                });
+                lblOpenHelpAboutMenu.Invoke((MethodInvoker)delegate
+                {
+                    lblOpenHelpAboutMenu.Text = "HELP, UPDATE ▼";
+                });
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "CloseCurrencyMenu");
+            }
+        }
+
+        private void ClosePreferencesMenu()
+        {
+            if (lblOpenPreferences.Text == "PREFERENCES ▲")
+            {
+                CloseThemeMenu();
+                CloseCurrencyMenu();
+                lblOpenPreferences.Invoke((MethodInvoker)delegate
+                {
+                    lblOpenPreferences.Text = "PREFERENCES ▼";
+                });
+                btnMenuSettings.Visible = false;
+                btnThemeMenu.Visible = false;
+                btnCurrency.Visible = false;
+                panelOpenHelpAboutMenu.Invoke((MethodInvoker)delegate
+                {
+                    panelOpenHelpAboutMenu.Location = new Point(panelOpenHelpAboutMenu.Location.X, panelOpenHelpAboutMenu.Location.Y - (int)(54 * UIScale));
+                });
+                panelHelpAboutMenu.Invoke((MethodInvoker)delegate
+                {
+                    panelHelpAboutMenu.Location = new Point(panelHelpAboutMenu.Location.X, panelHelpAboutMenu.Location.Y - (int)(54 * UIScale));
+                });
             }
         }
         #endregion
@@ -30428,8 +30531,11 @@ namespace SATSuma
 
 
 
+
         #endregion
 
         #endregion
+
+
     }
 }

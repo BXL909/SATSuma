@@ -676,6 +676,8 @@ namespace SATSuma
                         {
                             btnMenuSplash.ForeColor = Color.FromArgb(255, 153, 0);
                         });
+                        lblUpdateFlasher.Visible = true;
+                        
                     }
                     else
                     {
@@ -683,7 +685,12 @@ namespace SATSuma
                         {
                             btnMenuSplash.ForeColor = btnMenuSettings.ForeColor;
                         });
+                        lblUpdateFlasher.Visible = false;
                     }
+                }
+                else
+                {
+                    lblUpdateFlasher.Visible = false;
                 }
                 // reset node activity light
                 headerSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
@@ -19650,7 +19657,7 @@ namespace SATSuma
                 btnMenuSplash.FlatAppearance.BorderColor = menuAndHeaderButtonsColour;
                 btnMenuHelp.FlatAppearance.BorderColor = menuAndHeaderButtonsColour;
 
-                Control[] listHeaderButtonTextToColor = { btnCurrency, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks, btnMenuAddress, btnMenuCreateTheme, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuBlockList, btnMenuDirectory, btnMenuBookmarks, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuSplash, btnMenuTransaction, btnMenuXpub, btnThemeMenu, btnMenuDCACalculator, btnMenuThemeFranklin, btnMenuThemeSatsuma, BtnMenuThemeGenesis, btnMenuThemeStackSats, btnMenuThemeSymbol, btnMenuThemeHoneyBadger, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage, btnCopyErrorMessage };
+                Control[] listHeaderButtonTextToColor = { btnCurrency, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks, btnMenuAddress, btnMenuCreateTheme, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuBlockList, btnMenuDirectory, btnMenuBookmarks, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuSplash, btnMenuTransaction, btnMenuXpub, btnThemeMenu, btnMenuDCACalculator, btnMenuThemeFranklin, btnMenuThemeSatsuma, BtnMenuThemeGenesis, btnMenuThemeStackSats, btnMenuThemeSymbol, btnMenuThemeHoneyBadger, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage, btnCopyErrorMessage, button3, button4, button5 };
                 if (String.Compare(lblChartsDarkBackground.Text, "✔️") == 0 || String.Compare(lblChartsMediumBackground.Text, "✔️") == 0)
                 {
                     //header
@@ -21747,7 +21754,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listHeaderButtonTextToColor = { btnCurrency, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks, btnMenuAddress, btnMenuAddressUTXO, btnMenuCreateTheme, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuPriceConverter, btnMenuBlockList, btnMenuDirectory, btnMenuBookmarks, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuSplash, btnMenuTransaction, btnMenuDCACalculator, btnMenuXpub, btnThemeMenu, btnMenuThemeFranklin, btnMenuThemeSatsuma, BtnMenuThemeGenesis, btnMenuThemeStackSats, btnMenuThemeSymbol, btnMenuThemeHoneyBadger, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage, btnCopyErrorMessage };
+                Control[] listHeaderButtonTextToColor = { btnCurrency, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks, btnMenuAddress, btnMenuAddressUTXO, btnMenuCreateTheme, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuPriceConverter, btnMenuBlockList, btnMenuDirectory, btnMenuBookmarks, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuSplash, btnMenuTransaction, btnMenuDCACalculator, btnMenuXpub, btnThemeMenu, btnMenuThemeFranklin, btnMenuThemeSatsuma, BtnMenuThemeGenesis, btnMenuThemeStackSats, btnMenuThemeSymbol, btnMenuThemeHoneyBadger, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage, btnCopyErrorMessage, button3, button4, button5 };
                 if (String.Compare(lblChartsDarkBackground.Text, "✔️") == 0 || String.Compare(lblChartsMediumBackground.Text, "✔️") == 0)
                 {
                     //header
@@ -22418,7 +22425,7 @@ namespace SATSuma
                     });
                 }
                 // main menu
-                Control[] listMenuHeadingsToColor = { lblOpenHelpAboutMenu, lblOpenPreferences, label214, label215, label216 };
+                Control[] listMenuHeadingsToColor = { lblOpenHelpAboutMenu, lblOpenPreferences, label214, label215, label218, label216 };
                 foreach (Control control in listMenuHeadingsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -23494,7 +23501,7 @@ namespace SATSuma
                     btnMenuThemeStackSats, btnMenuThemeSymbol, btnUSD, btnEUR, btnGBP,
                     btnXAU, btnCurrency, btnHelp, btnMinimise, btnShowGlobalSearch,
                     btnMoveWindow, btnExit, btnAddToBookmarks, btnHideErrorMessage,
-                    btnCopyErrorMessage
+                    btnCopyErrorMessage, button3, button4, button5
                 };
                 if (buttonsToUpdateBackColor.Contains((System.Windows.Forms.Button)sender))
                 {
@@ -23546,7 +23553,7 @@ namespace SATSuma
 
                 System.Windows.Forms.Button[] buttonstoMakeTransparent =
                 {
-                    btnMenuBitcoinDashboard, btnMenuAddress, btnMenuBlock, btnMenuBlockList, btnMenuBookmarks, btnMenuDirectory, btnMenuPriceConverter, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuTransaction, btnMenuDCACalculator, btnMenuXpub, btnMenuSplash, btnMenuAddressUTXO
+                    btnMenuBitcoinDashboard, btnMenuAddress, btnMenuBlock, btnMenuBlockList, btnMenuBookmarks, btnMenuDirectory, btnMenuPriceConverter, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuTransaction, btnMenuDCACalculator, btnMenuXpub, btnMenuSplash, btnMenuAddressUTXO, button3, button4, button5
                 };
                 if (buttonstoMakeTransparent.Contains((System.Windows.Forms.Button)sender))
                 {
@@ -26933,7 +26940,7 @@ namespace SATSuma
             {
                 btnMenuCreateTheme.BackgroundImage = null;
             });
-            Control[] buttonsToEnable = { btnMenuSettings, btnMenuXpub, btnMenuAddress, btnMenuAddressUTXO, btnMenuTransaction, btnMenuBookmarks, btnMenuCreateTheme, btnMenuDirectory, btnMenuBitcoinDashboard, btnMenuBlockList, btnMenuLightningDashboard, btnMenuBlock };
+            Control[] buttonsToEnable = { btnMenuSettings, btnMenuXpub, btnMenuAddress, btnMenuAddressUTXO, btnMenuTransaction, btnMenuBookmarks, btnMenuCreateTheme, btnMenuDirectory, btnMenuBitcoinDashboard, btnMenuBlockList, btnMenuLightningDashboard, btnMenuBlock, button3, button4, button5 };
             foreach (Control control in buttonsToEnable)
             {
                 control.Invoke((MethodInvoker)delegate
@@ -28125,12 +28132,17 @@ namespace SATSuma
             CloseThemeMenu();
             CloseCurrencyMenu();
             ClosePreferencesMenu();
-            lblOpenHelpAboutMenu.Invoke((MethodInvoker)delegate
-            {
-                lblOpenHelpAboutMenu.Text = "HELP, UPDATE ▲";
-            });
+            
             if (panelHelpAboutMenu.Height == 0)
             {
+                lblOpenHelpAboutMenu.Invoke((MethodInvoker)delegate
+                {
+                    lblOpenHelpAboutMenu.Text = "HELP, UPDATE ▲";
+                });
+                lblUpdateFlasher.Invoke((MethodInvoker)delegate
+                {
+                    lblUpdateFlasher.Text = "▲";
+                });
                 //expand the panel
                 currentHeightExpandingPanel = panelHelpAboutMenu.Height;
                 StartExpandingPanelVert(panelHelpAboutMenu);
@@ -29305,6 +29317,10 @@ namespace SATSuma
                 lblOpenHelpAboutMenu.Invoke((MethodInvoker)delegate
                 {
                     lblOpenHelpAboutMenu.Text = "HELP, UPDATE ▼";
+                });
+                lblUpdateFlasher.Invoke((MethodInvoker)delegate
+                {
+                    lblUpdateFlasher.Text = "▼";
                 });
             }
             catch (Exception ex)

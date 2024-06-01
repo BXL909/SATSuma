@@ -1110,6 +1110,7 @@
             this.ShrinkPanelTimerHoriz = new System.Windows.Forms.Timer(this.components);
             this.panelLeftPanel = new System.Windows.Forms.Panel();
             this.panelOpenHelpAboutMenu = new System.Windows.Forms.Panel();
+            this.lblUpdateFlasher = new System.Windows.Forms.Label();
             this.lblOpenHelpAboutMenu = new System.Windows.Forms.Label();
             this.panelHelpAboutMenu = new System.Windows.Forms.Panel();
             this.button5 = new System.Windows.Forms.Button();
@@ -17612,6 +17613,7 @@
             this.panelOpenHelpAboutMenu.BackColor = System.Drawing.Color.Transparent;
             this.panelOpenHelpAboutMenu.BackgroundImage = global::SATSuma.Properties.Resources.MainMenuFade;
             this.panelOpenHelpAboutMenu.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panelOpenHelpAboutMenu.Controls.Add(this.lblUpdateFlasher);
             this.panelOpenHelpAboutMenu.Controls.Add(this.lblOpenHelpAboutMenu);
             this.panelOpenHelpAboutMenu.Location = new System.Drawing.Point(8, 447);
             this.panelOpenHelpAboutMenu.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
@@ -17619,6 +17621,20 @@
             this.panelOpenHelpAboutMenu.Size = new System.Drawing.Size(121, 22);
             this.panelOpenHelpAboutMenu.TabIndex = 264;
             this.panelOpenHelpAboutMenu.Click += new System.EventHandler(this.lblOpenHelpAboutMenu_Click);
+            // 
+            // lblUpdateFlasher
+            // 
+            this.lblUpdateFlasher.AutoSize = true;
+            this.lblUpdateFlasher.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblUpdateFlasher.Font = new System.Drawing.Font("Century Gothic", 8F);
+            this.lblUpdateFlasher.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.lblUpdateFlasher.Location = new System.Drawing.Point(67, 6);
+            this.lblUpdateFlasher.Name = "lblUpdateFlasher";
+            this.lblUpdateFlasher.Size = new System.Drawing.Size(18, 16);
+            this.lblUpdateFlasher.TabIndex = 154;
+            this.lblUpdateFlasher.Text = "▼";
+            this.lblUpdateFlasher.Visible = false;
+            this.lblUpdateFlasher.Click += new System.EventHandler(this.lblOpenHelpAboutMenu_Click);
             // 
             // lblOpenHelpAboutMenu
             // 
@@ -17661,6 +17677,8 @@
             this.button5.Text = "   pools - blocks";
             this.button5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.button5.UseVisualStyleBackColor = false;
+            this.button5.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
+            this.button5.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 
             // panel79
             // 
@@ -17705,6 +17723,8 @@
             this.button3.Text = "   mining pools";
             this.button3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.button3.UseVisualStyleBackColor = false;
+            this.button3.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
+            this.button3.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 
             // button4
             // 
@@ -17723,6 +17743,8 @@
             this.button4.Text = "   pools - hashrate";
             this.button4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.button4.UseVisualStyleBackColor = false;
+            this.button4.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
+            this.button4.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 
             // lblMenuArrow
             // 
@@ -18069,9 +18091,9 @@
             this.label216.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.label216.Location = new System.Drawing.Point(0, 6);
             this.label216.Name = "label216";
-            this.label216.Size = new System.Drawing.Size(60, 16);
+            this.label216.Size = new System.Drawing.Size(64, 16);
             this.label216.TabIndex = 153;
-            this.label216.Text = "ONCHAIN";
+            this.label216.Text = "ON-CHAIN";
             this.label216.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // panel130
@@ -21124,6 +21146,7 @@
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Panel panelHelpAboutMenu;
+        private System.Windows.Forms.Label lblUpdateFlasher;
     }
 }
 

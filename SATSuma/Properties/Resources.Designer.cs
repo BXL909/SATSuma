@@ -153,6 +153,16 @@ namespace SATSuma.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ezgif_1_275c0652c6 {
+            get {
+                object obj = ResourceManager.GetObject("ezgif-1-275c0652c6", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Franklin {
             get {
                 object obj = ResourceManager.GetObject("Franklin", resourceCulture);

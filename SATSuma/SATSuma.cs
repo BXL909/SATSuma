@@ -26,8 +26,7 @@ https://satsuma.btcdir.org/download/
 
 * Stuff to do:
 * Taproot support on xpub screen 
-* add utxo button to xpub and tx listviews
-* colour of disabled apply theme button in menu
+* tx screen - height of address button on outputs list too big when first record is an opreturn
  */
 
 #region Using
@@ -3384,6 +3383,12 @@ namespace SATSuma
                 HandleException(ex, "BtnViewTransactionFromAddress_Click");
             }
         }
+
+        private void BtnViewUTXOsFromAddressTX_Click(object sender, EventArgs e)
+        {
+            textboxSubmittedAddressUTXO.Text = textboxSubmittedAddress.Text;
+            BtnMenuAddressUTXO_ClickAsync(sender, e);
+        }
         #endregion
         #region listview appearance
         //------------------------ CHANGE COLOUR OF SELECTED ROW ------------------------------------------------------
@@ -3666,13 +3671,6 @@ namespace SATSuma
         }
 
         #endregion
-
-        private void BtnViewUTXOsFromAddressTX_Click(object sender, EventArgs e)
-        {
-            textboxSubmittedAddressUTXO.Text = textboxSubmittedAddress.Text;
-            BtnMenuAddressUTXO_ClickAsync(sender, e);
-        }
-
         #endregion
 
         #region ⚡ADDRESS (UTXO's) SCREEN⚡
@@ -3737,7 +3735,6 @@ namespace SATSuma
                         HandleException(ex, "TboxSubmittedAddressUTXO_TextChanged (Error getting address balance)");
                         return;
                     }
-                    string lastSeenTxId = "0"; // start from the top of the JSON (most recent tx)
                     try
                     {
                         await GetUTXOsForAddressAsyncUTXO(addressString).ConfigureAwait(true); 
@@ -12941,62 +12938,62 @@ namespace SATSuma
         }
         #endregion
         #region linear/log buttons
-        private void btnChartUTXOScaleLinear_Click(object sender, EventArgs e)
+        private void BtnChartUTXOScaleLinear_Click(object sender, EventArgs e)
         {
             ChartUTXO();
         }
 
-        private void btnChartUTXOScaleLog_Click(object sender, EventArgs e)
+        private void BtnChartUTXOScaleLog_Click(object sender, EventArgs e)
         {
             ChartUTXOLog();
         }
 
-        private void btnChartDifficultyLinear_Click(object sender, EventArgs e)
+        private void BtnChartDifficultyLinear_Click(object sender, EventArgs e)
         {
             ChartDifficulty();
         }
 
-        private void btnChartDifficultyLog_Click(object sender, EventArgs e)
+        private void BtnChartDifficultyLog_Click(object sender, EventArgs e)
         {
             ChartDifficultyLog();
         }
 
-        private void btnChartMarketCapScaleLinear_Click(object sender, EventArgs e)
+        private void BtnChartMarketCapScaleLinear_Click(object sender, EventArgs e)
         {
             ChartMarketCap();
         }
 
-        private void btnChartMarketCapScaleLog_Click(object sender, EventArgs e)
+        private void BtnChartMarketCapScaleLog_Click(object sender, EventArgs e)
         {
             ChartMarketCapLog();
         }
 
-        private void btnHashrateScaleLinear_Click(object sender, EventArgs e)
+        private void BtnHashrateScaleLinear_Click(object sender, EventArgs e)
         {
             ChartHashrate();
         }
 
-        private void btnHashrateScaleLog_Click(object sender, EventArgs e)
+        private void BtnHashrateScaleLog_Click(object sender, EventArgs e)
         {
             ChartHashrateLog();
         }
 
-        private void btnPriceChartScaleLinear_Click(object sender, EventArgs e)
+        private void BtnPriceChartScaleLinear_Click(object sender, EventArgs e)
         {
             ChartPrice();
         }
 
-        private void btnPriceChartScaleLog_Click(object sender, EventArgs e)
+        private void BtnPriceChartScaleLog_Click(object sender, EventArgs e)
         {
             ChartPriceLog();
         }
 
-        private void btnChartAddressScaleLinear_Click(object sender, EventArgs e)
+        private void BtnChartAddressScaleLinear_Click(object sender, EventArgs e)
         {
             ChartUniqueAddresses();
         }
 
-        private void btnChartAddressScaleLog_Click(object sender, EventArgs e)
+        private void BtnChartAddressScaleLog_Click(object sender, EventArgs e)
         {
             ChartUniqueAddressesLog();
         }
@@ -18293,15 +18290,6 @@ namespace SATSuma
                     {
                         lblApplyThemeButtonDisabledMask.Visible = false;
                     });
-                    /*
-                    if (lblThemeMenuHighlightedButtonText.Visible)
-                    {
-                        lblThemeMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
-                        {
-                            lblThemeMenuHighlightedButtonText.Visible = false;
-                        });
-                    }
-                    */
                 }
                 
                 firstTimeCustomThemeIndexChanged = false;
@@ -19657,7 +19645,7 @@ namespace SATSuma
                 btnMenuSplash.FlatAppearance.BorderColor = menuAndHeaderButtonsColour;
                 btnMenuHelp.FlatAppearance.BorderColor = menuAndHeaderButtonsColour;
 
-                Control[] listHeaderButtonTextToColor = { btnCurrency, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks, btnMenuAddress, btnMenuCreateTheme, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuBlockList, btnMenuDirectory, btnMenuBookmarks, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuSplash, btnMenuTransaction, btnMenuXpub, btnThemeMenu, btnMenuDCACalculator, btnMenuThemeFranklin, btnMenuThemeSatsuma, BtnMenuThemeGenesis, btnMenuThemeStackSats, btnMenuThemeSymbol, btnMenuThemeHoneyBadger, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage, btnCopyErrorMessage, button3, button4, button5 };
+                Control[] listHeaderButtonTextToColor = { btnCurrency, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks, btnMenuAddress, btnMenuCreateTheme, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuBlockList, btnMenuDirectory, btnMenuBookmarks, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuSplash, btnMenuTransaction, btnMenuXpub, btnThemeMenu, btnMenuDCACalculator, btnMenuThemeFranklin, btnMenuThemeSatsuma, BtnMenuThemeGenesis, btnMenuThemeStackSats, btnMenuThemeSymbol, btnMenuThemeHoneyBadger, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage, btnCopyErrorMessage, btnMenuMiningPools, btnMenuPoolsByHashrate, btnMenuPoolsByBlocks };
                 if (String.Compare(lblChartsDarkBackground.Text, "✔️") == 0 || String.Compare(lblChartsMediumBackground.Text, "✔️") == 0)
                 {
                     //header
@@ -21754,7 +21742,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listHeaderButtonTextToColor = { btnCurrency, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks, btnMenuAddress, btnMenuAddressUTXO, btnMenuCreateTheme, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuPriceConverter, btnMenuBlockList, btnMenuDirectory, btnMenuBookmarks, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuSplash, btnMenuTransaction, btnMenuDCACalculator, btnMenuXpub, btnThemeMenu, btnMenuThemeFranklin, btnMenuThemeSatsuma, BtnMenuThemeGenesis, btnMenuThemeStackSats, btnMenuThemeSymbol, btnMenuThemeHoneyBadger, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage, btnCopyErrorMessage, button3, button4, button5 };
+                Control[] listHeaderButtonTextToColor = { btnCurrency, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnCommitToBookmarks, btnCancelAddToBookmarks, btnMenuAddress, btnMenuAddressUTXO, btnMenuCreateTheme, btnMenuBitcoinDashboard, btnMenuBlock, btnMenuPriceConverter, btnMenuBlockList, btnMenuDirectory, btnMenuBookmarks, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuSplash, btnMenuTransaction, btnMenuDCACalculator, btnMenuXpub, btnThemeMenu, btnMenuThemeFranklin, btnMenuThemeSatsuma, BtnMenuThemeGenesis, btnMenuThemeStackSats, btnMenuThemeSymbol, btnMenuThemeHoneyBadger, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage, btnCopyErrorMessage, btnMenuMiningPools, btnMenuPoolsByHashrate, btnMenuPoolsByBlocks };
                 if (String.Compare(lblChartsDarkBackground.Text, "✔️") == 0 || String.Compare(lblChartsMediumBackground.Text, "✔️") == 0)
                 {
                     //header
@@ -23501,7 +23489,7 @@ namespace SATSuma
                     btnMenuThemeStackSats, btnMenuThemeSymbol, btnUSD, btnEUR, btnGBP,
                     btnXAU, btnCurrency, btnHelp, btnMinimise, btnShowGlobalSearch,
                     btnMoveWindow, btnExit, btnAddToBookmarks, btnHideErrorMessage,
-                    btnCopyErrorMessage, button3, button4, button5
+                    btnCopyErrorMessage, btnMenuMiningPools, btnMenuPoolsByHashrate, btnMenuPoolsByBlocks
                 };
                 if (buttonsToUpdateBackColor.Contains((System.Windows.Forms.Button)sender))
                 {
@@ -23553,7 +23541,7 @@ namespace SATSuma
 
                 System.Windows.Forms.Button[] buttonstoMakeTransparent =
                 {
-                    btnMenuBitcoinDashboard, btnMenuAddress, btnMenuBlock, btnMenuBlockList, btnMenuBookmarks, btnMenuDirectory, btnMenuPriceConverter, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuTransaction, btnMenuDCACalculator, btnMenuXpub, btnMenuSplash, btnMenuAddressUTXO, button3, button4, button5
+                    btnMenuBitcoinDashboard, btnMenuAddress, btnMenuBlock, btnMenuBlockList, btnMenuBookmarks, btnMenuDirectory, btnMenuPriceConverter, btnMenuCharts, btnMenuHelp, btnMenuLightningDashboard, btnMenuSettings, btnMenuTransaction, btnMenuDCACalculator, btnMenuXpub, btnMenuSplash, btnMenuAddressUTXO, btnMenuMiningPools, btnMenuPoolsByHashrate, btnMenuPoolsByBlocks
                 };
                 if (buttonstoMakeTransparent.Contains((System.Windows.Forms.Button)sender))
                 {
@@ -25486,6 +25474,27 @@ namespace SATSuma
                             lblNowViewing.Text = "Bookmarks";
                         });
                     }
+                    if (panelMiningPools.Visible)
+                    {
+                        lblNowViewing.Invoke((MethodInvoker)delegate
+                        {
+                            lblNowViewing.Text = "Mining pools";
+                        });
+                    }
+                    if (panelMiningBlocks.Visible)
+                    {
+                        lblNowViewing.Invoke((MethodInvoker)delegate
+                        {
+                            lblNowViewing.Text = "Mining pools by blocks mined";
+                        });
+                    }
+                    if (panelMiningHashrate.Visible)
+                    {
+                        lblNowViewing.Invoke((MethodInvoker)delegate
+                        {
+                            lblNowViewing.Text = "Mining pools by hashrate";
+                        });
+                    }
                     if (panelSettings.Visible)
                     {
                         lblNowViewing.Invoke((MethodInvoker)delegate
@@ -26940,7 +26949,7 @@ namespace SATSuma
             {
                 btnMenuCreateTheme.BackgroundImage = null;
             });
-            Control[] buttonsToEnable = { btnMenuSettings, btnMenuXpub, btnMenuAddress, btnMenuAddressUTXO, btnMenuTransaction, btnMenuBookmarks, btnMenuCreateTheme, btnMenuDirectory, btnMenuBitcoinDashboard, btnMenuBlockList, btnMenuLightningDashboard, btnMenuBlock, button3, button4, button5 };
+            Control[] buttonsToEnable = { btnMenuSettings, btnMenuXpub, btnMenuAddress, btnMenuAddressUTXO, btnMenuTransaction, btnMenuBookmarks, btnMenuCreateTheme, btnMenuDirectory, btnMenuBitcoinDashboard, btnMenuBlockList, btnMenuLightningDashboard, btnMenuBlock, btnMenuMiningPools, btnMenuPoolsByHashrate, btnMenuPoolsByBlocks };
             foreach (Control control in buttonsToEnable)
             {
                 control.Invoke((MethodInvoker)delegate
@@ -26968,7 +26977,7 @@ namespace SATSuma
 
         private void HideAllScreens()
         {
-            Control[] screensToHide = { panelBookmarks, panelBlockList, panelLightningDashboard, panelDirectory, panelCharts, panelAddress, panelBlock, panelTransaction, panelSettings, panelAppearance, panelXpub, panelDCACalculator, panelPriceConverter, panelBitcoinDashboard, panelAddressUTXO };
+            Control[] screensToHide = { panelBookmarks, panelBlockList, panelLightningDashboard, panelDirectory, panelCharts, panelAddress, panelBlock, panelTransaction, panelSettings, panelAppearance, panelXpub, panelDCACalculator, panelPriceConverter, panelBitcoinDashboard, panelAddressUTXO, panelMiningBlocks, panelMiningHashrate, panelMiningPools };
             foreach (Control control in screensToHide)
             {
                 control.Invoke((MethodInvoker)delegate
@@ -27638,6 +27647,234 @@ namespace SATSuma
             }
         }
 
+        private async void BtnMenuPoolsByBlocks_ClickAsync(object sender, EventArgs e)
+        {
+            try
+            {
+                CloseCurrencyMenu();
+                CloseThemeMenu();
+                lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
+                {
+                    lblMenuHighlightedButtonText.Visible = true;
+                    lblMenuHighlightedButtonText.Text = "pools - blocks";
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuPoolsByBlocks.Location.Y);
+                });
+                lblMenuArrow.Invoke((MethodInvoker)delegate
+                {
+                    lblMenuArrow.Height = (int)(18 * UIScale);
+                    lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuPoolsByBlocks.Location.Y);
+                    lblMenuArrow.Visible = true;
+                });
+                EnableAllMenuButtons();
+                btnMenuPoolsByBlocks.Enabled = false;
+                ToggleLoadingAnimation("enable");
+                SuspendLayout();
+                Form loadingScreen = null;
+                bool wasOnTop = false;
+                if (!fullScreenLoadingScreenVisible)
+                {
+                    #region display loading screen
+
+                    if (this.TopMost == true)
+                    {
+                        wasOnTop = true;
+                        this.TopMost = false;
+                    }
+                    // work out the position to place the loading form
+                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                    panelScreenLocation.Y -= (int)(162 * UIScale);
+                    panelScreenLocation.X -= (int)(13 * UIScale);
+
+                    loadingScreen = new LoadingScreen(UIScale)
+                    {
+                        Owner = this,
+                        StartPosition = FormStartPosition.Manual, // Set the start position manually
+                        FormBorderStyle = FormBorderStyle.None,
+                        BackColor = panel84.BackColor, // Set the background color to match panel colours
+                        Opacity = 1, // Set the opacity to 100%
+                        Location = panelScreenLocation // Set the location of the loadingScreen form
+                    };
+                    loadingScreen.Show(this);
+                    await BriefPauseAsync(100).ConfigureAwait(true);
+                    #endregion
+                }
+                HideAllScreens();
+                panelMiningBlocks.Visible = true;
+                CheckNetworkStatusAsync();
+                if (!fullScreenLoadingScreenVisible && loadingScreen != null)
+                {
+                    #region close loading screen
+                    //wait a moment to give time for screen to paint
+                    await BriefPauseAsync(400).ConfigureAwait(true);
+                    //close the loading screen
+                    loadingScreen.Close();
+                    if (wasOnTop)
+                    {
+                        this.TopMost = true;
+                    }
+                    #endregion
+                }
+                ResumeLayout();
+                ToggleLoadingAnimation("disable");
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "BtnMenuPoolsByBlocks_Click");
+            }
+        }
+
+        private async void btnMenuPoolsByHashrate_ClickAsync(object sender, EventArgs e)
+        {
+            try
+            {
+                CloseCurrencyMenu();
+                CloseThemeMenu();
+                lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
+                {
+                    lblMenuHighlightedButtonText.Visible = true;
+                    lblMenuHighlightedButtonText.Text = "pools - hashrate";
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuPoolsByHashrate.Location.Y);
+                });
+                lblMenuArrow.Invoke((MethodInvoker)delegate
+                {
+                    lblMenuArrow.Height = (int)(18 * UIScale);
+                    lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuPoolsByHashrate.Location.Y);
+                    lblMenuArrow.Visible = true;
+                });
+                EnableAllMenuButtons();
+                btnMenuPoolsByHashrate.Enabled = false;
+                ToggleLoadingAnimation("enable");
+                SuspendLayout();
+                Form loadingScreen = null;
+                bool wasOnTop = false;
+                if (!fullScreenLoadingScreenVisible)
+                {
+                    #region display loading screen
+
+                    if (this.TopMost == true)
+                    {
+                        wasOnTop = true;
+                        this.TopMost = false;
+                    }
+                    // work out the position to place the loading form
+                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                    panelScreenLocation.Y -= (int)(162 * UIScale);
+                    panelScreenLocation.X -= (int)(13 * UIScale);
+
+                    loadingScreen = new LoadingScreen(UIScale)
+                    {
+                        Owner = this,
+                        StartPosition = FormStartPosition.Manual, // Set the start position manually
+                        FormBorderStyle = FormBorderStyle.None,
+                        BackColor = panel84.BackColor, // Set the background color to match panel colours
+                        Opacity = 1, // Set the opacity to 100%
+                        Location = panelScreenLocation // Set the location of the loadingScreen form
+                    };
+                    loadingScreen.Show(this);
+                    await BriefPauseAsync(100).ConfigureAwait(true);
+                    #endregion
+                }
+                HideAllScreens();
+                panelMiningHashrate.Visible = true;
+                CheckNetworkStatusAsync();
+                if (!fullScreenLoadingScreenVisible && loadingScreen != null)
+                {
+                    #region close loading screen
+                    //wait a moment to give time for screen to paint
+                    await BriefPauseAsync(400).ConfigureAwait(true);
+                    //close the loading screen
+                    loadingScreen.Close();
+                    if (wasOnTop)
+                    {
+                        this.TopMost = true;
+                    }
+                    #endregion
+                }
+                ResumeLayout();
+                ToggleLoadingAnimation("disable");
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "BtnMenuPoolsByHashrate_Click");
+            }
+        }
+
+        private async void btnMenuMiningPools_ClickAsync(object sender, EventArgs e)
+        {
+            try
+            {
+                CloseCurrencyMenu();
+                CloseThemeMenu();
+                lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
+                {
+                    lblMenuHighlightedButtonText.Visible = true;
+                    lblMenuHighlightedButtonText.Text = "mining pools";
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuMiningPools.Location.Y);
+                });
+                lblMenuArrow.Invoke((MethodInvoker)delegate
+                {
+                    lblMenuArrow.Height = (int)(18 * UIScale);
+                    lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuMiningPools.Location.Y);
+                    lblMenuArrow.Visible = true;
+                });
+                EnableAllMenuButtons();
+                btnMenuMiningPools.Enabled = false;
+                ToggleLoadingAnimation("enable");
+                SuspendLayout();
+                Form loadingScreen = null;
+                bool wasOnTop = false;
+                if (!fullScreenLoadingScreenVisible)
+                {
+                    #region display loading screen
+
+                    if (this.TopMost == true)
+                    {
+                        wasOnTop = true;
+                        this.TopMost = false;
+                    }
+                    // work out the position to place the loading form
+                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                    panelScreenLocation.Y -= (int)(162 * UIScale);
+                    panelScreenLocation.X -= (int)(13 * UIScale);
+
+                    loadingScreen = new LoadingScreen(UIScale)
+                    {
+                        Owner = this,
+                        StartPosition = FormStartPosition.Manual, // Set the start position manually
+                        FormBorderStyle = FormBorderStyle.None,
+                        BackColor = panel84.BackColor, // Set the background color to match panel colours
+                        Opacity = 1, // Set the opacity to 100%
+                        Location = panelScreenLocation // Set the location of the loadingScreen form
+                    };
+                    loadingScreen.Show(this);
+                    await BriefPauseAsync(100).ConfigureAwait(true);
+                    #endregion
+                }
+                HideAllScreens();
+                panelMiningPools.Visible = true;
+                CheckNetworkStatusAsync();
+                if (!fullScreenLoadingScreenVisible && loadingScreen != null)
+                {
+                    #region close loading screen
+                    //wait a moment to give time for screen to paint
+                    await BriefPauseAsync(400).ConfigureAwait(true);
+                    //close the loading screen
+                    loadingScreen.Close();
+                    if (wasOnTop)
+                    {
+                        this.TopMost = true;
+                    }
+                    #endregion
+                }
+                ResumeLayout();
+                ToggleLoadingAnimation("disable");
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "BtnMenuMiningPools_Click");
+            }
+        }
+
         private async void BtnMenuTransaction_ClickAsync(object sender, EventArgs e)
         {
             try
@@ -28098,7 +28335,7 @@ namespace SATSuma
             }
         }
 
-        private void lblOpenPreferences_Click(object sender, EventArgs e)
+        private void LblOpenPreferences_Click(object sender, EventArgs e)
         {
             if (lblOpenPreferences.Text == "PREFERENCES ▼")
             {
@@ -28127,7 +28364,7 @@ namespace SATSuma
             }
         }
 
-        private void lblOpenHelpAboutMenu_Click(object sender, EventArgs e)
+        private void LblOpenHelpAboutMenu_Click(object sender, EventArgs e)
         {
             CloseThemeMenu();
             CloseCurrencyMenu();
@@ -28152,9 +28389,6 @@ namespace SATSuma
                 CloseHelpAboutMenu();
             }
         }
-
-
-
         #endregion
         #region show help screen
         private void BtnMenuHelp_Click(object sender, EventArgs e)
@@ -28905,6 +29139,7 @@ namespace SATSuma
                 HandleException(ex, "BtnShowGlobalSearch_Click");
             }
         }
+
         private void TextBoxUniversalSearch_Enter(object sender, EventArgs e)
         {
             try
@@ -29236,6 +29471,21 @@ namespace SATSuma
         public Panel GetPanelXpub() // enables help screen to get state (visible) of panel to determine which help text to show
         {
             return this.panelXpub;
+        }
+
+        public Panel GetPanelMiningBlocks() // enables help screen to get state (visible) of panel to determine which help text to show
+        {
+            return this.panelMiningBlocks;
+        }
+
+        public Panel GetPanelMiningHashrate() // enables help screen to get state (visible) of panel to determine which help text to show
+        {
+            return this.panelMiningHashrate;
+        }
+
+        public Panel GetPanelMiningPools() // enables help screen to get state (visible) of panel to determine which help text to show
+        {
+            return this.panelMiningPools;
         }
 
         public Panel GetPanelDCACalculator() // enables help screen to get state (visible) of panel to determine which help text to show
@@ -30548,10 +30798,12 @@ namespace SATSuma
 
 
 
+
+
         #endregion
 
         #endregion
 
-
+        
     }
 }

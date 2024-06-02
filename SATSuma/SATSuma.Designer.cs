@@ -1113,11 +1113,11 @@
             this.lblUpdateFlasher = new System.Windows.Forms.Label();
             this.lblOpenHelpAboutMenu = new System.Windows.Forms.Label();
             this.panelHelpAboutMenu = new System.Windows.Forms.Panel();
-            this.button5 = new System.Windows.Forms.Button();
+            this.btnMenuPoolsByBlocks = new System.Windows.Forms.Button();
             this.panel79 = new System.Windows.Forms.Panel();
             this.label218 = new System.Windows.Forms.Label();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
+            this.btnMenuMiningPools = new System.Windows.Forms.Button();
+            this.btnMenuPoolsByHashrate = new System.Windows.Forms.Button();
             this.lblMenuArrow = new System.Windows.Forms.Label();
             this.lblMenuHighlightedButtonText = new System.Windows.Forms.Label();
             this.btnMenuCharts = new System.Windows.Forms.Button();
@@ -1204,6 +1204,10 @@
             this.btnViewBlockFromAddressUTXO = new CustomControls.RJControls.RJButton();
             this.lblLargestUTXO = new System.Windows.Forms.Label();
             this.lblSmallestUTXO = new System.Windows.Forms.Label();
+            this.rjButton4 = new CustomControls.RJControls.RJButton();
+            this.rjButton5 = new CustomControls.RJControls.RJButton();
+            this.rjButton7 = new CustomControls.RJControls.RJButton();
+            this.rjButton8 = new CustomControls.RJControls.RJButton();
             this.timer50thSec = new System.Windows.Forms.Timer(this.components);
             this.panelAddressUTXO = new System.Windows.Forms.Panel();
             this.panel136 = new System.Windows.Forms.Panel();
@@ -1237,6 +1241,34 @@
             this.label316 = new System.Windows.Forms.Label();
             this.lblAddressUTXOPositionInList = new System.Windows.Forms.Label();
             this.UTXOsScrollTimer = new System.Windows.Forms.Timer(this.components);
+            this.panelMiningBlocks = new System.Windows.Forms.Panel();
+            this.panel128 = new System.Windows.Forms.Panel();
+            this.rjButton1 = new CustomControls.RJControls.RJButton();
+            this.rjButton2 = new CustomControls.RJControls.RJButton();
+            this.panel138 = new System.Windows.Forms.Panel();
+            this.listView1 = new System.Windows.Forms.ListView();
+            this.panel140 = new System.Windows.Forms.Panel();
+            this.panel144 = new System.Windows.Forms.Panel();
+            this.panel145 = new System.Windows.Forms.Panel();
+            this.panel148 = new System.Windows.Forms.Panel();
+            this.label324 = new System.Windows.Forms.Label();
+            this.label325 = new System.Windows.Forms.Label();
+            this.panelMiningHashrate = new System.Windows.Forms.Panel();
+            this.panel80 = new System.Windows.Forms.Panel();
+            this.rjButton3 = new CustomControls.RJControls.RJButton();
+            this.rjButton6 = new CustomControls.RJControls.RJButton();
+            this.panel81 = new System.Windows.Forms.Panel();
+            this.listView2 = new System.Windows.Forms.ListView();
+            this.panel146 = new System.Windows.Forms.Panel();
+            this.panel147 = new System.Windows.Forms.Panel();
+            this.panel149 = new System.Windows.Forms.Panel();
+            this.panel150 = new System.Windows.Forms.Panel();
+            this.label210 = new System.Windows.Forms.Label();
+            this.label213 = new System.Windows.Forms.Label();
+            this.panelMiningPools = new System.Windows.Forms.Panel();
+            this.panel156 = new System.Windows.Forms.Panel();
+            this.label228 = new System.Windows.Forms.Label();
+            this.label231 = new System.Windows.Forms.Label();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel109.SuspendLayout();
             this.panel12.SuspendLayout();
@@ -1456,6 +1488,18 @@
             this.panel141.SuspendLayout();
             this.panel142.SuspendLayout();
             this.panelSubmittedAddressContainerUTXO.SuspendLayout();
+            this.panelMiningBlocks.SuspendLayout();
+            this.panel128.SuspendLayout();
+            this.panel138.SuspendLayout();
+            this.panel144.SuspendLayout();
+            this.panel148.SuspendLayout();
+            this.panelMiningHashrate.SuspendLayout();
+            this.panel80.SuspendLayout();
+            this.panel81.SuspendLayout();
+            this.panel147.SuspendLayout();
+            this.panel150.SuspendLayout();
+            this.panelMiningPools.SuspendLayout();
+            this.panel156.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTime
@@ -14397,7 +14441,7 @@
             this.btnChartDifficultyLog.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartDifficultyLog, "Logarithmic scale chart");
             this.btnChartDifficultyLog.UseVisualStyleBackColor = false;
-            this.btnChartDifficultyLog.Click += new System.EventHandler(this.btnChartDifficultyLog_Click);
+            this.btnChartDifficultyLog.Click += new System.EventHandler(this.BtnChartDifficultyLog_Click);
             // 
             // btnChartDifficultyLinear
             // 
@@ -14422,7 +14466,7 @@
             this.btnChartDifficultyLinear.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartDifficultyLinear, "Linear scale chart");
             this.btnChartDifficultyLinear.UseVisualStyleBackColor = false;
-            this.btnChartDifficultyLinear.Click += new System.EventHandler(this.btnChartDifficultyLinear_Click);
+            this.btnChartDifficultyLinear.Click += new System.EventHandler(this.BtnChartDifficultyLinear_Click);
             // 
             // panelHashrateScaleButtons
             // 
@@ -14457,7 +14501,7 @@
             this.btnHashrateScaleLog.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnHashrateScaleLog, "Logarithmic scale chart");
             this.btnHashrateScaleLog.UseVisualStyleBackColor = false;
-            this.btnHashrateScaleLog.Click += new System.EventHandler(this.btnHashrateScaleLog_Click);
+            this.btnHashrateScaleLog.Click += new System.EventHandler(this.BtnHashrateScaleLog_Click);
             // 
             // btnHashrateScaleLinear
             // 
@@ -14482,7 +14526,7 @@
             this.btnHashrateScaleLinear.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnHashrateScaleLinear, "Linear scale chart");
             this.btnHashrateScaleLinear.UseVisualStyleBackColor = false;
-            this.btnHashrateScaleLinear.Click += new System.EventHandler(this.btnHashrateScaleLinear_Click);
+            this.btnHashrateScaleLinear.Click += new System.EventHandler(this.BtnHashrateScaleLinear_Click);
             // 
             // panelChartMarketCapScaleButtons
             // 
@@ -14518,7 +14562,7 @@
             this.btnChartMarketCapScaleLog.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartMarketCapScaleLog, "Logarithmic scale chart");
             this.btnChartMarketCapScaleLog.UseVisualStyleBackColor = false;
-            this.btnChartMarketCapScaleLog.Click += new System.EventHandler(this.btnChartMarketCapScaleLog_Click);
+            this.btnChartMarketCapScaleLog.Click += new System.EventHandler(this.BtnChartMarketCapScaleLog_Click);
             // 
             // btnChartMarketCapScaleLinear
             // 
@@ -14543,7 +14587,7 @@
             this.btnChartMarketCapScaleLinear.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartMarketCapScaleLinear, "Linear scale chart");
             this.btnChartMarketCapScaleLinear.UseVisualStyleBackColor = false;
-            this.btnChartMarketCapScaleLinear.Click += new System.EventHandler(this.btnChartMarketCapScaleLinear_Click);
+            this.btnChartMarketCapScaleLinear.Click += new System.EventHandler(this.BtnChartMarketCapScaleLinear_Click);
             // 
             // panelChartLoading
             // 
@@ -14626,7 +14670,7 @@
             this.btnPriceChartScaleLog.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnPriceChartScaleLog, "Logarithmic scale chart");
             this.btnPriceChartScaleLog.UseVisualStyleBackColor = false;
-            this.btnPriceChartScaleLog.Click += new System.EventHandler(this.btnPriceChartScaleLog_Click);
+            this.btnPriceChartScaleLog.Click += new System.EventHandler(this.BtnPriceChartScaleLog_Click);
             // 
             // btnPriceChartScaleLinear
             // 
@@ -14651,7 +14695,7 @@
             this.btnPriceChartScaleLinear.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnPriceChartScaleLinear, "Linear scale chart");
             this.btnPriceChartScaleLinear.UseVisualStyleBackColor = false;
-            this.btnPriceChartScaleLinear.Click += new System.EventHandler(this.btnPriceChartScaleLinear_Click);
+            this.btnPriceChartScaleLinear.Click += new System.EventHandler(this.BtnPriceChartScaleLinear_Click);
             // 
             // panelChartUTXOScaleButtons
             // 
@@ -14686,7 +14730,7 @@
             this.btnChartUTXOScaleLog.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartUTXOScaleLog, "Logarithmic scale chart");
             this.btnChartUTXOScaleLog.UseVisualStyleBackColor = false;
-            this.btnChartUTXOScaleLog.Click += new System.EventHandler(this.btnChartUTXOScaleLog_Click);
+            this.btnChartUTXOScaleLog.Click += new System.EventHandler(this.BtnChartUTXOScaleLog_Click);
             // 
             // btnChartUTXOScaleLinear
             // 
@@ -14711,7 +14755,7 @@
             this.btnChartUTXOScaleLinear.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartUTXOScaleLinear, "Linear scale chart");
             this.btnChartUTXOScaleLinear.UseVisualStyleBackColor = false;
-            this.btnChartUTXOScaleLinear.Click += new System.EventHandler(this.btnChartUTXOScaleLinear_Click);
+            this.btnChartUTXOScaleLinear.Click += new System.EventHandler(this.BtnChartUTXOScaleLinear_Click);
             // 
             // panelUniqueAddressesScaleButtons
             // 
@@ -14746,7 +14790,7 @@
             this.btnChartAddressScaleLog.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartAddressScaleLog, "Logarithmic scale chart");
             this.btnChartAddressScaleLog.UseVisualStyleBackColor = false;
-            this.btnChartAddressScaleLog.Click += new System.EventHandler(this.btnChartAddressScaleLog_Click);
+            this.btnChartAddressScaleLog.Click += new System.EventHandler(this.BtnChartAddressScaleLog_Click);
             // 
             // btnChartAddressScaleLinear
             // 
@@ -14771,7 +14815,7 @@
             this.btnChartAddressScaleLinear.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnChartAddressScaleLinear, "Linear scale chart");
             this.btnChartAddressScaleLinear.UseVisualStyleBackColor = false;
-            this.btnChartAddressScaleLinear.Click += new System.EventHandler(this.btnChartAddressScaleLinear_Click);
+            this.btnChartAddressScaleLinear.Click += new System.EventHandler(this.BtnChartAddressScaleLinear_Click);
             // 
             // panel78
             // 
@@ -17562,10 +17606,10 @@
             this.panelLeftPanel.Controls.Add(this.panelCurrency);
             this.panelLeftPanel.Controls.Add(this.panelOpenHelpAboutMenu);
             this.panelLeftPanel.Controls.Add(this.panelHelpAboutMenu);
-            this.panelLeftPanel.Controls.Add(this.button5);
+            this.panelLeftPanel.Controls.Add(this.btnMenuPoolsByBlocks);
             this.panelLeftPanel.Controls.Add(this.panel79);
-            this.panelLeftPanel.Controls.Add(this.button3);
-            this.panelLeftPanel.Controls.Add(this.button4);
+            this.panelLeftPanel.Controls.Add(this.btnMenuMiningPools);
+            this.panelLeftPanel.Controls.Add(this.btnMenuPoolsByHashrate);
             this.panelLeftPanel.Controls.Add(this.lblMenuArrow);
             this.panelLeftPanel.Controls.Add(this.lblMenuHighlightedButtonText);
             this.panelLeftPanel.Controls.Add(this.btnMenuCharts);
@@ -17620,7 +17664,7 @@
             this.panelOpenHelpAboutMenu.Name = "panelOpenHelpAboutMenu";
             this.panelOpenHelpAboutMenu.Size = new System.Drawing.Size(121, 22);
             this.panelOpenHelpAboutMenu.TabIndex = 264;
-            this.panelOpenHelpAboutMenu.Click += new System.EventHandler(this.lblOpenHelpAboutMenu_Click);
+            this.panelOpenHelpAboutMenu.Click += new System.EventHandler(this.LblOpenHelpAboutMenu_Click);
             // 
             // lblUpdateFlasher
             // 
@@ -17634,7 +17678,7 @@
             this.lblUpdateFlasher.TabIndex = 154;
             this.lblUpdateFlasher.Text = "▼";
             this.lblUpdateFlasher.Visible = false;
-            this.lblUpdateFlasher.Click += new System.EventHandler(this.lblOpenHelpAboutMenu_Click);
+            this.lblUpdateFlasher.Click += new System.EventHandler(this.LblOpenHelpAboutMenu_Click);
             // 
             // lblOpenHelpAboutMenu
             // 
@@ -17649,7 +17693,7 @@
             this.lblOpenHelpAboutMenu.TabIndex = 153;
             this.lblOpenHelpAboutMenu.Text = "HELP, UPDATE ▼";
             this.lblOpenHelpAboutMenu.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblOpenHelpAboutMenu.Click += new System.EventHandler(this.lblOpenHelpAboutMenu_Click);
+            this.lblOpenHelpAboutMenu.Click += new System.EventHandler(this.LblOpenHelpAboutMenu_Click);
             // 
             // panelHelpAboutMenu
             // 
@@ -17660,25 +17704,26 @@
             this.panelHelpAboutMenu.Size = new System.Drawing.Size(122, 0);
             this.panelHelpAboutMenu.TabIndex = 289;
             // 
-            // button5
+            // btnMenuPoolsByBlocks
             // 
-            this.button5.BackColor = System.Drawing.Color.Transparent;
-            this.button5.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.button5.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.button5.FlatAppearance.BorderSize = 0;
-            this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button5.Font = new System.Drawing.Font("Century Gothic", 8F, System.Drawing.FontStyle.Bold);
-            this.button5.ForeColor = System.Drawing.Color.White;
-            this.button5.Location = new System.Drawing.Point(8, 272);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(122, 18);
-            this.button5.TabIndex = 288;
-            this.button5.TabStop = false;
-            this.button5.Text = "   pools - blocks";
-            this.button5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button5.UseVisualStyleBackColor = false;
-            this.button5.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
-            this.button5.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
+            this.btnMenuPoolsByBlocks.BackColor = System.Drawing.Color.Transparent;
+            this.btnMenuPoolsByBlocks.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnMenuPoolsByBlocks.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuPoolsByBlocks.FlatAppearance.BorderSize = 0;
+            this.btnMenuPoolsByBlocks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMenuPoolsByBlocks.Font = new System.Drawing.Font("Century Gothic", 8F, System.Drawing.FontStyle.Bold);
+            this.btnMenuPoolsByBlocks.ForeColor = System.Drawing.Color.White;
+            this.btnMenuPoolsByBlocks.Location = new System.Drawing.Point(8, 272);
+            this.btnMenuPoolsByBlocks.Name = "btnMenuPoolsByBlocks";
+            this.btnMenuPoolsByBlocks.Size = new System.Drawing.Size(122, 18);
+            this.btnMenuPoolsByBlocks.TabIndex = 288;
+            this.btnMenuPoolsByBlocks.TabStop = false;
+            this.btnMenuPoolsByBlocks.Text = "   pools - blocks";
+            this.btnMenuPoolsByBlocks.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnMenuPoolsByBlocks.UseVisualStyleBackColor = false;
+            this.btnMenuPoolsByBlocks.Click += new System.EventHandler(this.BtnMenuPoolsByBlocks_ClickAsync);
+            this.btnMenuPoolsByBlocks.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
+            this.btnMenuPoolsByBlocks.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 
             // panel79
             // 
@@ -17706,45 +17751,47 @@
             this.label218.Text = "MINING";
             this.label218.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // button3
+            // btnMenuMiningPools
             // 
-            this.button3.BackColor = System.Drawing.Color.Transparent;
-            this.button3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.button3.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.button3.FlatAppearance.BorderSize = 0;
-            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button3.Font = new System.Drawing.Font("Century Gothic", 8F, System.Drawing.FontStyle.Bold);
-            this.button3.ForeColor = System.Drawing.Color.White;
-            this.button3.Location = new System.Drawing.Point(8, 236);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(122, 18);
-            this.button3.TabIndex = 286;
-            this.button3.TabStop = false;
-            this.button3.Text = "   mining pools";
-            this.button3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button3.UseVisualStyleBackColor = false;
-            this.button3.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
-            this.button3.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
+            this.btnMenuMiningPools.BackColor = System.Drawing.Color.Transparent;
+            this.btnMenuMiningPools.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnMenuMiningPools.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnMenuMiningPools.FlatAppearance.BorderSize = 0;
+            this.btnMenuMiningPools.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMenuMiningPools.Font = new System.Drawing.Font("Century Gothic", 8F, System.Drawing.FontStyle.Bold);
+            this.btnMenuMiningPools.ForeColor = System.Drawing.Color.White;
+            this.btnMenuMiningPools.Location = new System.Drawing.Point(8, 236);
+            this.btnMenuMiningPools.Name = "btnMenuMiningPools";
+            this.btnMenuMiningPools.Size = new System.Drawing.Size(122, 18);
+            this.btnMenuMiningPools.TabIndex = 286;
+            this.btnMenuMiningPools.TabStop = false;
+            this.btnMenuMiningPools.Text = "   mining pools";
+            this.btnMenuMiningPools.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnMenuMiningPools.UseVisualStyleBackColor = false;
+            this.btnMenuMiningPools.Click += new System.EventHandler(this.btnMenuMiningPools_ClickAsync);
+            this.btnMenuMiningPools.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
+            this.btnMenuMiningPools.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 
-            // button4
+            // btnMenuPoolsByHashrate
             // 
-            this.button4.BackColor = System.Drawing.Color.Transparent;
-            this.button4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.button4.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.button4.FlatAppearance.BorderSize = 0;
-            this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button4.Font = new System.Drawing.Font("Century Gothic", 8F, System.Drawing.FontStyle.Bold);
-            this.button4.ForeColor = System.Drawing.Color.White;
-            this.button4.Location = new System.Drawing.Point(8, 254);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(122, 18);
-            this.button4.TabIndex = 285;
-            this.button4.TabStop = false;
-            this.button4.Text = "   pools - hashrate";
-            this.button4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button4.UseVisualStyleBackColor = false;
-            this.button4.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
-            this.button4.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
+            this.btnMenuPoolsByHashrate.BackColor = System.Drawing.Color.Transparent;
+            this.btnMenuPoolsByHashrate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnMenuPoolsByHashrate.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnMenuPoolsByHashrate.FlatAppearance.BorderSize = 0;
+            this.btnMenuPoolsByHashrate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMenuPoolsByHashrate.Font = new System.Drawing.Font("Century Gothic", 8F, System.Drawing.FontStyle.Bold);
+            this.btnMenuPoolsByHashrate.ForeColor = System.Drawing.Color.White;
+            this.btnMenuPoolsByHashrate.Location = new System.Drawing.Point(8, 254);
+            this.btnMenuPoolsByHashrate.Name = "btnMenuPoolsByHashrate";
+            this.btnMenuPoolsByHashrate.Size = new System.Drawing.Size(122, 18);
+            this.btnMenuPoolsByHashrate.TabIndex = 285;
+            this.btnMenuPoolsByHashrate.TabStop = false;
+            this.btnMenuPoolsByHashrate.Text = "   pools - hashrate";
+            this.btnMenuPoolsByHashrate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnMenuPoolsByHashrate.UseVisualStyleBackColor = false;
+            this.btnMenuPoolsByHashrate.Click += new System.EventHandler(this.btnMenuPoolsByHashrate_ClickAsync);
+            this.btnMenuPoolsByHashrate.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
+            this.btnMenuPoolsByHashrate.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 
             // lblMenuArrow
             // 
@@ -18183,7 +18230,7 @@
             this.panelOpenPreferences.Name = "panelOpenPreferences";
             this.panelOpenPreferences.Size = new System.Drawing.Size(121, 22);
             this.panelOpenPreferences.TabIndex = 265;
-            this.panelOpenPreferences.Click += new System.EventHandler(this.lblOpenPreferences_Click);
+            this.panelOpenPreferences.Click += new System.EventHandler(this.LblOpenPreferences_Click);
             // 
             // lblOpenPreferences
             // 
@@ -18198,7 +18245,7 @@
             this.lblOpenPreferences.TabIndex = 153;
             this.lblOpenPreferences.Text = "PREFERENCES ▼";
             this.lblOpenPreferences.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblOpenPreferences.Click += new System.EventHandler(this.lblOpenPreferences_Click);
+            this.lblOpenPreferences.Click += new System.EventHandler(this.LblOpenPreferences_Click);
             // 
             // lblUpdaterLight
             // 
@@ -19062,6 +19109,108 @@
             this.toolTipGeneralUse.SetToolTip(this.lblSmallestUTXO, "Smallest unspent output\r\nXX(UTXO) currently held\r\n");
             this.lblSmallestUTXO.Visible = false;
             // 
+            // rjButton4
+            // 
+            this.rjButton4.AutoSize = true;
+            this.rjButton4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.rjButton4.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.rjButton4.BorderColor = System.Drawing.Color.Transparent;
+            this.rjButton4.BorderRadius = 7;
+            this.rjButton4.BorderSize = 0;
+            this.rjButton4.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.rjButton4.FlatAppearance.BorderSize = 0;
+            this.rjButton4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.rjButton4.Font = new System.Drawing.Font("Consolas", 7F);
+            this.rjButton4.ForeColor = System.Drawing.Color.White;
+            this.rjButton4.Location = new System.Drawing.Point(444, 88);
+            this.rjButton4.Margin = new System.Windows.Forms.Padding(1);
+            this.rjButton4.Name = "rjButton4";
+            this.rjButton4.Size = new System.Drawing.Size(54, 22);
+            this.rjButton4.TabIndex = 282;
+            this.rjButton4.TabStop = false;
+            this.rjButton4.Text = "block ▶";
+            this.rjButton4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.rjButton4.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.rjButton4, "view block");
+            this.rjButton4.UseVisualStyleBackColor = false;
+            this.rjButton4.Visible = false;
+            // 
+            // rjButton5
+            // 
+            this.rjButton5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.rjButton5.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.rjButton5.BorderColor = System.Drawing.Color.Transparent;
+            this.rjButton5.BorderRadius = 7;
+            this.rjButton5.BorderSize = 0;
+            this.rjButton5.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.rjButton5.FlatAppearance.BorderSize = 0;
+            this.rjButton5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.rjButton5.Font = new System.Drawing.Font("Consolas", 7F);
+            this.rjButton5.ForeColor = System.Drawing.Color.White;
+            this.rjButton5.Location = new System.Drawing.Point(6, 97);
+            this.rjButton5.Margin = new System.Windows.Forms.Padding(1);
+            this.rjButton5.Name = "rjButton5";
+            this.rjButton5.Size = new System.Drawing.Size(40, 15);
+            this.rjButton5.TabIndex = 281;
+            this.rjButton5.TabStop = false;
+            this.rjButton5.Text = "tx ▶";
+            this.rjButton5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.rjButton5.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.rjButton5, "view transaction");
+            this.rjButton5.UseVisualStyleBackColor = false;
+            this.rjButton5.Visible = false;
+            // 
+            // rjButton7
+            // 
+            this.rjButton7.AutoSize = true;
+            this.rjButton7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.rjButton7.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.rjButton7.BorderColor = System.Drawing.Color.Transparent;
+            this.rjButton7.BorderRadius = 7;
+            this.rjButton7.BorderSize = 0;
+            this.rjButton7.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.rjButton7.FlatAppearance.BorderSize = 0;
+            this.rjButton7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.rjButton7.Font = new System.Drawing.Font("Consolas", 7F);
+            this.rjButton7.ForeColor = System.Drawing.Color.White;
+            this.rjButton7.Location = new System.Drawing.Point(444, 88);
+            this.rjButton7.Margin = new System.Windows.Forms.Padding(1);
+            this.rjButton7.Name = "rjButton7";
+            this.rjButton7.Size = new System.Drawing.Size(54, 22);
+            this.rjButton7.TabIndex = 282;
+            this.rjButton7.TabStop = false;
+            this.rjButton7.Text = "block ▶";
+            this.rjButton7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.rjButton7.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.rjButton7, "view block");
+            this.rjButton7.UseVisualStyleBackColor = false;
+            this.rjButton7.Visible = false;
+            // 
+            // rjButton8
+            // 
+            this.rjButton8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.rjButton8.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.rjButton8.BorderColor = System.Drawing.Color.Transparent;
+            this.rjButton8.BorderRadius = 7;
+            this.rjButton8.BorderSize = 0;
+            this.rjButton8.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.rjButton8.FlatAppearance.BorderSize = 0;
+            this.rjButton8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.rjButton8.Font = new System.Drawing.Font("Consolas", 7F);
+            this.rjButton8.ForeColor = System.Drawing.Color.White;
+            this.rjButton8.Location = new System.Drawing.Point(6, 97);
+            this.rjButton8.Margin = new System.Windows.Forms.Padding(1);
+            this.rjButton8.Name = "rjButton8";
+            this.rjButton8.Size = new System.Drawing.Size(40, 15);
+            this.rjButton8.TabIndex = 281;
+            this.rjButton8.TabStop = false;
+            this.rjButton8.Text = "tx ▶";
+            this.rjButton8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.rjButton8.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.rjButton8, "view transaction");
+            this.rjButton8.UseVisualStyleBackColor = false;
+            this.rjButton8.Visible = false;
+            // 
             // timer50thSec
             // 
             this.timer50thSec.Interval = 50;
@@ -19516,6 +19665,363 @@
             this.UTXOsScrollTimer.Interval = 50;
             this.UTXOsScrollTimer.Tick += new System.EventHandler(this.UTXOsScrollTimer_Tick);
             // 
+            // panelMiningBlocks
+            // 
+            this.panelMiningBlocks.BackColor = System.Drawing.Color.Transparent;
+            this.panelMiningBlocks.Controls.Add(this.panel128);
+            this.panelMiningBlocks.Controls.Add(this.panel138);
+            this.panelMiningBlocks.Controls.Add(this.panel148);
+            this.panelMiningBlocks.Location = new System.Drawing.Point(162, 187);
+            this.panelMiningBlocks.Name = "panelMiningBlocks";
+            this.panelMiningBlocks.Size = new System.Drawing.Size(773, 556);
+            this.panelMiningBlocks.TabIndex = 286;
+            this.panelMiningBlocks.Visible = false;
+            // 
+            // panel128
+            // 
+            this.panel128.BackColor = System.Drawing.Color.Transparent;
+            this.panel128.Controls.Add(this.rjButton1);
+            this.panel128.Controls.Add(this.rjButton2);
+            this.panel128.Location = new System.Drawing.Point(730, 45);
+            this.panel128.Name = "panel128";
+            this.panel128.Size = new System.Drawing.Size(31, 490);
+            this.panel128.TabIndex = 284;
+            // 
+            // rjButton1
+            // 
+            this.rjButton1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.rjButton1.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.rjButton1.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.rjButton1.BorderRadius = 7;
+            this.rjButton1.BorderSize = 0;
+            this.rjButton1.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.rjButton1.FlatAppearance.BorderSize = 0;
+            this.rjButton1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.rjButton1.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rjButton1.ForeColor = System.Drawing.Color.White;
+            this.rjButton1.Location = new System.Drawing.Point(2, 464);
+            this.rjButton1.Margin = new System.Windows.Forms.Padding(1);
+            this.rjButton1.Name = "rjButton1";
+            this.rjButton1.Size = new System.Drawing.Size(24, 24);
+            this.rjButton1.TabIndex = 298;
+            this.rjButton1.TabStop = false;
+            this.rjButton1.Text = "▼";
+            this.rjButton1.TextColor = System.Drawing.Color.White;
+            this.rjButton1.UseVisualStyleBackColor = false;
+            // 
+            // rjButton2
+            // 
+            this.rjButton2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.rjButton2.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.rjButton2.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.rjButton2.BorderRadius = 7;
+            this.rjButton2.BorderSize = 0;
+            this.rjButton2.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.rjButton2.FlatAppearance.BorderSize = 0;
+            this.rjButton2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.rjButton2.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rjButton2.ForeColor = System.Drawing.Color.White;
+            this.rjButton2.Location = new System.Drawing.Point(2, 2);
+            this.rjButton2.Margin = new System.Windows.Forms.Padding(1);
+            this.rjButton2.Name = "rjButton2";
+            this.rjButton2.Size = new System.Drawing.Size(24, 24);
+            this.rjButton2.TabIndex = 297;
+            this.rjButton2.TabStop = false;
+            this.rjButton2.Text = "▲";
+            this.rjButton2.TextColor = System.Drawing.Color.White;
+            this.rjButton2.UseVisualStyleBackColor = false;
+            // 
+            // panel138
+            // 
+            this.panel138.AutoScroll = true;
+            this.panel138.Controls.Add(this.listView1);
+            this.panel138.Controls.Add(this.panel140);
+            this.panel138.Controls.Add(this.rjButton4);
+            this.panel138.Controls.Add(this.rjButton5);
+            this.panel138.Controls.Add(this.panel144);
+            this.panel138.Location = new System.Drawing.Point(214, 45);
+            this.panel138.Name = "panel138";
+            this.panel138.Size = new System.Drawing.Size(544, 490);
+            this.panel138.TabIndex = 283;
+            // 
+            // listView1
+            // 
+            this.listView1.Activation = System.Windows.Forms.ItemActivation.OneClick;
+            this.listView1.AllowColumnReorder = true;
+            this.listView1.AutoArrange = false;
+            this.listView1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
+            this.listView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listView1.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listView1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.listView1.FullRowSelect = true;
+            this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.listView1.HideSelection = false;
+            this.listView1.LabelWrap = false;
+            this.listView1.Location = new System.Drawing.Point(30, 0);
+            this.listView1.Margin = new System.Windows.Forms.Padding(0);
+            this.listView1.MultiSelect = false;
+            this.listView1.Name = "listView1";
+            this.listView1.OwnerDraw = true;
+            this.listView1.Scrollable = false;
+            this.listView1.ShowGroups = false;
+            this.listView1.Size = new System.Drawing.Size(429, 485);
+            this.listView1.TabIndex = 164;
+            this.listView1.TabStop = false;
+            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listView1.View = System.Windows.Forms.View.Details;
+            // 
+            // panel140
+            // 
+            this.panel140.BackColor = System.Drawing.Color.Transparent;
+            this.panel140.Location = new System.Drawing.Point(30, -2);
+            this.panel140.Name = "panel140";
+            this.panel140.Size = new System.Drawing.Size(429, 480);
+            this.panel140.TabIndex = 165;
+            // 
+            // panel144
+            // 
+            this.panel144.BackColor = System.Drawing.Color.White;
+            this.panel144.Controls.Add(this.panel145);
+            this.panel144.Location = new System.Drawing.Point(0, 0);
+            this.panel144.Name = "panel144";
+            this.panel144.Size = new System.Drawing.Size(520, 16);
+            this.panel144.TabIndex = 285;
+            this.panel144.Visible = false;
+            // 
+            // panel145
+            // 
+            this.panel145.Location = new System.Drawing.Point(515, 0);
+            this.panel145.Name = "panel145";
+            this.panel145.Size = new System.Drawing.Size(25, 16);
+            this.panel145.TabIndex = 0;
+            // 
+            // panel148
+            // 
+            this.panel148.Controls.Add(this.label324);
+            this.panel148.Controls.Add(this.label325);
+            this.panel148.Location = new System.Drawing.Point(1, 3);
+            this.panel148.Name = "panel148";
+            this.panel148.Size = new System.Drawing.Size(750, 30);
+            this.panel148.TabIndex = 148;
+            // 
+            // label324
+            // 
+            this.label324.AutoSize = true;
+            this.label324.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label324.ForeColor = System.Drawing.Color.IndianRed;
+            this.label324.Location = new System.Drawing.Point(564, 3);
+            this.label324.Name = "label324";
+            this.label324.Size = new System.Drawing.Size(0, 17);
+            this.label324.TabIndex = 199;
+            // 
+            // label325
+            // 
+            this.label325.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label325.ForeColor = System.Drawing.Color.Silver;
+            this.label325.Location = new System.Drawing.Point(0, 3);
+            this.label325.Name = "label325";
+            this.label325.Size = new System.Drawing.Size(98, 17);
+            this.label325.TabIndex = 5;
+            this.label325.Text = "Mining blocks";
+            // 
+            // panelMiningHashrate
+            // 
+            this.panelMiningHashrate.BackColor = System.Drawing.Color.Transparent;
+            this.panelMiningHashrate.Controls.Add(this.panel80);
+            this.panelMiningHashrate.Controls.Add(this.panel81);
+            this.panelMiningHashrate.Controls.Add(this.panel150);
+            this.panelMiningHashrate.Location = new System.Drawing.Point(162, 187);
+            this.panelMiningHashrate.Name = "panelMiningHashrate";
+            this.panelMiningHashrate.Size = new System.Drawing.Size(773, 556);
+            this.panelMiningHashrate.TabIndex = 287;
+            this.panelMiningHashrate.Visible = false;
+            // 
+            // panel80
+            // 
+            this.panel80.BackColor = System.Drawing.Color.Transparent;
+            this.panel80.Controls.Add(this.rjButton3);
+            this.panel80.Controls.Add(this.rjButton6);
+            this.panel80.Location = new System.Drawing.Point(730, 45);
+            this.panel80.Name = "panel80";
+            this.panel80.Size = new System.Drawing.Size(31, 490);
+            this.panel80.TabIndex = 284;
+            // 
+            // rjButton3
+            // 
+            this.rjButton3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.rjButton3.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.rjButton3.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.rjButton3.BorderRadius = 7;
+            this.rjButton3.BorderSize = 0;
+            this.rjButton3.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.rjButton3.FlatAppearance.BorderSize = 0;
+            this.rjButton3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.rjButton3.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rjButton3.ForeColor = System.Drawing.Color.White;
+            this.rjButton3.Location = new System.Drawing.Point(2, 464);
+            this.rjButton3.Margin = new System.Windows.Forms.Padding(1);
+            this.rjButton3.Name = "rjButton3";
+            this.rjButton3.Size = new System.Drawing.Size(24, 24);
+            this.rjButton3.TabIndex = 298;
+            this.rjButton3.TabStop = false;
+            this.rjButton3.Text = "▼";
+            this.rjButton3.TextColor = System.Drawing.Color.White;
+            this.rjButton3.UseVisualStyleBackColor = false;
+            // 
+            // rjButton6
+            // 
+            this.rjButton6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.rjButton6.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.rjButton6.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.rjButton6.BorderRadius = 7;
+            this.rjButton6.BorderSize = 0;
+            this.rjButton6.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.rjButton6.FlatAppearance.BorderSize = 0;
+            this.rjButton6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.rjButton6.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rjButton6.ForeColor = System.Drawing.Color.White;
+            this.rjButton6.Location = new System.Drawing.Point(2, 2);
+            this.rjButton6.Margin = new System.Windows.Forms.Padding(1);
+            this.rjButton6.Name = "rjButton6";
+            this.rjButton6.Size = new System.Drawing.Size(24, 24);
+            this.rjButton6.TabIndex = 297;
+            this.rjButton6.TabStop = false;
+            this.rjButton6.Text = "▲";
+            this.rjButton6.TextColor = System.Drawing.Color.White;
+            this.rjButton6.UseVisualStyleBackColor = false;
+            // 
+            // panel81
+            // 
+            this.panel81.AutoScroll = true;
+            this.panel81.Controls.Add(this.listView2);
+            this.panel81.Controls.Add(this.panel146);
+            this.panel81.Controls.Add(this.rjButton7);
+            this.panel81.Controls.Add(this.rjButton8);
+            this.panel81.Controls.Add(this.panel147);
+            this.panel81.Location = new System.Drawing.Point(214, 45);
+            this.panel81.Name = "panel81";
+            this.panel81.Size = new System.Drawing.Size(544, 490);
+            this.panel81.TabIndex = 283;
+            // 
+            // listView2
+            // 
+            this.listView2.Activation = System.Windows.Forms.ItemActivation.OneClick;
+            this.listView2.AllowColumnReorder = true;
+            this.listView2.AutoArrange = false;
+            this.listView2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
+            this.listView2.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listView2.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listView2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.listView2.FullRowSelect = true;
+            this.listView2.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.listView2.HideSelection = false;
+            this.listView2.LabelWrap = false;
+            this.listView2.Location = new System.Drawing.Point(30, 0);
+            this.listView2.Margin = new System.Windows.Forms.Padding(0);
+            this.listView2.MultiSelect = false;
+            this.listView2.Name = "listView2";
+            this.listView2.OwnerDraw = true;
+            this.listView2.Scrollable = false;
+            this.listView2.ShowGroups = false;
+            this.listView2.Size = new System.Drawing.Size(429, 485);
+            this.listView2.TabIndex = 164;
+            this.listView2.TabStop = false;
+            this.listView2.UseCompatibleStateImageBehavior = false;
+            this.listView2.View = System.Windows.Forms.View.Details;
+            // 
+            // panel146
+            // 
+            this.panel146.BackColor = System.Drawing.Color.Transparent;
+            this.panel146.Location = new System.Drawing.Point(30, -2);
+            this.panel146.Name = "panel146";
+            this.panel146.Size = new System.Drawing.Size(429, 480);
+            this.panel146.TabIndex = 165;
+            // 
+            // panel147
+            // 
+            this.panel147.BackColor = System.Drawing.Color.White;
+            this.panel147.Controls.Add(this.panel149);
+            this.panel147.Location = new System.Drawing.Point(0, 0);
+            this.panel147.Name = "panel147";
+            this.panel147.Size = new System.Drawing.Size(520, 16);
+            this.panel147.TabIndex = 285;
+            this.panel147.Visible = false;
+            // 
+            // panel149
+            // 
+            this.panel149.Location = new System.Drawing.Point(515, 0);
+            this.panel149.Name = "panel149";
+            this.panel149.Size = new System.Drawing.Size(25, 16);
+            this.panel149.TabIndex = 0;
+            // 
+            // panel150
+            // 
+            this.panel150.Controls.Add(this.label210);
+            this.panel150.Controls.Add(this.label213);
+            this.panel150.Location = new System.Drawing.Point(1, 3);
+            this.panel150.Name = "panel150";
+            this.panel150.Size = new System.Drawing.Size(750, 30);
+            this.panel150.TabIndex = 148;
+            // 
+            // label210
+            // 
+            this.label210.AutoSize = true;
+            this.label210.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label210.ForeColor = System.Drawing.Color.IndianRed;
+            this.label210.Location = new System.Drawing.Point(564, 3);
+            this.label210.Name = "label210";
+            this.label210.Size = new System.Drawing.Size(0, 17);
+            this.label210.TabIndex = 199;
+            // 
+            // label213
+            // 
+            this.label213.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label213.ForeColor = System.Drawing.Color.Silver;
+            this.label213.Location = new System.Drawing.Point(0, 3);
+            this.label213.Name = "label213";
+            this.label213.Size = new System.Drawing.Size(98, 17);
+            this.label213.TabIndex = 5;
+            this.label213.Text = "Mining hashrate";
+            // 
+            // panelMiningPools
+            // 
+            this.panelMiningPools.BackColor = System.Drawing.Color.Transparent;
+            this.panelMiningPools.Controls.Add(this.panel156);
+            this.panelMiningPools.Location = new System.Drawing.Point(162, 187);
+            this.panelMiningPools.Name = "panelMiningPools";
+            this.panelMiningPools.Size = new System.Drawing.Size(773, 556);
+            this.panelMiningPools.TabIndex = 288;
+            this.panelMiningPools.Visible = false;
+            // 
+            // panel156
+            // 
+            this.panel156.Controls.Add(this.label228);
+            this.panel156.Controls.Add(this.label231);
+            this.panel156.Location = new System.Drawing.Point(1, 3);
+            this.panel156.Name = "panel156";
+            this.panel156.Size = new System.Drawing.Size(750, 30);
+            this.panel156.TabIndex = 148;
+            // 
+            // label228
+            // 
+            this.label228.AutoSize = true;
+            this.label228.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label228.ForeColor = System.Drawing.Color.IndianRed;
+            this.label228.Location = new System.Drawing.Point(564, 3);
+            this.label228.Name = "label228";
+            this.label228.Size = new System.Drawing.Size(0, 17);
+            this.label228.TabIndex = 199;
+            // 
+            // label231
+            // 
+            this.label231.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label231.ForeColor = System.Drawing.Color.Silver;
+            this.label231.Location = new System.Drawing.Point(0, 3);
+            this.label231.Name = "label231";
+            this.label231.Size = new System.Drawing.Size(98, 17);
+            this.label231.TabIndex = 5;
+            this.label231.Text = "Mining pools";
+            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(5F, 12F);
@@ -19525,6 +20031,10 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
+            this.Controls.Add(this.panelMiningPools);
+            this.Controls.Add(this.panelMiningHashrate);
+            this.Controls.Add(this.panelMiningBlocks);
+            this.Controls.Add(this.panelAddressUTXO);
             this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelBlockList);
@@ -19538,7 +20048,6 @@
             this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelAddress);
-            this.Controls.Add(this.panelAddressUTXO);
             this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelPriceSourceIndicators);
             this.Controls.Add(this.progressBarRefreshData);
@@ -19933,6 +20442,23 @@
             this.panel142.PerformLayout();
             this.panelSubmittedAddressContainerUTXO.ResumeLayout(false);
             this.panelSubmittedAddressContainerUTXO.PerformLayout();
+            this.panelMiningBlocks.ResumeLayout(false);
+            this.panel128.ResumeLayout(false);
+            this.panel138.ResumeLayout(false);
+            this.panel138.PerformLayout();
+            this.panel144.ResumeLayout(false);
+            this.panel148.ResumeLayout(false);
+            this.panel148.PerformLayout();
+            this.panelMiningHashrate.ResumeLayout(false);
+            this.panel80.ResumeLayout(false);
+            this.panel81.ResumeLayout(false);
+            this.panel81.PerformLayout();
+            this.panel147.ResumeLayout(false);
+            this.panel150.ResumeLayout(false);
+            this.panel150.PerformLayout();
+            this.panelMiningPools.ResumeLayout(false);
+            this.panel156.ResumeLayout(false);
+            this.panel156.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -21140,13 +21666,45 @@
         private CustomControls.RJControls.RJComboBox comboBoxChartSelect;
         private System.Windows.Forms.Panel panel139;
         private System.Windows.Forms.Label label114;
-        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button btnMenuPoolsByBlocks;
         private System.Windows.Forms.Panel panel79;
         private System.Windows.Forms.Label label218;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button btnMenuMiningPools;
+        private System.Windows.Forms.Button btnMenuPoolsByHashrate;
         private System.Windows.Forms.Panel panelHelpAboutMenu;
         private System.Windows.Forms.Label lblUpdateFlasher;
+        private System.Windows.Forms.Panel panelMiningBlocks;
+        private System.Windows.Forms.Panel panel128;
+        private CustomControls.RJControls.RJButton rjButton1;
+        private CustomControls.RJControls.RJButton rjButton2;
+        public System.Windows.Forms.Panel panel138;
+        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.Panel panel140;
+        private CustomControls.RJControls.RJButton rjButton4;
+        private CustomControls.RJControls.RJButton rjButton5;
+        private System.Windows.Forms.Panel panel144;
+        private System.Windows.Forms.Panel panel145;
+        private System.Windows.Forms.Panel panel148;
+        private System.Windows.Forms.Label label324;
+        private System.Windows.Forms.Label label325;
+        private System.Windows.Forms.Panel panelMiningHashrate;
+        private System.Windows.Forms.Panel panel80;
+        private CustomControls.RJControls.RJButton rjButton3;
+        private CustomControls.RJControls.RJButton rjButton6;
+        public System.Windows.Forms.Panel panel81;
+        private System.Windows.Forms.ListView listView2;
+        private System.Windows.Forms.Panel panel146;
+        private CustomControls.RJControls.RJButton rjButton7;
+        private CustomControls.RJControls.RJButton rjButton8;
+        private System.Windows.Forms.Panel panel147;
+        private System.Windows.Forms.Panel panel149;
+        private System.Windows.Forms.Panel panel150;
+        private System.Windows.Forms.Label label210;
+        private System.Windows.Forms.Label label213;
+        private System.Windows.Forms.Panel panelMiningPools;
+        private System.Windows.Forms.Panel panel156;
+        private System.Windows.Forms.Label label228;
+        private System.Windows.Forms.Label label231;
     }
 }
 

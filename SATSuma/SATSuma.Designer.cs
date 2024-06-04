@@ -1204,10 +1204,10 @@
             this.btnViewBlockFromAddressUTXO = new CustomControls.RJControls.RJButton();
             this.lblLargestUTXO = new System.Windows.Forms.Label();
             this.lblSmallestUTXO = new System.Windows.Forms.Label();
-            this.rjButton4 = new CustomControls.RJControls.RJButton();
-            this.rjButton5 = new CustomControls.RJControls.RJButton();
             this.rjButton7 = new CustomControls.RJControls.RJButton();
             this.rjButton8 = new CustomControls.RJControls.RJButton();
+            this.rjButton4 = new CustomControls.RJControls.RJButton();
+            this.rjButton5 = new CustomControls.RJControls.RJButton();
             this.timer50thSec = new System.Windows.Forms.Timer(this.components);
             this.panelAddressUTXO = new System.Windows.Forms.Panel();
             this.panel136 = new System.Windows.Forms.Panel();
@@ -1243,13 +1243,13 @@
             this.UTXOsScrollTimer = new System.Windows.Forms.Timer(this.components);
             this.panelMiningBlocks = new System.Windows.Forms.Panel();
             this.panel128 = new System.Windows.Forms.Panel();
-            this.rjButton1 = new CustomControls.RJControls.RJButton();
-            this.rjButton2 = new CustomControls.RJControls.RJButton();
-            this.panel138 = new System.Windows.Forms.Panel();
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.btnPoolsBlocksScrollUp = new CustomControls.RJControls.RJButton();
+            this.btnPoolsBlocksScrollDown = new CustomControls.RJControls.RJButton();
+            this.panel30 = new System.Windows.Forms.Panel();
+            this.panelPoolsBlocksContainer = new System.Windows.Forms.Panel();
+            this.listViewPoolsByBlock = new System.Windows.Forms.ListView();
             this.panel140 = new System.Windows.Forms.Panel();
             this.panel144 = new System.Windows.Forms.Panel();
-            this.panel145 = new System.Windows.Forms.Panel();
             this.panel148 = new System.Windows.Forms.Panel();
             this.label324 = new System.Windows.Forms.Label();
             this.label325 = new System.Windows.Forms.Label();
@@ -1269,6 +1269,7 @@
             this.panel156 = new System.Windows.Forms.Panel();
             this.label228 = new System.Windows.Forms.Label();
             this.label231 = new System.Windows.Forms.Label();
+            this.PoolsBlocksScrollTimer = new System.Windows.Forms.Timer(this.components);
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel109.SuspendLayout();
             this.panel12.SuspendLayout();
@@ -1490,8 +1491,7 @@
             this.panelSubmittedAddressContainerUTXO.SuspendLayout();
             this.panelMiningBlocks.SuspendLayout();
             this.panel128.SuspendLayout();
-            this.panel138.SuspendLayout();
-            this.panel144.SuspendLayout();
+            this.panelPoolsBlocksContainer.SuspendLayout();
             this.panel148.SuspendLayout();
             this.panelMiningHashrate.SuspendLayout();
             this.panel80.SuspendLayout();
@@ -19109,57 +19109,6 @@
             this.toolTipGeneralUse.SetToolTip(this.lblSmallestUTXO, "Smallest unspent output\r\nXX(UTXO) currently held\r\n");
             this.lblSmallestUTXO.Visible = false;
             // 
-            // rjButton4
-            // 
-            this.rjButton4.AutoSize = true;
-            this.rjButton4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.rjButton4.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.rjButton4.BorderColor = System.Drawing.Color.Transparent;
-            this.rjButton4.BorderRadius = 7;
-            this.rjButton4.BorderSize = 0;
-            this.rjButton4.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.rjButton4.FlatAppearance.BorderSize = 0;
-            this.rjButton4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.rjButton4.Font = new System.Drawing.Font("Consolas", 7F);
-            this.rjButton4.ForeColor = System.Drawing.Color.White;
-            this.rjButton4.Location = new System.Drawing.Point(444, 88);
-            this.rjButton4.Margin = new System.Windows.Forms.Padding(1);
-            this.rjButton4.Name = "rjButton4";
-            this.rjButton4.Size = new System.Drawing.Size(54, 22);
-            this.rjButton4.TabIndex = 282;
-            this.rjButton4.TabStop = false;
-            this.rjButton4.Text = "block ▶";
-            this.rjButton4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.rjButton4.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.rjButton4, "view block");
-            this.rjButton4.UseVisualStyleBackColor = false;
-            this.rjButton4.Visible = false;
-            // 
-            // rjButton5
-            // 
-            this.rjButton5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.rjButton5.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.rjButton5.BorderColor = System.Drawing.Color.Transparent;
-            this.rjButton5.BorderRadius = 7;
-            this.rjButton5.BorderSize = 0;
-            this.rjButton5.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.rjButton5.FlatAppearance.BorderSize = 0;
-            this.rjButton5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.rjButton5.Font = new System.Drawing.Font("Consolas", 7F);
-            this.rjButton5.ForeColor = System.Drawing.Color.White;
-            this.rjButton5.Location = new System.Drawing.Point(6, 97);
-            this.rjButton5.Margin = new System.Windows.Forms.Padding(1);
-            this.rjButton5.Name = "rjButton5";
-            this.rjButton5.Size = new System.Drawing.Size(40, 15);
-            this.rjButton5.TabIndex = 281;
-            this.rjButton5.TabStop = false;
-            this.rjButton5.Text = "tx ▶";
-            this.rjButton5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.rjButton5.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.rjButton5, "view transaction");
-            this.rjButton5.UseVisualStyleBackColor = false;
-            this.rjButton5.Visible = false;
-            // 
             // rjButton7
             // 
             this.rjButton7.AutoSize = true;
@@ -19210,6 +19159,57 @@
             this.toolTipGeneralUse.SetToolTip(this.rjButton8, "view transaction");
             this.rjButton8.UseVisualStyleBackColor = false;
             this.rjButton8.Visible = false;
+            // 
+            // rjButton4
+            // 
+            this.rjButton4.AutoSize = true;
+            this.rjButton4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.rjButton4.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.rjButton4.BorderColor = System.Drawing.Color.Transparent;
+            this.rjButton4.BorderRadius = 7;
+            this.rjButton4.BorderSize = 0;
+            this.rjButton4.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.rjButton4.FlatAppearance.BorderSize = 0;
+            this.rjButton4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.rjButton4.Font = new System.Drawing.Font("Consolas", 7F);
+            this.rjButton4.ForeColor = System.Drawing.Color.White;
+            this.rjButton4.Location = new System.Drawing.Point(644, 88);
+            this.rjButton4.Margin = new System.Windows.Forms.Padding(1);
+            this.rjButton4.Name = "rjButton4";
+            this.rjButton4.Size = new System.Drawing.Size(54, 22);
+            this.rjButton4.TabIndex = 282;
+            this.rjButton4.TabStop = false;
+            this.rjButton4.Text = "block ▶";
+            this.rjButton4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.rjButton4.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.rjButton4, "view block");
+            this.rjButton4.UseVisualStyleBackColor = false;
+            this.rjButton4.Visible = false;
+            // 
+            // rjButton5
+            // 
+            this.rjButton5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.rjButton5.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.rjButton5.BorderColor = System.Drawing.Color.Transparent;
+            this.rjButton5.BorderRadius = 7;
+            this.rjButton5.BorderSize = 0;
+            this.rjButton5.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.rjButton5.FlatAppearance.BorderSize = 0;
+            this.rjButton5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.rjButton5.Font = new System.Drawing.Font("Consolas", 7F);
+            this.rjButton5.ForeColor = System.Drawing.Color.White;
+            this.rjButton5.Location = new System.Drawing.Point(6, 97);
+            this.rjButton5.Margin = new System.Windows.Forms.Padding(1);
+            this.rjButton5.Name = "rjButton5";
+            this.rjButton5.Size = new System.Drawing.Size(40, 15);
+            this.rjButton5.TabIndex = 281;
+            this.rjButton5.TabStop = false;
+            this.rjButton5.Text = "tx ▶";
+            this.rjButton5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.rjButton5.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.rjButton5, "view transaction");
+            this.rjButton5.UseVisualStyleBackColor = false;
+            this.rjButton5.Visible = false;
             // 
             // timer50thSec
             // 
@@ -19669,7 +19669,8 @@
             // 
             this.panelMiningBlocks.BackColor = System.Drawing.Color.Transparent;
             this.panelMiningBlocks.Controls.Add(this.panel128);
-            this.panelMiningBlocks.Controls.Add(this.panel138);
+            this.panelMiningBlocks.Controls.Add(this.panel30);
+            this.panelMiningBlocks.Controls.Add(this.panelPoolsBlocksContainer);
             this.panelMiningBlocks.Controls.Add(this.panel148);
             this.panelMiningBlocks.Location = new System.Drawing.Point(162, 187);
             this.panelMiningBlocks.Name = "panelMiningBlocks";
@@ -19680,95 +19681,110 @@
             // panel128
             // 
             this.panel128.BackColor = System.Drawing.Color.Transparent;
-            this.panel128.Controls.Add(this.rjButton1);
-            this.panel128.Controls.Add(this.rjButton2);
-            this.panel128.Location = new System.Drawing.Point(730, 45);
+            this.panel128.Controls.Add(this.btnPoolsBlocksScrollUp);
+            this.panel128.Controls.Add(this.btnPoolsBlocksScrollDown);
+            this.panel128.Location = new System.Drawing.Point(722, 56);
             this.panel128.Name = "panel128";
             this.panel128.Size = new System.Drawing.Size(31, 490);
-            this.panel128.TabIndex = 284;
+            this.panel128.TabIndex = 298;
             // 
-            // rjButton1
+            // btnPoolsBlocksScrollUp
             // 
-            this.rjButton1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.rjButton1.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.rjButton1.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.rjButton1.BorderRadius = 7;
-            this.rjButton1.BorderSize = 0;
-            this.rjButton1.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.rjButton1.FlatAppearance.BorderSize = 0;
-            this.rjButton1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.rjButton1.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rjButton1.ForeColor = System.Drawing.Color.White;
-            this.rjButton1.Location = new System.Drawing.Point(2, 464);
-            this.rjButton1.Margin = new System.Windows.Forms.Padding(1);
-            this.rjButton1.Name = "rjButton1";
-            this.rjButton1.Size = new System.Drawing.Size(24, 24);
-            this.rjButton1.TabIndex = 298;
-            this.rjButton1.TabStop = false;
-            this.rjButton1.Text = "▼";
-            this.rjButton1.TextColor = System.Drawing.Color.White;
-            this.rjButton1.UseVisualStyleBackColor = false;
+            this.btnPoolsBlocksScrollUp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnPoolsBlocksScrollUp.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnPoolsBlocksScrollUp.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.btnPoolsBlocksScrollUp.BorderRadius = 7;
+            this.btnPoolsBlocksScrollUp.BorderSize = 0;
+            this.btnPoolsBlocksScrollUp.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnPoolsBlocksScrollUp.FlatAppearance.BorderSize = 0;
+            this.btnPoolsBlocksScrollUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnPoolsBlocksScrollUp.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPoolsBlocksScrollUp.ForeColor = System.Drawing.Color.White;
+            this.btnPoolsBlocksScrollUp.Location = new System.Drawing.Point(2, 2);
+            this.btnPoolsBlocksScrollUp.Margin = new System.Windows.Forms.Padding(1);
+            this.btnPoolsBlocksScrollUp.Name = "btnPoolsBlocksScrollUp";
+            this.btnPoolsBlocksScrollUp.Size = new System.Drawing.Size(24, 24);
+            this.btnPoolsBlocksScrollUp.TabIndex = 297;
+            this.btnPoolsBlocksScrollUp.TabStop = false;
+            this.btnPoolsBlocksScrollUp.Text = "▲";
+            this.btnPoolsBlocksScrollUp.TextColor = System.Drawing.Color.White;
+            this.btnPoolsBlocksScrollUp.UseVisualStyleBackColor = false;
+            this.btnPoolsBlocksScrollUp.Click += new System.EventHandler(this.btnPoolsBlocksScrollUp_Click);
+            this.btnPoolsBlocksScrollUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnPoolsBlocksScrollUp_MouseDown);
+            this.btnPoolsBlocksScrollUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnPoolsBlocksScrollUp_MouseUp);
             // 
-            // rjButton2
+            // btnPoolsBlocksScrollDown
             // 
-            this.rjButton2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.rjButton2.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.rjButton2.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.rjButton2.BorderRadius = 7;
-            this.rjButton2.BorderSize = 0;
-            this.rjButton2.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.rjButton2.FlatAppearance.BorderSize = 0;
-            this.rjButton2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.rjButton2.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rjButton2.ForeColor = System.Drawing.Color.White;
-            this.rjButton2.Location = new System.Drawing.Point(2, 2);
-            this.rjButton2.Margin = new System.Windows.Forms.Padding(1);
-            this.rjButton2.Name = "rjButton2";
-            this.rjButton2.Size = new System.Drawing.Size(24, 24);
-            this.rjButton2.TabIndex = 297;
-            this.rjButton2.TabStop = false;
-            this.rjButton2.Text = "▲";
-            this.rjButton2.TextColor = System.Drawing.Color.White;
-            this.rjButton2.UseVisualStyleBackColor = false;
+            this.btnPoolsBlocksScrollDown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnPoolsBlocksScrollDown.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnPoolsBlocksScrollDown.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.btnPoolsBlocksScrollDown.BorderRadius = 7;
+            this.btnPoolsBlocksScrollDown.BorderSize = 0;
+            this.btnPoolsBlocksScrollDown.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnPoolsBlocksScrollDown.FlatAppearance.BorderSize = 0;
+            this.btnPoolsBlocksScrollDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnPoolsBlocksScrollDown.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPoolsBlocksScrollDown.ForeColor = System.Drawing.Color.White;
+            this.btnPoolsBlocksScrollDown.Location = new System.Drawing.Point(2, 464);
+            this.btnPoolsBlocksScrollDown.Margin = new System.Windows.Forms.Padding(1);
+            this.btnPoolsBlocksScrollDown.Name = "btnPoolsBlocksScrollDown";
+            this.btnPoolsBlocksScrollDown.Size = new System.Drawing.Size(24, 24);
+            this.btnPoolsBlocksScrollDown.TabIndex = 298;
+            this.btnPoolsBlocksScrollDown.TabStop = false;
+            this.btnPoolsBlocksScrollDown.Text = "▼";
+            this.btnPoolsBlocksScrollDown.TextColor = System.Drawing.Color.White;
+            this.btnPoolsBlocksScrollDown.UseVisualStyleBackColor = false;
+            this.btnPoolsBlocksScrollDown.Click += new System.EventHandler(this.btnPoolsBlocksScrollDown_Click);
+            this.btnPoolsBlocksScrollDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnPoolsBlocksScrollDown_MouseDown);
+            this.btnPoolsBlocksScrollDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnPoolsBlocksScrollDown_MouseUp);
             // 
-            // panel138
+            // panel30
             // 
-            this.panel138.AutoScroll = true;
-            this.panel138.Controls.Add(this.listView1);
-            this.panel138.Controls.Add(this.panel140);
-            this.panel138.Controls.Add(this.rjButton4);
-            this.panel138.Controls.Add(this.rjButton5);
-            this.panel138.Controls.Add(this.panel144);
-            this.panel138.Location = new System.Drawing.Point(214, 45);
-            this.panel138.Name = "panel138";
-            this.panel138.Size = new System.Drawing.Size(544, 490);
-            this.panel138.TabIndex = 283;
+            this.panel30.Location = new System.Drawing.Point(722, 56);
+            this.panel30.Name = "panel30";
+            this.panel30.Size = new System.Drawing.Size(25, 16);
+            this.panel30.TabIndex = 299;
             // 
-            // listView1
+            // panelPoolsBlocksContainer
             // 
-            this.listView1.Activation = System.Windows.Forms.ItemActivation.OneClick;
-            this.listView1.AllowColumnReorder = true;
-            this.listView1.AutoArrange = false;
-            this.listView1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
-            this.listView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.listView1.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listView1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.listView1.FullRowSelect = true;
-            this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.listView1.HideSelection = false;
-            this.listView1.LabelWrap = false;
-            this.listView1.Location = new System.Drawing.Point(30, 0);
-            this.listView1.Margin = new System.Windows.Forms.Padding(0);
-            this.listView1.MultiSelect = false;
-            this.listView1.Name = "listView1";
-            this.listView1.OwnerDraw = true;
-            this.listView1.Scrollable = false;
-            this.listView1.ShowGroups = false;
-            this.listView1.Size = new System.Drawing.Size(429, 485);
-            this.listView1.TabIndex = 164;
-            this.listView1.TabStop = false;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
+            this.panelPoolsBlocksContainer.AutoScroll = true;
+            this.panelPoolsBlocksContainer.Controls.Add(this.listViewPoolsByBlock);
+            this.panelPoolsBlocksContainer.Controls.Add(this.panel140);
+            this.panelPoolsBlocksContainer.Controls.Add(this.rjButton4);
+            this.panelPoolsBlocksContainer.Controls.Add(this.rjButton5);
+            this.panelPoolsBlocksContainer.Controls.Add(this.panel144);
+            this.panelPoolsBlocksContainer.Location = new System.Drawing.Point(6, 56);
+            this.panelPoolsBlocksContainer.Name = "panelPoolsBlocksContainer";
+            this.panelPoolsBlocksContainer.Size = new System.Drawing.Size(744, 490);
+            this.panelPoolsBlocksContainer.TabIndex = 297;
+            // 
+            // listViewPoolsByBlock
+            // 
+            this.listViewPoolsByBlock.Activation = System.Windows.Forms.ItemActivation.OneClick;
+            this.listViewPoolsByBlock.AllowColumnReorder = true;
+            this.listViewPoolsByBlock.AutoArrange = false;
+            this.listViewPoolsByBlock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
+            this.listViewPoolsByBlock.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listViewPoolsByBlock.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listViewPoolsByBlock.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.listViewPoolsByBlock.FullRowSelect = true;
+            this.listViewPoolsByBlock.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.listViewPoolsByBlock.HideSelection = false;
+            this.listViewPoolsByBlock.LabelWrap = false;
+            this.listViewPoolsByBlock.Location = new System.Drawing.Point(30, 0);
+            this.listViewPoolsByBlock.Margin = new System.Windows.Forms.Padding(0);
+            this.listViewPoolsByBlock.MultiSelect = false;
+            this.listViewPoolsByBlock.Name = "listViewPoolsByBlock";
+            this.listViewPoolsByBlock.OwnerDraw = true;
+            this.listViewPoolsByBlock.Scrollable = false;
+            this.listViewPoolsByBlock.ShowGroups = false;
+            this.listViewPoolsByBlock.Size = new System.Drawing.Size(629, 485);
+            this.listViewPoolsByBlock.TabIndex = 164;
+            this.listViewPoolsByBlock.TabStop = false;
+            this.listViewPoolsByBlock.UseCompatibleStateImageBehavior = false;
+            this.listViewPoolsByBlock.View = System.Windows.Forms.View.Details;
+            this.listViewPoolsByBlock.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.AllListViews_DrawColumnHeader);
+            this.listViewPoolsByBlock.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ListViewPoolsByBlock_DrawSubItem);
             // 
             // panel140
             // 
@@ -19781,19 +19797,10 @@
             // panel144
             // 
             this.panel144.BackColor = System.Drawing.Color.White;
-            this.panel144.Controls.Add(this.panel145);
             this.panel144.Location = new System.Drawing.Point(0, 0);
             this.panel144.Name = "panel144";
-            this.panel144.Size = new System.Drawing.Size(520, 16);
+            this.panel144.Size = new System.Drawing.Size(720, 16);
             this.panel144.TabIndex = 285;
-            this.panel144.Visible = false;
-            // 
-            // panel145
-            // 
-            this.panel145.Location = new System.Drawing.Point(515, 0);
-            this.panel145.Name = "panel145";
-            this.panel145.Size = new System.Drawing.Size(25, 16);
-            this.panel145.TabIndex = 0;
             // 
             // panel148
             // 
@@ -20022,6 +20029,11 @@
             this.label231.TabIndex = 5;
             this.label231.Text = "Mining pools";
             // 
+            // PoolsBlocksScrollTimer
+            // 
+            this.PoolsBlocksScrollTimer.Interval = 50;
+            this.PoolsBlocksScrollTimer.Tick += new System.EventHandler(this.PoolsBlocksScrollTimer_Tick);
+            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(5F, 12F);
@@ -20031,10 +20043,11 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
-            this.Controls.Add(this.panelMiningPools);
-            this.Controls.Add(this.panelMiningHashrate);
             this.Controls.Add(this.panelMiningBlocks);
             this.Controls.Add(this.panelAddressUTXO);
+            this.Controls.Add(this.panelBookmarks);
+            this.Controls.Add(this.panelMiningPools);
+            this.Controls.Add(this.panelMiningHashrate);
             this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelBlockList);
@@ -20042,7 +20055,6 @@
             this.Controls.Add(this.panelDirectory);
             this.Controls.Add(this.panelPriceConverter);
             this.Controls.Add(this.panelDCACalculator);
-            this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelXpub);
@@ -20444,9 +20456,8 @@
             this.panelSubmittedAddressContainerUTXO.PerformLayout();
             this.panelMiningBlocks.ResumeLayout(false);
             this.panel128.ResumeLayout(false);
-            this.panel138.ResumeLayout(false);
-            this.panel138.PerformLayout();
-            this.panel144.ResumeLayout(false);
+            this.panelPoolsBlocksContainer.ResumeLayout(false);
+            this.panelPoolsBlocksContainer.PerformLayout();
             this.panel148.ResumeLayout(false);
             this.panel148.PerformLayout();
             this.panelMiningHashrate.ResumeLayout(false);
@@ -21674,16 +21685,6 @@
         private System.Windows.Forms.Panel panelHelpAboutMenu;
         private System.Windows.Forms.Label lblUpdateFlasher;
         private System.Windows.Forms.Panel panelMiningBlocks;
-        private System.Windows.Forms.Panel panel128;
-        private CustomControls.RJControls.RJButton rjButton1;
-        private CustomControls.RJControls.RJButton rjButton2;
-        public System.Windows.Forms.Panel panel138;
-        private System.Windows.Forms.ListView listView1;
-        private System.Windows.Forms.Panel panel140;
-        private CustomControls.RJControls.RJButton rjButton4;
-        private CustomControls.RJControls.RJButton rjButton5;
-        private System.Windows.Forms.Panel panel144;
-        private System.Windows.Forms.Panel panel145;
         private System.Windows.Forms.Panel panel148;
         private System.Windows.Forms.Label label324;
         private System.Windows.Forms.Label label325;
@@ -21705,6 +21706,17 @@
         private System.Windows.Forms.Panel panel156;
         private System.Windows.Forms.Label label228;
         private System.Windows.Forms.Label label231;
+        private System.Windows.Forms.Panel panel128;
+        private CustomControls.RJControls.RJButton btnPoolsBlocksScrollDown;
+        private CustomControls.RJControls.RJButton btnPoolsBlocksScrollUp;
+        public System.Windows.Forms.Panel panelPoolsBlocksContainer;
+        private System.Windows.Forms.ListView listViewPoolsByBlock;
+        private System.Windows.Forms.Panel panel140;
+        private CustomControls.RJControls.RJButton rjButton4;
+        private CustomControls.RJControls.RJButton rjButton5;
+        private System.Windows.Forms.Panel panel144;
+        private System.Windows.Forms.Panel panel30;
+        private System.Windows.Forms.Timer PoolsBlocksScrollTimer;
     }
 }
 

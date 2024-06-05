@@ -26,9 +26,6 @@ https://satsuma.btcdir.org/download/
 
 * Stuff to do:
 * Taproot support on xpub screen 
-* tx screen - height of address button on outputs list too big when first record is an opreturn
-* tx outputs scroll up is a bit janky when clicked from bottom of a list
-* pools blocks list scroll up produces error when at top of list
 * add images to pools blocks list
  */
 
@@ -69,6 +66,8 @@ using static QRCoder.PayloadGenerator;
 using System.Numerics;
 using ScottPlot.Palettes;
 using static SATSuma.SATSuma;
+using System.Security.AccessControl;
+
 #endregion
 
 namespace SATSuma
@@ -121,6 +120,7 @@ namespace SATSuma
         private bool isPoolsBlocksButtonPressed;
         private bool PoolsBlocksDownButtonPressed;
         private bool PoolsBlocksUpButtonPressed;
+        string poolsBlocksTimePeriod = "3y";
         #endregion
         #region transaction screen variables
         private int TransactionOutputsScrollPosition; // used to remember position in scrollable panel to return to that position after paint event
@@ -5993,7 +5993,7 @@ namespace SATSuma
                 HandleException(ex, "GetTransaction");
             }
 
-            Control[] controlsToShow = { panelTransactionHeadline, panelTransactionDiagram, panel24, panel25, panel102, panelTransactionOutputs, panelTransactionInputs, btnTransactionInputsUp, btnTransactionInputDown, btnTransactionOutputsUp, btnTransactionOutputsDown, listViewTransactionInputs, listViewTransactionOutputs, btnViewAddressFromTXInput, btnViewAddressFromTXOutput, label107, label102, panel125 };
+            Control[] controlsToShow = { panelTransactionHeadline, panelTransactionDiagram, panel24, panel25, panel102, panelTransactionOutputs, panelTransactionInputs, btnTransactionInputsUp, btnTransactionInputDown, btnTransactionOutputsUp, btnTransactionOutputsDown, listViewTransactionInputs, listViewTransactionOutputs, btnViewAddressFromTXOutput, label107, label102, panel125 };
             foreach (Control control in controlsToShow)
             {
                 control.Invoke((MethodInvoker)delegate
@@ -6027,16 +6027,19 @@ namespace SATSuma
                                 {
                                     btnViewAddressFromTXInput.Invoke((MethodInvoker)delegate
                                     {
-                                        btnViewAddressFromTXInput.Visible = true;
                                         btnViewAddressFromTXInput.Location = new Point(listViewTransactionInputs.Location.X - btnViewAddressFromTXInput.Width + (int)(15 * UIScale), item.Position.Y + listViewTransactionInputs.Location.Y);
                                         btnViewAddressFromTXInput.Height = item.Bounds.Height;
                                     });
+                                    anySelected = true;
                                 }
-                                anySelected = true;
+                                else
+                                {
+                                    anySelected = false;
+                                }
                             }
                             else
                             {
-                                btnViewAddressFromTXInput.Visible = false;
+                                anySelected = false;
                             }
                         }
                         else
@@ -6048,7 +6051,10 @@ namespace SATSuma
                         }
                     }
                 }
-                btnViewAddressFromTXInput.Visible = anySelected;
+                btnViewAddressFromTXInput.Invoke((MethodInvoker)delegate
+                {
+                    btnViewAddressFromTXInput.Visible = anySelected;
+                });
                 lblHeaderBlockAge.Focus();
             }
             catch (Exception ex)
@@ -6081,16 +6087,19 @@ namespace SATSuma
                                 {
                                     btnViewAddressFromTXOutput.Invoke((MethodInvoker)delegate
                                     {
-                                        btnViewAddressFromTXOutput.Visible = true;
                                         btnViewAddressFromTXOutput.Location = new Point(listViewTransactionOutputs.Location.X - btnViewAddressFromTXOutput.Width + (int)(15 * UIScale), item.Position.Y + listViewTransactionOutputs.Location.Y);
                                         btnViewAddressFromTXOutput.Height = item.Bounds.Height;
                                     });
+                                    anySelected = true;
                                 }
-                                anySelected = true;
+                                else
+                                {
+                                    anySelected = false;
+                                }
                             }
                             else
                             {
-                                btnViewAddressFromTXOutput.Visible = false;
+                                anySelected = false;
                             }
                         }
                         else
@@ -6102,7 +6111,10 @@ namespace SATSuma
                         }
                     }
                 }
-                btnViewAddressFromTXOutput.Visible = anySelected;
+                btnViewAddressFromTXOutput.Invoke((MethodInvoker)delegate
+                {
+                    btnViewAddressFromTXOutput.Visible = anySelected;
+                });
                 lblHeaderBlockAge.Focus();
             }
             catch (Exception ex)
@@ -23703,18 +23715,18 @@ namespace SATSuma
         #endregion region
         #endregion
 
-        #region MINING POOLS BY BLOCKS SCREEN
+        #region ⚡ MINING POOLS BY BLOCKS SCREEN ⚡
+
         private async void SetupPoolsByBlocksScreen()
         {
             try
             {
                 LightUpNodeLight();
-                var PoolsByBlockJson = await _PoolsByBlockService.GetPoolsByBlockAsync().ConfigureAwait(true);
+                var PoolsByBlockJson = await _PoolsByBlockService.GetPoolsByBlockAsync(poolsBlocksTimePeriod).ConfigureAwait(true);
                 var poolsBlocks = JsonConvert.DeserializeObject<PoolsBlocks>(PoolsByBlockJson);
 
                 if (poolsBlocks?.pools != null && poolsBlocks.pools.Length > 0)
                 {
-                    
 
                     //LIST VIEW
                     listViewPoolsByBlock.Invoke((MethodInvoker)delegate
@@ -23728,36 +23740,31 @@ namespace SATSuma
                                             
                     listViewPoolsByBlock.Invoke((MethodInvoker)delegate
                     {
+                        listViewPoolsByBlock.Columns.Add("Pool name", (int)(100 * UIScale));
                         listViewPoolsByBlock.Columns.Add("Rank", (int)(35 * UIScale));
-                        listViewPoolsByBlock.Columns.Add("Name", (int)(90 * UIScale));
-                        listViewPoolsByBlock.Columns.Add("Link", (int)(200 * UIScale)); // increased width for better visibility
                         listViewPoolsByBlock.Columns.Add("Blocks mined", (int)(85 * UIScale));
                         listViewPoolsByBlock.Columns.Add("% mined", (int)(65 * UIScale));
                         listViewPoolsByBlock.Columns.Add("Empty blocks", (int)(85 * UIScale));
                         listViewPoolsByBlock.Columns.Add("Empty %", (int)(65 * UIScale));
-                        
+                        listViewPoolsByBlock.Columns.Add("Link to mining pool", (int)(200 * UIScale));
                     });
-                    
 
-
-
-                        // Add the items to the ListView
+                    // Add the items to the ListView
                     int counter = 0; // used to count rows in list as they're added
                     decimal emptyPercent = 0;
                     decimal totalBlocksFound = Convert.ToDecimal(poolsBlocks.blockCount);
                     foreach (var pool in poolsBlocks.pools)
                     {
 
-                        ListViewItem item = new ListViewItem(Convert.ToString(pool.rank)); // create new row
-                        item.SubItems.Add(Convert.ToString(pool.name));
-                        item.SubItems.Add(Convert.ToString(pool.link));
+                        ListViewItem item = new ListViewItem(Convert.ToString(pool.name)); // create new row
+                        item.SubItems.Add(Convert.ToString(pool.rank));
                         item.SubItems.Add(Convert.ToString(pool.blockCount));
                         decimal percentageFound = (100m / totalBlocksFound * Convert.ToDecimal(pool.blockCount));
                         item.SubItems.Add(Convert.ToString(percentageFound.ToString("F2")) + "%");
                         item.SubItems.Add(Convert.ToString(pool.emptyBlocks));
                         emptyPercent = (100m / Convert.ToDecimal(pool.blockCount)) * Convert.ToDecimal(pool.emptyBlocks);
                         item.SubItems.Add(Convert.ToString(emptyPercent.ToString("F2")) + "%");
-                        
+                        item.SubItems.Add(Convert.ToString(pool.link));
 
                         listViewPoolsByBlock.Invoke((MethodInvoker)delegate
                         {
@@ -23775,32 +23782,173 @@ namespace SATSuma
                         panel140.Height = listBoxHeight;
 
                     }
-                    
-/*                      
-                        if (counter > 0)
-                        {
-                            lblAddressConfirmedUnspentOutputsUTXO.Invoke((MethodInvoker)delegate
-                            {
-                                lblAddressConfirmedUnspentOutputsUTXO.Text = $"{TotalAddressUTXORowsAdded}";
-                            });
-
-                        }
-                        else
-                        {
-                            lblAddressConfirmedUnspentOutputsUTXO.Invoke((MethodInvoker)delegate
-                            {
-                                lblAddressConfirmedUnspentOutputsUTXO.Text = "0";
-                            });
-                        }
-*/
+                    lblPoolsBlockCount.Invoke((MethodInvoker)delegate
+                    {
+                        lblPoolsBlockCount.Text = "(" + Convert.ToString(poolsBlocks.blockCount) + " blocks mined)";
+                    });
+                    if (listViewPoolsByBlock.Items.Count > 0)
+                    {
+                        listViewPoolsByBlock.Items[0].Selected = true;
+                    }
                 }
             }
             catch (Exception ex)
             {
-                HandleException(ex, "GetTransactionsForAddressUTXO");
+                HandleException(ex, "SetupPoolsByBlocksScreen");
             }
         }
 
+        private void listViewPoolsByBlock_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            try
+            {
+
+                foreach (ListViewItem item in listViewPoolsByBlock.Items)
+                {
+                    if (item != null)
+                    {
+                        if (item.Selected)
+                        {
+                            foreach (ListViewItem.ListViewSubItem subItem in item.SubItems)
+                            {
+                                subItem.ForeColor = MakeColorLighter(tableTextColor, 40);
+                            }
+                            btnViewPoolFromMiningBlocks.Invoke((MethodInvoker)delegate
+                            {
+                                btnViewPoolFromMiningBlocks.Location = new Point(btnViewPoolFromMiningBlocks.Location.X, item.Position.Y);
+                                btnViewPoolFromMiningBlocks.Height = item.Bounds.Height;
+                            });
+                            btnViewWebsiteFromPoolsBlocks.Invoke((MethodInvoker)delegate
+                            {
+                                btnViewWebsiteFromPoolsBlocks.Location = new Point(listViewPoolsByBlock.Location.X + listViewPoolsByBlock.Width - (int)(13 * UIScale), item.Position.Y);
+                                btnViewWebsiteFromPoolsBlocks.Height = item.Bounds.Height;
+                            });
+                            if (item.SubItems[6].Text == "")
+                            {
+                                btnViewWebsiteFromPoolsBlocks.Enabled = false;
+                            }
+                            else
+                            {
+                                btnViewWebsiteFromPoolsBlocks.Enabled = true;
+                            }
+                        }
+                        else
+                        {
+                            foreach (ListViewItem.ListViewSubItem subItem in item.SubItems)
+                            {
+                                subItem.ForeColor = tableTextColor;
+                            }
+                        }
+                    }
+                }
+                btnViewPoolFromMiningBlocks.Visible = listViewPoolsByBlock.SelectedItems.Count > 0;
+                btnViewWebsiteFromPoolsBlocks.Visible = listViewPoolsByBlock.SelectedItems.Count > 0;
+                //btnViewBlockFromAddressUTXO.BringToFront();
+                lblHeaderBlockAge.Focus();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "listViewPoolsByBlock_ItemSelectionChanged");
+            }
+        }
+
+        private void btnViewWebsiteFromPoolsBlocks_Click(object sender, EventArgs e)
+        {
+            ListViewItem selectedItem = listViewPoolsByBlock.SelectedItems[0];
+
+            string url = selectedItem.SubItems[6].Text;
+            System.Diagnostics.Process.Start(url);
+        }
+
+        #region change time period
+        private void btnPoolsBlocks24h_Click(object sender, EventArgs e)
+        {
+            poolsBlocksTimePeriod = "24h";
+            EnableTimePeriodButtons();
+            btnPoolsBlocks24h.Enabled = false;
+            SetupPoolsByBlocksScreen();
+        }
+
+        private void btnPoolsBlocks3d_Click(object sender, EventArgs e)
+        {
+            poolsBlocksTimePeriod = "3d";
+            EnableTimePeriodButtons();
+            btnPoolsBlocks3d.Enabled = false;
+            SetupPoolsByBlocksScreen();
+        }
+
+        private void btnPoolsBlocks1w_Click(object sender, EventArgs e)
+        {
+            poolsBlocksTimePeriod = "1w";
+            EnableTimePeriodButtons();
+            btnPoolsBlocks1w.Enabled = false;
+            SetupPoolsByBlocksScreen();
+        }
+
+        private void btnPoolsBlocks1m_Click(object sender, EventArgs e)
+        {
+            poolsBlocksTimePeriod = "1m";
+            EnableTimePeriodButtons();
+            btnPoolsBlocks1m.Enabled = false;
+            SetupPoolsByBlocksScreen();
+        }
+
+        private void btnPoolsBlocks3m_Click(object sender, EventArgs e)
+        {
+            poolsBlocksTimePeriod = "3m";
+            EnableTimePeriodButtons();
+            btnPoolsBlocks3m.Enabled = false;
+            SetupPoolsByBlocksScreen();
+        }
+
+        private void btnPoolsBlocks6m_Click(object sender, EventArgs e)
+        {
+            poolsBlocksTimePeriod = "6m";
+            EnableTimePeriodButtons();
+            btnPoolsBlocks6m.Enabled = false;
+            SetupPoolsByBlocksScreen();
+        }
+
+        private void btnPoolsBlocks1y_Click(object sender, EventArgs e)
+        {
+            poolsBlocksTimePeriod = "1y";
+            EnableTimePeriodButtons();
+            btnPoolsBlocks1y.Enabled = false;
+            SetupPoolsByBlocksScreen();
+        }
+
+        private void btnPoolsBlocks2y_Click(object sender, EventArgs e)
+        {
+            poolsBlocksTimePeriod = "2y";
+            EnableTimePeriodButtons();
+            btnPoolsBlocks2y.Enabled = false;
+            SetupPoolsByBlocksScreen();
+        }
+
+        private void btnPoolsBlocks3y_Click(object sender, EventArgs e)
+        {
+            poolsBlocksTimePeriod = "3y";
+            EnableTimePeriodButtons();
+            btnPoolsBlocks3y.Enabled = false;
+            SetupPoolsByBlocksScreen();
+        }
+
+        private void EnableTimePeriodButtons()
+        {
+            Control[] controlsToShow = { btnPoolsBlocks1m, btnPoolsBlocks1w, btnPoolsBlocks1y, btnPoolsBlocks24h, btnPoolsBlocks2y, btnPoolsBlocks3d, btnPoolsBlocks3m, btnPoolsBlocks3y, btnPoolsBlocks6m };
+            foreach (Control control in controlsToShow)
+            {
+                control.Invoke((MethodInvoker)delegate
+                {
+                    control.Enabled = true;
+                });
+            }
+        }
+        #endregion
+
+
+
+        #region listview scrolling
         private void ListViewPoolsByBlock_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
         {
             try
@@ -23850,9 +23998,10 @@ namespace SATSuma
 
         private void btnPoolsBlocksScrollUp_Click(object sender, EventArgs e)
         {
+            
             try
             {
-                if (panelPoolsBlocksContainer.VerticalScroll.Value > panelPoolsBlocksContainer.VerticalScroll.Minimum)
+                if (poolsBlocksScrollPosition > panelPoolsBlocksContainer.VerticalScroll.Minimum)
                 {
                     int rowHeight = listViewPoolsByBlock.Margin.Vertical + listViewPoolsByBlock.Padding.Vertical + listViewPoolsByBlock.GetItemRect(0).Height;
                     poolsBlocksScrollPosition -= rowHeight;
@@ -23864,6 +24013,7 @@ namespace SATSuma
             {
                 HandleException(ex, "btnPoolsBlocksScrollUp_Click");
             }
+            
         }
 
         private void btnPoolsBlocksScrollUp_MouseDown(object sender, MouseEventArgs e)
@@ -23966,7 +24116,7 @@ namespace SATSuma
                     else if (PoolsBlocksUpButtonPressed)
                     {
                         int rowHeight = listViewPoolsByBlock.Margin.Vertical + listViewPoolsByBlock.Padding.Vertical + listViewPoolsByBlock.GetItemRect(0).Height;
-                        if (poolsBlocksScrollPosition > panelPoolsBlocksContainer.VerticalScroll.Minimum + rowHeight)
+                        if (poolsBlocksScrollPosition > panelPoolsBlocksContainer.VerticalScroll.Minimum)
                         {
                             poolsBlocksScrollPosition -= rowHeight;
                             panelPoolsBlocksContainer.VerticalScroll.Value = poolsBlocksScrollPosition;
@@ -23983,6 +24133,7 @@ namespace SATSuma
                 HandleException(ex, "PoolsBlocksScrollTimer_Tick");
             }
         }
+        #endregion
         #endregion
 
         #region ⚡COMMON CODE⚡
@@ -30137,7 +30288,7 @@ namespace SATSuma
                 _nodeUrl = nodeUrl;
             }
 
-            public async Task<string> GetPoolsByBlockAsync()
+            public async Task<string> GetPoolsByBlockAsync(string poolsBlocksTimePeriod)
             {
                 int retryCount = 3;
                 while (retryCount > 0)
@@ -30147,7 +30298,7 @@ namespace SATSuma
                     {
                         client.BaseAddress = new Uri(_nodeUrl);
                     
-                        var response = await client.GetAsync($"v1/mining/pools/3y").ConfigureAwait(true);
+                        var response = await client.GetAsync($"v1/mining/pools/{poolsBlocksTimePeriod}").ConfigureAwait(true);
                         if (response.IsSuccessStatusCode)
                         {
                             return await response.Content.ReadAsStringAsync().ConfigureAwait(true);
@@ -31159,10 +31310,13 @@ namespace SATSuma
 
 
 
-        #endregion
+
+
 
         #endregion
 
-        
+        #endregion
+
+
     }
 }

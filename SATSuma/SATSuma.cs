@@ -452,7 +452,7 @@ namespace SATSuma
             #region rounded panels
             Control[] panelsToRound = { panelXpubContainer, panelXpubScrollbar, panel32, panel74, panel76, panel77, panel99, panel84, panel88, panel89, panel90, panel86, panel87, panel103, panel46, panel51, panel91, panel70, panel71, panel16, panel21, panel85, panel53, panel96, panel106, panel107, panel92, panelAddToBookmarks, panelAddToBookmarksBorder,
                 panelLeftPanel, panelOwnNodeAddressTXInfo, panelOwnNodeBlockTXInfo, panelTransactionMiddle, panelErrorMessage, panelSettingsUIScale, panelSettingsUIScaleContainer, panelDCAMessages, panelDCASummary, panelDCAInputs, panel119, panelPriceConvert, panelDCAChartContainer, panel117, panel120, panel121,
-                panel122, panel123, panel124, panel125, panel101, panel27, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panel134, panelBookmarksContainer, panel33, panelPoolsBlocksContainer, panel128 };
+                panel122, panel123, panel124, panel125, panel101, panel27, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panel134, panelBookmarksContainer, panel33, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panel128, panel147, panel80 };
             foreach (Control control in panelsToRound)
             {
                 control.Paint += Panel_Paint;
@@ -469,7 +469,7 @@ namespace SATSuma
             #endregion
             #region panels (heading containers)
             Control[] panelHeadingContainersToRound = { panel1, panel2, panel3, panel4, panel5, panel6, panel7, panel8, panel9, panel10, panel11, panel12, panel20, panel23, panel26, panel29, panel31, panel38, panel39, panel40, panel41, panel42, panel43, panel44, panel45, panel57, panel78,
-                panel94, panel105, panel109, panelLoadingAnimationContainer, panel141, panel136, panel139, panel138, panel145 };
+                panel94, panel105, panel109, panelLoadingAnimationContainer, panel141, panel136, panel139, panel138, panel145, panel81, panel146 };
             foreach (Control control in panelHeadingContainersToRound)
             {
                 control.Paint += Panel_Paint;
@@ -21613,8 +21613,8 @@ namespace SATSuma
                 btnViewTransactionFromAddressUTXO.BorderRadius = (int)((radius - 4) * UIScale);
                 btnViewBlockFromAddressUTXO.BorderRadius = (int)((radius - 4) * UIScale);
 
-                //mining pools - blocks
-                RJButton[] PoolsBlocksButtonBorders = { btnSortPoolsByBlocks, btnSortPoolsByHashrate, btnPoolsBlocks1m, btnPoolsBlocks1w, btnPoolsBlocks1y, btnPoolsBlocks24h, btnPoolsBlocks2y, btnPoolsBlocks3d, btnPoolsBlocks3m, btnPoolsBlocks3y, btnPoolsBlocks6m, btnPoolsBlocksScrollDown, btnPoolsBlocksScrollUp };
+                //mining pools - blocks & hashrate
+                RJButton[] PoolsBlocksButtonBorders = { btnSortPoolsByBlocks, btnSortPoolsByHashrate, btnPoolsBlocks1m, btnPoolsBlocks1w, btnPoolsBlocks1y, btnPoolsBlocks24h, btnPoolsBlocks2y, btnPoolsBlocks3d, btnPoolsBlocks3m, btnPoolsBlocks3y, btnPoolsBlocks6m, btnPoolsBlocksScrollDown, btnPoolsBlocksScrollUp, btnSortPoolsByBlocksH, btnSortPoolsByHashrateH, btnPoolsHashrate1m, btnPoolsHashrate1w, btnPoolsHashrate1y, btnPoolsHashrate2y, btnPoolsHashrate3m, btnPoolsHashrate3y, btnPoolsHashrate6m, btnPoolsHashrateScrollDown, btnPoolsHashrateScrollUp };
                 foreach (RJButton button in PoolsBlocksButtonBorders)
                 {
                     button.Invoke((MethodInvoker)delegate
@@ -21623,7 +21623,7 @@ namespace SATSuma
                     });
                 }
                 btnViewPoolFromMiningBlocks.BorderRadius = (int)((radius - 4) * UIScale);
-                btnViewWebsiteFromPoolsBlocks.BorderRadius = (int)((radius - 4) * UIScale);
+                btnViewPoolFromPoolsHashrate.BorderRadius = (int)((radius - 4) * UIScale);
 
                 // appearance & settings
                 RJButton[] appearanceButtonBorders = { btnResetAll, button1, button2, btnLoadTheme, btnSaveTheme, btnDeleteTheme, btnSquareCorners, btnPartialCorners, btnRoundCorners, btnColorDataFields, btnColorLabels, btnColorHeadings, btnColorTableText, btnColorFiatConversionText, btnListViewHeadingColor, btnColorOtherText, btnColorPriceBlock, btnColorStatusError, btnColorButtonText, btnColorButtons, btnColorLines, btnColorTextBox, btnColorPanels, btnColorProgressBars, btnColorTableTitleBar, btnColorTableBackground, btnColorTitleBackgrounds, btnPreviewAnimations };
@@ -21742,7 +21742,7 @@ namespace SATSuma
                 #region rounded panels
                 Control[] panelsToInvalidate = { panelXpubContainer, panelXpubScrollbar, panel92, panel32, panel74, panel76, panel77, panel99, panel84, panel88, panel89, panel90, panel86, panel87, panel103, panel46, panel51, panel91, panel70, panel71, panel16, panel21, panel85, panel53, panel96, panel106, panel107, panelAddToBookmarks,
                     panelAddToBookmarksBorder, panelOwnNodeAddressTXInfo, panelOwnNodeBlockTXInfo, panelTransactionMiddle, panelErrorMessage, panelDCAMessages, panelDCASummary, panelDCAInputs, panel119, panelPriceConvert, panelDCAChartContainer, panel117, panel120, panel121, panel122, panel123,
-                    panel124, panel125, panel101, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panel134, panelBookmarksContainer, panel33, panelPoolsBlocksContainer, panel128 };
+                    panel124, panel125, panel101, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panel134, panelBookmarksContainer, panel33, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panel128, panel147, panel80 };
                 foreach (Control control in panelsToInvalidate)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -21765,7 +21765,7 @@ namespace SATSuma
                 #endregion
                 #region panels (heading containers)
                 Control[] headingPanelsToInvalidate = { panel1, panel2, panel3, panel4, panel5, panel6, panel7, panel8, panel9, panel10, panel11, panel12, panel20, panel23, panel26, panel29, panel31, panel38, panel39, panel40, panel41, panel42, panel43, panel44, panel45, panel54, panel57, panel78, panel139,
-                    panel82, panel83, panel94, panel105, panel22, panel34, panel37, panel97, panel98, panel108, panel109, panel141, panel136, panel138, panel145 };
+                    panel82, panel83, panel94, panel105, panel22, panel34, panel37, panel97, panel98, panel108, panel109, panel141, panel136, panel138, panel145, panel81, panel146 };
                 foreach (Control control in headingPanelsToInvalidate)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -21852,8 +21852,8 @@ namespace SATSuma
                         control.ForeColor = thiscolor;
                     });
                 }
-                //mining pools - blocks
-                Control[] listPoolsBlocksButtonTextToColor = { btnSortPoolsByBlocks, btnSortPoolsByHashrate, btnPoolsBlocks1m, btnPoolsBlocks1w, btnPoolsBlocks1y, btnPoolsBlocks24h, btnPoolsBlocks2y, btnPoolsBlocks3d, btnPoolsBlocks3m, btnPoolsBlocks3y, btnPoolsBlocks6m, btnPoolsBlocksScrollDown, btnPoolsBlocksScrollUp, btnViewPoolFromMiningBlocks, btnViewWebsiteFromPoolsBlocks };
+                //mining pools - blocks & hashrate
+                Control[] listPoolsBlocksButtonTextToColor = { btnSortPoolsByBlocks, btnSortPoolsByHashrate, btnPoolsBlocks1m, btnPoolsBlocks1w, btnPoolsBlocks1y, btnPoolsBlocks24h, btnPoolsBlocks2y, btnPoolsBlocks3d, btnPoolsBlocks3m, btnPoolsBlocks3y, btnPoolsBlocks6m, btnPoolsBlocksScrollDown, btnPoolsBlocksScrollUp, btnViewPoolFromMiningBlocks, btnSortPoolsByHashrateH, btnPoolsHashrate1m, btnPoolsHashrate1w, btnPoolsHashrate1y, btnPoolsHashrate2y, btnPoolsHashrate3m, btnPoolsHashrate3y, btnPoolsHashrate6m, btnPoolsHashrateScrollDown, btnPoolsHashrateScrollUp, btnViewPoolFromPoolsHashrate };
                 foreach (Control control in listPoolsBlocksButtonTextToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -21983,6 +21983,13 @@ namespace SATSuma
                 formsPlotDCA.Plot.Palette = ScottPlot.Palette.Amber;
                 formsPlotDCA.Plot.YAxis.AxisLabel.IsVisible = false;
 
+                formsPlotPoolRankForPoolScreen.Plot.Margins(x: .1, y: .1);
+                formsPlotPoolRankForPoolScreen.Plot.Style(ScottPlot.Style.Black);
+                formsPlotPoolRankForPoolScreen.RightClicked -= formsPlot1.DefaultRightClickEvent; // disable default right-click event
+                formsPlotPoolRankForPoolScreen.Configuration.DoubleClickBenchmark = false;
+                formsPlotPoolRankForPoolScreen.Plot.Palette = ScottPlot.Palette.Amber;
+                formsPlotPoolRankForPoolScreen.Plot.YAxis.AxisLabel.IsVisible = false;
+
                 formsPlot1.Plot.Style(
                     figureBackground: Color.Transparent,
                     dataBackground: chartsBackgroundColor,
@@ -22003,8 +22010,13 @@ namespace SATSuma
                     dataBackground: chartsBackgroundColor,
                     titleLabel: thisColor,
                     axisLabel: label148.ForeColor); // using any random label to get the color from
+                formsPlotPoolRankForPoolScreen.Plot.Style(
+                    figureBackground: Color.Transparent,
+                    dataBackground: chartsBackgroundColor,
+                    titleLabel: thisColor,
+                    axisLabel: label148.ForeColor); // using any random label to get the color from
 
-                Control[] panelsToColor = { panelPriceScaleButtons, panelChartMarketCapScaleButtons, panelChartUTXOScaleButtons, panelChartDifficultyScaleButtons, panelHashrateScaleButtons, panelUniqueAddressesScaleButtons, panelCurrencyMenuFiller, panelThemeMenuFiller, panelDCAChartContainer };
+                Control[] panelsToColor = { panelPriceScaleButtons, panelChartMarketCapScaleButtons, panelChartUTXOScaleButtons, panelChartDifficultyScaleButtons, panelHashrateScaleButtons, panelUniqueAddressesScaleButtons, panelCurrencyMenuFiller, panelThemeMenuFiller, panelDCAChartContainer, panel80 };
                 foreach (Control control in panelsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -22034,6 +22046,8 @@ namespace SATSuma
                 formsPlot3.Refresh();
                 formsPlotDCA.Refresh();
                 formsPlotDCA.Render();
+                formsPlotPoolRankForPoolScreen.Refresh();
+                formsPlotPoolRankForPoolScreen.Render();
                 formsPlot1.Render();
                 formsPlot2.Render();
                 formsPlot3.Render();
@@ -22378,8 +22392,8 @@ namespace SATSuma
                         control.ForeColor = thiscolor;
                     });
                 }
-                //mining pools - blocks
-                Control[] listPoolsBlocksHeadingsToColor = { label310, label311 };
+                //mining pools - blocks & hashrate
+                Control[] listPoolsBlocksHeadingsToColor = { label310, label311, label210, label312 };
                 foreach (Control control in listPoolsBlocksHeadingsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -22498,7 +22512,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listTableTextToColor = { label170, listViewAddressTransactions, listViewBlockTransactions, listViewBlockList, listViewTransactionInputs, listViewTransactionOutputs, listViewXpubAddresses, listViewBookmarks, label186, listViewAddressUTXOs, listViewPoolsByBlock };
+                Control[] listTableTextToColor = { label170, listViewAddressTransactions, listViewBlockTransactions, listViewBlockList, listViewTransactionInputs, listViewTransactionOutputs, listViewXpubAddresses, listViewBookmarks, label186, listViewAddressUTXOs, listViewPoolsByBlock, listViewPoolsHashrate };
                 foreach (Control control in listTableTextToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -22740,8 +22754,8 @@ namespace SATSuma
                         control.BackColor = thiscolor;
                     });
                 }
-                //mining pools - blocks
-                Control[] listPoolsBlocksButtonTextToColor = { btnSortPoolsByBlocks, btnSortPoolsByHashrate, btnPoolsBlocks1m, btnPoolsBlocks1w, btnPoolsBlocks1y, btnPoolsBlocks24h, btnPoolsBlocks2y, btnPoolsBlocks3d, btnPoolsBlocks3m, btnPoolsBlocks3y, btnPoolsBlocks6m, btnPoolsBlocksScrollDown, btnPoolsBlocksScrollUp, btnViewPoolFromMiningBlocks, btnViewWebsiteFromPoolsBlocks };
+                //mining pools - blocks & hashrate
+                Control[] listPoolsBlocksButtonTextToColor = { btnSortPoolsByBlocks, btnSortPoolsByHashrate, btnPoolsBlocks1m, btnPoolsBlocks1w, btnPoolsBlocks1y, btnPoolsBlocks24h, btnPoolsBlocks2y, btnPoolsBlocks3d, btnPoolsBlocks3m, btnPoolsBlocks3y, btnPoolsBlocks6m, btnPoolsBlocksScrollDown, btnPoolsBlocksScrollUp, btnViewPoolFromMiningBlocks, btnSortPoolsByHashrateH, btnPoolsHashrate1m, btnPoolsHashrate1w, btnPoolsHashrate1y, btnPoolsHashrate2y, btnPoolsHashrate3m, btnPoolsHashrate3y, btnPoolsHashrate6m, btnPoolsHashrateScrollDown, btnPoolsHashrateScrollUp, btnViewPoolFromPoolsHashrate };
                 foreach (Control control in listPoolsBlocksButtonTextToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -22923,7 +22937,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listListViewBackgroundsToColor = { panel127, panel28, panel133, panel134, panel128, panelUTXOsContainer, panelPoolsBlocksContainer, panelUTXOError, panel137, panel120, panel122, panel124, panel125, panel27, panelTransactionOutputs, panelTransactionInputs, panel102, listViewBlockList, listViewTransactionInputs, listViewTransactionOutputs, listViewXpubAddresses, listViewBookmarks, listViewAddressTransactions, listViewAddressUTXOs, listViewPoolsByBlock, listViewBlockTransactions, panel66, panel24, panel25, panelXpubScrollbar, panel33, panel101, panelXpubContainer, panel30 };
+                Control[] listListViewBackgroundsToColor = { panel127, panel28, panel133, panel134, panel128, panel147, panelUTXOsContainer, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panelUTXOError, panel137, panel120, panel122, panel124, panel125, panel27, panelTransactionOutputs, panelTransactionInputs, panel102, listViewBlockList, listViewTransactionInputs, listViewTransactionOutputs, listViewXpubAddresses, listViewBookmarks, listViewAddressTransactions, listViewAddressUTXOs, listViewPoolsByBlock, listViewPoolsHashrate, listViewBlockTransactions, panel66, panel24, panel25, panelXpubScrollbar, panel33, panel101, panelXpubContainer, panel30, panel148 };
                 foreach (Control control in listListViewBackgroundsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -22944,7 +22958,7 @@ namespace SATSuma
             try
             {
                 listViewHeaderColor = thiscolor;
-                Control[] tableTitleBarsToColor = { panel126, panel143, panel67, panel68, panel117, panel121, panel123, panel100, panelBookmarksContainer, panel144 };
+                Control[] tableTitleBarsToColor = { panel126, panel143, panel67, panel68, panel117, panel121, panel123, panel100, panelBookmarksContainer, panel144, panel150 };
                 foreach (Control control in tableTitleBarsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -23081,8 +23095,8 @@ namespace SATSuma
                         control.BackgroundImage = ImageFile;
                     });
                 }
-                //mining pools - blocks
-                Control[] listPoolsBlocksHeadingsToColor = { panel138, panel145 };
+                //mining pools - blocks & hashrate
+                Control[] listPoolsBlocksHeadingsToColor = { panel138, panel145, panel81, panel146 };
                 foreach (Control control in listPoolsBlocksHeadingsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -23228,8 +23242,8 @@ namespace SATSuma
                         control.BackgroundImage = null;
                     });
                 }
-                //mining pools - blocks
-                Control[] listPoolsBlocksHeadingsToColor = { panel138, panel145 };
+                //mining pools - blocks & hashrate
+                Control[] listPoolsBlocksHeadingsToColor = { panel138, panel145, panel81, panel146 };
                 foreach (Control control in listPoolsBlocksHeadingsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -23369,8 +23383,8 @@ namespace SATSuma
                         control.BackColor = titleBackgroundColor;
                     });
                 }
-                //mining pools - blocks
-                Control[] listPoolsBlocksHeadingsToColor = { panel138, panel145 };
+                //mining pools - blocks & hashrate
+                Control[] listPoolsBlocksHeadingsToColor = { panel138, panel145, panel81, panel146 };
                 foreach (Control control in listPoolsBlocksHeadingsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -23821,13 +23835,13 @@ namespace SATSuma
 
                     listViewPoolsByBlock.Invoke((MethodInvoker)delegate
                     {
-                        listViewPoolsByBlock.Columns.Add("Pool name", (int)(100 * UIScale));
+                        listViewPoolsByBlock.Columns.Add("Pool name", (int)(90 * UIScale));
                         listViewPoolsByBlock.Columns.Add("Rank", (int)(35 * UIScale));
-                        listViewPoolsByBlock.Columns.Add("Blocks mined", (int)(85 * UIScale));
-                        listViewPoolsByBlock.Columns.Add("% mined", (int)(65 * UIScale));
-                        listViewPoolsByBlock.Columns.Add("Empty blocks", (int)(85 * UIScale));
-                        listViewPoolsByBlock.Columns.Add("Empty %", (int)(65 * UIScale));
-                        listViewPoolsByBlock.Columns.Add("Link to mining pool", (int)(200 * UIScale));
+                        listViewPoolsByBlock.Columns.Add("Blocks", (int)(55 * UIScale));
+                        listViewPoolsByBlock.Columns.Add("Blocks %", (int)(65 * UIScale));
+                        listViewPoolsByBlock.Columns.Add("Empty", (int)(45 * UIScale));
+                        listViewPoolsByBlock.Columns.Add("Empty %", (int)(57 * UIScale));
+                        //listViewPoolsByBlock.Columns.Add("Link to mining pool", (int)(200 * UIScale));
                     });
 
                     // Add the items to the ListView
@@ -23845,7 +23859,7 @@ namespace SATSuma
                         item.SubItems.Add(Convert.ToString(pool.emptyBlocks));
                         emptyPercent = (100m / Convert.ToDecimal(pool.blockCount)) * Convert.ToDecimal(pool.emptyBlocks);
                         item.SubItems.Add(Convert.ToString(emptyPercent.ToString("F2")) + "%");
-                        item.SubItems.Add(Convert.ToString(pool.link));
+                        //item.SubItems.Add(Convert.ToString(pool.link));
 
                         listViewPoolsByBlock.Invoke((MethodInvoker)delegate
                         {
@@ -23946,19 +23960,6 @@ namespace SATSuma
                                 btnViewPoolFromMiningBlocks.Location = new Point(btnViewPoolFromMiningBlocks.Location.X, item.Position.Y);
                                 btnViewPoolFromMiningBlocks.Height = item.Bounds.Height;
                             });
-                            btnViewWebsiteFromPoolsBlocks.Invoke((MethodInvoker)delegate
-                            {
-                                btnViewWebsiteFromPoolsBlocks.Location = new Point(listViewPoolsByBlock.Location.X + listViewPoolsByBlock.Width - (int)(13 * UIScale), item.Position.Y);
-                                btnViewWebsiteFromPoolsBlocks.Height = item.Bounds.Height;
-                            });
-                            if (item.SubItems[6].Text == "")
-                            {
-                                btnViewWebsiteFromPoolsBlocks.Enabled = false;
-                            }
-                            else
-                            {
-                                btnViewWebsiteFromPoolsBlocks.Enabled = true;
-                            }
                         }
                         else
                         {
@@ -23970,7 +23971,6 @@ namespace SATSuma
                     }
                 }
                 btnViewPoolFromMiningBlocks.Visible = listViewPoolsByBlock.SelectedItems.Count > 0;
-                btnViewWebsiteFromPoolsBlocks.Visible = listViewPoolsByBlock.SelectedItems.Count > 0;
                 //btnViewBlockFromAddressUTXO.BringToFront();
                 lblHeaderBlockAge.Focus();
             }
@@ -24250,54 +24250,63 @@ namespace SATSuma
 
                 if (pools != null && pools.Count > 0)
                 {
-                    var sortedPools = pools.OrderByDescending(pool => Convert.ToString(pool.poolName)).ToList();
 
-                    //LIST VIEW
-                    listViewPoolsHashrate.Invoke((MethodInvoker)delegate
+                    var groupedPools = pools
+                        .GroupBy(p => p.poolName)
+                        .Select(g => new
+                        {
+                            PoolName = g.Key,
+                            AvgShare = g.Average(p => p.share),
+                            AvgHashrate = g.Average(p => p.avgHashrate)
+                        })
+                        .OrderByDescending(g => g.AvgShare)
+                        .ToList();
+
+                    if (groupedPools.Count > 0)
                     {
-                        listViewPoolsHashrate.Items.Clear(); // remove any data that may be there already
-                        listViewPoolsHashrate.Columns.Clear();
-                    });
-                    listViewPoolsHashrate.GetType().InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, listViewPoolsHashrate, new object[] { true });
-
-                    // Check if the column header already exists
-
-                    listViewPoolsHashrate.Invoke((MethodInvoker)delegate
-                    {
-                        listViewPoolsHashrate.Columns.Add("Pool name", (int)(180 * UIScale));
-                        listViewPoolsHashrate.Columns.Add("Share", (int)(120 * UIScale));
-                        listViewPoolsHashrate.Columns.Add("Average hashrate", (int)(250 * UIScale));
-                    });
-
-                    // Add the items to the ListView
-                    int counter = 0; // used to count rows in list as they're added
-                    foreach (var pool in sortedPools)
-                    {
-
-                        ListViewItem item = new ListViewItem(Convert.ToString(pool.poolName)); // create new row
-                        item.SubItems.Add(Convert.ToString(pool.share));
-                        item.SubItems.Add(Convert.ToString(pool.avgHashrate));
-
                         listViewPoolsHashrate.Invoke((MethodInvoker)delegate
                         {
-                            listViewPoolsHashrate.Items.Add(item); // add row
+
+                            // Clear existing columns to avoid duplicate columns issue
+                            listViewPoolsHashrate.Columns.Clear();
+                            listViewPoolsHashrate.Items.Clear(); // Remove any data that may be there already
+                            listViewPoolsHashrate.Columns.Add("Pool name", (int)(90 * UIScale));
+                            listViewPoolsHashrate.Columns.Add("Share", (int)(90 * UIScale));
+                            listViewPoolsHashrate.Columns.Add("Average hashrate", (int)(167 * UIScale));
+                            listViewPoolsHashrate.GetType().InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, listViewPoolsHashrate, new object[] { true });
+                                                        
                         });
 
-                        counter++; // count rows
+                        int counter = 0;
+                        foreach (var pool in groupedPools)
+                        {
+                            ListViewItem item = new ListViewItem(pool.PoolName); // create new row
+                            item.SubItems.Add(pool.AvgShare.ToString("P4")); // 4 decimal places
+                            item.SubItems.Add(pool.AvgHashrate.ToString("F0")); // 0 decimals 
 
-                        // Get the height of each item to set height of whole listview
-                        int rowHeight = listViewPoolsHashrate.Margin.Vertical + listViewPoolsHashrate.Padding.Vertical + listViewPoolsHashrate.GetItemRect(0).Height;
-                        int itemCount = listViewPoolsHashrate.Items.Count; // Get the number of items in the ListBox
-                        int listBoxHeight = (itemCount + 2) * rowHeight; // Calculate the height of the ListBox (the extra 2 gives room for the header)
+                            listViewPoolsHashrate.Invoke((MethodInvoker)delegate
+                            {
+                                listViewPoolsHashrate.Items.Add(item); // add row
+                            });
 
-                        listViewPoolsHashrate.Height = listBoxHeight; // Set the height of the ListBox
-                        panel151.Height = listBoxHeight;
+                            counter++; // count rows
 
+                            // Get the height of each item to set height of whole listview
+                            int rowHeight = listViewPoolsHashrate.Margin.Vertical + listViewPoolsHashrate.Padding.Vertical + listViewPoolsHashrate.GetItemRect(0).Height;
+                            int itemCount = listViewPoolsHashrate.Items.Count; // Get the number of items in the ListBox
+                            int listBoxHeight = (itemCount + 2) * rowHeight; // Calculate the height of the ListBox (the extra 2 gives room for the header)
+
+                            listViewPoolsHashrate.Height = listBoxHeight; // Set the height of the ListBox
+                            panel151.Height = listBoxHeight;
+                        }
                     }
-                    if (listViewPoolsByBlock.Items.Count > 0)
+
+                    if (listViewPoolsHashrate.Items.Count > 0)
                     {
-                        listViewPoolsByBlock.Items[0].Selected = true;
+                        listViewPoolsHashrate.Items[0].Selected = true;
                     }
+
+                    ChartPoolsRankingPoolsHashrateScreen();
                 }
             }
             catch (Exception ex)
@@ -24305,6 +24314,465 @@ namespace SATSuma
                 HandleException(ex, "SetupPoolsByHashrateScreen");
             }
         }
+
+        private async void ChartPoolsRankingPoolsHashrateScreen()
+        {
+            try
+            {
+
+                // clear any previous graph
+                formsPlotPoolRankForPoolScreen.Plot.Clear();
+                //int desiredSpacing = 98; // spacing added to title to force left-align in
+                //string spacing = new string('\u00A0', desiredSpacing);
+                //string title = $"Mining pool rankings - time period: {poolsHashrateTimePeriod}{spacing}";
+                //formsPlotPoolRankForPoolScreen.Plot.Title(title, size: (int)(13 * UIScale), color: labelColor, bold: false);
+                
+
+                LightUpNodeLight();
+                var PoolRankingDataJson = await _poolsRankingDataService.GetPoolsRankingDataAsync(poolsHashrateTimePeriod).ConfigureAwait(true);
+                if (!string.IsNullOrEmpty(PoolRankingDataJson))
+                {
+                    JObject jsonObj = JObject.Parse(PoolRankingDataJson);
+
+                    List<PoolsRanking> poolsRankingList = JsonConvert.DeserializeObject<List<PoolsRanking>>(jsonObj["pools"].ToString());
+
+                    // Calculate the total BlockCount
+                    int totalBlockCount = poolsRankingList.Sum(p => int.Parse(p.BlockCount));
+
+                    // Create lists for values and labels
+                    List<double> values = new List<double>();
+                    List<string> labels = new List<string>();
+
+                    // Populate values and labels for the first 15 segments
+                    int blocksMinedByTop15 = 0;
+                    for (int i = 0; i < Math.Min(15, poolsRankingList.Count); i++)
+                    {
+                        var pool = poolsRankingList[i];
+                        values.Add(double.Parse(pool.BlockCount));
+                        blocksMinedByTop15 += Convert.ToInt32(pool.BlockCount);
+                        labels.Add(pool.Name);
+                    }
+
+                    int numberOfBlocksMinedByOthers = totalBlockCount - blocksMinedByTop15;
+                    values.Add(numberOfBlocksMinedByOthers);
+                    labels.Add("Others");
+
+                    // Copy values list to an array
+                    double[] valuesArray = values.ToArray();
+                    // Copy labels list to an array
+                    string[] labelsArray = labels.ToArray();
+
+                    string[] labelsAndValuesArray = new string[labelsArray.Length]; // this array is used to label the segments
+                    for (int i = 0; i < labelsArray.Count(); i++)
+                    {
+                        string labelAndValue = $"{labelsArray[i]} ({valuesArray[i]})";
+                        labelsAndValuesArray[i] = labelAndValue;
+                    }
+
+                    // Define the color spectrum
+                    Color[] colorSpectrum = GenerateRainbowColorSpectrum(values.Count);
+
+                    // Method to generate a rainbow-like color spectrum
+                    Color[] GenerateRainbowColorSpectrum(int segmentCount)
+                    {
+                        var colors = new Color[segmentCount];
+                        double hueIncrement = 360.0 / segmentCount;
+
+                        for (int i = 0; i < segmentCount; i++)
+                        {
+                            double hue = i * hueIncrement;
+                            Color color = ColorFromHSV(hue, 0.6, 0.7);
+                            colors[i] = color;
+                        }
+
+                        return colors;
+                    }
+
+                    // Method to convert HSV (Hue, Saturation, Value) to RGB
+                    Color ColorFromHSV(double hue, double saturation, double value)
+                    {
+                        int hi = Convert.ToInt32(Math.Floor(hue / 60)) % 6;
+                        double f = hue / 60 - Math.Floor(hue / 60);
+
+                        value *= 255;
+                        int v = Convert.ToInt32(value);
+                        int p = Convert.ToInt32(value * (1 - saturation));
+                        int q = Convert.ToInt32(value * (1 - f * saturation));
+                        int t = Convert.ToInt32(value * (1 - (1 - f) * saturation));
+
+                        if (hi == 0)
+                            return Color.FromArgb(255, v, t, p);
+                        else if (hi == 1)
+                            return Color.FromArgb(255, q, v, p);
+                        else if (hi == 2)
+                            return Color.FromArgb(255, p, v, t);
+                        else if (hi == 3)
+                            return Color.FromArgb(255, p, q, v);
+                        else if (hi == 4)
+                            return Color.FromArgb(255, t, p, v);
+                        else
+                            return Color.FromArgb(255, v, p, q);
+                    }
+
+                    // Create the pie chart 
+                    var pie = formsPlotPoolRankForPoolScreen.Plot.AddPie(valuesArray);
+                    pie.DonutSize = .3;
+                    pie.DonutLabel = $"{totalBlockCount - 1}\r\nblocks mined\r\nperiod: {poolsHashrateTimePeriod}";
+                    pie.CenterFont.Color = Color.Orange;
+                    pie.CenterFont.Size = (int)(8 * UIScale);
+                    pie.CenterFont.Bold = false;
+                    pie.SliceFillColors = colorSpectrum;
+                    pie.ShowPercentages = true;
+                    pie.ShowValues = false;
+                    pie.ShowLabels = true;
+                    pie.Size = .7;
+                    pie.SliceFont.Size = (int)(8 * UIScale);
+                    pie.SliceFont.Bold = false;
+                    pie.SliceLabels = labelsAndValuesArray;
+                    pie.SliceLabelColors = colorSpectrum;
+                    pie.SliceLabelPosition = 0.65;
+
+                    var padding = new ScottPlot.PixelPadding(
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        top: 0);
+                    formsPlotPoolRankForPoolScreen.Plot.ManualDataArea(padding);
+
+                    formsPlotPoolRankForPoolScreen.Plot.YAxis.Label("");
+                    formsPlotPoolRankForPoolScreen.Plot.XAxis.Label("");
+
+                    // refresh the graph
+                    formsPlotPoolRankForPoolScreen.Refresh();
+                    formsPlotPoolRankForPoolScreen.Visible = true;
+                }
+                else
+                {
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "Generating pools ranking chart");
+            }
+        }
+
+        private void listViewPoolsHashrate_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        {
+            try
+            {
+                var text = e.SubItem.Text;
+
+
+                var font = listViewPoolsHashrate.Font;
+                var columnWidth = e.Header.Width;
+                var textWidth = TextRenderer.MeasureText(text, font).Width;
+                if (textWidth > columnWidth)
+                {
+                    // Truncate the text
+                    var maxText = $"{text.Substring(0, text.Length * columnWidth / textWidth - 3)}...";
+                    var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
+                    if (e.Item.Selected)
+                    {
+                        e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
+                    }
+                    else
+                    {
+                        e.Graphics.FillRectangle(new SolidBrush(listViewPoolsHashrate.BackColor), bounds);
+                    }
+                    TextRenderer.DrawText(e.Graphics, maxText, font, bounds, e.Item.ForeColor, TextFormatFlags.EndEllipsis | TextFormatFlags.Left);
+                }
+                else if (textWidth < columnWidth)
+                {
+                    var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
+
+                    if (e.Item.Selected)
+                    {
+                        e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
+                    }
+                    else
+                    {
+                        e.Graphics.FillRectangle(new SolidBrush(listViewPoolsHashrate.BackColor), bounds);
+                    }
+
+                    TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "listViewPoolsHashrate_DrawSubItem");
+            }
+        }
+
+        private void listViewPoolsHashrate_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        {
+            // Prevent the column from being resized
+            e.Cancel = true;
+            e.NewWidth = listViewPoolsHashrate.Columns[e.ColumnIndex].Width;
+        }
+
+        private void listViewPoolsHashrate_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            try
+            {
+
+                foreach (ListViewItem item in listViewPoolsHashrate.Items)
+                {
+                    if (item != null)
+                    {
+                        if (item.Selected)
+                        {
+                            foreach (ListViewItem.ListViewSubItem subItem in item.SubItems)
+                            {
+                                subItem.ForeColor = MakeColorLighter(tableTextColor, 40);
+                            }
+                            btnViewPoolFromPoolsHashrate.Invoke((MethodInvoker)delegate
+                            {
+                                btnViewPoolFromPoolsHashrate.Location = new Point(btnViewPoolFromPoolsHashrate.Location.X, item.Position.Y);
+                                btnViewPoolFromPoolsHashrate.Height = item.Bounds.Height;
+                            });
+                        }
+                        else
+                        {
+                            foreach (ListViewItem.ListViewSubItem subItem in item.SubItems)
+                            {
+                                subItem.ForeColor = tableTextColor;
+                            }
+                        }
+                    }
+                }
+                btnViewPoolFromPoolsHashrate.Visible = listViewPoolsHashrate.SelectedItems.Count > 0;
+                //btnViewBlockFromAddressUTXO.BringToFront();
+                lblHeaderBlockAge.Focus();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "listViewPoolsHashrate_ItemSelectionChanged");
+            }
+        }
+
+        #region time period
+        private void btnPoolsHashrate1w_Click(object sender, EventArgs e)
+        {
+            poolsHashrateTimePeriod = "1w";
+            EnablePoolsHashrateTimePeriodButtons();
+            btnPoolsHashrate1w.Enabled = false;
+            SetupPoolsByHashrateScreen();
+        }
+
+        private void btnPoolsHashrate1m_Click(object sender, EventArgs e)
+        {
+            poolsHashrateTimePeriod = "1m";
+            EnablePoolsHashrateTimePeriodButtons();
+            btnPoolsHashrate1m.Enabled = false;
+            SetupPoolsByHashrateScreen();
+        }
+
+        private void btnPoolsHashrate3m_Click(object sender, EventArgs e)
+        {
+            poolsHashrateTimePeriod = "3m";
+            EnablePoolsHashrateTimePeriodButtons();
+            btnPoolsHashrate3m.Enabled = false;
+            SetupPoolsByHashrateScreen();
+        }
+
+        private void btnPoolsHashrate6m_Click(object sender, EventArgs e)
+        {
+            poolsHashrateTimePeriod = "6m";
+            EnablePoolsHashrateTimePeriodButtons();
+            btnPoolsHashrate6m.Enabled = false;
+            SetupPoolsByHashrateScreen();
+        }
+
+        private void btnPoolsHashrate1y_Click(object sender, EventArgs e)
+        {
+            poolsHashrateTimePeriod = "1y";
+            EnablePoolsHashrateTimePeriodButtons();
+            btnPoolsHashrate1y.Enabled = false;
+            SetupPoolsByHashrateScreen();
+        }
+
+        private void btnPoolsHashrate2y_Click(object sender, EventArgs e)
+        {
+            poolsHashrateTimePeriod = "2y";
+            EnablePoolsHashrateTimePeriodButtons();
+            btnPoolsHashrate2y.Enabled = false;
+            SetupPoolsByHashrateScreen();
+        }
+
+        private void btnPoolsHashrate3y_Click(object sender, EventArgs e)
+        {
+            poolsHashrateTimePeriod = "3y";
+            EnablePoolsHashrateTimePeriodButtons();
+            btnPoolsHashrate3y.Enabled = false;
+            SetupPoolsByHashrateScreen();
+        }
+
+        private void EnablePoolsHashrateTimePeriodButtons()
+        {
+            Control[] controlsToShow = { btnPoolsHashrate1m, btnPoolsHashrate1w, btnPoolsHashrate1y, btnPoolsHashrate2y, btnPoolsHashrate3m, btnPoolsHashrate3y, btnPoolsHashrate6m };
+            foreach (Control control in controlsToShow)
+            {
+                control.Invoke((MethodInvoker)delegate
+                {
+                    control.Enabled = true;
+                });
+            }
+        }
+        #endregion
+
+        #region listview scrolling
+        private void btnPoolsHashrateScrollUp_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (poolsHashrateScrollPosition > panelPoolsHashrateContainer.VerticalScroll.Minimum)
+                {
+                    int rowHeight = listViewPoolsHashrate.Margin.Vertical + listViewPoolsHashrate.Padding.Vertical + listViewPoolsHashrate.GetItemRect(0).Height;
+                    poolsHashrateScrollPosition -= rowHeight;
+                    panelPoolsHashrateContainer.VerticalScroll.Value = poolsHashrateScrollPosition;
+                    lblHeaderBlockAge.Focus();
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "btnPoolsHashrateScrollUp_Click");
+            }
+        }
+
+        private void btnPoolsHashrateScrollUp_MouseDown(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                isPoolsHashrateButtonPressed = true;
+                PoolsHashrateUpButtonPressed = true;
+                PoolsHashrateScrollTimer.Start();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "btnPoolsHashrateScrollUp_MouseDown");
+            }
+        }
+
+        private void btnPoolsHashrateScrollUp_MouseUp(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                isPoolsHashrateButtonPressed = false;
+                PoolsHashrateUpButtonPressed = false;
+                PoolsHashrateScrollTimer.Stop();
+                PoolsHashrateScrollTimer.Interval = 50; // reset the interval to its original value
+                lblHeaderBlockAge.Focus();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "btnPoolsHashrateScrollUp_MouseUp");
+            }
+        }
+
+        private void btnPoolsHashrateScrollDown_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int rowHeight = listViewPoolsHashrate.Margin.Vertical + listViewPoolsHashrate.Padding.Vertical + listViewPoolsHashrate.GetItemRect(0).Height;
+                if (poolsHashrateScrollPosition < (panelPoolsHashrateContainer.VerticalScroll.Maximum - panelPoolsHashrateContainer.Height) - rowHeight)
+                {
+
+                    poolsHashrateScrollPosition += rowHeight;
+                    panelPoolsHashrateContainer.VerticalScroll.Value = poolsHashrateScrollPosition;
+                    lblHeaderBlockAge.Focus();
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "btnPoolsHashrateScrollDown_Click");
+            }
+        }
+
+        private void btnPoolsHashrateScrollDown_MouseDown(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                isPoolsHashrateButtonPressed = true;
+                PoolsHashrateDownButtonPressed = true;
+                PoolsHashrateScrollTimer.Start();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "btnPoolsHashrateScrollDown_MouseDown");
+            }
+        }
+
+        private void btnPoolsHashrateScrollDown_MouseUp(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                isPoolsHashrateButtonPressed = false;
+                PoolsHashrateDownButtonPressed = false;
+                PoolsHashrateScrollTimer.Stop();
+                PoolsHashrateScrollTimer.Interval = 50; // reset the interval to its original value
+                lblHeaderBlockAge.Focus();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "btnPoolsHashrateScrollDown_MouseUp");
+            }
+        }
+
+        private void PoolsHashrateScrollTimer_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                if (isPoolsHashrateButtonPressed)
+                {
+                    if (PoolsHashrateDownButtonPressed)
+                    {
+                        int rowHeight = listViewPoolsHashrate.Margin.Vertical + listViewPoolsHashrate.Padding.Vertical + listViewPoolsHashrate.GetItemRect(0).Height;
+                        if (poolsHashrateScrollPosition < (panelPoolsHashrateContainer.VerticalScroll.Maximum - panelPoolsHashrateContainer.Height) - rowHeight)
+                        {
+                            if (poolsHashrateScrollPosition < panelPoolsHashrateContainer.VerticalScroll.Maximum + rowHeight)
+                            {
+                                poolsHashrateScrollPosition += rowHeight;
+                            }
+                            panelPoolsHashrateContainer.VerticalScroll.Value = poolsHashrateScrollPosition;
+                        }
+                    }
+                    else if (PoolsHashrateUpButtonPressed)
+                    {
+                        int rowHeight = listViewPoolsHashrate.Margin.Vertical + listViewPoolsHashrate.Padding.Vertical + listViewPoolsHashrate.GetItemRect(0).Height;
+                        if (poolsHashrateScrollPosition > panelPoolsHashrateContainer.VerticalScroll.Minimum)
+                        {
+                            poolsHashrateScrollPosition -= rowHeight;
+                            panelPoolsHashrateContainer.VerticalScroll.Value = poolsHashrateScrollPosition;
+                        }
+                    }
+                }
+                else
+                {
+                    PoolsHashrateScrollTimer.Stop();
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "PoolsHashrateScrollTimer_Tick");
+            }
+        }
+
+        private void listViewPoolsHashrate_KeyDown(object sender, KeyEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void listViewPoolsHashrate_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void listViewPoolsHashrate_KeyUp(object sender, KeyEventArgs e)
+        {
+            e.Handled = true;
+        }
+        #endregion
 
         #endregion
 
@@ -31552,55 +32020,13 @@ namespace SATSuma
 
 
 
-        #endregion
+
+
 
         #endregion
 
-        private void listViewPoolsHashrate_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
-        {
-            try
-            {
-                var text = e.SubItem.Text;
+        #endregion
 
 
-                var font = listViewPoolsHashrate.Font;
-                var columnWidth = e.Header.Width;
-                var textWidth = TextRenderer.MeasureText(text, font).Width;
-                if (textWidth > columnWidth)
-                {
-                    // Truncate the text
-                    var maxText = $"{text.Substring(0, text.Length * columnWidth / textWidth - 3)}...";
-                    var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
-                    if (e.Item.Selected)
-                    {
-                        e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
-                    }
-                    else
-                    {
-                        e.Graphics.FillRectangle(new SolidBrush(listViewPoolsHashrate.BackColor), bounds);
-                    }
-                    TextRenderer.DrawText(e.Graphics, maxText, font, bounds, e.Item.ForeColor, TextFormatFlags.EndEllipsis | TextFormatFlags.Left);
-                }
-                else if (textWidth < columnWidth)
-                {
-                    var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
-
-                    if (e.Item.Selected)
-                    {
-                        e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
-                    }
-                    else
-                    {
-                        e.Graphics.FillRectangle(new SolidBrush(listViewPoolsHashrate.BackColor), bounds);
-                    }
-
-                    TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "listViewPoolsHashrate_DrawSubItem");
-            }
-        }
     }
 }

@@ -1226,6 +1226,7 @@
             this.btnPoolsHashrate2y = new CustomControls.RJControls.RJButton();
             this.btnPoolsHashrate1m = new CustomControls.RJControls.RJButton();
             this.btnPoolsHashrate1w = new CustomControls.RJControls.RJButton();
+            this.btnViewBlockFromBlocksByPool = new CustomControls.RJControls.RJButton();
             this.timer50thSec = new System.Windows.Forms.Timer(this.components);
             this.panelAddressUTXO = new System.Windows.Forms.Panel();
             this.panel136 = new System.Windows.Forms.Panel();
@@ -1297,16 +1298,23 @@
             this.panel154 = new System.Windows.Forms.Panel();
             this.label318 = new System.Windows.Forms.Label();
             this.panelMiningPools = new System.Windows.Forms.Panel();
-            this.panel157 = new System.Windows.Forms.Panel();
-            this.rjButton4 = new CustomControls.RJControls.RJButton();
-            this.rjButton5 = new CustomControls.RJControls.RJButton();
-            this.panel158 = new System.Windows.Forms.Panel();
             this.panel159 = new System.Windows.Forms.Panel();
+            this.label231 = new System.Windows.Forms.Label();
+            this.panelBlocksByPoolContainer = new System.Windows.Forms.Panel();
+            this.listViewBlocksByPool = new System.Windows.Forms.ListView();
+            this.panel162 = new System.Windows.Forms.Panel();
+            this.panel163 = new System.Windows.Forms.Panel();
+            this.panel157 = new System.Windows.Forms.Panel();
+            this.btnPoolsListScrollUp = new CustomControls.RJControls.RJButton();
+            this.btnPoolsListScrollDown = new CustomControls.RJControls.RJButton();
+            this.panel149 = new System.Windows.Forms.Panel();
+            this.panel155 = new System.Windows.Forms.Panel();
+            this.label228 = new System.Windows.Forms.Label();
+            this.panelPoolsListContainer = new System.Windows.Forms.Panel();
             this.listViewPoolsList = new System.Windows.Forms.ListView();
             this.panel160 = new System.Windows.Forms.Panel();
             this.panel161 = new System.Windows.Forms.Panel();
-            this.label228 = new System.Windows.Forms.Label();
-            this.panel155 = new System.Windows.Forms.Panel();
+            this.PoolsListScrollTimer = new System.Windows.Forms.Timer(this.components);
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel109.SuspendLayout();
             this.panel12.SuspendLayout();
@@ -1542,9 +1550,11 @@
             this.panel153.SuspendLayout();
             this.panel154.SuspendLayout();
             this.panelMiningPools.SuspendLayout();
-            this.panel157.SuspendLayout();
             this.panel159.SuspendLayout();
+            this.panelBlocksByPoolContainer.SuspendLayout();
+            this.panel157.SuspendLayout();
             this.panel155.SuspendLayout();
+            this.panelPoolsListContainer.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTime
@@ -17812,7 +17822,7 @@
             this.btnMenuMiningPools.Text = "   mining pools";
             this.btnMenuMiningPools.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnMenuMiningPools.UseVisualStyleBackColor = false;
-            this.btnMenuMiningPools.Click += new System.EventHandler(this.btnMenuMiningPools_ClickAsync);
+            this.btnMenuMiningPools.Click += new System.EventHandler(this.BtnMenuMiningPools_ClickAsync);
             this.btnMenuMiningPools.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
             this.btnMenuMiningPools.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
             // 
@@ -19195,7 +19205,7 @@
             this.btnPoolsBlocks3y.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnPoolsBlocks3y, "3 years");
             this.btnPoolsBlocks3y.UseVisualStyleBackColor = false;
-            this.btnPoolsBlocks3y.Click += new System.EventHandler(this.btnPoolsBlocks3y_Click);
+            this.btnPoolsBlocks3y.Click += new System.EventHandler(this.BtnPoolsBlocks3y_Click);
             // 
             // btnPoolsBlocks24h
             // 
@@ -19220,7 +19230,7 @@
             this.btnPoolsBlocks24h.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnPoolsBlocks24h, "24 hours");
             this.btnPoolsBlocks24h.UseVisualStyleBackColor = false;
-            this.btnPoolsBlocks24h.Click += new System.EventHandler(this.btnPoolsBlocks24h_Click);
+            this.btnPoolsBlocks24h.Click += new System.EventHandler(this.BtnPoolsBlocks24h_Click);
             // 
             // btnPoolsBlocks3d
             // 
@@ -19245,7 +19255,7 @@
             this.btnPoolsBlocks3d.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnPoolsBlocks3d, "3 days");
             this.btnPoolsBlocks3d.UseVisualStyleBackColor = false;
-            this.btnPoolsBlocks3d.Click += new System.EventHandler(this.btnPoolsBlocks3d_Click);
+            this.btnPoolsBlocks3d.Click += new System.EventHandler(this.BtnPoolsBlocks3d_Click);
             // 
             // btnPoolsBlocks2y
             // 
@@ -19270,7 +19280,7 @@
             this.btnPoolsBlocks2y.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnPoolsBlocks2y, "2 years");
             this.btnPoolsBlocks2y.UseVisualStyleBackColor = false;
-            this.btnPoolsBlocks2y.Click += new System.EventHandler(this.btnPoolsBlocks2y_Click);
+            this.btnPoolsBlocks2y.Click += new System.EventHandler(this.BtnPoolsBlocks2y_Click);
             // 
             // btnPoolsBlocks1w
             // 
@@ -19295,7 +19305,7 @@
             this.btnPoolsBlocks1w.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnPoolsBlocks1w, "1 week");
             this.btnPoolsBlocks1w.UseVisualStyleBackColor = false;
-            this.btnPoolsBlocks1w.Click += new System.EventHandler(this.btnPoolsBlocks1w_Click);
+            this.btnPoolsBlocks1w.Click += new System.EventHandler(this.BtnPoolsBlocks1w_Click);
             // 
             // btnPoolsBlocks1m
             // 
@@ -19320,7 +19330,7 @@
             this.btnPoolsBlocks1m.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnPoolsBlocks1m, "1 month");
             this.btnPoolsBlocks1m.UseVisualStyleBackColor = false;
-            this.btnPoolsBlocks1m.Click += new System.EventHandler(this.btnPoolsBlocks1m_Click);
+            this.btnPoolsBlocks1m.Click += new System.EventHandler(this.BtnPoolsBlocks1m_Click);
             // 
             // btnPoolsBlocks1y
             // 
@@ -19345,7 +19355,7 @@
             this.btnPoolsBlocks1y.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnPoolsBlocks1y, "1 year");
             this.btnPoolsBlocks1y.UseVisualStyleBackColor = false;
-            this.btnPoolsBlocks1y.Click += new System.EventHandler(this.btnPoolsBlocks1y_Click);
+            this.btnPoolsBlocks1y.Click += new System.EventHandler(this.BtnPoolsBlocks1y_Click);
             // 
             // btnPoolsBlocks3m
             // 
@@ -19370,7 +19380,7 @@
             this.btnPoolsBlocks3m.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnPoolsBlocks3m, "3 months");
             this.btnPoolsBlocks3m.UseVisualStyleBackColor = false;
-            this.btnPoolsBlocks3m.Click += new System.EventHandler(this.btnPoolsBlocks3m_Click);
+            this.btnPoolsBlocks3m.Click += new System.EventHandler(this.BtnPoolsBlocks3m_Click);
             // 
             // btnPoolsBlocks6m
             // 
@@ -19395,7 +19405,7 @@
             this.btnPoolsBlocks6m.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnPoolsBlocks6m, "6 months");
             this.btnPoolsBlocks6m.UseVisualStyleBackColor = false;
-            this.btnPoolsBlocks6m.Click += new System.EventHandler(this.btnPoolsBlocks6m_Click);
+            this.btnPoolsBlocks6m.Click += new System.EventHandler(this.BtnPoolsBlocks6m_Click);
             // 
             // btnSortPoolsByBlocks
             // 
@@ -19446,7 +19456,7 @@
             this.btnSortPoolsByHashrate.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnSortPoolsByHashrate, "3 years");
             this.btnSortPoolsByHashrate.UseVisualStyleBackColor = false;
-            this.btnSortPoolsByHashrate.Click += new System.EventHandler(this.btnMenuPoolsByHashrate_ClickAsync);
+            this.btnSortPoolsByHashrate.Click += new System.EventHandler(this.BtnMenuPoolsByHashrate_ClickAsync);
             // 
             // btnSortPoolsByHashrateH
             // 
@@ -19472,7 +19482,7 @@
             this.btnSortPoolsByHashrateH.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnSortPoolsByHashrateH, "3 years");
             this.btnSortPoolsByHashrateH.UseVisualStyleBackColor = false;
-            this.btnSortPoolsByHashrateH.Click += new System.EventHandler(this.btnMenuPoolsByHashrate_ClickAsync);
+            this.btnSortPoolsByHashrateH.Click += new System.EventHandler(this.BtnMenuPoolsByHashrate_ClickAsync);
             // 
             // btnSortPoolsByBlocksH
             // 
@@ -19523,7 +19533,7 @@
             this.btnPoolsHashrate3y.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnPoolsHashrate3y, "3 years");
             this.btnPoolsHashrate3y.UseVisualStyleBackColor = false;
-            this.btnPoolsHashrate3y.Click += new System.EventHandler(this.btnPoolsHashrate3y_Click);
+            this.btnPoolsHashrate3y.Click += new System.EventHandler(this.BtnPoolsHashrate3y_Click);
             // 
             // btnViewPoolFromPoolsHashrate
             // 
@@ -19573,7 +19583,7 @@
             this.btnPoolsHashrate6m.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnPoolsHashrate6m, "6 months");
             this.btnPoolsHashrate6m.UseVisualStyleBackColor = false;
-            this.btnPoolsHashrate6m.Click += new System.EventHandler(this.btnPoolsHashrate6m_Click);
+            this.btnPoolsHashrate6m.Click += new System.EventHandler(this.BtnPoolsHashrate6m_Click);
             // 
             // btnPoolsHashrate3m
             // 
@@ -19598,7 +19608,7 @@
             this.btnPoolsHashrate3m.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnPoolsHashrate3m, "3 months");
             this.btnPoolsHashrate3m.UseVisualStyleBackColor = false;
-            this.btnPoolsHashrate3m.Click += new System.EventHandler(this.btnPoolsHashrate3m_Click);
+            this.btnPoolsHashrate3m.Click += new System.EventHandler(this.BtnPoolsHashrate3m_Click);
             // 
             // btnPoolsHashrate1y
             // 
@@ -19623,7 +19633,7 @@
             this.btnPoolsHashrate1y.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnPoolsHashrate1y, "1 year");
             this.btnPoolsHashrate1y.UseVisualStyleBackColor = false;
-            this.btnPoolsHashrate1y.Click += new System.EventHandler(this.btnPoolsHashrate1y_Click);
+            this.btnPoolsHashrate1y.Click += new System.EventHandler(this.BtnPoolsHashrate1y_Click);
             // 
             // btnPoolsHashrate2y
             // 
@@ -19648,7 +19658,7 @@
             this.btnPoolsHashrate2y.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnPoolsHashrate2y, "2 years");
             this.btnPoolsHashrate2y.UseVisualStyleBackColor = false;
-            this.btnPoolsHashrate2y.Click += new System.EventHandler(this.btnPoolsHashrate2y_Click);
+            this.btnPoolsHashrate2y.Click += new System.EventHandler(this.BtnPoolsHashrate2y_Click);
             // 
             // btnPoolsHashrate1m
             // 
@@ -19673,7 +19683,7 @@
             this.btnPoolsHashrate1m.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnPoolsHashrate1m, "1 month");
             this.btnPoolsHashrate1m.UseVisualStyleBackColor = false;
-            this.btnPoolsHashrate1m.Click += new System.EventHandler(this.btnPoolsHashrate1m_Click);
+            this.btnPoolsHashrate1m.Click += new System.EventHandler(this.BtnPoolsHashrate1m_Click);
             // 
             // btnPoolsHashrate1w
             // 
@@ -19698,7 +19708,32 @@
             this.btnPoolsHashrate1w.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnPoolsHashrate1w, "1 week");
             this.btnPoolsHashrate1w.UseVisualStyleBackColor = false;
-            this.btnPoolsHashrate1w.Click += new System.EventHandler(this.btnPoolsHashrate1w_Click);
+            this.btnPoolsHashrate1w.Click += new System.EventHandler(this.BtnPoolsHashrate1w_Click);
+            // 
+            // btnViewBlockFromBlocksByPool
+            // 
+            this.btnViewBlockFromBlocksByPool.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnViewBlockFromBlocksByPool.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnViewBlockFromBlocksByPool.BorderColor = System.Drawing.Color.Transparent;
+            this.btnViewBlockFromBlocksByPool.BorderRadius = 7;
+            this.btnViewBlockFromBlocksByPool.BorderSize = 0;
+            this.btnViewBlockFromBlocksByPool.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnViewBlockFromBlocksByPool.FlatAppearance.BorderSize = 0;
+            this.btnViewBlockFromBlocksByPool.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnViewBlockFromBlocksByPool.Font = new System.Drawing.Font("Consolas", 7F);
+            this.btnViewBlockFromBlocksByPool.ForeColor = System.Drawing.Color.White;
+            this.btnViewBlockFromBlocksByPool.Location = new System.Drawing.Point(3, 97);
+            this.btnViewBlockFromBlocksByPool.Margin = new System.Windows.Forms.Padding(1);
+            this.btnViewBlockFromBlocksByPool.Name = "btnViewBlockFromBlocksByPool";
+            this.btnViewBlockFromBlocksByPool.Size = new System.Drawing.Size(60, 15);
+            this.btnViewBlockFromBlocksByPool.TabIndex = 281;
+            this.btnViewBlockFromBlocksByPool.TabStop = false;
+            this.btnViewBlockFromBlocksByPool.Text = "pool ▶";
+            this.btnViewBlockFromBlocksByPool.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnViewBlockFromBlocksByPool.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnViewBlockFromBlocksByPool, "view transaction");
+            this.btnViewBlockFromBlocksByPool.UseVisualStyleBackColor = false;
+            this.btnViewBlockFromBlocksByPool.Visible = false;
             // 
             // timer50thSec
             // 
@@ -20265,9 +20300,9 @@
             this.btnPoolsBlocksScrollUp.Text = "▲";
             this.btnPoolsBlocksScrollUp.TextColor = System.Drawing.Color.White;
             this.btnPoolsBlocksScrollUp.UseVisualStyleBackColor = false;
-            this.btnPoolsBlocksScrollUp.Click += new System.EventHandler(this.btnPoolsBlocksScrollUp_Click);
-            this.btnPoolsBlocksScrollUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnPoolsBlocksScrollUp_MouseDown);
-            this.btnPoolsBlocksScrollUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnPoolsBlocksScrollUp_MouseUp);
+            this.btnPoolsBlocksScrollUp.Click += new System.EventHandler(this.BtnPoolsBlocksScrollUp_Click);
+            this.btnPoolsBlocksScrollUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnPoolsBlocksScrollUp_MouseDown);
+            this.btnPoolsBlocksScrollUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnPoolsBlocksScrollUp_MouseUp);
             // 
             // btnPoolsBlocksScrollDown
             // 
@@ -20290,9 +20325,9 @@
             this.btnPoolsBlocksScrollDown.Text = "▼";
             this.btnPoolsBlocksScrollDown.TextColor = System.Drawing.Color.White;
             this.btnPoolsBlocksScrollDown.UseVisualStyleBackColor = false;
-            this.btnPoolsBlocksScrollDown.Click += new System.EventHandler(this.btnPoolsBlocksScrollDown_Click);
-            this.btnPoolsBlocksScrollDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnPoolsBlocksScrollDown_MouseDown);
-            this.btnPoolsBlocksScrollDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnPoolsBlocksScrollDown_MouseUp);
+            this.btnPoolsBlocksScrollDown.Click += new System.EventHandler(this.BtnPoolsBlocksScrollDown_Click);
+            this.btnPoolsBlocksScrollDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnPoolsBlocksScrollDown_MouseDown);
+            this.btnPoolsBlocksScrollDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnPoolsBlocksScrollDown_MouseUp);
             // 
             // panel30
             // 
@@ -20312,6 +20347,7 @@
             this.panelPoolsBlocksContainer.Name = "panelPoolsBlocksContainer";
             this.panelPoolsBlocksContainer.Size = new System.Drawing.Size(411, 490);
             this.panelPoolsBlocksContainer.TabIndex = 297;
+            this.panelPoolsBlocksContainer.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelPoolsBlocksContainer_Paint);
             // 
             // listViewPoolsByBlock
             // 
@@ -20337,13 +20373,13 @@
             this.listViewPoolsByBlock.TabStop = false;
             this.listViewPoolsByBlock.UseCompatibleStateImageBehavior = false;
             this.listViewPoolsByBlock.View = System.Windows.Forms.View.Details;
-            this.listViewPoolsByBlock.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.listViewPoolsByBlock_ColumnWidthChanging);
+            this.listViewPoolsByBlock.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.ListViewPoolsByBlock_ColumnWidthChanging);
             this.listViewPoolsByBlock.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.AllListViews_DrawColumnHeader);
             this.listViewPoolsByBlock.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ListViewPoolsByBlock_DrawSubItem);
-            this.listViewPoolsByBlock.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.listViewPoolsByBlock_ItemSelectionChanged);
-            this.listViewPoolsByBlock.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listViewPoolsByBlock_KeyDown);
-            this.listViewPoolsByBlock.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.listViewPoolsByBlock_KeyPress);
-            this.listViewPoolsByBlock.KeyUp += new System.Windows.Forms.KeyEventHandler(this.listViewPoolsByBlock_KeyUp);
+            this.listViewPoolsByBlock.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.ListViewPoolsByBlock_ItemSelectionChanged);
+            this.listViewPoolsByBlock.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ListViewPoolsByBlock_KeyDown);
+            this.listViewPoolsByBlock.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ListViewPoolsByBlock_KeyPress);
+            this.listViewPoolsByBlock.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ListViewPoolsByBlock_KeyUp);
             // 
             // panel144
             // 
@@ -20474,9 +20510,9 @@
             this.btnPoolsHashrateScrollUp.Text = "▲";
             this.btnPoolsHashrateScrollUp.TextColor = System.Drawing.Color.White;
             this.btnPoolsHashrateScrollUp.UseVisualStyleBackColor = false;
-            this.btnPoolsHashrateScrollUp.Click += new System.EventHandler(this.btnPoolsHashrateScrollUp_Click);
-            this.btnPoolsHashrateScrollUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnPoolsHashrateScrollUp_MouseDown);
-            this.btnPoolsHashrateScrollUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnPoolsHashrateScrollUp_MouseUp);
+            this.btnPoolsHashrateScrollUp.Click += new System.EventHandler(this.BtnPoolsHashrateScrollUp_Click);
+            this.btnPoolsHashrateScrollUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnPoolsHashrateScrollUp_MouseDown);
+            this.btnPoolsHashrateScrollUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnPoolsHashrateScrollUp_MouseUp);
             // 
             // btnPoolsHashrateScrollDown
             // 
@@ -20499,9 +20535,9 @@
             this.btnPoolsHashrateScrollDown.Text = "▼";
             this.btnPoolsHashrateScrollDown.TextColor = System.Drawing.Color.White;
             this.btnPoolsHashrateScrollDown.UseVisualStyleBackColor = false;
-            this.btnPoolsHashrateScrollDown.Click += new System.EventHandler(this.btnPoolsHashrateScrollDown_Click);
-            this.btnPoolsHashrateScrollDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnPoolsHashrateScrollDown_MouseDown);
-            this.btnPoolsHashrateScrollDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnPoolsHashrateScrollDown_MouseUp);
+            this.btnPoolsHashrateScrollDown.Click += new System.EventHandler(this.BtnPoolsHashrateScrollDown_Click);
+            this.btnPoolsHashrateScrollDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnPoolsHashrateScrollDown_MouseDown);
+            this.btnPoolsHashrateScrollDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnPoolsHashrateScrollDown_MouseUp);
             // 
             // panel148
             // 
@@ -20521,6 +20557,7 @@
             this.panelPoolsHashrateContainer.Name = "panelPoolsHashrateContainer";
             this.panelPoolsHashrateContainer.Size = new System.Drawing.Size(411, 490);
             this.panelPoolsHashrateContainer.TabIndex = 297;
+            this.panelPoolsHashrateContainer.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelPoolsHashrateContainer_Paint);
             // 
             // listViewPoolsHashrate
             // 
@@ -20546,13 +20583,13 @@
             this.listViewPoolsHashrate.TabStop = false;
             this.listViewPoolsHashrate.UseCompatibleStateImageBehavior = false;
             this.listViewPoolsHashrate.View = System.Windows.Forms.View.Details;
-            this.listViewPoolsHashrate.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.listViewPoolsHashrate_ColumnWidthChanging);
+            this.listViewPoolsHashrate.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.ListViewPoolsHashrate_ColumnWidthChanging);
             this.listViewPoolsHashrate.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.AllListViews_DrawColumnHeader);
-            this.listViewPoolsHashrate.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.listViewPoolsHashrate_DrawSubItem);
-            this.listViewPoolsHashrate.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.listViewPoolsHashrate_ItemSelectionChanged);
-            this.listViewPoolsHashrate.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listViewPoolsHashrate_KeyDown);
-            this.listViewPoolsHashrate.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.listViewPoolsHashrate_KeyPress);
-            this.listViewPoolsHashrate.KeyUp += new System.Windows.Forms.KeyEventHandler(this.listViewPoolsHashrate_KeyUp);
+            this.listViewPoolsHashrate.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ListViewPoolsHashrate_DrawSubItem);
+            this.listViewPoolsHashrate.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.ListViewPoolsHashrate_ItemSelectionChanged);
+            this.listViewPoolsHashrate.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ListViewPoolsHashrate_KeyDown);
+            this.listViewPoolsHashrate.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ListViewPoolsHashrate_KeyPress);
+            this.listViewPoolsHashrate.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ListViewPoolsHashrate_KeyUp);
             // 
             // panel150
             // 
@@ -20681,87 +20718,204 @@
             // panelMiningPools
             // 
             this.panelMiningPools.BackColor = System.Drawing.Color.Transparent;
-            this.panelMiningPools.Controls.Add(this.panel155);
-            this.panelMiningPools.Controls.Add(this.panel157);
-            this.panelMiningPools.Controls.Add(this.panel158);
             this.panelMiningPools.Controls.Add(this.panel159);
+            this.panelMiningPools.Controls.Add(this.panelBlocksByPoolContainer);
+            this.panelMiningPools.Controls.Add(this.panel157);
+            this.panelMiningPools.Controls.Add(this.panel149);
+            this.panelMiningPools.Controls.Add(this.panel155);
+            this.panelMiningPools.Controls.Add(this.panelPoolsListContainer);
             this.panelMiningPools.Location = new System.Drawing.Point(162, 187);
             this.panelMiningPools.Name = "panelMiningPools";
             this.panelMiningPools.Size = new System.Drawing.Size(773, 556);
             this.panelMiningPools.TabIndex = 291;
             this.panelMiningPools.Visible = false;
             // 
+            // panel159
+            // 
+            this.panel159.BackColor = System.Drawing.Color.Transparent;
+            this.panel159.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel159.BackgroundImage")));
+            this.panel159.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel159.Controls.Add(this.label231);
+            this.panel159.Location = new System.Drawing.Point(180, 0);
+            this.panel159.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel159.Name = "panel159";
+            this.panel159.Size = new System.Drawing.Size(534, 23);
+            this.panel159.TabIndex = 209;
+            // 
+            // label231
+            // 
+            this.label231.AutoSize = true;
+            this.label231.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label231.Font = new System.Drawing.Font("Century Gothic", 8F);
+            this.label231.ForeColor = System.Drawing.Color.Gray;
+            this.label231.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label231.Location = new System.Drawing.Point(5, 2);
+            this.label231.Margin = new System.Windows.Forms.Padding(0);
+            this.label231.Name = "label231";
+            this.label231.Size = new System.Drawing.Size(149, 16);
+            this.label231.TabIndex = 153;
+            this.label231.Text = "RECENT BLOCKS MINED BY";
+            this.label231.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // panelBlocksByPoolContainer
+            // 
+            this.panelBlocksByPoolContainer.Controls.Add(this.listViewBlocksByPool);
+            this.panelBlocksByPoolContainer.Controls.Add(this.panel162);
+            this.panelBlocksByPoolContainer.Controls.Add(this.panel163);
+            this.panelBlocksByPoolContainer.Controls.Add(this.btnViewBlockFromBlocksByPool);
+            this.panelBlocksByPoolContainer.Location = new System.Drawing.Point(180, 36);
+            this.panelBlocksByPoolContainer.Name = "panelBlocksByPoolContainer";
+            this.panelBlocksByPoolContainer.Size = new System.Drawing.Size(561, 190);
+            this.panelBlocksByPoolContainer.TabIndex = 301;
+            // 
+            // listViewBlocksByPool
+            // 
+            this.listViewBlocksByPool.Activation = System.Windows.Forms.ItemActivation.OneClick;
+            this.listViewBlocksByPool.AutoArrange = false;
+            this.listViewBlocksByPool.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
+            this.listViewBlocksByPool.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listViewBlocksByPool.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listViewBlocksByPool.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.listViewBlocksByPool.FullRowSelect = true;
+            this.listViewBlocksByPool.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.listViewBlocksByPool.HideSelection = false;
+            this.listViewBlocksByPool.LabelWrap = false;
+            this.listViewBlocksByPool.Location = new System.Drawing.Point(39, 0);
+            this.listViewBlocksByPool.Margin = new System.Windows.Forms.Padding(0);
+            this.listViewBlocksByPool.MultiSelect = false;
+            this.listViewBlocksByPool.Name = "listViewBlocksByPool";
+            this.listViewBlocksByPool.OwnerDraw = true;
+            this.listViewBlocksByPool.Scrollable = false;
+            this.listViewBlocksByPool.ShowGroups = false;
+            this.listViewBlocksByPool.Size = new System.Drawing.Size(515, 185);
+            this.listViewBlocksByPool.TabIndex = 164;
+            this.listViewBlocksByPool.TabStop = false;
+            this.listViewBlocksByPool.UseCompatibleStateImageBehavior = false;
+            this.listViewBlocksByPool.View = System.Windows.Forms.View.Details;
+            this.listViewBlocksByPool.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.AllListViews_DrawColumnHeader);
+            this.listViewBlocksByPool.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ListViewBlocksByPool_DrawSubItem);
+            // 
+            // panel162
+            // 
+            this.panel162.BackColor = System.Drawing.Color.White;
+            this.panel162.Location = new System.Drawing.Point(0, 0);
+            this.panel162.Name = "panel162";
+            this.panel162.Size = new System.Drawing.Size(561, 16);
+            this.panel162.TabIndex = 285;
+            // 
+            // panel163
+            // 
+            this.panel163.BackColor = System.Drawing.Color.Transparent;
+            this.panel163.Location = new System.Drawing.Point(45, -2);
+            this.panel163.Name = "panel163";
+            this.panel163.Size = new System.Drawing.Size(329, 180);
+            this.panel163.TabIndex = 165;
+            // 
             // panel157
             // 
             this.panel157.BackColor = System.Drawing.Color.Transparent;
-            this.panel157.Controls.Add(this.rjButton4);
-            this.panel157.Controls.Add(this.rjButton5);
-            this.panel157.Location = new System.Drawing.Point(369, 56);
+            this.panel157.Controls.Add(this.btnPoolsListScrollUp);
+            this.panel157.Controls.Add(this.btnPoolsListScrollDown);
+            this.panel157.Location = new System.Drawing.Point(122, 36);
             this.panel157.Name = "panel157";
-            this.panel157.Size = new System.Drawing.Size(31, 490);
+            this.panel157.Size = new System.Drawing.Size(31, 510);
             this.panel157.TabIndex = 298;
             // 
-            // rjButton4
+            // btnPoolsListScrollUp
             // 
-            this.rjButton4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.rjButton4.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.rjButton4.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.rjButton4.BorderRadius = 7;
-            this.rjButton4.BorderSize = 0;
-            this.rjButton4.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.rjButton4.FlatAppearance.BorderSize = 0;
-            this.rjButton4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.rjButton4.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rjButton4.ForeColor = System.Drawing.Color.White;
-            this.rjButton4.Location = new System.Drawing.Point(2, 2);
-            this.rjButton4.Margin = new System.Windows.Forms.Padding(1);
-            this.rjButton4.Name = "rjButton4";
-            this.rjButton4.Size = new System.Drawing.Size(24, 24);
-            this.rjButton4.TabIndex = 297;
-            this.rjButton4.TabStop = false;
-            this.rjButton4.Text = "▲";
-            this.rjButton4.TextColor = System.Drawing.Color.White;
-            this.rjButton4.UseVisualStyleBackColor = false;
+            this.btnPoolsListScrollUp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnPoolsListScrollUp.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnPoolsListScrollUp.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.btnPoolsListScrollUp.BorderRadius = 7;
+            this.btnPoolsListScrollUp.BorderSize = 0;
+            this.btnPoolsListScrollUp.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnPoolsListScrollUp.FlatAppearance.BorderSize = 0;
+            this.btnPoolsListScrollUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnPoolsListScrollUp.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPoolsListScrollUp.ForeColor = System.Drawing.Color.White;
+            this.btnPoolsListScrollUp.Location = new System.Drawing.Point(2, 2);
+            this.btnPoolsListScrollUp.Margin = new System.Windows.Forms.Padding(1);
+            this.btnPoolsListScrollUp.Name = "btnPoolsListScrollUp";
+            this.btnPoolsListScrollUp.Size = new System.Drawing.Size(24, 24);
+            this.btnPoolsListScrollUp.TabIndex = 297;
+            this.btnPoolsListScrollUp.TabStop = false;
+            this.btnPoolsListScrollUp.Text = "▲";
+            this.btnPoolsListScrollUp.TextColor = System.Drawing.Color.White;
+            this.btnPoolsListScrollUp.UseVisualStyleBackColor = false;
+            this.btnPoolsListScrollUp.Click += new System.EventHandler(this.BtnPoolsListScrollUp_Click);
+            this.btnPoolsListScrollUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnPoolsListScrollUp_MouseDown);
+            this.btnPoolsListScrollUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnPoolsListScrollUp_MouseUp);
             // 
-            // rjButton5
+            // btnPoolsListScrollDown
             // 
-            this.rjButton5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.rjButton5.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.rjButton5.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.rjButton5.BorderRadius = 7;
-            this.rjButton5.BorderSize = 0;
-            this.rjButton5.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.rjButton5.FlatAppearance.BorderSize = 0;
-            this.rjButton5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.rjButton5.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rjButton5.ForeColor = System.Drawing.Color.White;
-            this.rjButton5.Location = new System.Drawing.Point(2, 464);
-            this.rjButton5.Margin = new System.Windows.Forms.Padding(1);
-            this.rjButton5.Name = "rjButton5";
-            this.rjButton5.Size = new System.Drawing.Size(24, 24);
-            this.rjButton5.TabIndex = 298;
-            this.rjButton5.TabStop = false;
-            this.rjButton5.Text = "▼";
-            this.rjButton5.TextColor = System.Drawing.Color.White;
-            this.rjButton5.UseVisualStyleBackColor = false;
+            this.btnPoolsListScrollDown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnPoolsListScrollDown.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnPoolsListScrollDown.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.btnPoolsListScrollDown.BorderRadius = 7;
+            this.btnPoolsListScrollDown.BorderSize = 0;
+            this.btnPoolsListScrollDown.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnPoolsListScrollDown.FlatAppearance.BorderSize = 0;
+            this.btnPoolsListScrollDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnPoolsListScrollDown.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPoolsListScrollDown.ForeColor = System.Drawing.Color.White;
+            this.btnPoolsListScrollDown.Location = new System.Drawing.Point(2, 484);
+            this.btnPoolsListScrollDown.Margin = new System.Windows.Forms.Padding(1);
+            this.btnPoolsListScrollDown.Name = "btnPoolsListScrollDown";
+            this.btnPoolsListScrollDown.Size = new System.Drawing.Size(24, 24);
+            this.btnPoolsListScrollDown.TabIndex = 298;
+            this.btnPoolsListScrollDown.TabStop = false;
+            this.btnPoolsListScrollDown.Text = "▼";
+            this.btnPoolsListScrollDown.TextColor = System.Drawing.Color.White;
+            this.btnPoolsListScrollDown.UseVisualStyleBackColor = false;
+            this.btnPoolsListScrollDown.Click += new System.EventHandler(this.BtnPoolsListScrollDown_Click);
+            this.btnPoolsListScrollDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnPoolsListScrollDown_MouseDown);
+            this.btnPoolsListScrollDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnPoolsListScrollDown_MouseUp);
             // 
-            // panel158
+            // panel149
             // 
-            this.panel158.Location = new System.Drawing.Point(369, 56);
-            this.panel158.Name = "panel158";
-            this.panel158.Size = new System.Drawing.Size(25, 16);
-            this.panel158.TabIndex = 299;
+            this.panel149.Location = new System.Drawing.Point(122, 36);
+            this.panel149.Name = "panel149";
+            this.panel149.Size = new System.Drawing.Size(25, 16);
+            this.panel149.TabIndex = 300;
             // 
-            // panel159
+            // panel155
             // 
-            this.panel159.AutoScroll = true;
-            this.panel159.Controls.Add(this.listViewPoolsList);
-            this.panel159.Controls.Add(this.panel160);
-            this.panel159.Controls.Add(this.panel161);
-            this.panel159.Location = new System.Drawing.Point(6, 56);
-            this.panel159.Name = "panel159";
-            this.panel159.Size = new System.Drawing.Size(391, 490);
-            this.panel159.TabIndex = 297;
+            this.panel155.BackColor = System.Drawing.Color.Transparent;
+            this.panel155.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel155.BackgroundImage")));
+            this.panel155.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel155.Controls.Add(this.label228);
+            this.panel155.Location = new System.Drawing.Point(3, 0);
+            this.panel155.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel155.Name = "panel155";
+            this.panel155.Size = new System.Drawing.Size(151, 23);
+            this.panel155.TabIndex = 208;
+            // 
+            // label228
+            // 
+            this.label228.AutoSize = true;
+            this.label228.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label228.Font = new System.Drawing.Font("Century Gothic", 8F);
+            this.label228.ForeColor = System.Drawing.Color.Gray;
+            this.label228.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label228.Location = new System.Drawing.Point(5, 2);
+            this.label228.Margin = new System.Windows.Forms.Padding(0);
+            this.label228.Name = "label228";
+            this.label228.Size = new System.Drawing.Size(100, 16);
+            this.label228.TabIndex = 153;
+            this.label228.Text = "POOL SELECTION";
+            this.label228.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // panelPoolsListContainer
+            // 
+            this.panelPoolsListContainer.AutoScroll = true;
+            this.panelPoolsListContainer.Controls.Add(this.listViewPoolsList);
+            this.panelPoolsListContainer.Controls.Add(this.panel160);
+            this.panelPoolsListContainer.Controls.Add(this.panel161);
+            this.panelPoolsListContainer.Location = new System.Drawing.Point(6, 36);
+            this.panelPoolsListContainer.Name = "panelPoolsListContainer";
+            this.panelPoolsListContainer.Size = new System.Drawing.Size(144, 510);
+            this.panelPoolsListContainer.TabIndex = 297;
+            this.panelPoolsListContainer.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelPoolsListContainer_Paint);
             // 
             // listViewPoolsList
             // 
@@ -20782,18 +20936,25 @@
             this.listViewPoolsList.OwnerDraw = true;
             this.listViewPoolsList.Scrollable = false;
             this.listViewPoolsList.ShowGroups = false;
-            this.listViewPoolsList.Size = new System.Drawing.Size(347, 485);
+            this.listViewPoolsList.Size = new System.Drawing.Size(100, 505);
             this.listViewPoolsList.TabIndex = 164;
             this.listViewPoolsList.TabStop = false;
             this.listViewPoolsList.UseCompatibleStateImageBehavior = false;
             this.listViewPoolsList.View = System.Windows.Forms.View.Details;
+            this.listViewPoolsList.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.ListViewPoolsList_ColumnWidthChanging);
+            this.listViewPoolsList.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.AllListViews_DrawColumnHeader);
+            this.listViewPoolsList.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ListViewPoolsList_DrawSubItem);
+            this.listViewPoolsList.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.ListViewPoolsList_ItemSelectionChanged);
+            this.listViewPoolsList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ListViewPoolsList_KeyDown);
+            this.listViewPoolsList.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ListViewPoolsList_KeyPress);
+            this.listViewPoolsList.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ListViewPoolsList_KeyUp);
             // 
             // panel160
             // 
             this.panel160.BackColor = System.Drawing.Color.White;
             this.panel160.Location = new System.Drawing.Point(0, 0);
             this.panel160.Name = "panel160";
-            this.panel160.Size = new System.Drawing.Size(377, 16);
+            this.panel160.Size = new System.Drawing.Size(130, 16);
             this.panel160.TabIndex = 285;
             // 
             // panel161
@@ -20801,35 +20962,13 @@
             this.panel161.BackColor = System.Drawing.Color.Transparent;
             this.panel161.Location = new System.Drawing.Point(45, -2);
             this.panel161.Name = "panel161";
-            this.panel161.Size = new System.Drawing.Size(200, 480);
+            this.panel161.Size = new System.Drawing.Size(80, 500);
             this.panel161.TabIndex = 165;
             // 
-            // label228
+            // PoolsListScrollTimer
             // 
-            this.label228.AutoSize = true;
-            this.label228.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label228.Font = new System.Drawing.Font("Century Gothic", 8F);
-            this.label228.ForeColor = System.Drawing.Color.Gray;
-            this.label228.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label228.Location = new System.Drawing.Point(5, 2);
-            this.label228.Margin = new System.Windows.Forms.Padding(0);
-            this.label228.Name = "label228";
-            this.label228.Size = new System.Drawing.Size(79, 16);
-            this.label228.TabIndex = 153;
-            this.label228.Text = "SELECT POOL";
-            this.label228.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // panel155
-            // 
-            this.panel155.BackColor = System.Drawing.Color.Transparent;
-            this.panel155.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel155.BackgroundImage")));
-            this.panel155.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel155.Controls.Add(this.label228);
-            this.panel155.Location = new System.Drawing.Point(3, 0);
-            this.panel155.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel155.Name = "panel155";
-            this.panel155.Size = new System.Drawing.Size(243, 23);
-            this.panel155.TabIndex = 208;
+            this.PoolsListScrollTimer.Interval = 50;
+            this.PoolsListScrollTimer.Tick += new System.EventHandler(this.PoolsListScrollTimer_Tick);
             // 
             // SATSuma
             // 
@@ -21274,10 +21413,13 @@
             this.panel154.ResumeLayout(false);
             this.panel154.PerformLayout();
             this.panelMiningPools.ResumeLayout(false);
-            this.panel157.ResumeLayout(false);
             this.panel159.ResumeLayout(false);
+            this.panel159.PerformLayout();
+            this.panelBlocksByPoolContainer.ResumeLayout(false);
+            this.panel157.ResumeLayout(false);
             this.panel155.ResumeLayout(false);
             this.panel155.PerformLayout();
+            this.panelPoolsListContainer.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -22555,13 +22697,21 @@
         private System.Windows.Forms.Panel panel155;
         private System.Windows.Forms.Label label228;
         private System.Windows.Forms.Panel panel157;
-        private CustomControls.RJControls.RJButton rjButton4;
-        private CustomControls.RJControls.RJButton rjButton5;
-        private System.Windows.Forms.Panel panel158;
-        public System.Windows.Forms.Panel panel159;
+        private CustomControls.RJControls.RJButton btnPoolsListScrollUp;
+        private CustomControls.RJControls.RJButton btnPoolsListScrollDown;
+        public System.Windows.Forms.Panel panelPoolsListContainer;
         private System.Windows.Forms.ListView listViewPoolsList;
         private System.Windows.Forms.Panel panel160;
         private System.Windows.Forms.Panel panel161;
+        private System.Windows.Forms.Panel panel149;
+        private System.Windows.Forms.Timer PoolsListScrollTimer;
+        public System.Windows.Forms.Panel panelBlocksByPoolContainer;
+        private System.Windows.Forms.ListView listViewBlocksByPool;
+        private System.Windows.Forms.Panel panel162;
+        private System.Windows.Forms.Panel panel163;
+        private CustomControls.RJControls.RJButton btnViewBlockFromBlocksByPool;
+        private System.Windows.Forms.Panel panel159;
+        private System.Windows.Forms.Label label231;
     }
 }
 

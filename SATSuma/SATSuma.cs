@@ -26,10 +26,12 @@ https://satsuma.btcdir.org/download/
 
 * Stuff to do:
 * Taproot support on xpub screen 
-* finish pools stuff
+* finish pool screen (stats and hashrate chart of selected pool)
 * tooltips on new screens 
-* listviewcontainer paint events for pools/blocks and pools/hashrate screens
- */
+* pools screens need to be added to default start screen options
+* check theme settings on new pools screens
+* testing, particularly new pools screens and pools screens on own node
+*/
 
 #region Using
 using NBitcoin;
@@ -114,6 +116,7 @@ namespace SATSuma
         #endregion
         #region mining pools screens
         Color panelColour;
+        string poolNameToPass = "empty"; // used to preselect a pool on the poolslist (e.g when selected from the pools by hashrate or pools by blocks screens)
         #region pools by block screen variables
         private int poolsBlocksScrollPosition;
         private bool isPoolsBlocksButtonPressed;
@@ -563,6 +566,7 @@ namespace SATSuma
                 });
 
                 LookupBlockListAsync(); // fetch the first 15 blocks automatically for the block list initial view.
+                SetupPoolScreen(); 
                 this.Visible = true;
                 AddressInvalidHideControls(); // Address screen - initially address textbox is empty so hide the controls
                 // prepopulate chart with fee rates (only if user hasn't selected one of the charts for their startup screen)
@@ -9916,102 +9920,7 @@ namespace SATSuma
                 HandleException(ex, "SetupPoolsByBlocksScreen");
             }
         }
-
-        private void ListViewPoolsByBlock_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
-        {
-            try
-            {
-                var text = e.SubItem.Text;
-
-
-                var font = listViewPoolsByBlock.Font;
-                var columnWidth = e.Header.Width;
-                var textWidth = TextRenderer.MeasureText(text, font).Width;
-                if (textWidth > columnWidth)
-                {
-                    // Truncate the text
-                    var maxText = $"{text.Substring(0, text.Length * columnWidth / textWidth - 3)}...";
-                    var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
-                    if (e.Item.Selected)
-                    {
-                        e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
-                    }
-                    else
-                    {
-                        e.Graphics.FillRectangle(new SolidBrush(listViewPoolsByBlock.BackColor), bounds);
-                    }
-                    TextRenderer.DrawText(e.Graphics, maxText, font, bounds, e.Item.ForeColor, TextFormatFlags.EndEllipsis | TextFormatFlags.Left);
-                }
-                else if (textWidth < columnWidth)
-                {
-                    var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
-
-                    if (e.Item.Selected)
-                    {
-                        e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
-                    }
-                    else
-                    {
-                        e.Graphics.FillRectangle(new SolidBrush(listViewPoolsByBlock.BackColor), bounds);
-                    }
-
-                    TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "listViewPoolsByBlock_DrawSubItem");
-            }
-        }
-
-        private void ListViewPoolsByBlock_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
-        {
-            try
-            {
-
-                foreach (ListViewItem item in listViewPoolsByBlock.Items)
-                {
-                    if (item != null)
-                    {
-                        if (item.Selected)
-                        {
-                            foreach (ListViewItem.ListViewSubItem subItem in item.SubItems)
-                            {
-                                subItem.ForeColor = MakeColorLighter(tableTextColor, 40);
-                            }
-                            btnViewPoolFromMiningBlocks.Invoke((MethodInvoker)delegate
-                            {
-                                btnViewPoolFromMiningBlocks.Location = new Point(btnViewPoolFromMiningBlocks.Location.X, item.Position.Y);
-                                btnViewPoolFromMiningBlocks.Height = item.Bounds.Height;
-                            });
-                        }
-                        else
-                        {
-                            foreach (ListViewItem.ListViewSubItem subItem in item.SubItems)
-                            {
-                                subItem.ForeColor = tableTextColor;
-                            }
-                        }
-                    }
-                }
-                btnViewPoolFromMiningBlocks.Visible = listViewPoolsByBlock.SelectedItems.Count > 0;
-                //btnViewBlockFromAddressUTXO.BringToFront();
-                lblHeaderBlockAge.Focus();
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "listViewPoolsByBlock_ItemSelectionChanged");
-            }
-        }
-
-        private void BtnViewWebsiteFromPoolsBlocks_Click(object sender, EventArgs e)
-        {
-            ListViewItem selectedItem = listViewPoolsByBlock.SelectedItems[0];
-
-            string url = selectedItem.SubItems[6].Text;
-            System.Diagnostics.Process.Start(url);
-        }
-
+        
         #region change time period
         private void BtnPoolsBlocks24h_Click(object sender, EventArgs e)
         {
@@ -10278,12 +10187,136 @@ namespace SATSuma
         }
         #endregion
 
+        #region listview appearance and behaviour
         private void ListViewPoolsByBlock_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
         {
             // Prevent the column from being resized
             e.Cancel = true;
             e.NewWidth = listViewPoolsByBlock.Columns[e.ColumnIndex].Width;
         }
+
+        private void ListViewPoolsByBlock_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        {
+            try
+            {
+                var text = e.SubItem.Text;
+
+
+                var font = listViewPoolsByBlock.Font;
+                var columnWidth = e.Header.Width;
+                var textWidth = TextRenderer.MeasureText(text, font).Width;
+                if (textWidth > columnWidth)
+                {
+                    // Truncate the text
+                    var maxText = $"{text.Substring(0, text.Length * columnWidth / textWidth - 3)}...";
+                    var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
+                    if (e.Item.Selected)
+                    {
+                        e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
+                    }
+                    else
+                    {
+                        e.Graphics.FillRectangle(new SolidBrush(listViewPoolsByBlock.BackColor), bounds);
+                    }
+                    TextRenderer.DrawText(e.Graphics, maxText, font, bounds, e.Item.ForeColor, TextFormatFlags.EndEllipsis | TextFormatFlags.Left);
+                }
+                else if (textWidth < columnWidth)
+                {
+                    var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
+
+                    if (e.Item.Selected)
+                    {
+                        e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
+                    }
+                    else
+                    {
+                        e.Graphics.FillRectangle(new SolidBrush(listViewPoolsByBlock.BackColor), bounds);
+                    }
+
+                    TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "listViewPoolsByBlock_DrawSubItem");
+            }
+        }
+
+        private void ListViewPoolsByBlock_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            try
+            {
+
+                foreach (ListViewItem item in listViewPoolsByBlock.Items)
+                {
+                    if (item != null)
+                    {
+                        if (item.Selected)
+                        {
+                            foreach (ListViewItem.ListViewSubItem subItem in item.SubItems)
+                            {
+                                subItem.ForeColor = MakeColorLighter(tableTextColor, 40);
+                            }
+                            btnViewPoolFromMiningBlocks.Invoke((MethodInvoker)delegate
+                            {
+                                btnViewPoolFromMiningBlocks.Location = new Point(btnViewPoolFromMiningBlocks.Location.X, item.Position.Y);
+                                btnViewPoolFromMiningBlocks.Height = item.Bounds.Height;
+                            });
+                        }
+                        else
+                        {
+                            foreach (ListViewItem.ListViewSubItem subItem in item.SubItems)
+                            {
+                                subItem.ForeColor = tableTextColor;
+                            }
+                        }
+                    }
+                }
+                btnViewPoolFromMiningBlocks.Visible = listViewPoolsByBlock.SelectedItems.Count > 0;
+                //btnViewBlockFromAddressUTXO.BringToFront();
+                lblHeaderBlockAge.Focus();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "listViewPoolsByBlock_ItemSelectionChanged");
+            }
+        }
+        #endregion
+
+        #region jump to pools list screen 
+        private void BtnViewPoolFromMiningBlocks_Click(object sender, EventArgs e)
+        {
+            // get the name of the pool from the selected row so the pools list can use it to preselect that pool
+            foreach (ListViewItem item in listViewPoolsByBlock.Items)
+            {
+                if (item != null)
+                {
+                    if (item.Selected)
+                    {
+                        poolNameToPass = item.SubItems[0].Text;
+                    }
+                }
+            }
+
+            // scan through the existing pools list to find the row we want so it can be selected and scrolled to
+            int counter = 0;
+            int rowHeight = listViewPoolsList.Margin.Vertical + listViewPoolsList.Padding.Vertical + listViewPoolsList.GetItemRect(0).Height;
+            foreach (ListViewItem item in listViewPoolsList.Items)
+            {
+                if (item != null)
+                {
+                    counter++;
+                    if (item.SubItems[0].Text == poolNameToPass)
+                    {
+                        poolsListScrollPosition = counter * rowHeight;
+                        break;
+                    }
+                }
+            }
+            
+            BtnMenuMiningPools_ClickAsync(sender, e);
+        }
+        #endregion
 
         #endregion
 
@@ -10368,101 +10401,7 @@ namespace SATSuma
             }
         }
 
-        private void ListViewPoolsHashrate_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
-        {
-            try
-            {
-                var text = e.SubItem.Text;
-
-
-                var font = listViewPoolsHashrate.Font;
-                var columnWidth = e.Header.Width;
-                var textWidth = TextRenderer.MeasureText(text, font).Width;
-                if (textWidth > columnWidth)
-                {
-                    // Truncate the text
-                    var maxText = $"{text.Substring(0, text.Length * columnWidth / textWidth - 3)}...";
-                    var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
-                    if (e.Item.Selected)
-                    {
-                        e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
-                    }
-                    else
-                    {
-                        e.Graphics.FillRectangle(new SolidBrush(listViewPoolsHashrate.BackColor), bounds);
-                    }
-                    TextRenderer.DrawText(e.Graphics, maxText, font, bounds, e.Item.ForeColor, TextFormatFlags.EndEllipsis | TextFormatFlags.Left);
-                }
-                else if (textWidth < columnWidth)
-                {
-                    var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
-
-                    if (e.Item.Selected)
-                    {
-                        e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
-                    }
-                    else
-                    {
-                        e.Graphics.FillRectangle(new SolidBrush(listViewPoolsHashrate.BackColor), bounds);
-                    }
-
-                    TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "listViewPoolsHashrate_DrawSubItem");
-            }
-        }
-
-        private void ListViewPoolsHashrate_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
-        {
-            // Prevent the column from being resized
-            e.Cancel = true;
-            e.NewWidth = listViewPoolsHashrate.Columns[e.ColumnIndex].Width;
-        }
-
-        private void ListViewPoolsHashrate_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
-        {
-            try
-            {
-
-                foreach (ListViewItem item in listViewPoolsHashrate.Items)
-                {
-                    if (item != null)
-                    {
-                        if (item.Selected)
-                        {
-                            foreach (ListViewItem.ListViewSubItem subItem in item.SubItems)
-                            {
-                                subItem.ForeColor = MakeColorLighter(tableTextColor, 40);
-                            }
-                            btnViewPoolFromPoolsHashrate.Invoke((MethodInvoker)delegate
-                            {
-                                btnViewPoolFromPoolsHashrate.Location = new Point(btnViewPoolFromPoolsHashrate.Location.X, item.Position.Y);
-                                btnViewPoolFromPoolsHashrate.Height = item.Bounds.Height;
-                            });
-                        }
-                        else
-                        {
-                            foreach (ListViewItem.ListViewSubItem subItem in item.SubItems)
-                            {
-                                subItem.ForeColor = tableTextColor;
-                            }
-                        }
-                    }
-                }
-                btnViewPoolFromPoolsHashrate.Visible = listViewPoolsHashrate.SelectedItems.Count > 0;
-                //btnViewBlockFromAddressUTXO.BringToFront();
-                lblHeaderBlockAge.Focus();
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "listViewPoolsHashrate_ItemSelectionChanged");
-            }
-        }
-
-        #region time period
+        #region change time period
         private void BtnPoolsHashrate1w_Click(object sender, EventArgs e)
         {
             poolsHashrateTimePeriod = "1w";
@@ -10709,6 +10648,139 @@ namespace SATSuma
         }
         #endregion
 
+        #region listview appearance and behaviour
+
+        private void ListViewPoolsHashrate_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        {
+            try
+            {
+                var text = e.SubItem.Text;
+
+
+                var font = listViewPoolsHashrate.Font;
+                var columnWidth = e.Header.Width;
+                var textWidth = TextRenderer.MeasureText(text, font).Width;
+                if (textWidth > columnWidth)
+                {
+                    // Truncate the text
+                    var maxText = $"{text.Substring(0, text.Length * columnWidth / textWidth - 3)}...";
+                    var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
+                    if (e.Item.Selected)
+                    {
+                        e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
+                    }
+                    else
+                    {
+                        e.Graphics.FillRectangle(new SolidBrush(listViewPoolsHashrate.BackColor), bounds);
+                    }
+                    TextRenderer.DrawText(e.Graphics, maxText, font, bounds, e.Item.ForeColor, TextFormatFlags.EndEllipsis | TextFormatFlags.Left);
+                }
+                else if (textWidth < columnWidth)
+                {
+                    var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
+
+                    if (e.Item.Selected)
+                    {
+                        e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
+                    }
+                    else
+                    {
+                        e.Graphics.FillRectangle(new SolidBrush(listViewPoolsHashrate.BackColor), bounds);
+                    }
+
+                    TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "listViewPoolsHashrate_DrawSubItem");
+            }
+        }
+
+        private void ListViewPoolsHashrate_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        {
+            // Prevent the column from being resized
+            e.Cancel = true;
+            e.NewWidth = listViewPoolsHashrate.Columns[e.ColumnIndex].Width;
+        }
+
+        private void ListViewPoolsHashrate_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            try
+            {
+
+                foreach (ListViewItem item in listViewPoolsHashrate.Items)
+                {
+                    if (item != null)
+                    {
+                        if (item.Selected)
+                        {
+                            foreach (ListViewItem.ListViewSubItem subItem in item.SubItems)
+                            {
+                                subItem.ForeColor = MakeColorLighter(tableTextColor, 40);
+                            }
+                            btnViewPoolFromPoolsHashrate.Invoke((MethodInvoker)delegate
+                            {
+                                btnViewPoolFromPoolsHashrate.Location = new Point(btnViewPoolFromPoolsHashrate.Location.X, item.Position.Y);
+                                btnViewPoolFromPoolsHashrate.Height = item.Bounds.Height;
+                            });
+                        }
+                        else
+                        {
+                            foreach (ListViewItem.ListViewSubItem subItem in item.SubItems)
+                            {
+                                subItem.ForeColor = tableTextColor;
+                            }
+                        }
+                    }
+                }
+                btnViewPoolFromPoolsHashrate.Visible = listViewPoolsHashrate.SelectedItems.Count > 0;
+                //btnViewBlockFromAddressUTXO.BringToFront();
+                lblHeaderBlockAge.Focus();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "listViewPoolsHashrate_ItemSelectionChanged");
+            }
+        }
+
+        #endregion
+
+        #region jump to pools list screen
+        private void BtnViewPoolFromPoolsHashrate_Click(object sender, EventArgs e)
+        {
+            // get the name of the pool from the selected row so the pools list can use it to preselect that pool
+            foreach (ListViewItem item in listViewPoolsHashrate.Items)
+            {
+                if (item != null)
+                {
+                    if (item.Selected)
+                    {
+                        poolNameToPass = item.SubItems[0].Text;
+                    }
+                }
+            }
+
+            // scan through the existing pools list to find the row we want so it can be selected and scrolled to
+            int counter = 0;
+            int rowHeight = listViewPoolsList.Margin.Vertical + listViewPoolsList.Padding.Vertical + listViewPoolsList.GetItemRect(0).Height;
+            foreach (ListViewItem item in listViewPoolsList.Items)
+            {
+                if (item != null)
+                {
+                    counter++;
+                    if (item.SubItems[0].Text == poolNameToPass)
+                    {
+                        poolsListScrollPosition = counter * rowHeight;
+                        break;
+                    }
+                }
+            }
+
+            BtnMenuMiningPools_ClickAsync(sender, e);
+        }
+        #endregion
+
         #endregion
 
         #region ⚡ charts for pools performance screen ⚡
@@ -10949,61 +11021,78 @@ namespace SATSuma
         {
             try
             {
-                LightUpNodeLight();
-                var PoolsListJson = await _miningPoolsListService.GetMiningPoolsListAsync().ConfigureAwait(true);
-                var poolsList = JsonConvert.DeserializeObject<List<PoolForList>>(PoolsListJson); // Deserialize into a list
-
-                if (poolsList != null)
+                if (listViewPoolsList.Items.Count == 0)
                 {
-                    poolsList = poolsList.OrderBy(pool => pool.Name).ToList();
+                    LightUpNodeLight();
+                    var PoolsListJson = await _miningPoolsListService.GetMiningPoolsListAsync().ConfigureAwait(true);
+                    var poolsList = JsonConvert.DeserializeObject<List<PoolForList>>(PoolsListJson); // Deserialize into a list
 
-                    //LIST VIEW
-                    listViewPoolsList.Invoke((MethodInvoker)delegate
+                    if (poolsList != null)
                     {
-                        listViewPoolsList.Items.Clear(); // remove any data that may be there already
-                        listViewPoolsList.Columns.Clear();
-                    });
-                    listViewPoolsList.GetType().InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, listViewPoolsList, new object[] { true });
+                        poolsList = poolsList.OrderBy(pool => pool.Name).ToList();
 
-                    // Check if the column header already exists
-                    listViewPoolsList.Invoke((MethodInvoker)delegate
-                    {
-                        listViewPoolsList.Columns.Add("Mining pools", (int)(100 * UIScale));
-                    });
-                    listViewPoolsList.Invoke((MethodInvoker)delegate
-                    {
-                        listViewPoolsList.Columns.Add("slug", (int)(0));
-                    });
-                    // Add the items to the ListView
-                    int counter = 0; // used to count rows in list as they're added
-                    foreach (var pool in poolsList)
-                    {
-
-                        ListViewItem item = new ListViewItem(Convert.ToString(pool.Name)); // create new row
-                        item.SubItems.Add(pool.Slug);
-
+                        //LIST VIEW
                         listViewPoolsList.Invoke((MethodInvoker)delegate
                         {
-                            listViewPoolsList.Items.Add(item); // add row
+                            listViewPoolsList.Items.Clear(); // remove any data that may be there already
+                            listViewPoolsList.Columns.Clear();
                         });
+                        listViewPoolsList.GetType().InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, listViewPoolsList, new object[] { true });
 
-                        counter++; // count rows
+                        // Check if the column header already exists
+                        listViewPoolsList.Invoke((MethodInvoker)delegate
+                        {
+                            listViewPoolsList.Columns.Add("Mining pools", (int)(100 * UIScale));
+                        });
+                        listViewPoolsList.Invoke((MethodInvoker)delegate
+                        {
+                            listViewPoolsList.Columns.Add("slug", (int)(0));
+                        });
+                        // Add the items to the ListView
+                        int counter = 0; // used to count rows in list as they're added
+                        foreach (var pool in poolsList)
+                        {
 
-                        // Get the height of each item to set height of whole listview
-                        int rowHeight = listViewPoolsList.Margin.Vertical + listViewPoolsList.Padding.Vertical + listViewPoolsList.GetItemRect(0).Height;
-                        int itemCount = listViewPoolsList.Items.Count; // Get the number of items in the ListBox
-                        int listBoxHeight = (itemCount + 2) * rowHeight; // Calculate the height of the ListBox (the extra 2 gives room for the header)
+                            ListViewItem item = new ListViewItem(Convert.ToString(pool.Name)); // create new row
+                            item.SubItems.Add(pool.Slug);
 
-                        listViewPoolsList.Height = listBoxHeight; // Set the height of the ListBox
-                        panel161.Height = listBoxHeight;
+                            listViewPoolsList.Invoke((MethodInvoker)delegate
+                            {
+                                listViewPoolsList.Items.Add(item); // add row
+                            });
 
+                            counter++; // count rows
+
+                            // Get the height of each item to set height of whole listview
+                            int rowHeight = listViewPoolsList.Margin.Vertical + listViewPoolsList.Padding.Vertical + listViewPoolsList.GetItemRect(0).Height;
+                            int itemCount = listViewPoolsList.Items.Count; // Get the number of items in the ListBox
+                            int listBoxHeight = (itemCount + 2) * rowHeight; // Calculate the height of the ListBox (the extra 2 gives room for the header)
+
+                            listViewPoolsList.Height = listBoxHeight; // Set the height of the ListBox
+                            panel161.Height = listBoxHeight;
+
+                        }
                     }
-
+                } // if we haven't already got the pools list, get them now
+                if (poolNameToPass != "empty") // we want to select a pool set by the pools hashrate or pools blocks screen
+                {
+                    foreach (ListViewItem item in listViewPoolsList.Items)
+                    {
+                        if (item != null)
+                        {
+                            if (item.SubItems[0].Text == poolNameToPass)
+                            {
+                                item.Selected = true;
+                            }
+                        }
+                    }
+                }
+                else // or we just want to select the first row
+                {
                     if (listViewPoolsList.Items.Count > 0)
                     {
                         listViewPoolsList.Items[0].Selected = true;
                     }
-
                 }
             }
             catch (Exception ex)
@@ -11012,54 +11101,7 @@ namespace SATSuma
             }
         }
 
-        private void ListViewPoolsList_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
-        {
-            try
-            {
-                var text = e.SubItem.Text;
-
-
-                var font = listViewPoolsList.Font;
-                var columnWidth = e.Header.Width;
-                var textWidth = TextRenderer.MeasureText(text, font).Width;
-                if (textWidth > columnWidth)
-                {
-                    // Truncate the text
-                    var maxText = $"{text.Substring(0, text.Length * columnWidth / textWidth - 3)}...";
-                    var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
-                    if (e.Item.Selected)
-                    {
-                        e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
-                    }
-                    else
-                    {
-                        e.Graphics.FillRectangle(new SolidBrush(listViewPoolsList.BackColor), bounds);
-                    }
-                    TextRenderer.DrawText(e.Graphics, maxText, font, bounds, e.Item.ForeColor, TextFormatFlags.EndEllipsis | TextFormatFlags.Left);
-                }
-                else if (textWidth < columnWidth)
-                {
-                    var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
-
-                    if (e.Item.Selected)
-                    {
-                        e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
-                    }
-                    else
-                    {
-                        e.Graphics.FillRectangle(new SolidBrush(listViewPoolsList.BackColor), bounds);
-                    }
-
-                    TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "listViewPoolsList_DrawSubItem");
-            }
-        }
-
-        #region listview scrolling
+        #region poolslist listview scrolling
 
         private void BtnPoolsListScrollUp_Click(object sender, EventArgs e)
         {
@@ -11211,7 +11253,33 @@ namespace SATSuma
         {
             e.Handled = true;
         }
+
+        private void PanelPoolsListContainer_Paint(object sender, PaintEventArgs e)
+        {
+            try
+            {
+                if (listViewPoolsList.Items.Count > 0)
+                {
+                    int rowHeight = listViewPoolsList.Margin.Vertical + listViewPoolsList.Padding.Vertical + listViewPoolsList.GetItemRect(0).Height;
+                    if (poolsListScrollPosition - rowHeight > 0)
+                    {
+                        panelPoolsListContainer.VerticalScroll.Value = poolsListScrollPosition;
+                    }
+                    else
+                    {
+                        panelPoolsListContainer.VerticalScroll.Value = 0;
+                        poolsListScrollPosition = 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "panelPoolsListContainer_Paint");
+            }
+        }
         #endregion
+
+        #region poolslist listview appearance and behaviour
 
         private void ListViewPoolsList_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
         {
@@ -11270,29 +11338,56 @@ namespace SATSuma
             }
         }
 
-        private void PanelPoolsListContainer_Paint(object sender, PaintEventArgs e)
+        private void ListViewPoolsList_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
         {
             try
             {
-                if (listViewPoolsList.Items.Count > 0)
+                var text = e.SubItem.Text;
+
+
+                var font = listViewPoolsList.Font;
+                var columnWidth = e.Header.Width;
+                var textWidth = TextRenderer.MeasureText(text, font).Width;
+                if (textWidth > columnWidth)
                 {
-                    int rowHeight = listViewPoolsList.Margin.Vertical + listViewPoolsList.Padding.Vertical + listViewPoolsList.GetItemRect(0).Height;
-                    if (poolsListScrollPosition - rowHeight > 0)
+                    // Truncate the text
+                    var maxText = $"{text.Substring(0, text.Length * columnWidth / textWidth - 3)}...";
+                    var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
+                    if (e.Item.Selected)
                     {
-                        panelPoolsListContainer.VerticalScroll.Value = poolsListScrollPosition;
+                        e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
                     }
                     else
                     {
-                        panelPoolsListContainer.VerticalScroll.Value = 0;
-                        poolsListScrollPosition = 0;
+                        e.Graphics.FillRectangle(new SolidBrush(listViewPoolsList.BackColor), bounds);
                     }
+                    TextRenderer.DrawText(e.Graphics, maxText, font, bounds, e.Item.ForeColor, TextFormatFlags.EndEllipsis | TextFormatFlags.Left);
+                }
+                else if (textWidth < columnWidth)
+                {
+                    var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
+
+                    if (e.Item.Selected)
+                    {
+                        e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
+                    }
+                    else
+                    {
+                        e.Graphics.FillRectangle(new SolidBrush(listViewPoolsList.BackColor), bounds);
+                    }
+
+                    TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
                 }
             }
             catch (Exception ex)
             {
-                HandleException(ex, "panelPoolsListContainer_Paint");
+                HandleException(ex, "listViewPoolsList_DrawSubItem");
             }
         }
+
+        #endregion
+
+        #region show 10 most recent blocks by selected pool
 
         private async void GetTenRecentBlocksFromPool(string slug)
         {
@@ -11390,6 +11485,124 @@ namespace SATSuma
                 HandleException(ex, "GetTenRecentBlocksFromPool");
             }
         }
+
+        private void ListViewBlocksByPool_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        {
+            try
+            {
+                var text = e.SubItem.Text;
+
+
+                var font = listViewBlocksByPool.Font;
+                var columnWidth = e.Header.Width;
+                var textWidth = TextRenderer.MeasureText(text, font).Width;
+                if (textWidth > columnWidth)
+                {
+                    // Truncate the text
+                    var maxText = $"{text.Substring(0, text.Length * columnWidth / textWidth - 3)}...";
+                    var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
+                    if (e.Item.Selected)
+                    {
+                        e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
+                    }
+                    else
+                    {
+                        e.Graphics.FillRectangle(new SolidBrush(listViewBlocksByPool.BackColor), bounds);
+                    }
+                    TextRenderer.DrawText(e.Graphics, maxText, font, bounds, e.Item.ForeColor, TextFormatFlags.EndEllipsis | TextFormatFlags.Left);
+                }
+                else if (textWidth < columnWidth)
+                {
+                    var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
+
+                    if (e.Item.Selected)
+                    {
+                        e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
+                    }
+                    else
+                    {
+                        e.Graphics.FillRectangle(new SolidBrush(listViewBlocksByPool.BackColor), bounds);
+                    }
+
+                    TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "listViewBlocksByPool_DrawSubItem");
+            }
+        }
+
+        private void ListViewBlocksByPool_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            try
+            {
+                foreach (ListViewItem item in listViewBlocksByPool.Items)
+                {
+                    if (item != null)
+                    {
+                        if (item.Selected)
+                        {
+                            foreach (ListViewItem.ListViewSubItem subItem in item.SubItems)
+                            {
+                                subItem.ForeColor = MakeColorLighter(tableTextColor, 40);
+                            }
+                            btnViewBlockFromBlocksByPool.Invoke((MethodInvoker)delegate
+                            {
+                                btnViewBlockFromBlocksByPool.Location = new Point(btnViewBlockFromBlocksByPool.Location.X, item.Position.Y);
+                                btnViewBlockFromBlocksByPool.Height = item.Bounds.Height;
+                            });
+                        }
+                        else
+                        {
+                            foreach (ListViewItem.ListViewSubItem subItem in item.SubItems)
+                            {
+                                subItem.ForeColor = tableTextColor;
+                            }
+                        }
+                    }
+                }
+                btnViewBlockFromBlocksByPool.Visible = listViewBlocksByPool.SelectedItems.Count > 0;
+                lblHeaderBlockAge.Focus();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "listViewBlocksByPool_ItemSelectionChanged");
+            }
+        }
+
+        private void BtnViewBlockFromBlocksByPool_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                CheckNetworkStatusAsync();
+                // Get the selected item
+                ListViewItem selectedItem = listViewBlocksByPool.SelectedItems[0];
+                if (selectedItem != null)
+                {
+                    string submittedBlockNumber = selectedItem.SubItems[0].Text;
+                    numericUpDownSubmittedBlockNumber.Invoke((MethodInvoker)delegate
+                    {
+                        numericUpDownSubmittedBlockNumber.Text = submittedBlockNumber; // copy block number to block screen
+                    });
+                    LookupBlockAsync();
+                    //show the block screen
+                    BtnMenuBlock_ClickAsync(sender, e);
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "BtnViewBlockFromBlockList_Click");
+            }
+        }
+
+        private void ListViewBlocksByPool_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        {
+            e.Cancel = true;
+            e.NewWidth = listViewBlocksByPool.Columns[e.ColumnIndex].Width;
+        }
+
+        #endregion
         #endregion
 
         #region ⚡CHARTS SCREEN⚡
@@ -24524,7 +24737,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listListViewBackgroundsToColor = { panel127, panel28, panel133, panel134, panel128, panel157, panel147, panelUTXOsContainer, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panelUTXOError, panel137, panel120, panel122, panel124, panel125, panel27, panelTransactionOutputs, panelTransactionInputs, panel102, listViewBlockList, listViewTransactionInputs, listViewTransactionOutputs, listViewXpubAddresses, listViewBookmarks, listViewAddressTransactions, listViewAddressUTXOs, listViewPoolsByBlock, listViewPoolsHashrate, listViewBlockTransactions, panel66, panel24, panel25, panelXpubScrollbar, panel33, panel101, panelXpubContainer, panel149, panel30, panel148, panelPoolsListContainer, panelBlocksByPoolContainer, listViewPoolsList, listViewBlocksByPool };
+                Control[] listListViewBackgroundsToColor = { panel127, panel28, panel133, panel134, panel128, panel157, panel147, panelUTXOsContainer, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panelUTXOError, panel137, panel120, panel122, panel124, panel125, panel27, panelTransactionOutputs, panelTransactionInputs, panel102, listViewBlockList, listViewTransactionInputs, listViewTransactionOutputs, listViewXpubAddresses, listViewBookmarks, listViewAddressTransactions, listViewAddressUTXOs, listViewPoolsByBlock, listViewPoolsHashrate, listViewBlockTransactions, panel66, panel24, panel25, panelXpubScrollbar, panel33, panel101, panelXpubContainer, panel149, panel30, panel148, panelPoolsListContainer, panelBlocksByPoolContainer, listViewPoolsList, listViewBlocksByPool, panel157 };
                 foreach (Control control in listListViewBackgroundsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -29578,6 +29791,7 @@ namespace SATSuma
                 HideAllScreens();
                 SetupPoolScreen();
                 panelMiningPools.Visible = true;
+                panelMiningPools.Invalidate();
                 CheckNetworkStatusAsync();
                 if (!fullScreenLoadingScreenVisible && loadingScreen != null)
                 {
@@ -32748,52 +32962,5 @@ namespace SATSuma
         #endregion
 
         #endregion
-
-        private void ListViewBlocksByPool_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
-        {
-            try
-            {
-                var text = e.SubItem.Text;
-
-
-                var font = listViewBlocksByPool.Font;
-                var columnWidth = e.Header.Width;
-                var textWidth = TextRenderer.MeasureText(text, font).Width;
-                if (textWidth > columnWidth)
-                {
-                    // Truncate the text
-                    var maxText = $"{text.Substring(0, text.Length * columnWidth / textWidth - 3)}...";
-                    var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
-                    if (e.Item.Selected)
-                    {
-                        e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
-                    }
-                    else
-                    {
-                        e.Graphics.FillRectangle(new SolidBrush(listViewBlocksByPool.BackColor), bounds);
-                    }
-                    TextRenderer.DrawText(e.Graphics, maxText, font, bounds, e.Item.ForeColor, TextFormatFlags.EndEllipsis | TextFormatFlags.Left);
-                }
-                else if (textWidth < columnWidth)
-                {
-                    var bounds = new Rectangle(e.SubItem.Bounds.Left, e.SubItem.Bounds.Top, columnWidth, e.SubItem.Bounds.Height);
-
-                    if (e.Item.Selected)
-                    {
-                        e.Graphics.FillRectangle(new SolidBrush(subItemBackColor), bounds);
-                    }
-                    else
-                    {
-                        e.Graphics.FillRectangle(new SolidBrush(listViewBlocksByPool.BackColor), bounds);
-                    }
-
-                    TextRenderer.DrawText(e.Graphics, text, font, bounds, e.SubItem.ForeColor, TextFormatFlags.Left);
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "listViewBlocksByPool_DrawSubItem");
-            }
-        }
     }
 }

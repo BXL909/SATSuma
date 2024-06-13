@@ -19180,6 +19180,7 @@
             this.toolTipGeneralUse.SetToolTip(this.btnViewPoolFromMiningBlocks, "view transaction");
             this.btnViewPoolFromMiningBlocks.UseVisualStyleBackColor = false;
             this.btnViewPoolFromMiningBlocks.Visible = false;
+            this.btnViewPoolFromMiningBlocks.Click += new System.EventHandler(this.BtnViewPoolFromMiningBlocks_Click);
             // 
             // btnPoolsBlocks3y
             // 
@@ -19559,6 +19560,7 @@
             this.toolTipGeneralUse.SetToolTip(this.btnViewPoolFromPoolsHashrate, "view transaction");
             this.btnViewPoolFromPoolsHashrate.UseVisualStyleBackColor = false;
             this.btnViewPoolFromPoolsHashrate.Visible = false;
+            this.btnViewPoolFromPoolsHashrate.Click += new System.EventHandler(this.BtnViewPoolFromPoolsHashrate_Click);
             // 
             // btnPoolsHashrate6m
             // 
@@ -19728,12 +19730,13 @@
             this.btnViewBlockFromBlocksByPool.Size = new System.Drawing.Size(60, 15);
             this.btnViewBlockFromBlocksByPool.TabIndex = 281;
             this.btnViewBlockFromBlocksByPool.TabStop = false;
-            this.btnViewBlockFromBlocksByPool.Text = "pool ▶";
+            this.btnViewBlockFromBlocksByPool.Text = "block ▶";
             this.btnViewBlockFromBlocksByPool.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnViewBlockFromBlocksByPool.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnViewBlockFromBlocksByPool, "view transaction");
             this.btnViewBlockFromBlocksByPool.UseVisualStyleBackColor = false;
             this.btnViewBlockFromBlocksByPool.Visible = false;
+            this.btnViewBlockFromBlocksByPool.Click += new System.EventHandler(this.BtnViewBlockFromBlocksByPool_Click);
             // 
             // timer50thSec
             // 
@@ -20718,9 +20721,9 @@
             // panelMiningPools
             // 
             this.panelMiningPools.BackColor = System.Drawing.Color.Transparent;
+            this.panelMiningPools.Controls.Add(this.panel157);
             this.panelMiningPools.Controls.Add(this.panel159);
             this.panelMiningPools.Controls.Add(this.panelBlocksByPoolContainer);
-            this.panelMiningPools.Controls.Add(this.panel157);
             this.panelMiningPools.Controls.Add(this.panel149);
             this.panelMiningPools.Controls.Add(this.panel155);
             this.panelMiningPools.Controls.Add(this.panelPoolsListContainer);
@@ -20780,7 +20783,7 @@
             this.listViewBlocksByPool.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewBlocksByPool.HideSelection = false;
             this.listViewBlocksByPool.LabelWrap = false;
-            this.listViewBlocksByPool.Location = new System.Drawing.Point(39, 0);
+            this.listViewBlocksByPool.Location = new System.Drawing.Point(45, 0);
             this.listViewBlocksByPool.Margin = new System.Windows.Forms.Padding(0);
             this.listViewBlocksByPool.MultiSelect = false;
             this.listViewBlocksByPool.Name = "listViewBlocksByPool";
@@ -20792,8 +20795,10 @@
             this.listViewBlocksByPool.TabStop = false;
             this.listViewBlocksByPool.UseCompatibleStateImageBehavior = false;
             this.listViewBlocksByPool.View = System.Windows.Forms.View.Details;
+            this.listViewBlocksByPool.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.ListViewBlocksByPool_ColumnWidthChanging);
             this.listViewBlocksByPool.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.AllListViews_DrawColumnHeader);
             this.listViewBlocksByPool.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.ListViewBlocksByPool_DrawSubItem);
+            this.listViewBlocksByPool.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.ListViewBlocksByPool_ItemSelectionChanged);
             // 
             // panel162
             // 
@@ -20979,9 +20984,9 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
-            this.Controls.Add(this.panelMiningPools);
             this.Controls.Add(this.panelMiningHashrate);
             this.Controls.Add(this.panelMiningBlocks);
+            this.Controls.Add(this.panelMiningPools);
             this.Controls.Add(this.panelChartsForPoolsScreen);
             this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelAddressUTXO);

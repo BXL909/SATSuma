@@ -1203,7 +1203,6 @@
             this.label322 = new System.Windows.Forms.Label();
             this.label321 = new System.Windows.Forms.Label();
             this.lblMiningPoolPool = new System.Windows.Forms.Label();
-            this.lblMiningPoolLink = new System.Windows.Forms.Label();
             this.lblMiningPoolHashrate = new System.Windows.Forms.Label();
             this.lblMiningPoolBlocks24h = new System.Windows.Forms.Label();
             this.lblMiningPoolBlocks1w = new System.Windows.Forms.Label();
@@ -1340,6 +1339,7 @@
             this.panel155 = new System.Windows.Forms.Panel();
             this.label228 = new System.Windows.Forms.Label();
             this.PoolsListScrollTimer = new System.Windows.Forms.Timer(this.components);
+            this.lblMiningPoolLink = new System.Windows.Forms.LinkLabel();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel109.SuspendLayout();
             this.panel12.SuspendLayout();
@@ -11342,7 +11342,9 @@
             "chart - price",
             "chart - market cap.",
             "btc/fiat converter",
-            "dca calculator"});
+            "dca calculator",
+            "mining pools",
+            "pool rankings"});
             this.comboBoxStartupScreen.ListBackColor = System.Drawing.Color.Black;
             this.comboBoxStartupScreen.ListTextColor = System.Drawing.Color.DimGray;
             this.comboBoxStartupScreen.Location = new System.Drawing.Point(6, 0);
@@ -17818,7 +17820,7 @@
             this.btnMenuPoolsByBlocks.Size = new System.Drawing.Size(122, 18);
             this.btnMenuPoolsByBlocks.TabIndex = 288;
             this.btnMenuPoolsByBlocks.TabStop = false;
-            this.btnMenuPoolsByBlocks.Text = "   pool performance";
+            this.btnMenuPoolsByBlocks.Text = "   pool rankings";
             this.btnMenuPoolsByBlocks.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnMenuPoolsByBlocks.UseVisualStyleBackColor = false;
             this.btnMenuPoolsByBlocks.Click += new System.EventHandler(this.BtnMenuPoolsByBlocks_ClickAsync);
@@ -19038,7 +19040,7 @@
             this.lblPoolsBlockCount.Size = new System.Drawing.Size(55, 17);
             this.lblPoolsBlockCount.TabIndex = 154;
             this.lblPoolsBlockCount.Text = "no data";
-            this.toolTipForLblHeaderPrice.SetToolTip(this.lblPoolsBlockCount, "Number of transactions in the \r\nXXmost recently mined block");
+            this.toolTipForLblHeaderPrice.SetToolTip(this.lblPoolsBlockCount, "Number of blocks mined in \r\nXXthe selected time period");
             // 
             // label327
             // 
@@ -19052,7 +19054,7 @@
             this.label327.Size = new System.Drawing.Size(102, 17);
             this.label327.TabIndex = 334;
             this.label327.Text = "Block share - 1w";
-            this.toolTipForLblHeaderPrice.SetToolTip(this.label327, "Number of transactions in the most recently mined block");
+            this.toolTipGeneralUse.SetToolTip(this.label327, "Pool\'s share of blocks \r\nXXmined in last week");
             // 
             // label328
             // 
@@ -19066,7 +19068,7 @@
             this.label328.Size = new System.Drawing.Size(106, 17);
             this.label328.TabIndex = 333;
             this.label328.Text = "Block share - 24h";
-            this.toolTipForLblHeaderPrice.SetToolTip(this.label328, "Number of transactions in the most recently mined block");
+            this.toolTipGeneralUse.SetToolTip(this.label328, "Pool\'s share of blocks \r\nXXmined in last 24 hours\r\n");
             // 
             // label329
             // 
@@ -19080,7 +19082,7 @@
             this.label329.Size = new System.Drawing.Size(99, 17);
             this.label329.TabIndex = 332;
             this.label329.Text = "Block share - all";
-            this.toolTipForLblHeaderPrice.SetToolTip(this.label329, "Number of transactions in the most recently mined block");
+            this.toolTipGeneralUse.SetToolTip(this.label329, "Pool\'s share of \r\nXXall blocks mined");
             // 
             // label324
             // 
@@ -19094,7 +19096,7 @@
             this.label324.Size = new System.Drawing.Size(72, 17);
             this.label324.TabIndex = 331;
             this.label324.Text = "Blocks - 1w";
-            this.toolTipForLblHeaderPrice.SetToolTip(this.label324, "Number of transactions in the most recently mined block");
+            this.toolTipGeneralUse.SetToolTip(this.label324, "Blocks mined by pool in last week");
             // 
             // label325
             // 
@@ -19108,7 +19110,7 @@
             this.label325.Size = new System.Drawing.Size(76, 17);
             this.label325.TabIndex = 330;
             this.label325.Text = "Blocks - 24h";
-            this.toolTipForLblHeaderPrice.SetToolTip(this.label325, "Number of transactions in the most recently mined block");
+            this.toolTipGeneralUse.SetToolTip(this.label325, "Blocks mined by pool in last 24 hours");
             // 
             // label326
             // 
@@ -19122,7 +19124,7 @@
             this.label326.Size = new System.Drawing.Size(69, 17);
             this.label326.TabIndex = 329;
             this.label326.Text = "Blocks - all";
-            this.toolTipForLblHeaderPrice.SetToolTip(this.label326, "Number of transactions in the most recently mined block");
+            this.toolTipGeneralUse.SetToolTip(this.label326, "Total blocks mined by pool");
             // 
             // label323
             // 
@@ -19136,7 +19138,7 @@
             this.label323.Size = new System.Drawing.Size(30, 17);
             this.label323.TabIndex = 328;
             this.label323.Text = "Link";
-            this.toolTipForLblHeaderPrice.SetToolTip(this.label323, "Number of transactions in the most recently mined block");
+            this.toolTipForLblHeaderPrice.SetToolTip(this.label323, "link to mining pool\'s website");
             // 
             // label322
             // 
@@ -19150,7 +19152,7 @@
             this.label322.Size = new System.Drawing.Size(82, 17);
             this.label322.TabIndex = 327;
             this.label322.Text = "Est. hashrate";
-            this.toolTipForLblHeaderPrice.SetToolTip(this.label322, "Number of transactions in the most recently mined block");
+            this.toolTipGeneralUse.SetToolTip(this.label322, "Current estimated hashrate of this pool");
             // 
             // label321
             // 
@@ -19164,7 +19166,7 @@
             this.label321.Size = new System.Drawing.Size(34, 17);
             this.label321.TabIndex = 326;
             this.label321.Text = "Pool";
-            this.toolTipForLblHeaderPrice.SetToolTip(this.label321, "Number of transactions in the most recently mined block");
+            this.toolTipGeneralUse.SetToolTip(this.label321, "Pool name");
             // 
             // lblMiningPoolPool
             // 
@@ -19178,21 +19180,7 @@
             this.lblMiningPoolPool.Size = new System.Drawing.Size(55, 17);
             this.lblMiningPoolPool.TabIndex = 335;
             this.lblMiningPoolPool.Text = "no data";
-            this.toolTipForLblHeaderPrice.SetToolTip(this.lblMiningPoolPool, "Number of transactions in the \r\nXXmost recently mined block");
-            // 
-            // lblMiningPoolLink
-            // 
-            this.lblMiningPoolLink.AutoSize = true;
-            this.lblMiningPoolLink.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblMiningPoolLink.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMiningPoolLink.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.lblMiningPoolLink.Location = new System.Drawing.Point(210, 46);
-            this.lblMiningPoolLink.Margin = new System.Windows.Forms.Padding(0);
-            this.lblMiningPoolLink.Name = "lblMiningPoolLink";
-            this.lblMiningPoolLink.Size = new System.Drawing.Size(55, 17);
-            this.lblMiningPoolLink.TabIndex = 336;
-            this.lblMiningPoolLink.Text = "no data";
-            this.toolTipForLblHeaderPrice.SetToolTip(this.lblMiningPoolLink, "Number of transactions in the \r\nXXmost recently mined block");
+            this.toolTipGeneralUse.SetToolTip(this.lblMiningPoolPool, "Pool name");
             // 
             // lblMiningPoolHashrate
             // 
@@ -19206,7 +19194,7 @@
             this.lblMiningPoolHashrate.Size = new System.Drawing.Size(55, 17);
             this.lblMiningPoolHashrate.TabIndex = 337;
             this.lblMiningPoolHashrate.Text = "no data";
-            this.toolTipForLblHeaderPrice.SetToolTip(this.lblMiningPoolHashrate, "Number of transactions in the \r\nXXmost recently mined block");
+            this.toolTipGeneralUse.SetToolTip(this.lblMiningPoolHashrate, "Current estimated hashrate of this pool");
             // 
             // lblMiningPoolBlocks24h
             // 
@@ -19220,7 +19208,7 @@
             this.lblMiningPoolBlocks24h.Size = new System.Drawing.Size(55, 17);
             this.lblMiningPoolBlocks24h.TabIndex = 340;
             this.lblMiningPoolBlocks24h.Text = "no data";
-            this.toolTipForLblHeaderPrice.SetToolTip(this.lblMiningPoolBlocks24h, "Number of transactions in the \r\nXXmost recently mined block");
+            this.toolTipGeneralUse.SetToolTip(this.lblMiningPoolBlocks24h, "Blocks mined by pool in last 24 hours");
             // 
             // lblMiningPoolBlocks1w
             // 
@@ -19234,7 +19222,7 @@
             this.lblMiningPoolBlocks1w.Size = new System.Drawing.Size(55, 17);
             this.lblMiningPoolBlocks1w.TabIndex = 339;
             this.lblMiningPoolBlocks1w.Text = "no data";
-            this.toolTipForLblHeaderPrice.SetToolTip(this.lblMiningPoolBlocks1w, "Number of transactions in the \r\nXXmost recently mined block");
+            this.toolTipGeneralUse.SetToolTip(this.lblMiningPoolBlocks1w, "Blocks mined by pool in last week");
             // 
             // lblMiningPoolBlocksAll
             // 
@@ -19248,7 +19236,7 @@
             this.lblMiningPoolBlocksAll.Size = new System.Drawing.Size(55, 17);
             this.lblMiningPoolBlocksAll.TabIndex = 338;
             this.lblMiningPoolBlocksAll.Text = "no data";
-            this.toolTipForLblHeaderPrice.SetToolTip(this.lblMiningPoolBlocksAll, "Number of transactions in the \r\nXXmost recently mined block");
+            this.toolTipGeneralUse.SetToolTip(this.lblMiningPoolBlocksAll, "Total blocks mined by pool");
             // 
             // lblMiningPoolBlockShare24h
             // 
@@ -19262,7 +19250,7 @@
             this.lblMiningPoolBlockShare24h.Size = new System.Drawing.Size(55, 17);
             this.lblMiningPoolBlockShare24h.TabIndex = 343;
             this.lblMiningPoolBlockShare24h.Text = "no data";
-            this.toolTipForLblHeaderPrice.SetToolTip(this.lblMiningPoolBlockShare24h, "Number of transactions in the \r\nXXmost recently mined block");
+            this.toolTipGeneralUse.SetToolTip(this.lblMiningPoolBlockShare24h, "Pool\'s share of blocks \r\nXXmined in last 24 hours\r\n");
             // 
             // lblMiningPoolBlockShare1w
             // 
@@ -19276,7 +19264,7 @@
             this.lblMiningPoolBlockShare1w.Size = new System.Drawing.Size(55, 17);
             this.lblMiningPoolBlockShare1w.TabIndex = 342;
             this.lblMiningPoolBlockShare1w.Text = "no data";
-            this.toolTipForLblHeaderPrice.SetToolTip(this.lblMiningPoolBlockShare1w, "Number of transactions in the \r\nXXmost recently mined block");
+            this.toolTipGeneralUse.SetToolTip(this.lblMiningPoolBlockShare1w, "Pool\'s share of blocks \r\nXXmined in last week");
             // 
             // lblMiningPoolBlockShareAll
             // 
@@ -19290,7 +19278,7 @@
             this.lblMiningPoolBlockShareAll.Size = new System.Drawing.Size(55, 17);
             this.lblMiningPoolBlockShareAll.TabIndex = 341;
             this.lblMiningPoolBlockShareAll.Text = "no data";
-            this.toolTipForLblHeaderPrice.SetToolTip(this.lblMiningPoolBlockShareAll, "Number of transactions in the \r\nXXmost recently mined block");
+            this.toolTipGeneralUse.SetToolTip(this.lblMiningPoolBlockShareAll, "Pool\'s share of \r\nXXall blocks mined");
             // 
             // toolTipGeneralUse
             // 
@@ -21019,6 +21007,7 @@
             // panelMiningPools
             // 
             this.panelMiningPools.BackColor = System.Drawing.Color.Transparent;
+            this.panelMiningPools.Controls.Add(this.lblMiningPoolLink);
             this.panelMiningPools.Controls.Add(this.lblMiningPoolBlockShare24h);
             this.panelMiningPools.Controls.Add(this.lblMiningPoolBlockShare1w);
             this.panelMiningPools.Controls.Add(this.lblMiningPoolBlockShareAll);
@@ -21026,7 +21015,6 @@
             this.panelMiningPools.Controls.Add(this.lblMiningPoolBlocks1w);
             this.panelMiningPools.Controls.Add(this.lblMiningPoolBlocksAll);
             this.panelMiningPools.Controls.Add(this.lblMiningPoolHashrate);
-            this.panelMiningPools.Controls.Add(this.lblMiningPoolLink);
             this.panelMiningPools.Controls.Add(this.lblMiningPoolPool);
             this.panelMiningPools.Controls.Add(this.label327);
             this.panelMiningPools.Controls.Add(this.label328);
@@ -21378,6 +21366,21 @@
             this.PoolsListScrollTimer.Interval = 50;
             this.PoolsListScrollTimer.Tick += new System.EventHandler(this.PoolsListScrollTimer_Tick);
             // 
+            // lblMiningPoolLink
+            // 
+            this.lblMiningPoolLink.AutoSize = true;
+            this.lblMiningPoolLink.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMiningPoolLink.LinkBehavior = System.Windows.Forms.LinkBehavior.AlwaysUnderline;
+            this.lblMiningPoolLink.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.lblMiningPoolLink.Location = new System.Drawing.Point(210, 46);
+            this.lblMiningPoolLink.Name = "lblMiningPoolLink";
+            this.lblMiningPoolLink.Size = new System.Drawing.Size(67, 17);
+            this.lblMiningPoolLink.TabIndex = 344;
+            this.lblMiningPoolLink.TabStop = true;
+            this.lblMiningPoolLink.Text = "linkLabel1";
+            this.toolTipForLblHeaderPrice.SetToolTip(this.lblMiningPoolLink, "link to mining pool\'s website");
+            this.lblMiningPoolLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblMiningPoolLink_LinkClicked);
+            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(5F, 12F);
@@ -21387,17 +21390,18 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
-            this.Controls.Add(this.panelBlockList);
-            this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelMiningPools);
+            this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelMiningHashrate);
             this.Controls.Add(this.panelMiningBlocks);
+            this.Controls.Add(this.panelAddressUTXO);
+            this.Controls.Add(this.panelSettings);
+            this.Controls.Add(this.panelBlockList);
+            this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelChartsForPoolsScreen);
             this.Controls.Add(this.panelCharts);
-            this.Controls.Add(this.panelAddressUTXO);
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelBookmarks);
-            this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelDirectory);
             this.Controls.Add(this.panelPriceConverter);
@@ -21405,7 +21409,6 @@
             this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelAddress);
-            this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelPriceSourceIndicators);
             this.Controls.Add(this.progressBarRefreshData);
             this.Controls.Add(this.lblHeaderPriceChange);
@@ -23147,10 +23150,10 @@
         private System.Windows.Forms.Label lblMiningPoolBlocks1w;
         private System.Windows.Forms.Label lblMiningPoolBlocksAll;
         private System.Windows.Forms.Label lblMiningPoolHashrate;
-        private System.Windows.Forms.Label lblMiningPoolLink;
         private System.Windows.Forms.Label lblMiningPoolPool;
         private CustomControls.RJControls.RJButton btnViewPoolFromBlockScreen;
         private CustomControls.RJControls.RJButton btnViewPoolFromBlockList;
+        private System.Windows.Forms.LinkLabel lblMiningPoolLink;
     }
 }
 

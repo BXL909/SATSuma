@@ -26,7 +26,6 @@ https://satsuma.btcdir.org/download/
 
 * Stuff to do:
 * Taproot support on xpub screen 
-* pools screens need to be added to default start screen options
 * documentation for new pools screens
 * testing, particularly new pools screens and pools screens on own node
 */
@@ -625,7 +624,9 @@ namespace SATSuma
                     { "chart - price", () => { BtnMenuCharts_ClickAsync(sender, e); ChartPrice(); } },
                     { "chart - market cap.", () => { BtnMenuCharts_ClickAsync(sender, e); ChartMarketCap(); } },
                     { "btc/fiat converter", () => BtnMenuPriceConverter_ClickAsync(sender, e)},
-                    { "dca calculator", () => BtnMenuDCACalculator_ClickAsync(sender, e) }
+                    { "dca calculator", () => BtnMenuDCACalculator_ClickAsync(sender, e) },
+                    { "mining pools", () => BtnMenuMiningPools_ClickAsync(sender, e) },
+                    { "pool rankings", () => BtnMenuPoolsByBlocks_ClickAsync(sender, e) }
                 };
                 if (buttonClickEvents.TryGetValue(comboBoxStartupScreen.Texts, out Action buttonClickEvent))
                 {
@@ -10835,7 +10836,7 @@ namespace SATSuma
 
         #endregion
 
-        #region ⚡ charts for pools performance screen ⚡
+        #region ⚡ charts for pools (block and hashrate) screens ⚡
         private async void ChartsHashrateForPoolsScreen(string timeperiod)
         {
             try
@@ -11410,6 +11411,8 @@ namespace SATSuma
                 GetTenRecentBlocksFromPool(slug);
                 ChartsHashrateForPoolScreen(slug);
                 panel157.Invalidate();
+                panel160.Invalidate();
+                panelPoolsListContainer.Invalidate();
             }
             catch (Exception ex)
             {
@@ -11462,6 +11465,13 @@ namespace SATSuma
             }
         }
 
+        #endregion
+
+        #region link to pool website
+        private void lblMiningPoolLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(lblMiningPoolLink.Text);
+        }
         #endregion
 
         #region get some pool stats
@@ -11733,7 +11743,6 @@ namespace SATSuma
         }
 
         #endregion
-        #endregion
 
         #region ⚡ HASHRATE CHART FOR POOL SCREEN ⚡
 
@@ -11741,7 +11750,7 @@ namespace SATSuma
         {
             try
             {
-                
+
                 // clear any previous graph
                 formsPlotPoolHashrate.Plot.Clear();
                 //                formsPlot1.Plot.Title($"Hashrate (exahash per second) - time period: {chartPeriod}", size: (int)(13 * UIScale), bold: false);
@@ -11751,10 +11760,10 @@ namespace SATSuma
                 var HashrateJson = await _poolHashrateService.GetPoolHashrateAsync(slug).ConfigureAwait(true);
                 if (!string.IsNullOrEmpty(HashrateJson))
                 {
-                   // JObject jsonObj = JObject.Parse(HashrateJson);
+                    // JObject jsonObj = JObject.Parse(HashrateJson);
 
                     //split the data into two lists
-                   // List<PoolHashrateSnapshot> hashratesList = JsonConvert.DeserializeObject<List<PoolHashrateSnapshot>>(jsonObj["hashrates"].ToString());
+                    // List<PoolHashrateSnapshot> hashratesList = JsonConvert.DeserializeObject<List<PoolHashrateSnapshot>>(jsonObj["hashrates"].ToString());
                     List<PoolHashrateSnapshot> hashratesList = JsonConvert.DeserializeObject<List<PoolHashrateSnapshot>>(HashrateJson);
 
 
@@ -11813,6 +11822,7 @@ namespace SATSuma
                 HandleException(ex, "Generating pool hashrate chart");
             }
         }
+        #endregion
         #endregion
 
         #region ⚡CHARTS SCREEN⚡
@@ -19134,7 +19144,9 @@ namespace SATSuma
                 { 24, "chtprice--" },
                 { 25, "chtmrktcap" },
                 { 26, "btcconvert" },
-                { 27, "dcacalcrtr" }
+                { 27, "dcacalcrtr" },
+                { 28, "miningpool" },
+                { 29, "poolrankng" }
             };
 
             if (screenMap.ContainsKey(comboBoxStartupScreen.SelectedIndex))
@@ -19382,7 +19394,9 @@ namespace SATSuma
                     { "chtprice--", "chart - price" },
                     { "chtmrktcap", "chart - market cap." },
                     { "btcconvert", "btc/fiat converter" },
-                    { "dcacalcrtr", "dca calculator" }
+                    { "dcacalcrtr", "dca calculator" },
+                    { "miningpool", "mining pools" },
+                    { "poolrankng", "pool rankings" }
 
                 };
 
@@ -23737,7 +23751,7 @@ namespace SATSuma
                 #region rounded panels
                 Control[] panelsToInvalidate = { panelXpubContainer, panelXpubScrollbar, panel92, panel32, panel74, panel76, panel77, panel99, panel84, panel88, panel89, panel90, panel86, panel87, panel103, panel46, panel51, panel91, panel70, panel71, panel16, panel21, panel85, panel53, panel96, panel106, panel107, panelAddToBookmarks,
                     panelAddToBookmarksBorder, panelOwnNodeAddressTXInfo, panelOwnNodeBlockTXInfo, panelTransactionMiddle, panelErrorMessage, panelDCAMessages, panelDCASummary, panelDCAInputs, panel119, panelPriceConvert, panelDCAChartContainer, panel117, panel120, panel121, panel122, panel123,
-                    panel124, panel125, panel101, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panel134, panelBookmarksContainer, panel33, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panel128, panel147, panel80, panel153, panel157, panelPoolsListContainer, panelBlocksByPoolContainer, panel158 };
+                    panel124, panel125, panel101, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panel134, panelBookmarksContainer, panel33, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panel128, panel147, panel80, panel153, panel157, panelPoolsListContainer, panelBlocksByPoolContainer, panel158, panel160 };
                 foreach (Control control in panelsToInvalidate)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24219,6 +24233,10 @@ namespace SATSuma
                         control.ForeColor = thisColor;
                     });
                 }
+                lblMiningPoolLink.Invoke((MethodInvoker)delegate
+                {
+                    lblMiningPoolLink.LinkColor = thisColor;
+                });
                 //mining pools - blocks
                 lblPoolsBlockCount.Invoke((MethodInvoker)delegate
                 {
@@ -27454,6 +27472,11 @@ namespace SATSuma
                     panel157.Visible = false;
                     panel157.Visible = true;
                 }
+                if (panel160.Visible)
+                {
+                    panel160.Visible = false;
+                    panel160.Visible = true;
+                }
                 #endregion
             }
             catch (Exception ex)
@@ -27670,14 +27693,14 @@ namespace SATSuma
                     {
                         lblNowViewing.Invoke((MethodInvoker)delegate
                         {
-                            lblNowViewing.Text = "Mining pools";
+                            lblNowViewing.Text = "Mining pools ranked by blocks mined";
                         });
                     }
                     if (panelMiningHashrate.Visible)
                     {
                         lblNowViewing.Invoke((MethodInvoker)delegate
                         {
-                            lblNowViewing.Text = "Mining pools";
+                            lblNowViewing.Text = "Mining pools ranked by estimated hashrate";
                         });
                     }
                     if (panelSettings.Visible)

@@ -27,6 +27,8 @@ https://satsuma.btcdir.org/download/
 * Stuff to do:
 * Taproot support on xpub screen 
 * documentation for new pools screens
+* tidy listviews on tx screen
+* tidy code in new screens
 * testing, particularly new pools screens and pools screens on own node
 */
 
@@ -461,7 +463,8 @@ namespace SATSuma
             #region rounded panels
             Control[] panelsToRound = { panelXpubContainer, panelXpubScrollbar, panel32, panel74, panel76, panel77, panel99, panel84, panel88, panel89, panel90, panel86, panel87, panel103, panel46, panel51, panel91, panel70, panel71, panel16, panel21, panel85, panel53, panel96, panel106, panel107, panel92, panelAddToBookmarks, panelAddToBookmarksBorder,
                 panelLeftPanel, panelOwnNodeAddressTXInfo, panelOwnNodeBlockTXInfo, panelTransactionMiddle, panelErrorMessage, panelSettingsUIScale, panelSettingsUIScaleContainer, panelDCAMessages, panelDCASummary, panelDCAInputs, panel119, panelPriceConvert, panelDCAChartContainer, panel117, panel120, panel121,
-                panel122, panel123, panel124, panel125, panel101, panel27, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panel134, panelBookmarksContainer, panel33, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panel128, panel147, panel80, panel153, panel157, panelPoolsListContainer, panelBlocksByPoolContainer, panel158 };
+                panel122, panel123, panel124, panel101, panel27, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panel134, panelBookmarksContainer, panel33, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panel128, panel147, panel80, panel153, panel157, panelPoolsListContainer, panelBlocksByPoolContainer, panel158,
+                panelTransactionInputs, panelTransactionOutputs, panel24, panel25 };
             foreach (Control control in panelsToRound)
             {
                 control.Paint += Panel_Paint;
@@ -478,7 +481,7 @@ namespace SATSuma
             #endregion
             #region panels (heading containers)
             Control[] panelHeadingContainersToRound = { panel1, panel2, panel3, panel4, panel5, panel6, panel7, panel8, panel9, panel10, panel11, panel12, panel20, panel23, panel26, panel29, panel31, panel38, panel39, panel40, panel41, panel42, panel43, panel44, panel45, panel57, panel78,
-                panel94, panel105, panel109, panelLoadingAnimationContainer, panel141, panel136, panel139, panel138, panel145, panel81, panel146, panel152, panel154, panel155, panel159, panel164, panel156 };
+                panel94, panel109, panelLoadingAnimationContainer, panel141, panel136, panel139, panel138, panel145, panel81, panel146, panel152, panel154, panel155, panel159, panel164, panel156 };
             foreach (Control control in panelHeadingContainersToRound)
             {
                 control.Paint += Panel_Paint;
@@ -4713,7 +4716,6 @@ namespace SATSuma
                     lblBlockBlockHeight.Invoke((MethodInvoker)delegate
                     {
                         lblBlockBlockHeight.Text = $"BLOCK {numericUpDownSubmittedBlockNumber.Text}";
-                        lblBlockBlockHeight.Location = new Point((panel105.Width / 2) - (lblBlockBlockHeight.Width / 2), lblBlockBlockHeight.Location.Y);
                     });
 
                     var blockNumber = Convert.ToString(numericUpDownSubmittedBlockNumber.Text);
@@ -5459,7 +5461,7 @@ namespace SATSuma
                     }
                     else
                     {
-                        Control[] controlsToHide = { panelTransactionHeadline, panelTransactionDiagram, panel24, panel25, panel102, panelTransactionOutputs, panelTransactionInputs, btnTransactionInputsUp, btnTransactionInputDown, btnTransactionOutputsUp, btnTransactionOutputsDown, listViewTransactionInputs, listViewTransactionOutputs, btnViewAddressFromTXInput, btnViewAddressFromTXOutput, label107, label102, panel125 };
+                        Control[] controlsToHide = { panelTransactionHeadline, panelTransactionDiagram, panel24, panel25, panelTransactionOutputs, panelTransactionInputs, btnTransactionInputsUp, btnTransactionInputDown, btnTransactionOutputsUp, btnTransactionOutputsDown, listViewTransactionInputs, listViewTransactionOutputs, btnViewAddressFromTXInput, btnViewAddressFromTXOutput, label107, label102 };
                         foreach (Control control in controlsToHide)
                         {
                             control.Invoke((MethodInvoker)delegate
@@ -5476,7 +5478,7 @@ namespace SATSuma
                 }
                 else
                 {
-                    Control[] controlsToHide = { panelTransactionHeadline, panelTransactionDiagram, panel24, panel25, panel102, panelTransactionOutputs, panelTransactionInputs, btnTransactionInputsUp, btnTransactionInputDown, btnTransactionOutputsUp, btnTransactionOutputsDown, listViewTransactionInputs, listViewTransactionOutputs, btnViewAddressFromTXInput, btnViewAddressFromTXOutput, label107, label102, panel125 };
+                    Control[] controlsToHide = { panelTransactionHeadline, panelTransactionDiagram, panel24, panel25, panelTransactionOutputs, panelTransactionInputs, btnTransactionInputsUp, btnTransactionInputDown, btnTransactionOutputsUp, btnTransactionOutputsDown, listViewTransactionInputs, listViewTransactionOutputs, btnViewAddressFromTXInput, btnViewAddressFromTXOutput, label107, label102 };
                     foreach (Control control in controlsToHide)
                     {
                         control.Invoke((MethodInvoker)delegate
@@ -5898,7 +5900,7 @@ namespace SATSuma
                         // If not, add the column header
                         listViewTransactionInputs.Invoke((MethodInvoker)delegate
                         {
-                            listViewTransactionInputs.Columns.Add(" Address", (int)(205 * UIScale));
+                            listViewTransactionInputs.Columns.Add(" Address", (int)(200 * UIScale));
                         });
                     }
 
@@ -5907,7 +5909,7 @@ namespace SATSuma
                         listViewTransactionInputs.Invoke((MethodInvoker)delegate
                         {
                             // If not, add the column header
-                            listViewTransactionInputs.Columns.Add("Amount", (int)(120 * UIScale));
+                            listViewTransactionInputs.Columns.Add("Amount", (int)(95 * UIScale));
                         });
                     }
 
@@ -5969,7 +5971,7 @@ namespace SATSuma
                         // If not, add the column header
                         listViewTransactionOutputs.Invoke((MethodInvoker)delegate
                         {
-                            listViewTransactionOutputs.Columns.Add(" Address", (int)(205 * UIScale));
+                            listViewTransactionOutputs.Columns.Add(" Address", (int)(200 * UIScale));
                         });
                     }
 
@@ -5978,7 +5980,7 @@ namespace SATSuma
                         listViewTransactionOutputs.Invoke((MethodInvoker)delegate
                         {
                             // If not, add the column header
-                            listViewTransactionOutputs.Columns.Add("Amount", (int)(120 * UIScale));
+                            listViewTransactionOutputs.Columns.Add("Amount", (int)(95 * UIScale));
                         });
                     }
 
@@ -6042,7 +6044,7 @@ namespace SATSuma
                 HandleException(ex, "GetTransaction");
             }
 
-            Control[] controlsToShow = { panelTransactionHeadline, panelTransactionDiagram, panel24, panel25, panel102, panelTransactionOutputs, panelTransactionInputs, btnTransactionInputsUp, btnTransactionInputDown, btnTransactionOutputsUp, btnTransactionOutputsDown, listViewTransactionInputs, listViewTransactionOutputs, btnViewAddressFromTXOutput, label107, label102, panel125 };
+            Control[] controlsToShow = { panelTransactionHeadline, panelTransactionDiagram, panel24, panel25, panelTransactionOutputs, panelTransactionInputs, btnTransactionInputsUp, btnTransactionInputDown, btnTransactionOutputsUp, btnTransactionOutputsDown, listViewTransactionInputs, listViewTransactionOutputs, btnViewAddressFromTXOutput, label107, label102 };
             foreach (Control control in controlsToShow)
             {
                 control.Invoke((MethodInvoker)delegate
@@ -9909,8 +9911,6 @@ namespace SATSuma
                     });
                     listViewPoolsByBlock.GetType().InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, listViewPoolsByBlock, new object[] { true });
 
-                    // Check if the column header already exists
-
                     listViewPoolsByBlock.Invoke((MethodInvoker)delegate
                     {
                         listViewPoolsByBlock.Columns.Add("Pool name", (int)(90 * UIScale));
@@ -9919,16 +9919,14 @@ namespace SATSuma
                         listViewPoolsByBlock.Columns.Add("Blocks %", (int)(65 * UIScale));
                         listViewPoolsByBlock.Columns.Add("Empty", (int)(45 * UIScale));
                         listViewPoolsByBlock.Columns.Add("Empty %", (int)(57 * UIScale));
-                        //listViewPoolsByBlock.Columns.Add("Link to mining pool", (int)(200 * UIScale));
                     });
 
                     // Add the items to the ListView
-                    int counter = 0; // used to count rows in list as they're added
+                    int counter = 0; 
                     decimal emptyPercent = 0;
                     decimal totalBlocksFound = Convert.ToDecimal(poolsBlocks.BlockCount);
                     foreach (var pool in poolsBlocks.Pools)
                     {
-
                         ListViewItem item = new ListViewItem(Convert.ToString(pool.Name)); // create new row
                         item.SubItems.Add(Convert.ToString(pool.Rank));
                         item.SubItems.Add(Convert.ToString(pool.BlockCount));
@@ -9937,8 +9935,7 @@ namespace SATSuma
                         item.SubItems.Add(Convert.ToString(pool.EmptyBlocks));
                         emptyPercent = (100m / Convert.ToDecimal(pool.BlockCount)) * Convert.ToDecimal(pool.EmptyBlocks);
                         item.SubItems.Add(Convert.ToString(emptyPercent.ToString("F2")) + "%");
-                        //item.SubItems.Add(Convert.ToString(pool.link));
-
+                        
                         listViewPoolsByBlock.Invoke((MethodInvoker)delegate
                         {
                             listViewPoolsByBlock.Items.Add(item); // add row
@@ -9955,10 +9952,7 @@ namespace SATSuma
                         panel140.Height = listBoxHeight;
 
                     }
-                    lblPoolsBlockCount.Invoke((MethodInvoker)delegate
-                    {
-                        lblPoolsBlockCount.Text = "(" + Convert.ToString(poolsBlocks.BlockCount) + " blocks mined)";
-                    });
+
                     if (listViewPoolsByBlock.Items.Count > 0)
                     {
                         listViewPoolsByBlock.Items[0].Selected = true;
@@ -10064,7 +10058,6 @@ namespace SATSuma
 
         private void BtnPoolsBlocksScrollUp_Click(object sender, EventArgs e)
         {
-
             try
             {
                 if (poolsBlocksScrollPosition > panelPoolsBlocksContainer.VerticalScroll.Minimum)
@@ -10326,7 +10319,6 @@ namespace SATSuma
                     }
                 }
                 btnViewPoolFromMiningBlocks.Visible = listViewPoolsByBlock.SelectedItems.Count > 0;
-                //btnViewBlockFromAddressUTXO.BringToFront();
                 lblHeaderBlockAge.Focus();
             }
             catch (Exception ex)
@@ -10401,8 +10393,6 @@ namespace SATSuma
                     {
                         listViewPoolsHashrate.Invoke((MethodInvoker)delegate
                         {
-
-                            // Clear existing columns to avoid duplicate columns issue
                             listViewPoolsHashrate.Columns.Clear();
                             listViewPoolsHashrate.Items.Clear(); // Remove any data that may be there already
                             listViewPoolsHashrate.Columns.Add("Pool name", (int)(90 * UIScale));
@@ -10426,8 +10416,6 @@ namespace SATSuma
                             {
                                 listViewPoolsHashrate.Items.Add(item); // add row
                             });
-
-
 
                             // Get the height of each item to set height of whole listview
                             int rowHeight = listViewPoolsHashrate.Margin.Vertical + listViewPoolsHashrate.Padding.Vertical + listViewPoolsHashrate.GetItemRect(0).Height;
@@ -10788,7 +10776,6 @@ namespace SATSuma
                     }
                 }
                 btnViewPoolFromPoolsHashrate.Visible = listViewPoolsHashrate.SelectedItems.Count > 0;
-                //btnViewBlockFromAddressUTXO.BringToFront();
                 lblHeaderBlockAge.Focus();
             }
             catch (Exception ex)
@@ -10856,10 +10843,8 @@ namespace SATSuma
 
                 // clear any previous graph
                 formsPlotHashrateForPoolsScreen.Plot.Clear();
-                //                formsPlot1.Plot.Title($"Hashrate (exahash per second) - time period: {chartPeriod}", size: (int)(13 * UIScale), bold: false);
-
+                
                 LightUpNodeLight();
-                // get a series of historic dates/hashrates/difficulties
                 var HashrateAndDifficultyJson = await _hashrateAndDifficultyService.GetHashrateAndDifficultyAsync(timeperiod).ConfigureAwait(true);
                 if (!string.IsNullOrEmpty(HashrateAndDifficultyJson))
                 {
@@ -10883,18 +10868,10 @@ namespace SATSuma
                     formsPlotHashrateForPoolsScreen.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
                     formsPlotHashrateForPoolsScreen.Plot.XAxis.Ticks(true);
                     formsPlotHashrateForPoolsScreen.Plot.YAxis.Label("EH/s", size: (int)(12 * UIScale), bold: false);
-                    //formsPlotHashrateForPoolsScreen.Plot.XAxis.Label("");
-
+                
                     // prevent navigating beyond the data
                     formsPlotHashrateForPoolsScreen.Plot.YAxis.SetBoundary(0, yValues.Max() * 1.05);
                     formsPlotHashrateForPoolsScreen.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
-
-                    // Add a red circle we can move around later as a highlighted point indicator
-                    //  HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
-                    //HighlightedPoint.Color = Color.Red;
-                    //HighlightedPoint.MarkerSize = (int)(10 * UIScale);
-                    //HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
-                    //HighlightedPoint.IsVisible = false;
 
                     formsPlotHashrateForPoolsScreen.Plot.XAxis.Ticks(true);
                     formsPlotHashrateForPoolsScreen.Plot.YAxis.Ticks(true);
@@ -10929,12 +10906,7 @@ namespace SATSuma
 
                 // clear any previous graph
                 formsPlotPoolRankForPoolScreen.Plot.Clear();
-                //int desiredSpacing = 98; // spacing added to title to force left-align in
-                //string spacing = new string('\u00A0', desiredSpacing);
-                //string title = $"Mining pool rankings - time period: {poolsHashrateTimePeriod}{spacing}";
-                //formsPlotPoolRankForPoolScreen.Plot.Title(title, size: (int)(13 * UIScale), color: labelColor, bold: false);
-
-
+                
                 LightUpNodeLight();
 
                 var PoolRankingDataJson = await _poolsRankingDataService.GetPoolsRankingDataAsync(timeperiod).ConfigureAwait(true);
@@ -11025,7 +10997,14 @@ namespace SATSuma
                     // Create the pie chart 
                     var pie = formsPlotPoolRankForPoolScreen.Plot.AddPie(valuesArray);
                     pie.DonutSize = .3;
-                    pie.DonutLabel = $"{totalBlockCount - 1}\r\nblocks mined\r\nperiod: {poolsHashrateTimePeriod}";
+                    if (panelMiningBlocks.Visible)
+                    {
+                        pie.DonutLabel = $"{totalBlockCount - 1}\r\nblocks mined\r\nperiod: {poolsBlocksTimePeriod}";
+                    }
+                    else
+                    {
+                        pie.DonutLabel = $"{totalBlockCount - 1}\r\nblocks mined\r\nperiod: {poolsHashrateTimePeriod}";
+                    }
                     pie.CenterFont.Color = Color.Orange;
                     pie.CenterFont.Size = (int)(7 * UIScale);
                     pie.CenterFont.Bold = false;
@@ -11092,7 +11071,6 @@ namespace SATSuma
                         });
                         listViewPoolsList.GetType().InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, listViewPoolsList, new object[] { true });
 
-                        // Check if the column header already exists
                         listViewPoolsList.Invoke((MethodInvoker)delegate
                         {
                             listViewPoolsList.Columns.Add("Mining pools", (int)(115 * UIScale));
@@ -11102,7 +11080,7 @@ namespace SATSuma
                             listViewPoolsList.Columns.Add("slug", (int)(0));
                         });
                         // Add the items to the ListView
-                        int counter = 0; // used to count rows in list as they're added
+                        int counter = 0; 
                         foreach (var pool in poolsList)
                         {
 
@@ -11331,13 +11309,11 @@ namespace SATSuma
                     if (poolsListScrollPosition - rowHeight > 0)
                     {
                         panelPoolsListContainer.VerticalScroll.Value = poolsListScrollPosition;
-                        //lblSelectedPoolMarker.Location = new Point(lblSelectedPoolMarker.Location.X, poolsListScrollPosition);
                     }
                     else
                     {
                         panelPoolsListContainer.VerticalScroll.Value = 0;
                         poolsListScrollPosition = 0;
-                        //lblSelectedPoolMarker.Location = new Point(lblSelectedPoolMarker.Location.X, 0);
                     }
                 }
             }
@@ -11468,7 +11444,7 @@ namespace SATSuma
         #endregion
 
         #region link to pool website
-        private void lblMiningPoolLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void LblMiningPoolLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start(lblMiningPoolLink.Text);
         }
@@ -11574,7 +11550,7 @@ namespace SATSuma
                     });
 
                     // Add the items to the ListView
-                    int counter = 0; // used to count rows in list as they're added
+                    int counter = 0;
                     foreach (var block in blocksByPool)
                     {
 
@@ -11610,7 +11586,6 @@ namespace SATSuma
 
                         listViewBlocksByPool.Height = listBoxHeight; // Set the height of the ListBox
                         panel163.Height = listBoxHeight;
-
                     }
 
                     if (listViewBlocksByPool.Items.Count > 0)
@@ -11631,8 +11606,6 @@ namespace SATSuma
             try
             {
                 var text = e.SubItem.Text;
-
-
                 var font = listViewBlocksByPool.Font;
                 var columnWidth = e.Header.Width;
                 var textWidth = TextRenderer.MeasureText(text, font).Width;
@@ -11753,19 +11726,12 @@ namespace SATSuma
 
                 // clear any previous graph
                 formsPlotPoolHashrate.Plot.Clear();
-                //                formsPlot1.Plot.Title($"Hashrate (exahash per second) - time period: {chartPeriod}", size: (int)(13 * UIScale), bold: false);
 
                 LightUpNodeLight();
-                // get a series of historic dates/hashrates/difficulties
                 var HashrateJson = await _poolHashrateService.GetPoolHashrateAsync(slug).ConfigureAwait(true);
                 if (!string.IsNullOrEmpty(HashrateJson))
                 {
-                    // JObject jsonObj = JObject.Parse(HashrateJson);
-
-                    //split the data into two lists
-                    // List<PoolHashrateSnapshot> hashratesList = JsonConvert.DeserializeObject<List<PoolHashrateSnapshot>>(jsonObj["hashrates"].ToString());
                     List<PoolHashrateSnapshot> hashratesList = JsonConvert.DeserializeObject<List<PoolHashrateSnapshot>>(HashrateJson);
-
 
                     // create arrays of doubles of the hashrates and the dates
                     double[] yValues = hashratesList.Select(h => (double)(h.AvgHashrate / (decimal)1E18)).ToArray(); // divide by 1E18 to get exahash
@@ -11784,18 +11750,10 @@ namespace SATSuma
                         formsPlotPoolHashrate.Plot.YAxis.TickLabelStyle(fontSize: (int)(10 * UIScale), color: btnMenuDirectory.ForeColor);
                         formsPlotPoolHashrate.Plot.XAxis.Ticks(true);
                         formsPlotPoolHashrate.Plot.YAxis.Label("EH/s", size: (int)(12 * UIScale), bold: false);
-                        //formsPlotHashrateForPoolsScreen.Plot.XAxis.Label("");
 
                         // prevent navigating beyond the data
                         formsPlotPoolHashrate.Plot.YAxis.SetBoundary(0, yValues.Max() * 1.05);
                         formsPlotPoolHashrate.Plot.XAxis.SetBoundary(xValues.Min(), xValues.Max());
-
-                        // Add a red circle we can move around later as a highlighted point indicator
-                        //  HighlightedPoint = formsPlot1.Plot.AddPoint(0, 0);
-                        //HighlightedPoint.Color = Color.Red;
-                        //HighlightedPoint.MarkerSize = (int)(10 * UIScale);
-                        //HighlightedPoint.MarkerShape = ScottPlot.MarkerShape.openCircle;
-                        //HighlightedPoint.IsVisible = false;
 
                         formsPlotPoolHashrate.Plot.XAxis.Ticks(true);
                         formsPlotPoolHashrate.Plot.YAxis.Ticks(true);
@@ -15951,7 +15909,9 @@ namespace SATSuma
                     {
                         if (item.Selected)
                         {
+
                             item.EnsureVisible();
+
                             if (String.Compare(item.SubItems[1].Text, "xpub") == 0)
                             {
                                 if (lblXpubScreenOwnNodeStatusLight.ForeColor == Color.OliveDrab)
@@ -23557,7 +23517,7 @@ namespace SATSuma
                 }
 
                 // block
-                RJButton[] blockButtonBorders = { btnLookUpBlock, btnPreviousBlock, btnNextBlock, btnPreviousBlockTransactions, btnNextBlockTransactions };
+                RJButton[] blockButtonBorders = { btnLookUpBlock, btnPreviousBlockTransactions, btnNextBlockTransactions };
                 foreach (RJButton button in blockButtonBorders)
                 {
                     button.Invoke((MethodInvoker)delegate
@@ -23585,10 +23545,11 @@ namespace SATSuma
                         button.BorderRadius = (int)(radius * UIScale);
                     });
                 }
+
                 btnViewBlockFromBlockList.BorderRadius = (int)((radius - 4) * UIScale);
                 btnViewPoolFromBlockList.BorderRadius = (int)((radius - 4) * UIScale);
 
-                RJButton[] otherButtonBorders = { btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, btnNonZeroBalancesUp, btnNonZeroBalancesDown, btnDerivationPathsUp, btnDerivationPathsDown, btnOpacityUp, btnOpacityDown, btnDataRefreshPeriodUp, btnDataRefreshPeriodDown, btnBiggerScale, btnSmallerScale, btnThemeMenu, btnCurrency, btnCopyErrorMessage };
+                RJButton[] otherButtonBorders = { btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, btnNonZeroBalancesUp, btnNonZeroBalancesDown, btnDerivationPathsUp, btnDerivationPathsDown, btnOpacityUp, btnOpacityDown, btnDataRefreshPeriodUp, btnDataRefreshPeriodDown, btnBiggerScale, btnSmallerScale, btnThemeMenu, btnCurrency, btnCopyErrorMessage, btnNextBlock, btnPreviousBlock };
                 foreach (RJButton button in otherButtonBorders)
                 {
                     button.Invoke((MethodInvoker)delegate
@@ -23751,7 +23712,8 @@ namespace SATSuma
                 #region rounded panels
                 Control[] panelsToInvalidate = { panelXpubContainer, panelXpubScrollbar, panel92, panel32, panel74, panel76, panel77, panel99, panel84, panel88, panel89, panel90, panel86, panel87, panel103, panel46, panel51, panel91, panel70, panel71, panel16, panel21, panel85, panel53, panel96, panel106, panel107, panelAddToBookmarks,
                     panelAddToBookmarksBorder, panelOwnNodeAddressTXInfo, panelOwnNodeBlockTXInfo, panelTransactionMiddle, panelErrorMessage, panelDCAMessages, panelDCASummary, panelDCAInputs, panel119, panelPriceConvert, panelDCAChartContainer, panel117, panel120, panel121, panel122, panel123,
-                    panel124, panel125, panel101, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panel134, panelBookmarksContainer, panel33, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panel128, panel147, panel80, panel153, panel157, panelPoolsListContainer, panelBlocksByPoolContainer, panel158, panel160 };
+                    panel124, panel101, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panel134, panelBookmarksContainer, panel33, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panel128, panel147, panel80, panel153, panel157, panelPoolsListContainer, panelBlocksByPoolContainer, panel158, panel160,
+                panelTransactionInputs, panelTransactionOutputs, panel24, panel25 };
                 foreach (Control control in panelsToInvalidate)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -23774,7 +23736,7 @@ namespace SATSuma
                 #endregion
                 #region panels (heading containers)
                 Control[] headingPanelsToInvalidate = { panel1, panel2, panel3, panel4, panel5, panel6, panel7, panel8, panel9, panel10, panel11, panel12, panel20, panel23, panel26, panel29, panel31, panel38, panel39, panel40, panel41, panel42, panel43, panel44, panel45, panel54, panel57, panel78, panel139,
-                    panel82, panel83, panel94, panel105, panel22, panel34, panel37, panel97, panel98, panel108, panel109, panel141, panel136, panel138, panel145, panel81, panel146, panel152, panel154, panel155, panel159, panel164, panel156 };
+                    panel82, panel83, panel94, panel22, panel34, panel37, panel97, panel98, panel108, panel109, panel141, panel136, panel138, panel145, panel81, panel146, panel152, panel154, panel155, panel159, panel164, panel156 };
                 foreach (Control control in headingPanelsToInvalidate)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24115,7 +24077,7 @@ namespace SATSuma
                     });
                 }
                 //bitcoindashboard
-                Control[] listBitcoinDashboardDataFieldsToColor = { lblPrice, lblMoscowTime, lblMarketCapUSD, lblBTCInCirc, lblHodlingAddresses, lblAvgNoTransactions, lblBlocksIn24Hours, lbl24HourTransCount, lbl24HourBTCSent, lblTXInMempool, lblNextBlockMinMaxFee, lblNextBlockTotalFees, lblTransInNextBlock, lblHashesToSolve, lblAvgTimeBetweenBlocks, lblEstHashrate, lblNextDiffAdjBlock, lblDifficultyAdjEst, lblBlockSubsidy, lblProgressNextDiffAdjPercentage, lblBlocksUntilDiffAdj, lblEstDiffAdjDate, lblNodes, lblBlockchainSize, lblProgressToHalving, lblEstimatedHalvingDate, lblHalvingSecondsRemaining, lblBlockSubsidyAfterHalving, lblBTCToBeIssued, lblPercentIssued, lblDifficultyEpoch, lblNetworkAge, lblSubsidyEpoch };
+                Control[] listBitcoinDashboardDataFieldsToColor = { lblPrice, lblMoscowTime, lblMarketCapUSD, lblBTCInCirc, lblHodlingAddresses, lblAvgNoTransactions, lblBlocksIn24Hours, lbl24HourTransCount, lbl24HourBTCSent, lblTXInMempool, lblNextBlockMinMaxFee, lblNextBlockTotalFees, lblTransInNextBlock, lblHashesToSolve, lblAvgTimeBetweenBlocks, lblEstHashrate, lblNextDiffAdjBlock, lblDifficultyAdjEst, lblBlockSubsidy, lblProgressNextDiffAdjPercentage, lblBlocksUntilDiffAdj, lblEstDiffAdjDate, lblNodes, lblBlockchainSize, lblProgressToHalving, lblEstimatedHalvingDate, lblHalvingSecondsRemaining, lblBlockSubsidyAfterHalving, lblBTCToBeIssued, lblPercentIssued, lblDifficultyEpoch, lblNetworkAge, lblSubsidyEpoch, lblPrevDiffAdjustment };
                 foreach (Control control in listBitcoinDashboardDataFieldsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24237,11 +24199,7 @@ namespace SATSuma
                 {
                     lblMiningPoolLink.LinkColor = thisColor;
                 });
-                //mining pools - blocks
-                lblPoolsBlockCount.Invoke((MethodInvoker)delegate
-                {
-                    lblPoolsBlockCount.ForeColor = thisColor;
-                });
+
             }
             catch (Exception ex)
             {
@@ -24923,7 +24881,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listTextBoxesToColor = { lblMempoolSpacePriceAPI, lblSolidProgressBars, lblDashedProgressBars, lblShowClock, btnDataRefreshPeriodDown, btnDataRefreshPeriodUp, btnBiggerScale, btnSmallerScale, btnNonZeroBalancesUp, btnNonZeroBalancesDown, btnDerivationPathsDown, btnDerivationPathsUp, panel93, panel95, panel98, btnNumericUpDownSubmittedBlockNumberUp, numericUpDownOpacity, btnOpacityDown, btnOpacityUp, btnNumericUpDownSubmittedBlockNumberDown, numericUpDownSubmittedBlockNumber, numericUpDownBlockHeightToStartListFrom, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, panel75, textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textboxSubmittedAddressUTXO, textBoxTransactionID, textBoxXpubScreenOwnNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, lblAlwaysOnTop, textBoxThemeName, lblTitleBackgroundCustom, lblTitlesBackgroundImage, lblTitleBackgroundNone, lblBackgroundFranklinSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected, lblBackgroundGenesisSelected, lblBackgroundSatsumaSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblSettingsOwnNodeSelected, lblSettingsNodeMainnetSelected, lblSettingsNodeTestnetSelected, lblBitcoinExplorerEndpoints, lblCoingeckoComJSON, lblBlockchainInfoEndpoints, lblBlockchairComJSON, lblOfflineMode, lblConfirmReset, lblChartsDarkBackground, lblChartsLightBackground, lblChartsMediumBackground, textBoxConvertBTCtoFiat, textBoxConvertEURtoBTC, textBoxConvertGBPtoBTC, textBoxConvertUSDtoBTC, textBoxConvertXAUtoBTC, panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelSubmittedAddressContainerUTXO, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer, panelBookmarkKeyContainer, panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelAppearanceTextbox1Container, panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, lblInfinity1, lblInfinity2, lblInfinity3, lblEnableDirectory, btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, panelUniversalSearchContainer, textBoxUniversalSearch, panelSettingsUIScaleContainer, textBoxDCAAmountInput, panel111, panel113, panel114, panel115, comboBoxChartSelect, panelComboBoxChartSelectContainer };
+                Control[] listTextBoxesToColor = { lblMempoolSpacePriceAPI, lblSolidProgressBars, lblDashedProgressBars, lblShowClock, btnDataRefreshPeriodDown, btnDataRefreshPeriodUp, btnBiggerScale, btnSmallerScale, btnNonZeroBalancesUp, btnNonZeroBalancesDown, btnDerivationPathsDown, btnDerivationPathsUp, panel93, panel95, panel98, btnNumericUpDownSubmittedBlockNumberUp, numericUpDownOpacity, btnOpacityDown, btnOpacityUp, btnNumericUpDownSubmittedBlockNumberDown, numericUpDownSubmittedBlockNumber, numericUpDownBlockHeightToStartListFrom, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, panel75, textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textboxSubmittedAddressUTXO, textBoxTransactionID, textBoxXpubScreenOwnNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, lblAlwaysOnTop, textBoxThemeName, lblTitleBackgroundCustom, lblTitlesBackgroundImage, lblTitleBackgroundNone, lblBackgroundFranklinSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected, lblBackgroundGenesisSelected, lblBackgroundSatsumaSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblSettingsOwnNodeSelected, lblSettingsNodeMainnetSelected, lblSettingsNodeTestnetSelected, lblBitcoinExplorerEndpoints, lblCoingeckoComJSON, lblBlockchainInfoEndpoints, lblBlockchairComJSON, lblOfflineMode, lblConfirmReset, lblChartsDarkBackground, lblChartsLightBackground, lblChartsMediumBackground, textBoxConvertBTCtoFiat, textBoxConvertEURtoBTC, textBoxConvertGBPtoBTC, textBoxConvertUSDtoBTC, textBoxConvertXAUtoBTC, panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelSubmittedAddressContainerUTXO, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer, panelBookmarkKeyContainer, panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelAppearanceTextbox1Container, panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, lblInfinity1, lblInfinity2, lblInfinity3, lblEnableDirectory, btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, panelUniversalSearchContainer, textBoxUniversalSearch, panelSettingsUIScaleContainer, textBoxDCAAmountInput, panel111, panel113, panel114, panel115, comboBoxChartSelect, panelComboBoxChartSelectContainer, btnPreviousBlock, btnNextBlock };
                 foreach (Control control in listTextBoxesToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -25002,7 +24960,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listListViewBackgroundsToColor = { panel127, panel28, panel133, panel134, panel128, panel157, panel147, panelUTXOsContainer, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panelUTXOError, panel137, panel120, panel122, panel124, panel125, panel27, panelTransactionOutputs, panelTransactionInputs, panel102, listViewBlockList, listViewTransactionInputs, listViewTransactionOutputs, listViewXpubAddresses, listViewBookmarks, listViewAddressTransactions, listViewAddressUTXOs, listViewPoolsByBlock, listViewPoolsHashrate, listViewBlockTransactions, panel66, panel24, panel25, panelXpubScrollbar, panel33, panel101, panelXpubContainer, panel149, panel30, panel148, panelPoolsListContainer, panelBlocksByPoolContainer, listViewPoolsList, listViewBlocksByPool, panel157 };
+                Control[] listListViewBackgroundsToColor = { panel127, panel28, panel133, panel134, panel128, panel157, panel147, panelUTXOsContainer, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panelUTXOError, panel137, panel120, panel122, panel56, panel124, panel27, panelTransactionOutputs, panelTransactionInputs, listViewBlockList, listViewTransactionInputs, listViewTransactionOutputs, listViewXpubAddresses, listViewBookmarks, listViewAddressTransactions, listViewAddressUTXOs, listViewPoolsByBlock, listViewPoolsHashrate, listViewBlockTransactions, panel66, panel24, panel25, panelXpubScrollbar, panel33, panel101, panelXpubContainer, panel149, panel30, panel148, panelPoolsListContainer, panelBlocksByPoolContainer, listViewPoolsList, listViewBlocksByPool, panel157 };
                 foreach (Control control in listListViewBackgroundsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -25023,7 +24981,7 @@ namespace SATSuma
             try
             {
                 listViewHeaderColor = thiscolor;
-                Control[] tableTitleBarsToColor = { panel126, panel143, panel67, panel68, panel117, panel121, panel123, panel100, panelBookmarksContainer, panel144, panel150, panel160, panel162 };
+                Control[] tableTitleBarsToColor = { panel126, panel143, panel67, panel68, panel117, panel121, panel123, panel100, panelBookmarksContainer, panel144, panel150, panel160, panel162, panel165, panel167 };
                 foreach (Control control in tableTitleBarsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -25171,7 +25129,7 @@ namespace SATSuma
                     });
                 }
                 //block
-                Control[] listBlockHeadingsToColor = { panel105, panel55 };
+                Control[] listBlockHeadingsToColor = { panel55 };
                 foreach (Control control in listBlockHeadingsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -25328,7 +25286,7 @@ namespace SATSuma
                     });
                 }
                 //block
-                Control[] listBlockHeadingsToColor = { panel105, panel55 };
+                Control[] listBlockHeadingsToColor = { panel55 };
                 foreach (Control control in listBlockHeadingsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -25469,7 +25427,7 @@ namespace SATSuma
                     });
                 }
                 //block
-                Control[] listBlockHeadingsToColor = { panel105, panel55 };
+                Control[] listBlockHeadingsToColor = { panel55 };
                 foreach (Control control in listBlockHeadingsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -27579,9 +27537,11 @@ namespace SATSuma
                             btnAddToBookmarks.Enabled = true;
                             btnAddToBookmarks.Text = "🖤";
                         });
+                        TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
+                        string blockNowViewingText = textInfo.ToTitleCase(lblBlockBlockHeight.Text.ToLower());
                         lblNowViewing.Invoke((MethodInvoker)delegate
                         {
-                            lblNowViewing.Text = "Block";
+                            lblNowViewing.Text = blockNowViewingText;
                         });
                     }
                     if (panelBlock.Visible && lblBlockHash.Text == "")

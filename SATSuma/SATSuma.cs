@@ -27,9 +27,10 @@ https://satsuma.btcdir.org/download/
 * Stuff to do:
 * Taproot support on xpub screen 
 * documentation for new pools screens
-* tidy listviews on tx screen
-* tidy code in new screens
 * testing, particularly new pools screens and pools screens on own node
+* tooltips on block and blocks screens
+* check themes apply correctly on block and blocks screens
+* add connecting arrow to bookmarks screen
 */
 
 #region Using
@@ -4717,7 +4718,10 @@ namespace SATSuma
                     {
                         lblBlockBlockHeight.Text = $"BLOCK {numericUpDownSubmittedBlockNumber.Text}";
                     });
-
+                    label330.Invoke((MethodInvoker)delegate
+                    {
+                        label330.Text = "TRANSACTIONS IN " + lblBlockBlockHeight.Text;
+                    });
                     var blockNumber = Convert.ToString(numericUpDownSubmittedBlockNumber.Text);
                     await GetFifteenBlocksAsync(blockNumber).ConfigureAwait(true);
                     string BlockHashToGetTransactionsFor = lblBlockHash.Text;
@@ -7161,7 +7165,11 @@ namespace SATSuma
                     Rectangle itemRect = listViewBlockList.GetItemRect(listViewBlockList.SelectedIndices[0]);
                     panel14.Invoke((MethodInvoker)delegate
                     {
-                        panel14.Top = itemRect.Top + (int)(16 * UIScale);
+                        panel14.Top = itemRect.Top + (int)(69 * UIScale);
+                    });
+                    label331.Invoke((MethodInvoker)delegate
+                    {
+                        label331.Top = itemRect.Top + (int)(61 * UIScale);
                     });
                     panel19.Invoke((MethodInvoker)delegate
                     {
@@ -7339,6 +7347,8 @@ namespace SATSuma
             try
             {
                 bool anySelected = false;
+
+                btnViewBlockFromBlockList.Visible = false;
                 foreach (ListViewItem item in listViewBlockList.Items)
                 {
                     if (item != null)
@@ -7346,16 +7356,17 @@ namespace SATSuma
                         if (item.Selected)
                         {
                             btnViewBlockFromBlockList.Enabled = true;
+                            
                             foreach (ListViewItem.ListViewSubItem subItem in item.SubItems)
                             {
                                 subItem.ForeColor = MakeColorLighter(tableTextColor, 20);
                             }
                             anySelected = true;
-                            btnViewBlockFromBlockList.Invoke((MethodInvoker)delegate
-                            {
-                                btnViewBlockFromBlockList.Location = new Point(listViewBlockList.Location.X - btnViewBlockFromBlockList.Width + (int)(12 * UIScale), item.Position.Y + listViewBlockList.Location.Y);
-                                btnViewBlockFromBlockList.Height = item.Bounds.Height;
-                            });
+                            //btnViewBlockFromBlockList.Invoke((MethodInvoker)delegate
+                            //{
+                            //    btnViewBlockFromBlockList.Location = new Point(listViewBlockList.Location.X - btnViewBlockFromBlockList.Width + (int)(12 * UIScale), item.Position.Y + listViewBlockList.Location.Y);
+                            //    btnViewBlockFromBlockList.Height = item.Bounds.Height;
+                            //});
                             // display block hash
                             using (WebClient client = new WebClient())
                             {
@@ -7380,6 +7391,7 @@ namespace SATSuma
                             {
                                 ToggleLoadingAnimation("disable"); // stop the loading animation
                                 DisableEnableBlockListButtons("enable"); // enable buttons after operation is complete
+
                                 var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
                                 lblBlockListBlockTime.Invoke((MethodInvoker)delegate
                                 {
@@ -7433,6 +7445,7 @@ namespace SATSuma
                                     lblBlockListMiner.Text = Convert.ToString(blocks[0].Extras.Pool.Name);
                                     lblBlockListMiner.Location = new Point(label95.Location.X + label95.Width, lblBlockListMiner.Location.Y);
                                 });
+                                
                                 lblBlockListTransactionCount.Invoke((MethodInvoker)delegate
                                 {
                                     lblBlockListTransactionCount.Text = Convert.ToString(blocks[0].Tx_count);
@@ -7514,6 +7527,10 @@ namespace SATSuma
                                 ToggleLoadingAnimation("disable"); // stop the loading animation
                                 DisableEnableBlockListButtons("enable"); // enable buttons after operation is complete
                             }
+                            btnViewBlockFromBlockList.Invoke((MethodInvoker)delegate
+                            {
+                                btnViewBlockFromBlockList.Text = "transactions in block " + listViewBlockList.SelectedItems[0].SubItems[0].Text; ;
+                            });
                         }
                         else
                         {
@@ -23517,7 +23534,7 @@ namespace SATSuma
                 }
 
                 // block
-                RJButton[] blockButtonBorders = { btnLookUpBlock, btnPreviousBlockTransactions, btnNextBlockTransactions };
+                RJButton[] blockButtonBorders = { btnLookUpBlock, btnPreviousBlockTransactions, btnNextBlockTransactions, btnNextBlock, btnPreviousBlock };
                 foreach (RJButton button in blockButtonBorders)
                 {
                     button.Invoke((MethodInvoker)delegate
@@ -23537,7 +23554,7 @@ namespace SATSuma
                 });
 
                 // blocks
-                RJButton[] blocksButtonBorders = { btnLookUpBlockList, btnNewer15Blocks, btnOlder15Blocks };
+                RJButton[] blocksButtonBorders = { btnLookUpBlockList, btnNewer15Blocks, btnOlder15Blocks, btnViewBlockFromBlockList };
                 foreach (RJButton button in blocksButtonBorders)
                 {
                     button.Invoke((MethodInvoker)delegate
@@ -23546,10 +23563,10 @@ namespace SATSuma
                     });
                 }
 
-                btnViewBlockFromBlockList.BorderRadius = (int)((radius - 4) * UIScale);
+                
                 btnViewPoolFromBlockList.BorderRadius = (int)((radius - 4) * UIScale);
 
-                RJButton[] otherButtonBorders = { btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, btnNonZeroBalancesUp, btnNonZeroBalancesDown, btnDerivationPathsUp, btnDerivationPathsDown, btnOpacityUp, btnOpacityDown, btnDataRefreshPeriodUp, btnDataRefreshPeriodDown, btnBiggerScale, btnSmallerScale, btnThemeMenu, btnCurrency, btnCopyErrorMessage, btnNextBlock, btnPreviousBlock };
+                RJButton[] otherButtonBorders = { btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, btnNonZeroBalancesUp, btnNonZeroBalancesDown, btnDerivationPathsUp, btnDerivationPathsDown, btnOpacityUp, btnOpacityDown, btnDataRefreshPeriodUp, btnDataRefreshPeriodDown, btnBiggerScale, btnSmallerScale, btnThemeMenu, btnCurrency, btnCopyErrorMessage };
                 foreach (RJButton button in otherButtonBorders)
                 {
                     button.Invoke((MethodInvoker)delegate
@@ -23833,7 +23850,7 @@ namespace SATSuma
                     });
                 }
                 //block
-                Control[] listBlockButtonTextToColor = { btnViewTransactionFromBlock, btnPreviousBlockTransactions, btnNextBlockTransactions, btnLookUpBlock };
+                Control[] listBlockButtonTextToColor = { btnViewTransactionFromBlock, btnPreviousBlockTransactions, btnNextBlockTransactions, btnLookUpBlock, btnNextBlock, btnPreviousBlock };
                 foreach (Control control in listBlockButtonTextToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24113,7 +24130,7 @@ namespace SATSuma
                     });
                 }
                 //block
-                Control[] listBlockDataFieldsToColor = { btnNumericUpDownSubmittedBlockNumberUp, btnNumericUpDownSubmittedBlockNumberDown, btnNextBlock, btnPreviousBlock, btnOpacityUp, btnOpacityDown, lblBlockHash, lblBlockTime, lblNumberOfTXInBlock, lblSizeOfBlock, lblBlockWeight, lblTotalFees, lblReward, lblBlockFeeRangeAndMedianFee, lblBlockAverageFee, lblNonce, lblMiner, lblBlockBlockHeight };
+                Control[] listBlockDataFieldsToColor = { btnNumericUpDownSubmittedBlockNumberUp, btnNumericUpDownSubmittedBlockNumberDown, btnOpacityUp, btnOpacityDown, lblBlockHash, lblBlockTime, lblNumberOfTXInBlock, lblSizeOfBlock, lblBlockWeight, lblTotalFees, lblReward, lblBlockFeeRangeAndMedianFee, lblBlockAverageFee, lblNonce, lblMiner, lblBlockBlockHeight };
                 foreach (Control control in listBlockDataFieldsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24266,7 +24283,7 @@ namespace SATSuma
                     });
                 }
                 //block
-                Control[] listBlockLabelsToColor = { label64, lblBlockTXPositionInList, label145, label69, label68, label74, label72, label66, label70, label62, label65, label71, lblBlockScreenChartBlockSize, lblBlockFeeChart, lblBlockScreenChartReward, lblBlockScreenChartFeeRange };
+                Control[] listBlockLabelsToColor = { label64, label145, label69, label68, label74, label72, label66, label70, label62, label65, label71, lblBlockScreenChartBlockSize, lblBlockFeeChart, lblBlockScreenChartReward, lblBlockScreenChartFeeRange };
                 foreach (Control control in listBlockLabelsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24284,7 +24301,7 @@ namespace SATSuma
                     });
                 }
                 //blocklist
-                Control[] listBlockListLabelsToColor = { label87, label100, label106, label108, label110, label112, label115, label116, label16, label118, label120, label122, lblBlockListPositionInList, label109, label90, label91, label105, label103, label24, label95, label99, label96, label88, label101, label93, label97, label89, label94, label92, lblBlockListFeeRangeChart, lblBlockListRewardChart, lblBlockListFeeChart, lblBlockListBlockSizeChart, lblBlockListHashrateChart, lblBlockListFeeRangeChart2, lblBlockListFeeChart2, lblBlockListDifficultyChart };
+                Control[] listBlockListLabelsToColor = { label87, label100, label106, label108, label110, label112, label115, label116, label16, label118, label120, label122, label90, label91, label105, label103, label24, label95, label99, label96, label88, label101, label93, label97, label89, label94, label92, lblBlockListFeeRangeChart, lblBlockListRewardChart, lblBlockListFeeChart, lblBlockListBlockSizeChart, lblBlockListHashrateChart, lblBlockListFeeRangeChart2, lblBlockListFeeChart2, lblBlockListDifficultyChart };
                 foreach (Control control in listBlockListLabelsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24602,7 +24619,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listOtherTextToColor = { label317, label226, label223, label224, comboBoxTitlesBackgroundImage, comboBoxStartupScreen, comboBoxChartSelect, comboBoxCustomizeScreenThemeList, label220, label185, numericUpDownOpacity, label235, label160, label159, label158, label165, label173, label167, textBoxXpubScreenOwnNodeURL, textBoxSubmittedXpub, numberUpDownDerivationPathsToCheck, textboxSubmittedAddress, textBoxTransactionID, textBoxBookmarkEncryptionKey, textBoxBookmarkKey, textBoxBookmarkProposedNote, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBoxThemeName, textBox1, lblCurrentVersion, textBoxUniversalSearch, textBoxDCAAmountInput, comboBoxDCAFrequency, label227 };
+                Control[] listOtherTextToColor = { lblBlockTXPositionInList, lblBlockListPositionInList, label317, label226, label223, label224, comboBoxTitlesBackgroundImage, comboBoxStartupScreen, comboBoxChartSelect, comboBoxCustomizeScreenThemeList, label220, label185, numericUpDownOpacity, label235, label160, label159, label158, label165, label173, label167, textBoxXpubScreenOwnNodeURL, textBoxSubmittedXpub, numberUpDownDerivationPathsToCheck, textboxSubmittedAddress, textBoxTransactionID, textBoxBookmarkEncryptionKey, textBoxBookmarkKey, textBoxBookmarkProposedNote, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBoxThemeName, textBox1, lblCurrentVersion, textBoxUniversalSearch, textBoxDCAAmountInput, comboBoxDCAFrequency, label227 };
                 foreach (Control control in listOtherTextToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24760,7 +24777,7 @@ namespace SATSuma
                     });
                 }
                 //block
-                Control[] listBlockButtonsToColor = { btnViewTransactionFromBlock, btnPreviousBlockTransactions, btnNextBlockTransactions, btnLookUpBlock };
+                Control[] listBlockButtonsToColor = { btnViewTransactionFromBlock, btnPreviousBlockTransactions, btnNextBlockTransactions, btnLookUpBlock, btnNextBlock, btnPreviousBlock };
                 foreach (Control control in listBlockButtonsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24881,7 +24898,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listTextBoxesToColor = { lblMempoolSpacePriceAPI, lblSolidProgressBars, lblDashedProgressBars, lblShowClock, btnDataRefreshPeriodDown, btnDataRefreshPeriodUp, btnBiggerScale, btnSmallerScale, btnNonZeroBalancesUp, btnNonZeroBalancesDown, btnDerivationPathsDown, btnDerivationPathsUp, panel93, panel95, panel98, btnNumericUpDownSubmittedBlockNumberUp, numericUpDownOpacity, btnOpacityDown, btnOpacityUp, btnNumericUpDownSubmittedBlockNumberDown, numericUpDownSubmittedBlockNumber, numericUpDownBlockHeightToStartListFrom, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, panel75, textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textboxSubmittedAddressUTXO, textBoxTransactionID, textBoxXpubScreenOwnNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, lblAlwaysOnTop, textBoxThemeName, lblTitleBackgroundCustom, lblTitlesBackgroundImage, lblTitleBackgroundNone, lblBackgroundFranklinSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected, lblBackgroundGenesisSelected, lblBackgroundSatsumaSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblSettingsOwnNodeSelected, lblSettingsNodeMainnetSelected, lblSettingsNodeTestnetSelected, lblBitcoinExplorerEndpoints, lblCoingeckoComJSON, lblBlockchainInfoEndpoints, lblBlockchairComJSON, lblOfflineMode, lblConfirmReset, lblChartsDarkBackground, lblChartsLightBackground, lblChartsMediumBackground, textBoxConvertBTCtoFiat, textBoxConvertEURtoBTC, textBoxConvertGBPtoBTC, textBoxConvertUSDtoBTC, textBoxConvertXAUtoBTC, panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelSubmittedAddressContainerUTXO, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer, panelBookmarkKeyContainer, panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelAppearanceTextbox1Container, panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, lblInfinity1, lblInfinity2, lblInfinity3, lblEnableDirectory, btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, panelUniversalSearchContainer, textBoxUniversalSearch, panelSettingsUIScaleContainer, textBoxDCAAmountInput, panel111, panel113, panel114, panel115, comboBoxChartSelect, panelComboBoxChartSelectContainer, btnPreviousBlock, btnNextBlock };
+                Control[] listTextBoxesToColor = { lblMempoolSpacePriceAPI, lblSolidProgressBars, lblDashedProgressBars, lblShowClock, btnDataRefreshPeriodDown, btnDataRefreshPeriodUp, btnBiggerScale, btnSmallerScale, btnNonZeroBalancesUp, btnNonZeroBalancesDown, btnDerivationPathsDown, btnDerivationPathsUp, panel93, panel95, panel98, numericUpDownOpacity, btnOpacityDown, btnOpacityUp, btnNumericUpDownSubmittedBlockNumberUp, btnNumericUpDownSubmittedBlockNumberDown, numericUpDownSubmittedBlockNumber, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, panel75, textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textboxSubmittedAddressUTXO, textBoxTransactionID, textBoxXpubScreenOwnNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, lblAlwaysOnTop, textBoxThemeName, lblTitleBackgroundCustom, lblTitlesBackgroundImage, lblTitleBackgroundNone, lblBackgroundFranklinSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected, lblBackgroundGenesisSelected, lblBackgroundSatsumaSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblSettingsOwnNodeSelected, lblSettingsNodeMainnetSelected, lblSettingsNodeTestnetSelected, lblBitcoinExplorerEndpoints, lblCoingeckoComJSON, lblBlockchainInfoEndpoints, lblBlockchairComJSON, lblOfflineMode, lblConfirmReset, lblChartsDarkBackground, lblChartsLightBackground, lblChartsMediumBackground, textBoxConvertBTCtoFiat, textBoxConvertEURtoBTC, textBoxConvertGBPtoBTC, textBoxConvertUSDtoBTC, textBoxConvertXAUtoBTC, panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelSubmittedAddressContainerUTXO, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer, panelBookmarkKeyContainer, panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelAppearanceTextbox1Container, panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, lblInfinity1, lblInfinity2, lblInfinity3, lblEnableDirectory, numericUpDownBlockHeightToStartListFrom, btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, panelUniversalSearchContainer, textBoxUniversalSearch, panelSettingsUIScaleContainer, textBoxDCAAmountInput, panel111, panel113, panel114, panel115, comboBoxChartSelect, panelComboBoxChartSelectContainer };
                 foreach (Control control in listTextBoxesToColor)
                 {
                     control.Invoke((MethodInvoker)delegate

@@ -199,6 +199,8 @@
             "xpub",
             "charts",
             "bitcoin dashboard",
+            "mining pools",
+            "pool rankings",
             "lightning dashboard",
             "bookmarks",
             "dca calculator",

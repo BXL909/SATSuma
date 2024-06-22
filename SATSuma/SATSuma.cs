@@ -26,13 +26,12 @@ https://satsuma.btcdir.org/download/
 
 * Stuff to do:
 * Taproot support on xpub screen 
-* documentation for new pools screens
+* documentation for new pools screens (code done, just do online help)
 * testing, particularly new pools screens and pools screens on own node
-* tooltips on block and blocks screens
-* check themes apply correctly on block and blocks screens,address tx and utxo screens
+* check tooltips everywhere
 * chart background colours on the 2 pools screens don't change with themes
-* more consistency with scrollbars and listviews. xpub screen still to do
-* 
+* theme choice not being remembered sometimes. 
+* pools screen - put headings into same panels as the 2 listviews
 */
 
 #region Using
@@ -467,7 +466,7 @@ namespace SATSuma
             Control[] panelsToRound = { panelXpubContainer, panelXpubScrollbar, panel32, panel74, panel76, panel77, panel99, panel84, panel88, panel89, panel90, panel86, panel87, panel103, panel46, panel51, panel91, panel70, panel71, panel16, panel21, panel85, panel53, panel96, panel106, panel107, panel92, panelAddToBookmarks, panelAddToBookmarksBorder,
                 panelLeftPanel, panelOwnNodeAddressTXInfo, panelOwnNodeBlockTXInfo, panelTransactionMiddle, panelErrorMessage, panelSettingsUIScale, panelSettingsUIScaleContainer, panelDCAMessages, panelDCASummary, panelDCAInputs, panel119, panelPriceConvert, panelDCAChartContainer, panel117, panel121,
                 panel122, panel101, panel27, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panel134, panelBookmarksContainer, panel33, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panel128, panel147, panel80, panel153, panel157, panelPoolsListContainer, panelBlocksByPoolContainer, panel158,
-                panelTransactionInputs, panelTransactionOutputs, panel24, panel25, addressTxContainer };
+                panelTransactionInputs, panelTransactionOutputs, panel24, panel25, panelAddressTxContainer };
             foreach (Control control in panelsToRound)
             {
                 control.Paint += Panel_Paint;
@@ -484,7 +483,7 @@ namespace SATSuma
             #endregion
             #region panels (heading containers)
             Control[] panelHeadingContainersToRound = { panel1, panel2, panel3, panel4, panel5, panel6, panel7, panel8, panel9, panel10, panel11, panel12, panel20, panel23, panel26, panel29, panel31, panel38, panel39, panel40, panel41, panel42, panel43, panel44, panel45, panel57, panel78,
-                panel94, panel109, panelLoadingAnimationContainer, panel141, panel136, panel139, panel138, panel145, panel81, panel146, panel152, panel154, panel155, panel159, panel164, panel156 };
+                panel94, panel109, panelLoadingAnimationContainer, panel141, panel136, panel139, panel138, panel145, panel81, panel146, panel155, panel159, panel156 };
             foreach (Control control in panelHeadingContainersToRound)
             {
                 control.Paint += Panel_Paint;
@@ -3134,39 +3133,40 @@ namespace SATSuma
                     counter++; // increment rows for this batch
                     TotalAddressTransactionRowsAdded++; // increment all rows
 
-                    if (TotalAddressTransactionRowsAdded <= rowsReturnedByAddressTransactionsAPI) // less than 25 transactions in all
-                    {
-                        btnFirstAddressTransaction.Visible = false; // so this won't be needed
-                    }
-                    else
-                    {
-                        if (String.Compare(addressScreenConfUnconfOrAllTx, "mempool") == 0) //regardless how many unconfirmed TXs there are, the api only returns the first batch, but otherwise we can go back to first TX
-                        {
-                            btnFirstAddressTransaction.Visible = false;
-                        }
-                        else
-                        {
-                            btnFirstAddressTransaction.Visible = true;
-                        }
-                    }
-
-                    if (String.Compare(Convert.ToString(TotalAddressTransactionRowsAdded), lblAddressConfirmedTransactionCount.Text) == 0) // we've shown all the TXs
-                    {
-                        btnNextAddressTransactions.Visible = false; // so we won't need this
-                    }
-                    else
-                    {
-                        if (String.Compare(addressScreenConfUnconfOrAllTx, "mempool") == 0) //regardless how many unconfirmed TXs there are, the api only returns the first batch, but otherwise we can go to the next batch
-                        {
-                            btnNextAddressTransactions.Visible = false;
-                        }
-                    }
-
                     if (counter == rowsReturnedByAddressTransactionsAPI) // ListView is full. stop adding rows at this point and pick up from here next time.
                     {
                         break;
                     }
                 }
+
+                if (TotalAddressTransactionRowsAdded <= rowsReturnedByAddressTransactionsAPI) // less than 25 transactions in all
+                {
+                    btnFirstAddressTransaction.Enabled = false; // so this won't be needed
+                }
+                else
+                {
+                    if (String.Compare(addressScreenConfUnconfOrAllTx, "mempool") == 0) //regardless how many unconfirmed TXs there are, the api only returns the first batch, but otherwise we can go back to first TX
+                    {
+                        btnFirstAddressTransaction.Enabled = false;
+                    }
+                    else
+                    {
+                        btnFirstAddressTransaction.Enabled = true;
+                    }
+                }
+
+                if (String.Compare(Convert.ToString(TotalAddressTransactionRowsAdded), lblAddressConfirmedTransactionCount.Text) == 0) // we've shown all the TXs
+                {
+                    btnNextAddressTransactions.Enabled = false; // so we won't need this
+                }
+                else
+                {
+                    if (String.Compare(addressScreenConfUnconfOrAllTx, "mempool") == 0) //regardless how many unconfirmed TXs there are, the api only returns the first batch, but otherwise we can go to the next batch
+                    {
+                        btnNextAddressTransactions.Enabled = false;
+                    }
+                }
+
                 if (listViewAddressTransactions.Items.Count > 0)
                 {
                     listViewAddressTransactions.Items[0].Selected = true;
@@ -3190,7 +3190,7 @@ namespace SATSuma
                     addressScreenConfUnconfOrAllTx = "chain";
                 }
                 // set focus
-                if (btnNextAddressTransactions.Visible && btnNextAddressTransactions.Enabled)
+                if (btnNextAddressTransactions.Enabled && btnNextAddressTransactions.Enabled)
                 {
                     btnNextAddressTransactions.Focus();
                 }
@@ -3244,11 +3244,11 @@ namespace SATSuma
                 {
                     addressScreenConfUnconfOrAllTx = "all";
                 }
-                btnFirstAddressTransaction.Visible = false;
+                btnFirstAddressTransaction.Enabled = false;
                 var address = textboxSubmittedAddress.Text; // Get the address from the address text box
                 var lastSeenTxId = "0"; // Reset the last seen transaction ID to go back to start
                 TotalAddressTransactionRowsAdded = 0;
-                btnNextAddressTransactions.Visible = true; // this time we know there's a next page (couldn't press first otherwise)
+                btnNextAddressTransactions.Enabled = true; // this time we know there's a next page (couldn't press first otherwise)
                 BtnViewBlockFromAddress.Visible = false;
                 BtnViewTransactionFromAddress.Visible = false;
 
@@ -3273,8 +3273,8 @@ namespace SATSuma
                 btnShowAllTX.Enabled = true;
                 btnShowUnconfirmedTX.Enabled = false;
                 addressScreenConfUnconfOrAllTx = "mempool";
-                btnNextAddressTransactions.Visible = false;
-                btnFirstAddressTransaction.Visible = false;
+                btnNextAddressTransactions.Enabled = false;
+                btnFirstAddressTransaction.Enabled = false;
                 PartOfAnAllAddressTransactionsRequest = false;
                 BtnViewBlockFromAddress.Visible = false;
                 BtnViewTransactionFromAddress.Visible = false;
@@ -3593,17 +3593,17 @@ namespace SATSuma
             {
                 if (String.Compare(addressScreenConfUnconfOrAllTx, "mempool") == 0) //only one page of unconfirmed tx regardless how many tx there are
                 {
-                    btnNextAddressTransactions.Visible = false;
-                    btnFirstAddressTransaction.Visible = false;
+                    btnNextAddressTransactions.Enabled = false;
+                    btnFirstAddressTransaction.Enabled = false;
                 }
                 else
                 {
-                    btnNextAddressTransactions.Visible = true;
-                    btnFirstAddressTransaction.Visible = true;
+                    btnNextAddressTransactions.Enabled = true;
+                    btnFirstAddressTransaction.Enabled = true;
                 }
 
                 Control[] controlsToShow = { lblAddressTXPositionInList, label59, label61, label67, label63, listViewAddressTransactions, lblAddressConfirmedUnspent, lblAddressConfirmedUnspentOutputs, lblAddressConfirmedTransactionCount, lblAddressConfirmedReceived, lblAddressConfirmedReceivedOutputs, lblAddressConfirmedSpent, lblAddressConfirmedSpentOutputs,
-                    btnShowAllTX, btnShowConfirmedTX, btnShowUnconfirmedTX, lblAddressType, panel41, panel42, panel43, panel44, panel132, listViewAddressTransactions, btnViewUTXOsFromAddressTX };
+                    btnShowAllTX, btnShowConfirmedTX, btnShowUnconfirmedTX, lblAddressType, panel41, panel42, panel43, panel44, panel132, listViewAddressTransactions, btnViewUTXOsFromAddressTX, btnFirstAddressTransaction, btnNextAddressTransactions, panelAddressTxContainer };
                 foreach (Control control in controlsToShow)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -3646,8 +3646,8 @@ namespace SATSuma
             {
                 if (lblAddressType.Visible)
                 {
-                    Control[] controlsToHide = { btnNextAddressTransactions, btnFirstAddressTransaction, lblAddressTXPositionInList, label59, label61, label67, label63, listViewAddressTransactions, lblAddressConfirmedUnspent, lblAddressConfirmedUnspentOutputs, lblAddressConfirmedTransactionCount, lblAddressConfirmedReceived, lblAddressConfirmedReceivedOutputs,
-                        lblAddressConfirmedSpent, lblAddressConfirmedSpentOutputs, lblAddressConfirmedReceivedFiat, lblAddressConfirmedSpentFiat, lblAddressConfirmedUnspentFiat, btnShowAllTX, btnShowConfirmedTX, btnShowUnconfirmedTX, lblAddressType, panel41, panel42, panel43, panel44, panel132, listViewAddressTransactions, panelOwnNodeAddressTXInfo, btnViewUTXOsFromAddressTX };
+                    Control[] controlsToHide = { btnNextAddressTransactions, btnFirstAddressTransaction, lblAddressTXPositionInList, label59, label61, label67, label63, listViewAddressTransactions, lblAddressConfirmedUnspent, lblAddressConfirmedUnspentOutputs, lblAddressConfirmedTransactionCount, lblAddressConfirmedReceived, lblAddressConfirmedReceivedOutputs, panelAddressTxContainer, 
+                        lblAddressConfirmedSpent, lblAddressConfirmedSpentOutputs, lblAddressConfirmedReceivedFiat, lblAddressConfirmedSpentFiat, lblAddressConfirmedUnspentFiat, btnShowAllTX, btnShowConfirmedTX, btnShowUnconfirmedTX, lblAddressType, panel41, panel42, panel43, panel44, panel132, listViewAddressTransactions, panelOwnNodeAddressTXInfo, btnViewUTXOsFromAddressTX, btnFirstAddressTransaction, btnNextAddressTransactions };
                     foreach (Control control in controlsToHide)
                     {
                         control.Invoke((MethodInvoker)delegate
@@ -3673,14 +3673,14 @@ namespace SATSuma
                     btnShowAllAddressTXWasEnabled = btnShowAllTX.Enabled;
                     btnShowConfirmedAddressTXWasEnabled = btnShowConfirmedTX.Enabled;
                     btnShowUnconfirmedAddressTXWasEnabled = btnShowUnconfirmedTX.Enabled;
-                    btnFirstAddressTransactionWasEnabled = btnFirstAddressTransaction.Enabled;
-                    btnNextAddressTransactionsWasEnabled = btnNextAddressTransactions.Enabled;
+                    //btnFirstAddressTransactionWasEnabled = btnFirstAddressTransaction.Enabled;
+                    //btnNextAddressTransactionsWasEnabled = btnNextAddressTransactions.Enabled;
                     BtnViewTransactionFromAddressWasEnabled = BtnViewTransactionFromAddress.Enabled;
                     BtnViewBlockFromAddressWasEnabled = BtnViewBlockFromAddress.Enabled;
                     textBoxSubmittedAddressWasEnabled = textboxSubmittedAddress.Enabled;
 
                     //disable them all
-                    Control[] controlsToDisable = { btnShowAllTX, btnShowConfirmedTX, btnShowUnconfirmedTX, btnFirstAddressTransaction, btnNextAddressTransactions, BtnViewTransactionFromAddress, BtnViewBlockFromAddress, textboxSubmittedAddress };
+                    Control[] controlsToDisable = { btnShowAllTX, btnShowConfirmedTX, btnShowUnconfirmedTX, BtnViewTransactionFromAddress, BtnViewBlockFromAddress, textboxSubmittedAddress };
                     foreach (Control control in controlsToDisable)
                     {
                         control.Invoke((MethodInvoker)delegate
@@ -3695,8 +3695,8 @@ namespace SATSuma
                     btnShowAllTX.Enabled = btnShowAllAddressTXWasEnabled;
                     btnShowConfirmedTX.Enabled = btnShowConfirmedAddressTXWasEnabled;
                     btnShowUnconfirmedTX.Enabled = btnShowUnconfirmedAddressTXWasEnabled;
-                    btnFirstAddressTransaction.Enabled = btnFirstAddressTransactionWasEnabled;
-                    btnNextAddressTransactions.Enabled = btnNextAddressTransactionsWasEnabled;
+                    //btnFirstAddressTransaction.Enabled = btnFirstAddressTransactionWasEnabled;
+                    //btnNextAddressTransactions.Enabled = btnNextAddressTransactionsWasEnabled;
                     BtnViewTransactionFromAddress.Enabled = BtnViewTransactionFromAddressWasEnabled;
                     BtnViewBlockFromAddress.Enabled = BtnViewBlockFromAddressWasEnabled;
                     textboxSubmittedAddress.Enabled = textBoxSubmittedAddressWasEnabled;
@@ -4028,6 +4028,18 @@ namespace SATSuma
                             panel137.Height = listBoxHeight;
 
                         }
+
+                        if (listViewAddressUTXOs.Items.Count > 29)
+                        {
+                            btnAddressUTXOScrollUp.Enabled = true;
+                            btnAddressUTXOScrollDown.Enabled = true;
+                        }
+                        else
+                        {
+                            btnAddressUTXOScrollUp.Enabled = false;
+                            btnAddressUTXOScrollDown.Enabled = false;
+                        }
+
                         lblLargestUTXO.Invoke((MethodInvoker)delegate
                         {
                             lblLargestUTXO.Text = Convert.ToString(largestUTXO);
@@ -4320,7 +4332,7 @@ namespace SATSuma
                 if (lblAddressTypeUTXO.Visible)
                 {
                     Control[] controlsToHide = { lblLargestUTXO, lblSmallestUTXO, label230, label308, panel143, panel134, lblAddressUTXOPositionInList, label314, panelUTXOsContainer, panel137, listViewAddressUTXOs, lblAddressConfirmedUnspentUTXO, lblAddressConfirmedUnspentOutputsUTXO,
-                        lblAddressConfirmedSpentUTXO, lblAddressConfirmedSpentOutputsUTXO, lblAddressTypeUTXO, panel135, panel141, btnViewAddressTXFromUTXO, label303, label313, label315, panel136, label309, lblAddressConfirmedSpentUTXOFiat, lblAddressConfirmedUnspentUTXOFiat, addressTxContainer };
+                        lblAddressConfirmedSpentUTXO, lblAddressConfirmedSpentOutputsUTXO, lblAddressTypeUTXO, panel135, panel141, btnViewAddressTXFromUTXO, label303, label313, label315, panel136, label309, lblAddressConfirmedSpentUTXOFiat, lblAddressConfirmedUnspentUTXOFiat, panelAddressTxContainer };
                     foreach (Control control in controlsToHide)
                     {
                         control.Invoke((MethodInvoker)delegate
@@ -4341,7 +4353,7 @@ namespace SATSuma
             try
             {
                 Control[] controlsToShow = { lblLargestUTXO, lblSmallestUTXO, label230, label308, panel143, panel134, lblAddressUTXOPositionInList, label314, panel137, panelUTXOsContainer, listViewAddressUTXOs, lblAddressConfirmedUnspentUTXO, lblAddressConfirmedUnspentOutputsUTXO, lblAddressConfirmedSpentUTXO, lblAddressConfirmedSpentOutputsUTXO,
-                     lblAddressTypeUTXO, panel135, panel141, btnViewAddressTXFromUTXO, label303, label313, label315, panel136, label309, addressTxContainer  };
+                     lblAddressTypeUTXO, panel135, panel141, btnViewAddressTXFromUTXO, label303, label313, label315, panel136, label309, panelAddressTxContainer  };
                 foreach (Control control in controlsToShow)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -4463,7 +4475,7 @@ namespace SATSuma
             }
             catch (Exception ex)
             {
-                HandleException(ex, "BtnBookmarksListUp_Click");
+                HandleException(ex, "BtnAddressUTXOScrollUp_Click");
             }
         }
 
@@ -4855,10 +4867,6 @@ namespace SATSuma
                     {
                         btnViewPoolFromBlockScreen.Location = new Point(lblMiner.Location.X + lblMiner.Width, btnViewPoolFromBlockScreen.Location.Y);
                     });
-                    //lblBlockScreenPoolRankingChart.Invoke((MethodInvoker)delegate
-                    //{
-                    //    lblBlockScreenPoolRankingChart.Location = new Point(lblMiner.Location.X + lblMiner.Width, lblBlockScreenPoolRankingChart.Location.Y);
-                    //});
                     lblBlockTime.Invoke((MethodInvoker)delegate
                     {
                         lblBlockTime.Text = DateTimeOffset.FromUnixTimeSeconds(long.Parse(blocks[0].Timestamp)).ToString("yyyy-MM-dd HH:mm");
@@ -4969,29 +4977,30 @@ namespace SATSuma
                         counter++; // increment rows for this batch
                         TotalBlockTransactionRowsAdded++; // increment all rows
 
-                        if (TotalBlockTransactionRowsAdded <= rowsReturnedByBlockTransactionsAPI) // we must still be on first results so there are no previous
-                        {
-                            btnPreviousBlockTransactions.Enabled = false;
-                        }
-                        else
-                        {
-                            btnPreviousBlockTransactions.Enabled = true;
-                        }
-
-                        if (String.Compare(Convert.ToString(TotalBlockTransactionRowsAdded), lblNumberOfTXInBlock.Text) == 0) // we've shown all the TXs
-                        {
-                            btnNextBlockTransactions.Enabled = false; // so we won't need this
-                        }
-                        else
-                        {
-                            btnNextBlockTransactions.Enabled = true;
-                        }
-
                         if (counter == rowsReturnedByBlockTransactionsAPI) // ListView is full. stop adding rows at this point and pick up from here...
                         {
                             break;
                         }
                     }
+
+                    if (TotalBlockTransactionRowsAdded <= rowsReturnedByBlockTransactionsAPI) // we must still be on first results so there are no previous
+                    {
+                        btnPreviousBlockTransactions.Enabled = false;
+                    }
+                    else
+                    {
+                        btnPreviousBlockTransactions.Enabled = true;
+                    }
+
+                    if (String.Compare(Convert.ToString(TotalBlockTransactionRowsAdded), lblNumberOfTXInBlock.Text) == 0) // we've shown all the TXs
+                    {
+                        btnNextBlockTransactions.Enabled = false; // so we won't need this
+                    }
+                    else
+                    {
+                        btnNextBlockTransactions.Enabled = true;
+                    }
+
                     listViewBlockTransactions.Items[0].Selected = true;
                     if (counter > 0)
                     {
@@ -5906,7 +5915,7 @@ namespace SATSuma
                         // If not, add the column header
                         listViewTransactionInputs.Invoke((MethodInvoker)delegate
                         {
-                            listViewTransactionInputs.Columns.Add(" Address", (int)(200 * UIScale));
+                            listViewTransactionInputs.Columns.Add(" Address", (int)(198 * UIScale));
                         });
                     }
 
@@ -5951,6 +5960,18 @@ namespace SATSuma
                             });
                         }
                     }
+
+                    if (listViewTransactionInputs.Items.Count > 6)
+                    {
+                        btnTransactionInputsUp.Enabled = true;
+                        btnTransactionInputDown.Enabled = true;
+                    }
+                    else
+                    {
+                        btnTransactionInputsUp.Enabled = false;
+                        btnTransactionInputDown.Enabled = false;
+                    }
+
                     // Get the height of each item to set height of whole listview
                     int rowHeight = listViewTransactionInputs.Margin.Vertical + listViewTransactionInputs.Padding.Vertical + listViewTransactionInputs.GetItemRect(0).Height;
                     int itemCount = listViewTransactionInputs.Items.Count; // Get the number of items in the ListBox
@@ -5977,7 +5998,7 @@ namespace SATSuma
                         // If not, add the column header
                         listViewTransactionOutputs.Invoke((MethodInvoker)delegate
                         {
-                            listViewTransactionOutputs.Columns.Add(" Address", (int)(200 * UIScale));
+                            listViewTransactionOutputs.Columns.Add(" Address", (int)(198 * UIScale));
                         });
                     }
 
@@ -6024,6 +6045,18 @@ namespace SATSuma
                             listViewTransactionOutputs.Items.Add(item); // add row
                         });
                     }
+
+                    if (listViewTransactionOutputs.Items.Count > 6)
+                    {
+                        btnTransactionOutputsDown.Enabled = true;
+                        btnTransactionOutputsUp.Enabled = true;
+                    }
+                    else
+                    {
+                        btnTransactionOutputsDown.Enabled = false;
+                        btnTransactionOutputsUp.Enabled = false;
+                    }
+
                     int rowHeightout = listViewTransactionOutputs.Margin.Vertical + listViewTransactionOutputs.Padding.Vertical + listViewTransactionOutputs.GetItemRect(0).Height; // Get the height of each item to set height of whole listview
                     int itemCountout = listViewTransactionOutputs.Items.Count; // Get the number of items in the ListBox
                     int listBoxHeightout = (itemCountout + 2) * rowHeightout; // Calculate the height of the ListBox (the extra 2 gives room for the header)
@@ -6084,7 +6117,7 @@ namespace SATSuma
                                 {
                                     btnViewAddressFromTXInput.Invoke((MethodInvoker)delegate
                                     {
-                                        btnViewAddressFromTXInput.Location = new Point(listViewTransactionInputs.Location.X - btnViewAddressFromTXInput.Width + (int)(15 * UIScale), item.Position.Y + listViewTransactionInputs.Location.Y);
+                                        btnViewAddressFromTXInput.Location = new Point(listViewTransactionInputs.Location.X - btnViewAddressFromTXInput.Width + (int)(13 * UIScale), item.Position.Y + listViewTransactionInputs.Location.Y);
                                         btnViewAddressFromTXInput.Height = item.Bounds.Height;
                                     });
                                     anySelected = true;
@@ -6144,7 +6177,7 @@ namespace SATSuma
                                 {
                                     btnViewAddressFromTXOutput.Invoke((MethodInvoker)delegate
                                     {
-                                        btnViewAddressFromTXOutput.Location = new Point(listViewTransactionOutputs.Location.X - btnViewAddressFromTXOutput.Width + (int)(15 * UIScale), item.Position.Y + listViewTransactionOutputs.Location.Y);
+                                        btnViewAddressFromTXOutput.Location = new Point(listViewTransactionOutputs.Location.X - btnViewAddressFromTXOutput.Width + (int)(13 * UIScale), item.Position.Y + listViewTransactionOutputs.Location.Y);
                                         btnViewAddressFromTXOutput.Height = item.Bounds.Height;
                                     });
                                     anySelected = true;
@@ -7055,30 +7088,29 @@ namespace SATSuma
 
                         counter++; // increment rows for this batch
 
-
-                        if (String.Compare(blocklist.First(), lblBlockNumber.Text) == 0) // We're looking at the most recent blocks 
-                        {
-                            btnNewer15Blocks.Enabled = false;
-                        }
-                        else
-                        {
-                            btnNewer15Blocks.Enabled = true;
-
-                        }
-
-                        if (counter > 1 && String.Compare(blocklist.Last(), "0") == 0) // we've reached the Genesis Block (bottom of the list)
-                        {
-                            btnOlder15Blocks.Enabled = false; // so we won't need this
-                        }
-                        else
-                        {
-                            btnOlder15Blocks.Enabled = true;
-                        }
-
                         if (counter == 15) // ListView is full. stop adding rows at this point and pick up from here...
                         {
                             break;
                         }
+                    }
+
+                    if (String.Compare(blocklist.First(), lblBlockNumber.Text) == 0) // We're looking at the most recent blocks 
+                    {
+                        btnNewer15Blocks.Enabled = false;
+                    }
+                    else
+                    {
+                        btnNewer15Blocks.Enabled = true;
+
+                    }
+
+                    if (counter > 1 && String.Compare(blocklist.Last(), "0") == 0) // we've reached the Genesis Block (bottom of the list)
+                    {
+                        btnOlder15Blocks.Enabled = false; // so we won't need this
+                    }
+                    else
+                    {
+                        btnOlder15Blocks.Enabled = true;
                     }
 
                     if (counter > 0)
@@ -7167,11 +7199,11 @@ namespace SATSuma
                     Rectangle itemRect = listViewBlockList.GetItemRect(listViewBlockList.SelectedIndices[0]);
                     panel14.Invoke((MethodInvoker)delegate
                     {
-                        panel14.Top = itemRect.Top + (int)(68 * UIScale);
+                        panel14.Top = itemRect.Top + (int)(98 * UIScale);
                     });
                     label331.Invoke((MethodInvoker)delegate
                     {
-                        label331.Top = itemRect.Top + (int)(61 * UIScale);
+                        label331.Top = itemRect.Top + (int)(90 * UIScale);
                     });
                     panel19.Invoke((MethodInvoker)delegate
                     {
@@ -8423,7 +8455,7 @@ namespace SATSuma
                 {
                     listViewXpubAddresses.Invoke((MethodInvoker)delegate
                     {
-                        listViewXpubAddresses.Columns.Add("Address", (int)(140 * UIScale));
+                        listViewXpubAddresses.Columns.Add("Address", (int)(116 * UIScale));
                     });
                 }
                 if (listViewXpubAddresses.Columns.Count == 1)
@@ -8460,12 +8492,12 @@ namespace SATSuma
                 #region P2WPKH (Bech32 SegWit)
                 while (DerivationPath != NumberOfDerivationPathsToCheck)
                 {
+                    lblXpubStatus.Invoke((MethodInvoker)delegate
+                    {
+                        lblXpubStatus.Text = "Deriving P2WPKH Bech32 addresses";
+                    });
                     for (uint i = 0; i < 500; i++)
                     {
-                        lblXpubStatus.Invoke((MethodInvoker)delegate
-                        {
-                            lblXpubStatus.Text = "Deriving P2WPKH Bech32 addresses";
-                        });
                         var pubkey = ExtPubKey.Parse(submittedXpub, Network.Main);
                         uint index = i; // increment the index for each iteration
                         var BitcoinAddress = pubkey.Derive(Convert.ToUInt32(DerivationPath)).Derive(index).PubKey.GetAddress(ScriptPubKeyType.Segwit, Network.Main); //Segwit 
@@ -8570,17 +8602,18 @@ namespace SATSuma
                             listViewXpubAddresses.Items.Add(item); // add row
                             numberOfAddressesChecked++;
                         });
-                        if (listViewXpubAddresses.Items.Count > 23)
+                        
+                        if (listViewXpubAddresses.Items.Count > 27)
                         {
-                            btnXpubAddressesUp.Visible = true;
-                            btnXpubAddressesDown.Visible = true;
+                            btnXpubAddressesUp.Enabled = true;
+                            btnXpubAddressesDown.Enabled = true;
                         }
                         else
                         {
-                            btnXpubAddressesUp.Visible = false;
-                            btnXpubAddressesDown.Visible = false;
+                            btnXpubAddressesUp.Enabled = false;
+                            btnXpubAddressesDown.Enabled = false;
                         }
-
+                        
                         // Get the height of each item to set height of whole listview
                         int rowHeight = listViewXpubAddresses.Margin.Vertical + listViewXpubAddresses.Padding.Vertical + listViewXpubAddresses.GetItemRect(0).Height;
                         int itemCount = listViewXpubAddresses.Items.Count; // Get the number of items in the ListBox
@@ -8710,12 +8743,12 @@ namespace SATSuma
                 #region P2PKH legacy
                 while (DerivationPath != NumberOfDerivationPathsToCheck)
                 {
+                    lblXpubStatus.Invoke((MethodInvoker)delegate
+                    {
+                        lblXpubStatus.Text = "Deriving P2PKH legacy addresses";
+                    });
                     for (uint i = 0; i < 500; i++)
                     {
-                        lblXpubStatus.Invoke((MethodInvoker)delegate
-                        {
-                            lblXpubStatus.Text = "Deriving P2PKH legacy addresses";
-                        });
                         var pubkey = ExtPubKey.Parse(submittedXpub, Network.Main);
                         uint index = i; // increment the index for each iteration
                         var BitcoinAddress = pubkey.Derive(Convert.ToUInt32(DerivationPath)).Derive(index).PubKey.GetAddress(ScriptPubKeyType.Legacy, Network.Main); //Legacy 
@@ -8815,15 +8848,15 @@ namespace SATSuma
                             listViewXpubAddresses.Items.Add(item); // add row
                             numberOfAddressesChecked++;
                         });
-                        if (listViewXpubAddresses.Items.Count > 23)
+                        if (listViewXpubAddresses.Items.Count > 27)
                         {
-                            btnXpubAddressesUp.Visible = true;
-                            btnXpubAddressesDown.Visible = true;
+                            btnXpubAddressesUp.Enabled = true;
+                            btnXpubAddressesDown.Enabled = true;
                         }
                         else
                         {
-                            btnXpubAddressesUp.Visible = false;
-                            btnXpubAddressesDown.Visible = false;
+                            btnXpubAddressesUp.Enabled = false;
+                            btnXpubAddressesDown.Enabled = false;
                         }
 
                         // Get the height of each item to set height of whole listview
@@ -8960,12 +8993,12 @@ namespace SATSuma
                 #region P2SH-P2WPKH
                 while (DerivationPath != NumberOfDerivationPathsToCheck)
                 {
+                    lblXpubStatus.Invoke((MethodInvoker)delegate
+                    {
+                        lblXpubStatus.Text = "Deriving P2SH-P2WPKH addresses";
+                    });
                     for (uint i = 0; i < 500; i++)
                     {
-                        lblXpubStatus.Invoke((MethodInvoker)delegate
-                        {
-                            lblXpubStatus.Text = "Deriving P2SH-P2WPKH addresses";
-                        });
                         var pubkey = ExtPubKey.Parse(submittedXpub, Network.Main);
                         uint index = i; // increment the index for each iteration
                         var BitcoinAddress = pubkey.Derive(Convert.ToUInt32(DerivationPath)).Derive(index).PubKey.GetAddress(ScriptPubKeyType.SegwitP2SH, Network.Main); //Segwit P2SH
@@ -9066,15 +9099,15 @@ namespace SATSuma
                             listViewXpubAddresses.Items.Add(item); // add row
                             numberOfAddressesChecked++;
                         });
-                        if (listViewXpubAddresses.Items.Count > 23)
+                        if (listViewXpubAddresses.Items.Count > 27)
                         {
-                            btnXpubAddressesUp.Visible = true;
-                            btnXpubAddressesDown.Visible = true;
+                            btnXpubAddressesUp.Enabled = true;
+                            btnXpubAddressesDown.Enabled = true;
                         }
                         else
                         {
-                            btnXpubAddressesUp.Visible = false;
-                            btnXpubAddressesDown.Visible = false;
+                            btnXpubAddressesUp.Enabled = false;
+                            btnXpubAddressesDown.Enabled = false;
                         }
 
                         // Get the height of each item to set height of whole listview
@@ -9211,12 +9244,12 @@ namespace SATSuma
                 #region P2SH
                 while (DerivationPath != NumberOfDerivationPathsToCheck)
                 {
+                    lblXpubStatus.Invoke((MethodInvoker)delegate
+                    {
+                        lblXpubStatus.Text = "Deriving P2SH addresses";
+                    });
                     for (uint i = 0; i < 500; i++)
                     {
-                        lblXpubStatus.Invoke((MethodInvoker)delegate
-                        {
-                            lblXpubStatus.Text = "Deriving P2SH addresses";
-                        });
                         var pubkey = ExtPubKey.Parse(submittedXpub, Network.Main);
                         uint index = i; // increment the index for each iteration
                         var redeemScript = pubkey.Derive(Convert.ToUInt32(DerivationPath)).Derive(index).PubKey.ScriptPubKey;
@@ -9318,15 +9351,15 @@ namespace SATSuma
                             listViewXpubAddresses.Items.Add(item); // add row
                             numberOfAddressesChecked++;
                         });
-                        if (listViewXpubAddresses.Items.Count > 23)
+                        if (listViewXpubAddresses.Items.Count > 27)
                         {
-                            btnXpubAddressesUp.Visible = true;
-                            btnXpubAddressesDown.Visible = true;
+                            btnXpubAddressesUp.Enabled = true;
+                            btnXpubAddressesDown.Enabled = true;
                         }
                         else
                         {
-                            btnXpubAddressesUp.Visible = false;
-                            btnXpubAddressesDown.Visible = false;
+                            btnXpubAddressesUp.Enabled = false;
+                            btnXpubAddressesDown.Enabled = false;
                         }
 
                         // Get the height of each item to set height of whole listview
@@ -9932,7 +9965,7 @@ namespace SATSuma
 
                     listViewPoolsByBlock.Invoke((MethodInvoker)delegate
                     {
-                        listViewPoolsByBlock.Columns.Add("Pool name", (int)(90 * UIScale));
+                        listViewPoolsByBlock.Columns.Add("Pool name", (int)(92 * UIScale));
                         listViewPoolsByBlock.Columns.Add("Rank", (int)(35 * UIScale));
                         listViewPoolsByBlock.Columns.Add("Blocks", (int)(55 * UIScale));
                         listViewPoolsByBlock.Columns.Add("Blocks %", (int)(65 * UIScale));
@@ -11507,15 +11540,15 @@ namespace SATSuma
                 });
                 lblMiningPoolBlockShareAll.Invoke((MethodInvoker)delegate
                 {
-                    lblMiningPoolBlockShareAll.Text = poolDataJson.BlockShare.All.ToString("F5") + "%";
+                    lblMiningPoolBlockShareAll.Text = (poolDataJson.BlockShare.All * 100).ToString("F5") + "%";
                 });
                 lblMiningPoolBlockShare1w.Invoke((MethodInvoker)delegate
                 {
-                    lblMiningPoolBlockShare1w.Text = poolDataJson.BlockShare._1w.ToString("F5") + "%";
+                    lblMiningPoolBlockShare1w.Text = (poolDataJson.BlockShare._1w * 100).ToString("F5") + "%";
                 });
                 lblMiningPoolBlockShare24h.Invoke((MethodInvoker)delegate
                 {
-                    lblMiningPoolBlockShare24h.Text = poolDataJson.BlockShare._24h.ToString("F5") + "%";
+                    lblMiningPoolBlockShare24h.Text = (poolDataJson.BlockShare._24h * 100).ToString("F5") + "%";
                 });
             }
         }
@@ -15816,18 +15849,6 @@ namespace SATSuma
                             listViewBookmarks.Items.Add(item); // add row
                         });
 
-                        if (listViewBookmarks.Items.Count > 21)
-                        {
-                            btnBookmarksListUp.Visible = true;
-                            btnBookmarksListDown.Visible = true;
-                        }
-                        else
-                        {
-                            btnBookmarksListUp.Visible = false;
-                            btnBookmarksListDown.Visible = false;
-
-                        }
-
                         // Get the height of each item to set height of whole listview
                         int rowHeight = listViewBookmarks.Margin.Vertical + listViewBookmarks.Padding.Vertical + listViewBookmarks.GetItemRect(0).Height;
                         int itemCount = listViewBookmarks.Items.Count; // Get the number of items in the ListBox
@@ -15855,6 +15876,17 @@ namespace SATSuma
                     }
                 }
 
+                if (listViewBookmarks.Items.Count > 23)
+                {
+                    btnBookmarksListUp.Enabled = true;
+                    btnBookmarksListDown.Enabled = true;
+                }
+                else
+                {
+                    btnBookmarksListUp.Enabled = false;
+                    btnBookmarksListDown.Enabled = false;
+
+                }
 
                 listViewBookmarks.Items[0].Selected = true;
 
@@ -16366,6 +16398,35 @@ namespace SATSuma
                 HandleException(ex, "ListViewBookmarks_DrawSubItem");
             }
         }
+
+        private void ListViewBookmarks_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (listViewBookmarks.SelectedItems.Count > 0)
+                {
+                    Rectangle itemRect = listViewBookmarks.GetItemRect(listViewBookmarks.SelectedIndices[0]);
+                    panel169.Invoke((MethodInvoker)delegate
+                    {
+                        panel169.Top = itemRect.Top + (int)(46 * UIScale);
+                    });
+                    label335.Invoke((MethodInvoker)delegate
+                    {
+                        label335.Top = itemRect.Top + (int)(38 * UIScale);
+                    });
+                    panel171.Invoke((MethodInvoker)delegate
+                    {
+                        panel171.Height = panel170.Top - panel169.Top;
+                        panel171.Top = panel169.Top;
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "listViewBookmarks_SelectedIndexChanged");
+            }
+        }
+
         #endregion
         #region scroll listview
         private void BtnDecryptBookmark_Click(object sender, EventArgs e)
@@ -23732,7 +23793,7 @@ namespace SATSuma
                 Control[] panelsToInvalidate = { panelXpubContainer, panelXpubScrollbar, panel92, panel32, panel74, panel76, panel77, panel99, panel84, panel88, panel89, panel90, panel86, panel87, panel103, panel46, panel51, panel91, panel70, panel71, panel16, panel21, panel85, panel53, panel96, panel106, panel107, panelAddToBookmarks,
                     panelAddToBookmarksBorder, panelOwnNodeAddressTXInfo, panelOwnNodeBlockTXInfo, panelTransactionMiddle, panelErrorMessage, panelDCAMessages, panelDCASummary, panelDCAInputs, panel119, panelPriceConvert, panelDCAChartContainer, panel117, panel121, panel122, 
                     panel101, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panel134, panelBookmarksContainer, panel33, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panel128, panel147, panel80, panel153, panel157, panelPoolsListContainer, panelBlocksByPoolContainer, panel158, panel160,
-                panelTransactionInputs, panelTransactionOutputs, panel24, panel25, addressTxContainer };
+                panelTransactionInputs, panelTransactionOutputs, panel24, panel25, panelAddressTxContainer };
                 foreach (Control control in panelsToInvalidate)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -23755,7 +23816,7 @@ namespace SATSuma
                 #endregion
                 #region panels (heading containers)
                 Control[] headingPanelsToInvalidate = { panel1, panel2, panel3, panel4, panel5, panel6, panel7, panel8, panel9, panel10, panel11, panel12, panel20, panel23, panel26, panel29, panel31, panel38, panel39, panel40, panel41, panel42, panel43, panel44, panel45, panel54, panel57, panel78, panel139,
-                    panel82, panel83, panel94, panel22, panel34, panel37, panel97, panel98, panel108, panel109, panel141, panel136, panel138, panel145, panel81, panel146, panel152, panel154, panel155, panel159, panel164, panel156 };
+                    panel82, panel83, panel94, panel22, panel34, panel37, panel97, panel98, panel108, panel109, panel141, panel136, panel138, panel145, panel81, panel146, panel155, panel159, panel156 };
                 foreach (Control control in headingPanelsToInvalidate)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24249,7 +24310,7 @@ namespace SATSuma
                     });
                 }
                 //bitcoindashboard
-                Control[] listBitcoinDashboardLabelsToColor = { lblPoolRankingChart, lblDifficultyChart, lblHashrateChart, lblFeeRangeChart, lblBlockFeesChart, lblUniqueAddressesChart, lblChartCirculation, lblMarketCapChart, lblConverterChart, label296, label297, label301, label292, label294, lblPriceLabel, lblMoscowTimeLabel, lblMarketCapLabel, label7, label30, label14, label31, label10, label12, label11, label21, label20, label17, label8, label27, label13, label9, label3, label2, label23, label134, label137, label32, label33, label57, label19, label85, lblPriceChart };
+                Control[] listBitcoinDashboardLabelsToColor = { label229, lblPoolRankingChart, lblDifficultyChart, lblHashrateChart, lblFeeRangeChart, lblBlockFeesChart, lblUniqueAddressesChart, lblChartCirculation, lblMarketCapChart, lblConverterChart, label296, label297, label301, label292, label294, lblPriceLabel, lblMoscowTimeLabel, lblMarketCapLabel, label7, label30, label14, label31, label10, label12, label11, label21, label20, label17, label8, label27, label13, label9, label3, label2, label23, label134, label137, label32, label33, label57, label19, label85, lblPriceChart };
                 foreach (Control control in listBitcoinDashboardLabelsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24770,7 +24831,7 @@ namespace SATSuma
                     });
                 }
                 //address utxo
-                Control[] listAddressUTXOButtonsToColor = { btnViewTransactionFromAddressUTXO, btnViewBlockFromAddressUTXO, btnViewAddressTXFromUTXO };
+                Control[] listAddressUTXOButtonsToColor = { btnViewTransactionFromAddressUTXO, btnViewBlockFromAddressUTXO, btnViewAddressTXFromUTXO, btnAddressUTXOScrollUp, btnAddressUTXOScrollDown };
                 foreach (Control control in listAddressUTXOButtonsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24987,7 +25048,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listListViewBackgroundsToColor = { addressTxContainer, panel127, panel134, panel128, panel157, panel147, panelUTXOsContainer, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panelUTXOError, panel137, panel122, panel56, panel27, panelTransactionOutputs, panelTransactionInputs, listViewBlockList, listViewTransactionInputs, listViewTransactionOutputs, listViewXpubAddresses, listViewBookmarks, listViewAddressTransactions, listViewAddressUTXOs, listViewPoolsByBlock, listViewPoolsHashrate, listViewBlockTransactions, panel66, panel24, panel25, panelXpubScrollbar, panel33, panel101, panelXpubContainer, panel149, panel30, panel148, panelPoolsListContainer, panelBlocksByPoolContainer, listViewPoolsList, listViewBlocksByPool, panel157 };
+                Control[] listListViewBackgroundsToColor = { panelAddressTxContainer, panel134, panel128, panel157, panel147, panelUTXOsContainer, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panelUTXOError, panel137, panel122, panel56, panel27, panelTransactionOutputs, panelTransactionInputs, listViewBlockList, listViewTransactionInputs, listViewTransactionOutputs, listViewXpubAddresses, listViewBookmarks, listViewAddressTransactions, listViewAddressUTXOs, listViewPoolsByBlock, listViewPoolsHashrate, listViewBlockTransactions, panel66, panel24, panel25, panelXpubScrollbar, panel33, panel101, panelXpubContainer, panelPoolsListContainer, panelBlocksByPoolContainer, listViewPoolsList, listViewBlocksByPool, panel157 };
                 foreach (Control control in listListViewBackgroundsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -25166,7 +25227,7 @@ namespace SATSuma
                     });
                 }
                 //blocklist
-                Control[] listBlockListHeadingsToColor = { panel45, panel13, panel15 };
+                Control[] listBlockListHeadingsToColor = { panel45, panel13, panel15, panel28 };
                 foreach (Control control in listBlockListHeadingsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -25323,7 +25384,7 @@ namespace SATSuma
                     });
                 }
                 //blocklist
-                Control[] listBlockListHeadingsToColor = { panel45, panel13, panel15 };
+                Control[] listBlockListHeadingsToColor = { panel45, panel13, panel15, panel28 };
                 foreach (Control control in listBlockListHeadingsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -25464,7 +25525,7 @@ namespace SATSuma
                     });
                 }
                 //blocklist
-                Control[] listBlockListHeadingsToColor = { panel45, panel13, panel15 };
+                Control[] listBlockListHeadingsToColor = { panel45, panel13, panel15, panel28 };
                 foreach (Control control in listBlockListHeadingsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -25524,7 +25585,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listPanelsToColor = { panel125, panel132, panel92, panelAddToBookmarks, panel46, panel103, panelOwnNodeBlockTXInfo, panel119, panelPriceConvert, panel106, panel107, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21, panelSettingsUIScale, panelDCAMessages, panelDCASummary, panelDCAInputs, panelRefreshChart, panelPriceSourceIndicators, panel80, panel153, panel158 };
+                Control[] listPanelsToColor = { panel30, panel125, panel132, panel92, panelAddToBookmarks, panel46, panel103, panelOwnNodeBlockTXInfo, panel119, panelPriceConvert, panel106, panel107, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21, panelSettingsUIScale, panelDCAMessages, panelDCASummary, panelDCAInputs, panelRefreshChart, panelPriceSourceIndicators, panel80, panel153, panel158 };
                 foreach (Control control in listPanelsToColor)
                 {
                     {
@@ -33378,32 +33439,5 @@ namespace SATSuma
 
         #endregion
 
-        private void listViewBookmarks_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                if (listViewBookmarks.SelectedItems.Count > 0)
-                {
-                    Rectangle itemRect = listViewBookmarks.GetItemRect(listViewBookmarks.SelectedIndices[0]);
-                    panel169.Invoke((MethodInvoker)delegate
-                    {
-                        panel169.Top = itemRect.Top + (int)(46 * UIScale);
-                    });
-                    label335.Invoke((MethodInvoker)delegate
-                    {
-                        label335.Top = itemRect.Top + (int)(38 * UIScale);
-                    });
-                    panel171.Invoke((MethodInvoker)delegate
-                    {
-                        panel171.Height = panel170.Top - panel169.Top;
-                        panel171.Top = panel169.Top;
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "listViewBookmarks_SelectedIndexChanged");
-            }
-        }
     }
 }

@@ -211,6 +211,24 @@ namespace SATSuma
                 webBrowserDocumentation.Url = new Uri("https://satsuma.btcdir.org/help-bitcoindashboard/");
             }
             else
+            if (((SATSuma)this.Owner).GetPanelMiningPools().Visible == true)
+            {
+                lblHelpHeading.Text = "Mining pools";
+                webBrowserDocumentation.Url = new Uri("https://satsuma.btcdir.org/help-miningpools/");
+            }
+            else
+            if (((SATSuma)this.Owner).GetPanelMiningBlocks().Visible == true)
+            {
+                lblHelpHeading.Text = "Pool rankings";
+                webBrowserDocumentation.Url = new Uri("https://satsuma.btcdir.org/help-poolrankings/");
+            }
+            else
+            if (((SATSuma)this.Owner).GetPanelMiningHashrate().Visible == true)
+            {
+                lblHelpHeading.Text = "Pool rankings";
+                webBrowserDocumentation.Url = new Uri("https://satsuma.btcdir.org/help-poolrankings/");
+            }
+            else
             if (((SATSuma)this.Owner).GetPanelLightningDashboard().Visible == true)
             {
                 lblHelpHeading.Text = "Lightning dashboard";
@@ -434,55 +452,65 @@ namespace SATSuma
             }
             if (comboBoxDocumentation.SelectedIndex == 8)
             {
+                lblHelpHeading.Text = "Mining pools";
+                webBrowserDocumentation.Url = new Uri("https://satsuma.btcdir.org/help-miningpools/");
+            }
+            if (comboBoxDocumentation.SelectedIndex == 9)
+            {
+                lblHelpHeading.Text = "Pool rankings";
+                webBrowserDocumentation.Url = new Uri("https://satsuma.btcdir.org/help-poolrankings/");
+            }
+            if (comboBoxDocumentation.SelectedIndex == 10)
+            {
                 lblHelpHeading.Text = "Lightning dashboard";
                 webBrowserDocumentation.Url = new Uri("https://satsuma.btcdir.org/help-lightningdashboard/");
             }
-            if (comboBoxDocumentation.SelectedIndex == 9)
+            if (comboBoxDocumentation.SelectedIndex == 11)
             {
                 lblHelpHeading.Text = "Bookmarks";
                 webBrowserDocumentation.Url = new Uri("https://satsuma.btcdir.org/help-bookmarks/");
             }
-            if (comboBoxDocumentation.SelectedIndex == 10)
+            if (comboBoxDocumentation.SelectedIndex == 12)
             {
                 lblHelpHeading.Text = "DCA calculator";
                 webBrowserDocumentation.Url = new Uri("https://satsuma.btcdir.org/help-dcacalculator/");
             }
-            if (comboBoxDocumentation.SelectedIndex == 11)
+            if (comboBoxDocumentation.SelectedIndex == 13)
             {
                 lblHelpHeading.Text = "BTC/Fiat converter";
                 webBrowserDocumentation.Url = new Uri("https://satsuma.btcdir.org/help-fiatconverter/");
             }
-            if (comboBoxDocumentation.SelectedIndex == 12)
+            if (comboBoxDocumentation.SelectedIndex == 14)
             {
                 lblHelpHeading.Text = "Directory";
                 webBrowserDocumentation.Url = new Uri("https://satsuma.btcdir.org/help-directory/");
             }
-            if (comboBoxDocumentation.SelectedIndex == 13)
+            if (comboBoxDocumentation.SelectedIndex == 15)
             {
                 lblHelpHeading.Text = "Settings";
                 webBrowserDocumentation.Url = new Uri("https://satsuma.btcdir.org/help-settings/");
             }
-            if (comboBoxDocumentation.SelectedIndex == 14)
+            if (comboBoxDocumentation.SelectedIndex == 16)
             {
                 lblHelpHeading.Text = "Themes";
                 webBrowserDocumentation.Url = new Uri("https://satsuma.btcdir.org/help-themes/");
             }
-            if (comboBoxDocumentation.SelectedIndex == 16)
+            if (comboBoxDocumentation.SelectedIndex == 18)
             {
                 lblHelpHeading.Text = "Release notes";
                 webBrowserDocumentation.Url = new Uri("https://satsuma.btcdir.org/help-version-history/");
             }
-            if (comboBoxDocumentation.SelectedIndex == 17)
+            if (comboBoxDocumentation.SelectedIndex == 19)
             {
                 lblHelpHeading.Text = "FAQ";
                 webBrowserDocumentation.Url = new Uri("https://satsuma.btcdir.org/help-faq/");
             }
-            if (comboBoxDocumentation.SelectedIndex == 18)
+            if (comboBoxDocumentation.SelectedIndex == 20)
             {
                 lblHelpHeading.Text = "Source code";
                 webBrowserDocumentation.Url = new Uri("https://satsuma.btcdir.org/help-source-code/");
             }
-            if (comboBoxDocumentation.SelectedIndex == 19)
+            if (comboBoxDocumentation.SelectedIndex == 21)
             {
                 lblHelpHeading.Text = "Support SATSuma";
                 webBrowserDocumentation.Url = new Uri("https://satsuma.btcdir.org/help-support-satsuma/");

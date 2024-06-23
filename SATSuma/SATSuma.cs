@@ -31,7 +31,7 @@ https://satsuma.btcdir.org/download/
 * check tooltips everywhere
 * chart background colours on the 2 pools screens don't change with themes
 * theme choice not being remembered sometimes. 
-* pools screen - put headings into same panels as the 2 listviews
+* reduce number of file accesses to themes file
 */
 
 #region Using
@@ -400,35 +400,9 @@ namespace SATSuma
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
             InitializeComponent();
 
-            #region restore saved UIScale
-            RestoreUIScale(); // read UIScale from settings file
+            // get all the settings from the settings file
+            SettingsManager.Initialize();
 
-            Dictionary<string, double> scaleMap = new Dictionary<string, double> // Translate saved UIScale value (1-5) into an actual UIScale value we can use
-            {
-                { "1", 1 },
-                { "2", 1.25 },
-                { "3", 1.5 },
-                { "4", 1.75 },
-                { "5", 2 }
-            };
-
-            if (UIScaleAlreadySavedInFile) // Set user's choice of UIScale
-            {
-                if (scaleMap.ContainsKey(UIScaleInFile))
-                {
-                    UIScale = scaleMap[UIScaleInFile];
-                }
-            }
-            else // If nothing in settings, set it to the default 125% and save to settings
-            {
-                UIScale = 1.5;
-
-                SaveSettings();
-            }
-            // set the form dimensions
-            this.Width = (int)(940 * UIScale);
-            this.Height = (int)(754 * UIScale);
-            #endregion
             #region check user data files exist and restore them from restore folder if they don't
             // files to be checked
             string appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
@@ -462,11 +436,42 @@ namespace SATSuma
                 File.Copy(backupSettingsFilePath, settingsFilePath);
             }
             #endregion
+
+            #region restore saved UIScale
+            RestoreUIScale(); // read UIScale from settings file
+
+            Dictionary<string, double> scaleMap = new Dictionary<string, double> // Translate saved UIScale value (1-5) into an actual UIScale value we can use
+            {
+                { "1", 1 },
+                { "2", 1.25 },
+                { "3", 1.5 },
+                { "4", 1.75 },
+                { "5", 2 }
+            };
+
+            if (UIScaleAlreadySavedInFile) // Set user's choice of UIScale
+            {
+                if (scaleMap.ContainsKey(UIScaleInFile))
+                {
+                    UIScale = scaleMap[UIScaleInFile];
+                }
+            }
+            else // If nothing in settings, set it to the default 150% and save to settings
+            {
+                UIScale = 1.5;
+
+                SaveSettings();
+            }
+            // set the form dimensions
+            this.Width = (int)(940 * UIScale);
+            this.Height = (int)(754 * UIScale);
+            #endregion
+            
             #region rounded panels
             Control[] panelsToRound = { panelXpubContainer, panelXpubScrollbar, panel32, panel74, panel76, panel77, panel99, panel84, panel88, panel89, panel90, panel86, panel87, panel103, panel46, panel51, panel91, panel70, panel71, panel16, panel21, panel85, panel53, panel96, panel106, panel107, panel92, panelAddToBookmarks, panelAddToBookmarksBorder,
                 panelLeftPanel, panelOwnNodeAddressTXInfo, panelOwnNodeBlockTXInfo, panelTransactionMiddle, panelErrorMessage, panelSettingsUIScale, panelSettingsUIScaleContainer, panelDCAMessages, panelDCASummary, panelDCAInputs, panel119, panelPriceConvert, panelDCAChartContainer, panel117, panel121,
-                panel122, panel101, panel27, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panel134, panelBookmarksContainer, panel33, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panel128, panel147, panel80, panel153, panel157, panelPoolsListContainer, panelBlocksByPoolContainer, panel158,
-                panelTransactionInputs, panelTransactionOutputs, panel24, panel25, panelAddressTxContainer };
+                panel122, panel101, panel27, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panel134, panelBookmarksContainer, panel33, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panel128, panel147, panel80, panel153, panel157, panel158,
+                panelTransactionInputs, panelTransactionOutputs, panel24, panel25, panelAddressTxContainer, panel120, panel123, panel124 };
             foreach (Control control in panelsToRound)
             {
                 control.Paint += Panel_Paint;
@@ -483,7 +488,7 @@ namespace SATSuma
             #endregion
             #region panels (heading containers)
             Control[] panelHeadingContainersToRound = { panel1, panel2, panel3, panel4, panel5, panel6, panel7, panel8, panel9, panel10, panel11, panel12, panel20, panel23, panel26, panel29, panel31, panel38, panel39, panel40, panel41, panel42, panel43, panel44, panel45, panel57, panel78,
-                panel94, panel109, panelLoadingAnimationContainer, panel141, panel136, panel139, panel138, panel145, panel81, panel146, panel155, panel159, panel156 };
+                panel94, panel109, panelLoadingAnimationContainer, panel141, panel136, panel139, panel138, panel145, panel81, panel146 };
             foreach (Control control in panelHeadingContainersToRound)
             {
                 control.Paint += Panel_Paint;
@@ -19370,38 +19375,13 @@ namespace SATSuma
             File.WriteAllText(filePath, json);
         }
         #endregion
-        #region read settings from file
-        private static Settings ReadSettingsFromJsonFile()
-        {
-            string settingsFileName = "SATSuma_settings.json";
-            string appDataDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            string applicationDirectory = Path.Combine(appDataDirectory, "SATSuma");
-            // Create the application directory if it doesn't exist
-            Directory.CreateDirectory(applicationDirectory);
-            string settingsFilePath = Path.Combine(applicationDirectory, settingsFileName);
-            string filePath = settingsFilePath;
 
-            if (!File.Exists(filePath))
-            {
-                File.Create(filePath).Dispose();
-            }
-            // Read the contents of the JSON file into a string
-            string json = File.ReadAllText(filePath);
-
-            // Deserialize the JSON string into a list of settings objects
-            var settings = JsonConvert.DeserializeObject<Settings>(json);
-
-            // If the JSON file doesn't exist or is empty, return an empty list
-            settings ??= new Settings();
-            return settings;
-        }
-        #endregion
         #region restore settings
         private void RestoreSavedSettings()
         {
             try
             {
-                var settings = ReadSettingsFromJsonFile();
+                //var settings = ReadSettingsFromJsonFile();
 
                 #region determine startup screen (needs to occur before rest of settings screen is restored)
                 // Define a dictionary to map strings to their corresponding values
@@ -19440,30 +19420,30 @@ namespace SATSuma
 
                 };
 
-                if (screenMap.ContainsKey(settings.SettingsStartupScreen))
+                if (screenMap.ContainsKey(SettingsManager.Settings.SettingsStartupScreen))
                 {
-                    startupScreenToSave = settings.SettingsStartupScreen;
-                    comboBoxStartupScreen.Texts = screenMap[settings.SettingsStartupScreen];
+                    startupScreenToSave = SettingsManager.Settings.SettingsStartupScreen;
+                    comboBoxStartupScreen.Texts = screenMap[SettingsManager.Settings.SettingsStartupScreen];
                 }
                 #endregion
                 #region restore own node url
                 // check if there is a node address saved in the file
                 textBoxXpubScreenOwnNodeURL.Invoke((MethodInvoker)delegate
                 {
-                    textBoxXpubScreenOwnNodeURL.Text = settings.SettingsNode; // move node url string to the form
+                    textBoxXpubScreenOwnNodeURL.Text = SettingsManager.Settings.SettingsNode; // move node url string to the form
                 });
                 textBoxSettingsOwnNodeURL.Invoke((MethodInvoker)delegate
                 {
-                    textBoxSettingsOwnNodeURL.Text = settings.SettingsNode; // and to the settings screen
+                    textBoxSettingsOwnNodeURL.Text = SettingsManager.Settings.SettingsNode; // and to the settings screen
                 });
                 CheckOwnNodeIsOnlineAsync();
-                xpubNodeURLInFile = settings.SettingsNode;
+                xpubNodeURLInFile = SettingsManager.Settings.SettingsNode;
 
                 #endregion
                 #region restore remainder of settings
                 // check if settings are already saved in the file and either restore them or use defaults
                 #region restore default fiat currency
-                if (String.Compare(Convert.ToString(settings.SettingsCurrencySelected), "P") == 0)
+                if (String.Compare(Convert.ToString(SettingsManager.Settings.SettingsCurrencySelected), "P") == 0)
                 {
                     //GBP
                     lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -19482,7 +19462,7 @@ namespace SATSuma
                     btnXAU.Enabled = true;
                     btnCurrency.Text = "   currency (GBP) ▼";
                 }
-                if (String.Compare(Convert.ToString(settings.SettingsCurrencySelected), "D") == 0)
+                if (String.Compare(Convert.ToString(SettingsManager.Settings.SettingsCurrencySelected), "D") == 0)
                 {
                     //USD
                     lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -19501,7 +19481,7 @@ namespace SATSuma
                     btnXAU.Enabled = true;
                     btnCurrency.Text = "   currency (USD) ▼";
                 }
-                if (String.Compare(Convert.ToString(settings.SettingsCurrencySelected), "E") == 0)
+                if (String.Compare(Convert.ToString(SettingsManager.Settings.SettingsCurrencySelected), "E") == 0)
                 {
                     //EUR
                     lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -19520,7 +19500,7 @@ namespace SATSuma
                     btnXAU.Enabled = true;
                     btnCurrency.Text = "   currency (EUR) ▼";
                 }
-                if (String.Compare(Convert.ToString(settings.SettingsCurrencySelected), "G") == 0)
+                if (String.Compare(Convert.ToString(SettingsManager.Settings.SettingsCurrencySelected), "G") == 0)
                 {
                     //XAU
                     lblCurrencyMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -19541,7 +19521,7 @@ namespace SATSuma
                 }
                 #endregion
                 #region restore offline mode settings
-                if (String.Compare(Convert.ToString(settings.SettingsOfflineModeSelected), "1") == 0)
+                if (String.Compare(Convert.ToString(SettingsManager.Settings.SettingsOfflineModeSelected), "1") == 0)
                 {
                     lblOfflineMode.Invoke((MethodInvoker)delegate
                     {
@@ -19577,7 +19557,7 @@ namespace SATSuma
                 }
                 #endregion
                 #region restore network
-                if (String.Compare(Convert.ToString(settings.SettingsSelectedNetwork), "M") == 0)
+                if (String.Compare(Convert.ToString(SettingsManager.Settings.SettingsSelectedNetwork), "M") == 0)
                 {
                     //mainnet
                     testNet = false;
@@ -19601,7 +19581,7 @@ namespace SATSuma
                     });
                     btnMenuAddressUTXO.Enabled = true;
                 }
-                if (String.Compare(Convert.ToString(settings.SettingsSelectedNetwork), "T") == 0)
+                if (String.Compare(Convert.ToString(SettingsManager.Settings.SettingsSelectedNetwork), "T") == 0)
                 {
                     //testnet
                     testNet = true;
@@ -19626,7 +19606,7 @@ namespace SATSuma
                     });
                     btnMenuAddressUTXO.Enabled = true;
                 }
-                if (String.Compare(Convert.ToString(settings.SettingsSelectedNetwork), "C") == 0)
+                if (String.Compare(Convert.ToString(SettingsManager.Settings.SettingsSelectedNetwork), "C") == 0)
                 {
                     //custom
                     RunMempoolSpaceLightningAPI = false;
@@ -19653,7 +19633,7 @@ namespace SATSuma
                 #region restore API settings
                 if (!offlineMode)
                 {
-                    if (String.Compare(Convert.ToString(settings.SettingsBlockchairComJSONSelected), "1") == 0)
+                    if (String.Compare(Convert.ToString(SettingsManager.Settings.SettingsBlockchairComJSONSelected), "1") == 0)
                     {
                         RunBlockchairComAPI = true;
                         lblBlockchairComJSON.Invoke((MethodInvoker)delegate
@@ -19671,7 +19651,7 @@ namespace SATSuma
                             lblBlockchairComJSON.ForeColor = Color.IndianRed;
                         });
                     }
-                    if (String.Compare(Convert.ToString(settings.SettingsBitcoinExplorerEnpointsSelected), "1") == 0)
+                    if (String.Compare(Convert.ToString(SettingsManager.Settings.SettingsBitcoinExplorerEnpointsSelected), "1") == 0)
                     {
                         RunBitcoinExplorerAPI = true;
                         lblBitcoinExplorerEndpoints.Invoke((MethodInvoker)delegate
@@ -19689,7 +19669,7 @@ namespace SATSuma
                             lblBitcoinExplorerEndpoints.ForeColor = Color.IndianRed;
                         });
                     }
-                    if (String.Compare(Convert.ToString(settings.SettingsBlockchainInfoEndpointsSelected), "1") == 0)
+                    if (String.Compare(Convert.ToString(SettingsManager.Settings.SettingsBlockchainInfoEndpointsSelected), "1") == 0)
                     {
                         RunBlockchainInfoAPI = true;
                         lblBlockchainInfoEndpoints.Invoke((MethodInvoker)delegate
@@ -19707,7 +19687,7 @@ namespace SATSuma
                             lblBlockchainInfoEndpoints.ForeColor = Color.IndianRed;
                         });
                     }
-                    if (String.Compare(Convert.ToString(settings.SettingsCoingeckoAPISelected), "1") == 0)
+                    if (String.Compare(Convert.ToString(SettingsManager.Settings.SettingsCoingeckoAPISelected), "1") == 0)
                     {
                         RunCoingeckoAPI = true;
                         lblCoingeckoComJSON.Invoke((MethodInvoker)delegate
@@ -19725,7 +19705,7 @@ namespace SATSuma
                             lblCoingeckoComJSON.ForeColor = Color.IndianRed;
                         });
                     }
-                    if (String.Compare(Convert.ToString(settings.SettingsMempoolSpacePriceAPISelected), "1") == 0)
+                    if (String.Compare(Convert.ToString(SettingsManager.Settings.SettingsMempoolSpacePriceAPISelected), "1") == 0)
                     {
                         RunMempoolSpacePriceAPI = true;
                         lblMempoolSpacePriceAPI.Invoke((MethodInvoker)delegate
@@ -19762,7 +19742,7 @@ namespace SATSuma
                 #region restore directory settings
                 if (!offlineMode)
                 {
-                    if (String.Compare(Convert.ToString(settings.SettingsDirectoryEnabled), "1") == 0)
+                    if (String.Compare(Convert.ToString(SettingsManager.Settings.SettingsDirectoryEnabled), "1") == 0)
                     {
                         lblEnableDirectory.Invoke((MethodInvoker)delegate
                         {
@@ -19785,7 +19765,7 @@ namespace SATSuma
                 }
                 #endregion
                 #region restore always on top setting
-                if (String.Compare(Convert.ToString(settings.SettingsAlwaysOnTop), "1") == 0)
+                if (String.Compare(Convert.ToString(SettingsManager.Settings.SettingsAlwaysOnTop), "1") == 0)
                 {
                     lblAlwaysOnTop.Invoke((MethodInvoker)delegate
                     {
@@ -19804,17 +19784,17 @@ namespace SATSuma
                     });
                 }
                 #endregion
-                numericUpDownDashboardRefresh.Value = Convert.ToInt32(settings.SettingsDataRefreshPeriod);
+                numericUpDownDashboardRefresh.Value = Convert.ToInt32(SettingsManager.Settings.SettingsDataRefreshPeriod);
                 progressBarRefreshData.Maximum = (int)(numericUpDownDashboardRefresh.Value * 60000);
-                numericUpDownMaxNumberOfConsecutiveUnusedAddresses.Value = Convert.ToInt32(settings.SettingsNumberOfConsecutiveUnusedAddresses);
-                numberUpDownDerivationPathsToCheck.Value = Convert.ToInt32(settings.SettingsNumberUpDownDerivationPathsToCheck);
+                numericUpDownMaxNumberOfConsecutiveUnusedAddresses.Value = Convert.ToInt32(SettingsManager.Settings.SettingsNumberOfConsecutiveUnusedAddresses);
+                numberUpDownDerivationPathsToCheck.Value = Convert.ToInt32(SettingsManager.Settings.SettingsNumberUpDownDerivationPathsToCheck);
                 #endregion
                 #region determine default theme
                 // check if there is a default theme saved in the file
                 var themes = ReadThemesFromJsonFile();
                 foreach (Theme theme in themes)
                 {
-                    if (String.Compare(theme.ThemeName, settings.SettingsDefaultTheme) == 0)
+                    if (String.Compare(theme.ThemeName, SettingsManager.Settings.SettingsDefaultTheme) == 0)
                     {
                         if (String.Compare(theme.ThemeName, "Genesis (preset)") == 0)
                         {
@@ -19992,7 +19972,7 @@ namespace SATSuma
                         }
 
                         RestoreThemeAsync(theme);
-                        defaultThemeInFile = settings.SettingsDefaultTheme;
+                        defaultThemeInFile = SettingsManager.Settings.SettingsDefaultTheme;
                         return;
                     }
                 }
@@ -20011,10 +19991,10 @@ namespace SATSuma
         {
             try
             {
-                var settings = ReadSettingsFromJsonFile();
-                if (settings.SettingsUIScale != null)
+                //var settings = ReadSettingsFromJsonFile();
+                if (SettingsManager.Settings.SettingsUIScale != null)
                 {
-                    UIScaleInFile = settings.SettingsUIScale;
+                    UIScaleInFile = SettingsManager.Settings.SettingsUIScale;
                 }
                 else
                 {
@@ -23791,9 +23771,9 @@ namespace SATSuma
             {
                 #region rounded panels
                 Control[] panelsToInvalidate = { panelXpubContainer, panelXpubScrollbar, panel92, panel32, panel74, panel76, panel77, panel99, panel84, panel88, panel89, panel90, panel86, panel87, panel103, panel46, panel51, panel91, panel70, panel71, panel16, panel21, panel85, panel53, panel96, panel106, panel107, panelAddToBookmarks,
-                    panelAddToBookmarksBorder, panelOwnNodeAddressTXInfo, panelOwnNodeBlockTXInfo, panelTransactionMiddle, panelErrorMessage, panelDCAMessages, panelDCASummary, panelDCAInputs, panel119, panelPriceConvert, panelDCAChartContainer, panel117, panel121, panel122, 
-                    panel101, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panel134, panelBookmarksContainer, panel33, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panel128, panel147, panel80, panel153, panel157, panelPoolsListContainer, panelBlocksByPoolContainer, panel158, panel160,
-                panelTransactionInputs, panelTransactionOutputs, panel24, panel25, panelAddressTxContainer };
+                    panelAddToBookmarksBorder, panelOwnNodeAddressTXInfo, panelOwnNodeBlockTXInfo, panelTransactionMiddle, panelErrorMessage, panelDCAMessages, panelDCASummary, panelDCAInputs, panel119, panelPriceConvert, panelDCAChartContainer, panel117, panel121, panel122, panel120, 
+                    panel101, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panel134, panelBookmarksContainer, panel33, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panel128, panel147, panel80, panel153, panel157, panel158, panel160,
+                panelTransactionInputs, panelTransactionOutputs, panel24, panel25, panelAddressTxContainer, panel123, panel124 };
                 foreach (Control control in panelsToInvalidate)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -23816,7 +23796,7 @@ namespace SATSuma
                 #endregion
                 #region panels (heading containers)
                 Control[] headingPanelsToInvalidate = { panel1, panel2, panel3, panel4, panel5, panel6, panel7, panel8, panel9, panel10, panel11, panel12, panel20, panel23, panel26, panel29, panel31, panel38, panel39, panel40, panel41, panel42, panel43, panel44, panel45, panel54, panel57, panel78, panel139,
-                    panel82, panel83, panel94, panel22, panel34, panel37, panel97, panel98, panel108, panel109, panel141, panel136, panel138, panel145, panel81, panel146, panel155, panel159, panel156 };
+                    panel82, panel83, panel94, panel22, panel34, panel37, panel97, panel98, panel108, panel109, panel141, panel136, panel138, panel145, panel81, panel146 };
                 foreach (Control control in headingPanelsToInvalidate)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -25585,7 +25565,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listPanelsToColor = { panel30, panel125, panel132, panel92, panelAddToBookmarks, panel46, panel103, panelOwnNodeBlockTXInfo, panel119, panelPriceConvert, panel106, panel107, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21, panelSettingsUIScale, panelDCAMessages, panelDCASummary, panelDCAInputs, panelRefreshChart, panelPriceSourceIndicators, panel80, panel153, panel158 };
+                Control[] listPanelsToColor = { panel30, panel125, panel132, panel92, panelAddToBookmarks, panel46, panel103, panelOwnNodeBlockTXInfo, panel119, panelPriceConvert, panel106, panel107, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21, panelSettingsUIScale, panelDCAMessages, panelDCASummary, panelDCAInputs, panelRefreshChart, panelPriceSourceIndicators, panel80, panel153, panel158, panel120, panel123, panel124 };
                 foreach (Control control in listPanelsToColor)
                 {
                     {
@@ -31891,7 +31871,44 @@ namespace SATSuma
         #endregion
 
         #region CLASSES
-        
+
+        #region read settings from file
+        public static class SettingsManager
+        {
+            public static Settings Settings { get; private set; }
+
+            public static void Initialize()
+            {
+                Settings = ReadSettingsFromJsonFile();
+            }
+
+            private static Settings ReadSettingsFromJsonFile()
+            {
+                string settingsFileName = "SATSuma_settings.json";
+                string appDataDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                string applicationDirectory = Path.Combine(appDataDirectory, "SATSuma");
+                // Create the application directory if it doesn't exist
+                Directory.CreateDirectory(applicationDirectory);
+                string settingsFilePath = Path.Combine(applicationDirectory, settingsFileName);
+                string filePath = settingsFilePath;
+
+                if (!File.Exists(filePath))
+                {
+                    File.Create(filePath).Dispose();
+                }
+                // Read the contents of the JSON file into a string
+                string json = File.ReadAllText(filePath);
+
+                // Deserialize the JSON string into a list of settings objects
+                var settings = JsonConvert.DeserializeObject<Settings>(json);
+
+                // If the JSON file doesn't exist or is empty, return an empty list
+                settings ??= new Settings();
+                return settings;
+            }
+        }
+        #endregion
+
         #region bookmark
         public class Bookmark
         {

@@ -1324,29 +1324,32 @@
             this.panel154 = new System.Windows.Forms.Panel();
             this.label318 = new System.Windows.Forms.Label();
             this.panelMiningPools = new System.Windows.Forms.Panel();
-            this.panel156 = new System.Windows.Forms.Panel();
-            this.label320 = new System.Windows.Forms.Label();
-            this.panel157 = new System.Windows.Forms.Panel();
-            this.btnPoolsListScrollUp = new CustomControls.RJControls.RJButton();
-            this.btnPoolsListScrollDown = new CustomControls.RJControls.RJButton();
-            this.panel158 = new System.Windows.Forms.Panel();
-            this.formsPlotPoolHashrate = new ScottPlot.FormsPlot();
-            this.panel164 = new System.Windows.Forms.Panel();
-            this.label319 = new System.Windows.Forms.Label();
+            this.panel123 = new System.Windows.Forms.Panel();
+            this.panel159 = new System.Windows.Forms.Panel();
+            this.label231 = new System.Windows.Forms.Label();
             this.panelBlocksByPoolContainer = new System.Windows.Forms.Panel();
             this.listViewBlocksByPool = new System.Windows.Forms.ListView();
             this.panel162 = new System.Windows.Forms.Panel();
             this.panel163 = new System.Windows.Forms.Panel();
+            this.panel120 = new System.Windows.Forms.Panel();
+            this.panel157 = new System.Windows.Forms.Panel();
+            this.btnPoolsListScrollUp = new CustomControls.RJControls.RJButton();
+            this.btnPoolsListScrollDown = new CustomControls.RJControls.RJButton();
+            this.panel155 = new System.Windows.Forms.Panel();
+            this.label228 = new System.Windows.Forms.Label();
             this.panelPoolsListContainer = new System.Windows.Forms.Panel();
             this.lblSelectedPoolMarker = new System.Windows.Forms.Label();
             this.listViewPoolsList = new System.Windows.Forms.ListView();
             this.panel160 = new System.Windows.Forms.Panel();
             this.panel161 = new System.Windows.Forms.Panel();
-            this.panel159 = new System.Windows.Forms.Panel();
-            this.label231 = new System.Windows.Forms.Label();
-            this.panel155 = new System.Windows.Forms.Panel();
-            this.label228 = new System.Windows.Forms.Label();
+            this.panel156 = new System.Windows.Forms.Panel();
+            this.label320 = new System.Windows.Forms.Label();
+            this.panel158 = new System.Windows.Forms.Panel();
+            this.formsPlotPoolHashrate = new ScottPlot.FormsPlot();
+            this.panel164 = new System.Windows.Forms.Panel();
+            this.label319 = new System.Windows.Forms.Label();
             this.PoolsListScrollTimer = new System.Windows.Forms.Timer(this.components);
+            this.panel124 = new System.Windows.Forms.Panel();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel109.SuspendLayout();
             this.panel12.SuspendLayout();
@@ -1588,14 +1591,17 @@
             this.panel153.SuspendLayout();
             this.panel154.SuspendLayout();
             this.panelMiningPools.SuspendLayout();
-            this.panel156.SuspendLayout();
+            this.panel123.SuspendLayout();
+            this.panel159.SuspendLayout();
+            this.panelBlocksByPoolContainer.SuspendLayout();
+            this.panel120.SuspendLayout();
             this.panel157.SuspendLayout();
+            this.panel155.SuspendLayout();
+            this.panelPoolsListContainer.SuspendLayout();
+            this.panel156.SuspendLayout();
             this.panel158.SuspendLayout();
             this.panel164.SuspendLayout();
-            this.panelBlocksByPoolContainer.SuspendLayout();
-            this.panelPoolsListContainer.SuspendLayout();
-            this.panel159.SuspendLayout();
-            this.panel155.SuspendLayout();
+            this.panel124.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTime
@@ -1605,7 +1611,7 @@
             this.lblTime.BackColor = System.Drawing.Color.Transparent;
             this.lblTime.Font = new System.Drawing.Font("Consolas", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTime.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
-            this.lblTime.Location = new System.Drawing.Point(848, 44);
+            this.lblTime.Location = new System.Drawing.Point(1848, 44);
             this.lblTime.Margin = new System.Windows.Forms.Padding(0);
             this.lblTime.Name = "lblTime";
             this.lblTime.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -19195,7 +19201,7 @@
             this.label323.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.label323.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label323.ForeColor = System.Drawing.Color.Silver;
-            this.label323.Location = new System.Drawing.Point(180, 46);
+            this.label323.Location = new System.Drawing.Point(5, 46);
             this.label323.Margin = new System.Windows.Forms.Padding(0);
             this.label323.Name = "label323";
             this.label323.Size = new System.Drawing.Size(30, 17);
@@ -19209,7 +19215,7 @@
             this.lblMiningPoolLink.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMiningPoolLink.LinkBehavior = System.Windows.Forms.LinkBehavior.AlwaysUnderline;
             this.lblMiningPoolLink.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.lblMiningPoolLink.Location = new System.Drawing.Point(210, 46);
+            this.lblMiningPoolLink.Location = new System.Drawing.Point(35, 46);
             this.lblMiningPoolLink.Name = "lblMiningPoolLink";
             this.lblMiningPoolLink.Size = new System.Drawing.Size(67, 17);
             this.lblMiningPoolLink.TabIndex = 344;
@@ -19224,7 +19230,7 @@
             this.label327.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.label327.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label327.ForeColor = System.Drawing.Color.Silver;
-            this.label327.Location = new System.Drawing.Point(582, 46);
+            this.label327.Location = new System.Drawing.Point(392, 46);
             this.label327.Margin = new System.Windows.Forms.Padding(0);
             this.label327.Name = "label327";
             this.label327.Size = new System.Drawing.Size(102, 17);
@@ -19238,7 +19244,7 @@
             this.label328.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.label328.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label328.ForeColor = System.Drawing.Color.Silver;
-            this.label328.Location = new System.Drawing.Point(582, 63);
+            this.label328.Location = new System.Drawing.Point(392, 63);
             this.label328.Margin = new System.Windows.Forms.Padding(0);
             this.label328.Name = "label328";
             this.label328.Size = new System.Drawing.Size(106, 17);
@@ -19252,7 +19258,7 @@
             this.label329.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.label329.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label329.ForeColor = System.Drawing.Color.Silver;
-            this.label329.Location = new System.Drawing.Point(582, 29);
+            this.label329.Location = new System.Drawing.Point(392, 29);
             this.label329.Margin = new System.Windows.Forms.Padding(0);
             this.label329.Name = "label329";
             this.label329.Size = new System.Drawing.Size(99, 17);
@@ -19266,7 +19272,7 @@
             this.label324.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.label324.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label324.ForeColor = System.Drawing.Color.Silver;
-            this.label324.Location = new System.Drawing.Point(403, 46);
+            this.label324.Location = new System.Drawing.Point(223, 46);
             this.label324.Margin = new System.Windows.Forms.Padding(0);
             this.label324.Name = "label324";
             this.label324.Size = new System.Drawing.Size(72, 17);
@@ -19280,7 +19286,7 @@
             this.label325.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.label325.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label325.ForeColor = System.Drawing.Color.Silver;
-            this.label325.Location = new System.Drawing.Point(403, 63);
+            this.label325.Location = new System.Drawing.Point(223, 63);
             this.label325.Margin = new System.Windows.Forms.Padding(0);
             this.label325.Name = "label325";
             this.label325.Size = new System.Drawing.Size(76, 17);
@@ -19294,7 +19300,7 @@
             this.label326.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.label326.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label326.ForeColor = System.Drawing.Color.Silver;
-            this.label326.Location = new System.Drawing.Point(403, 29);
+            this.label326.Location = new System.Drawing.Point(223, 29);
             this.label326.Margin = new System.Windows.Forms.Padding(0);
             this.label326.Name = "label326";
             this.label326.Size = new System.Drawing.Size(69, 17);
@@ -19308,7 +19314,7 @@
             this.label322.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.label322.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label322.ForeColor = System.Drawing.Color.Silver;
-            this.label322.Location = new System.Drawing.Point(180, 63);
+            this.label322.Location = new System.Drawing.Point(5, 63);
             this.label322.Margin = new System.Windows.Forms.Padding(0);
             this.label322.Name = "label322";
             this.label322.Size = new System.Drawing.Size(82, 17);
@@ -19322,7 +19328,7 @@
             this.label321.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.label321.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label321.ForeColor = System.Drawing.Color.Silver;
-            this.label321.Location = new System.Drawing.Point(180, 29);
+            this.label321.Location = new System.Drawing.Point(5, 29);
             this.label321.Margin = new System.Windows.Forms.Padding(0);
             this.label321.Name = "label321";
             this.label321.Size = new System.Drawing.Size(34, 17);
@@ -19336,7 +19342,7 @@
             this.lblMiningPoolPool.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblMiningPoolPool.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMiningPoolPool.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.lblMiningPoolPool.Location = new System.Drawing.Point(214, 29);
+            this.lblMiningPoolPool.Location = new System.Drawing.Point(39, 29);
             this.lblMiningPoolPool.Margin = new System.Windows.Forms.Padding(0);
             this.lblMiningPoolPool.Name = "lblMiningPoolPool";
             this.lblMiningPoolPool.Size = new System.Drawing.Size(55, 17);
@@ -19350,7 +19356,7 @@
             this.lblMiningPoolHashrate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblMiningPoolHashrate.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMiningPoolHashrate.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.lblMiningPoolHashrate.Location = new System.Drawing.Point(262, 63);
+            this.lblMiningPoolHashrate.Location = new System.Drawing.Point(87, 63);
             this.lblMiningPoolHashrate.Margin = new System.Windows.Forms.Padding(0);
             this.lblMiningPoolHashrate.Name = "lblMiningPoolHashrate";
             this.lblMiningPoolHashrate.Size = new System.Drawing.Size(55, 17);
@@ -19364,7 +19370,7 @@
             this.lblMiningPoolBlocks24h.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblMiningPoolBlocks24h.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMiningPoolBlocks24h.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.lblMiningPoolBlocks24h.Location = new System.Drawing.Point(479, 63);
+            this.lblMiningPoolBlocks24h.Location = new System.Drawing.Point(299, 63);
             this.lblMiningPoolBlocks24h.Margin = new System.Windows.Forms.Padding(0);
             this.lblMiningPoolBlocks24h.Name = "lblMiningPoolBlocks24h";
             this.lblMiningPoolBlocks24h.Size = new System.Drawing.Size(55, 17);
@@ -19378,7 +19384,7 @@
             this.lblMiningPoolBlocks1w.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblMiningPoolBlocks1w.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMiningPoolBlocks1w.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.lblMiningPoolBlocks1w.Location = new System.Drawing.Point(475, 46);
+            this.lblMiningPoolBlocks1w.Location = new System.Drawing.Point(295, 46);
             this.lblMiningPoolBlocks1w.Margin = new System.Windows.Forms.Padding(0);
             this.lblMiningPoolBlocks1w.Name = "lblMiningPoolBlocks1w";
             this.lblMiningPoolBlocks1w.Size = new System.Drawing.Size(55, 17);
@@ -19392,7 +19398,7 @@
             this.lblMiningPoolBlocksAll.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblMiningPoolBlocksAll.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMiningPoolBlocksAll.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.lblMiningPoolBlocksAll.Location = new System.Drawing.Point(472, 29);
+            this.lblMiningPoolBlocksAll.Location = new System.Drawing.Point(292, 29);
             this.lblMiningPoolBlocksAll.Margin = new System.Windows.Forms.Padding(0);
             this.lblMiningPoolBlocksAll.Name = "lblMiningPoolBlocksAll";
             this.lblMiningPoolBlocksAll.Size = new System.Drawing.Size(55, 17);
@@ -19406,7 +19412,7 @@
             this.lblMiningPoolBlockShare24h.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblMiningPoolBlockShare24h.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMiningPoolBlockShare24h.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.lblMiningPoolBlockShare24h.Location = new System.Drawing.Point(688, 63);
+            this.lblMiningPoolBlockShare24h.Location = new System.Drawing.Point(498, 63);
             this.lblMiningPoolBlockShare24h.Margin = new System.Windows.Forms.Padding(0);
             this.lblMiningPoolBlockShare24h.Name = "lblMiningPoolBlockShare24h";
             this.lblMiningPoolBlockShare24h.Size = new System.Drawing.Size(55, 17);
@@ -19420,7 +19426,7 @@
             this.lblMiningPoolBlockShare1w.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblMiningPoolBlockShare1w.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMiningPoolBlockShare1w.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.lblMiningPoolBlockShare1w.Location = new System.Drawing.Point(684, 46);
+            this.lblMiningPoolBlockShare1w.Location = new System.Drawing.Point(494, 46);
             this.lblMiningPoolBlockShare1w.Margin = new System.Windows.Forms.Padding(0);
             this.lblMiningPoolBlockShare1w.Name = "lblMiningPoolBlockShare1w";
             this.lblMiningPoolBlockShare1w.Size = new System.Drawing.Size(55, 17);
@@ -19434,7 +19440,7 @@
             this.lblMiningPoolBlockShareAll.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblMiningPoolBlockShareAll.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMiningPoolBlockShareAll.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.lblMiningPoolBlockShareAll.Location = new System.Drawing.Point(683, 29);
+            this.lblMiningPoolBlockShareAll.Location = new System.Drawing.Point(493, 29);
             this.lblMiningPoolBlockShareAll.Margin = new System.Windows.Forms.Padding(0);
             this.lblMiningPoolBlockShareAll.Name = "lblMiningPoolBlockShareAll";
             this.lblMiningPoolBlockShareAll.Size = new System.Drawing.Size(55, 17);
@@ -21144,168 +21150,51 @@
             // panelMiningPools
             // 
             this.panelMiningPools.BackColor = System.Drawing.Color.Transparent;
-            this.panelMiningPools.Controls.Add(this.lblMiningPoolLink);
-            this.panelMiningPools.Controls.Add(this.lblMiningPoolBlockShare24h);
-            this.panelMiningPools.Controls.Add(this.lblMiningPoolBlockShare1w);
-            this.panelMiningPools.Controls.Add(this.lblMiningPoolBlockShareAll);
-            this.panelMiningPools.Controls.Add(this.lblMiningPoolBlocks24h);
-            this.panelMiningPools.Controls.Add(this.lblMiningPoolBlocks1w);
-            this.panelMiningPools.Controls.Add(this.lblMiningPoolBlocksAll);
-            this.panelMiningPools.Controls.Add(this.lblMiningPoolHashrate);
-            this.panelMiningPools.Controls.Add(this.lblMiningPoolPool);
-            this.panelMiningPools.Controls.Add(this.label327);
-            this.panelMiningPools.Controls.Add(this.label328);
-            this.panelMiningPools.Controls.Add(this.label329);
-            this.panelMiningPools.Controls.Add(this.label324);
-            this.panelMiningPools.Controls.Add(this.label325);
-            this.panelMiningPools.Controls.Add(this.label326);
-            this.panelMiningPools.Controls.Add(this.label323);
-            this.panelMiningPools.Controls.Add(this.label322);
-            this.panelMiningPools.Controls.Add(this.label321);
-            this.panelMiningPools.Controls.Add(this.panel156);
-            this.panelMiningPools.Controls.Add(this.panel157);
+            this.panelMiningPools.Controls.Add(this.panel124);
+            this.panelMiningPools.Controls.Add(this.panel123);
+            this.panelMiningPools.Controls.Add(this.panel120);
             this.panelMiningPools.Controls.Add(this.panel158);
-            this.panelMiningPools.Controls.Add(this.panelBlocksByPoolContainer);
-            this.panelMiningPools.Controls.Add(this.panelPoolsListContainer);
-            this.panelMiningPools.Controls.Add(this.panel159);
-            this.panelMiningPools.Controls.Add(this.panel155);
             this.panelMiningPools.Location = new System.Drawing.Point(162, 187);
             this.panelMiningPools.Name = "panelMiningPools";
             this.panelMiningPools.Size = new System.Drawing.Size(773, 556);
             this.panelMiningPools.TabIndex = 291;
             this.panelMiningPools.Visible = false;
             // 
-            // panel156
+            // panel123
             // 
-            this.panel156.BackColor = System.Drawing.Color.Transparent;
-            this.panel156.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel156.BackgroundImage")));
-            this.panel156.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel156.Controls.Add(this.label320);
-            this.panel156.Location = new System.Drawing.Point(180, 0);
-            this.panel156.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel156.Name = "panel156";
-            this.panel156.Size = new System.Drawing.Size(561, 23);
-            this.panel156.TabIndex = 325;
+            this.panel123.Controls.Add(this.panel159);
+            this.panel123.Controls.Add(this.panelBlocksByPoolContainer);
+            this.panel123.Location = new System.Drawing.Point(180, 96);
+            this.panel123.Name = "panel123";
+            this.panel123.Size = new System.Drawing.Size(561, 207);
+            this.panel123.TabIndex = 346;
             // 
-            // label320
+            // panel159
             // 
-            this.label320.AutoSize = true;
-            this.label320.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label320.Font = new System.Drawing.Font("Century Gothic", 8F);
-            this.label320.ForeColor = System.Drawing.Color.Gray;
-            this.label320.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label320.Location = new System.Drawing.Point(5, 4);
-            this.label320.Margin = new System.Windows.Forms.Padding(0);
-            this.label320.Name = "label320";
-            this.label320.Size = new System.Drawing.Size(39, 16);
-            this.label320.TabIndex = 153;
-            this.label320.Text = "POOL";
-            this.label320.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.panel159.BackColor = System.Drawing.Color.Transparent;
+            this.panel159.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel159.BackgroundImage")));
+            this.panel159.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel159.Controls.Add(this.label231);
+            this.panel159.Location = new System.Drawing.Point(0, 0);
+            this.panel159.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel159.Name = "panel159";
+            this.panel159.Size = new System.Drawing.Size(561, 23);
+            this.panel159.TabIndex = 209;
             // 
-            // panel157
+            // label231
             // 
-            this.panel157.BackColor = System.Drawing.Color.Transparent;
-            this.panel157.Controls.Add(this.btnPoolsListScrollUp);
-            this.panel157.Controls.Add(this.btnPoolsListScrollDown);
-            this.panel157.Location = new System.Drawing.Point(138, 29);
-            this.panel157.Name = "panel157";
-            this.panel157.Size = new System.Drawing.Size(24, 517);
-            this.panel157.TabIndex = 298;
-            // 
-            // btnPoolsListScrollUp
-            // 
-            this.btnPoolsListScrollUp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnPoolsListScrollUp.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnPoolsListScrollUp.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnPoolsListScrollUp.BorderRadius = 7;
-            this.btnPoolsListScrollUp.BorderSize = 0;
-            this.btnPoolsListScrollUp.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnPoolsListScrollUp.FlatAppearance.BorderSize = 0;
-            this.btnPoolsListScrollUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPoolsListScrollUp.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPoolsListScrollUp.ForeColor = System.Drawing.Color.White;
-            this.btnPoolsListScrollUp.Location = new System.Drawing.Point(0, 0);
-            this.btnPoolsListScrollUp.Margin = new System.Windows.Forms.Padding(1);
-            this.btnPoolsListScrollUp.Name = "btnPoolsListScrollUp";
-            this.btnPoolsListScrollUp.Size = new System.Drawing.Size(24, 24);
-            this.btnPoolsListScrollUp.TabIndex = 297;
-            this.btnPoolsListScrollUp.TabStop = false;
-            this.btnPoolsListScrollUp.Text = "▲";
-            this.btnPoolsListScrollUp.TextColor = System.Drawing.Color.White;
-            this.btnPoolsListScrollUp.UseVisualStyleBackColor = false;
-            this.btnPoolsListScrollUp.Click += new System.EventHandler(this.BtnPoolsListScrollUp_Click);
-            this.btnPoolsListScrollUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnPoolsListScrollUp_MouseDown);
-            this.btnPoolsListScrollUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnPoolsListScrollUp_MouseUp);
-            // 
-            // btnPoolsListScrollDown
-            // 
-            this.btnPoolsListScrollDown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnPoolsListScrollDown.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnPoolsListScrollDown.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnPoolsListScrollDown.BorderRadius = 7;
-            this.btnPoolsListScrollDown.BorderSize = 0;
-            this.btnPoolsListScrollDown.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnPoolsListScrollDown.FlatAppearance.BorderSize = 0;
-            this.btnPoolsListScrollDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPoolsListScrollDown.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPoolsListScrollDown.ForeColor = System.Drawing.Color.White;
-            this.btnPoolsListScrollDown.Location = new System.Drawing.Point(0, 493);
-            this.btnPoolsListScrollDown.Margin = new System.Windows.Forms.Padding(1);
-            this.btnPoolsListScrollDown.Name = "btnPoolsListScrollDown";
-            this.btnPoolsListScrollDown.Size = new System.Drawing.Size(24, 24);
-            this.btnPoolsListScrollDown.TabIndex = 298;
-            this.btnPoolsListScrollDown.TabStop = false;
-            this.btnPoolsListScrollDown.Text = "▼";
-            this.btnPoolsListScrollDown.TextColor = System.Drawing.Color.White;
-            this.btnPoolsListScrollDown.UseVisualStyleBackColor = false;
-            this.btnPoolsListScrollDown.Click += new System.EventHandler(this.BtnPoolsListScrollDown_Click);
-            this.btnPoolsListScrollDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnPoolsListScrollDown_MouseDown);
-            this.btnPoolsListScrollDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnPoolsListScrollDown_MouseUp);
-            // 
-            // panel158
-            // 
-            this.panel158.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.panel158.Controls.Add(this.formsPlotPoolHashrate);
-            this.panel158.Controls.Add(this.panel164);
-            this.panel158.Location = new System.Drawing.Point(180, 302);
-            this.panel158.Name = "panel158";
-            this.panel158.Size = new System.Drawing.Size(561, 242);
-            this.panel158.TabIndex = 314;
-            // 
-            // formsPlotPoolHashrate
-            // 
-            this.formsPlotPoolHashrate.Location = new System.Drawing.Point(0, 24);
-            this.formsPlotPoolHashrate.Margin = new System.Windows.Forms.Padding(0);
-            this.formsPlotPoolHashrate.Name = "formsPlotPoolHashrate";
-            this.formsPlotPoolHashrate.Size = new System.Drawing.Size(558, 219);
-            this.formsPlotPoolHashrate.TabIndex = 292;
-            // 
-            // panel164
-            // 
-            this.panel164.BackColor = System.Drawing.Color.Transparent;
-            this.panel164.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel164.BackgroundImage")));
-            this.panel164.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel164.Controls.Add(this.label319);
-            this.panel164.Location = new System.Drawing.Point(0, 0);
-            this.panel164.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel164.Name = "panel164";
-            this.panel164.Size = new System.Drawing.Size(561, 23);
-            this.panel164.TabIndex = 209;
-            // 
-            // label319
-            // 
-            this.label319.AutoSize = true;
-            this.label319.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label319.Font = new System.Drawing.Font("Century Gothic", 8F);
-            this.label319.ForeColor = System.Drawing.Color.Gray;
-            this.label319.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label319.Location = new System.Drawing.Point(5, 4);
-            this.label319.Margin = new System.Windows.Forms.Padding(0);
-            this.label319.Name = "label319";
-            this.label319.Size = new System.Drawing.Size(149, 16);
-            this.label319.TabIndex = 153;
-            this.label319.Text = "ESTIMATED HASHRATE FOR ";
-            this.label319.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label231.AutoSize = true;
+            this.label231.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label231.Font = new System.Drawing.Font("Century Gothic", 8F);
+            this.label231.ForeColor = System.Drawing.Color.Gray;
+            this.label231.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label231.Location = new System.Drawing.Point(5, 4);
+            this.label231.Margin = new System.Windows.Forms.Padding(0);
+            this.label231.Name = "label231";
+            this.label231.Size = new System.Drawing.Size(149, 16);
+            this.label231.TabIndex = 153;
+            this.label231.Text = "RECENT BLOCKS MINED BY";
+            this.label231.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // panelBlocksByPoolContainer
             // 
@@ -21313,7 +21202,7 @@
             this.panelBlocksByPoolContainer.Controls.Add(this.panel162);
             this.panelBlocksByPoolContainer.Controls.Add(this.panel163);
             this.panelBlocksByPoolContainer.Controls.Add(this.btnViewBlockFromBlocksByPool);
-            this.panelBlocksByPoolContainer.Location = new System.Drawing.Point(180, 113);
+            this.panelBlocksByPoolContainer.Location = new System.Drawing.Point(0, 23);
             this.panelBlocksByPoolContainer.Name = "panelBlocksByPoolContainer";
             this.panelBlocksByPoolContainer.Size = new System.Drawing.Size(561, 180);
             this.panelBlocksByPoolContainer.TabIndex = 301;
@@ -21363,6 +21252,103 @@
             this.panel163.Size = new System.Drawing.Size(329, 180);
             this.panel163.TabIndex = 165;
             // 
+            // panel120
+            // 
+            this.panel120.Controls.Add(this.panel157);
+            this.panel120.Controls.Add(this.panel155);
+            this.panel120.Controls.Add(this.panelPoolsListContainer);
+            this.panel120.Location = new System.Drawing.Point(0, 0);
+            this.panel120.Name = "panel120";
+            this.panel120.Size = new System.Drawing.Size(159, 544);
+            this.panel120.TabIndex = 345;
+            // 
+            // panel157
+            // 
+            this.panel157.BackColor = System.Drawing.Color.Transparent;
+            this.panel157.Controls.Add(this.btnPoolsListScrollUp);
+            this.panel157.Controls.Add(this.btnPoolsListScrollDown);
+            this.panel157.Location = new System.Drawing.Point(137, 23);
+            this.panel157.Name = "panel157";
+            this.panel157.Size = new System.Drawing.Size(24, 521);
+            this.panel157.TabIndex = 298;
+            // 
+            // btnPoolsListScrollUp
+            // 
+            this.btnPoolsListScrollUp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnPoolsListScrollUp.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnPoolsListScrollUp.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.btnPoolsListScrollUp.BorderRadius = 7;
+            this.btnPoolsListScrollUp.BorderSize = 0;
+            this.btnPoolsListScrollUp.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnPoolsListScrollUp.FlatAppearance.BorderSize = 0;
+            this.btnPoolsListScrollUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnPoolsListScrollUp.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPoolsListScrollUp.ForeColor = System.Drawing.Color.White;
+            this.btnPoolsListScrollUp.Location = new System.Drawing.Point(0, 0);
+            this.btnPoolsListScrollUp.Margin = new System.Windows.Forms.Padding(1);
+            this.btnPoolsListScrollUp.Name = "btnPoolsListScrollUp";
+            this.btnPoolsListScrollUp.Size = new System.Drawing.Size(24, 24);
+            this.btnPoolsListScrollUp.TabIndex = 297;
+            this.btnPoolsListScrollUp.TabStop = false;
+            this.btnPoolsListScrollUp.Text = "▲";
+            this.btnPoolsListScrollUp.TextColor = System.Drawing.Color.White;
+            this.btnPoolsListScrollUp.UseVisualStyleBackColor = false;
+            this.btnPoolsListScrollUp.Click += new System.EventHandler(this.BtnPoolsListScrollUp_Click);
+            this.btnPoolsListScrollUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnPoolsListScrollUp_MouseDown);
+            this.btnPoolsListScrollUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnPoolsListScrollUp_MouseUp);
+            // 
+            // btnPoolsListScrollDown
+            // 
+            this.btnPoolsListScrollDown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnPoolsListScrollDown.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnPoolsListScrollDown.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.btnPoolsListScrollDown.BorderRadius = 7;
+            this.btnPoolsListScrollDown.BorderSize = 0;
+            this.btnPoolsListScrollDown.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnPoolsListScrollDown.FlatAppearance.BorderSize = 0;
+            this.btnPoolsListScrollDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnPoolsListScrollDown.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPoolsListScrollDown.ForeColor = System.Drawing.Color.White;
+            this.btnPoolsListScrollDown.Location = new System.Drawing.Point(0, 497);
+            this.btnPoolsListScrollDown.Margin = new System.Windows.Forms.Padding(1);
+            this.btnPoolsListScrollDown.Name = "btnPoolsListScrollDown";
+            this.btnPoolsListScrollDown.Size = new System.Drawing.Size(24, 24);
+            this.btnPoolsListScrollDown.TabIndex = 298;
+            this.btnPoolsListScrollDown.TabStop = false;
+            this.btnPoolsListScrollDown.Text = "▼";
+            this.btnPoolsListScrollDown.TextColor = System.Drawing.Color.White;
+            this.btnPoolsListScrollDown.UseVisualStyleBackColor = false;
+            this.btnPoolsListScrollDown.Click += new System.EventHandler(this.BtnPoolsListScrollDown_Click);
+            this.btnPoolsListScrollDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnPoolsListScrollDown_MouseDown);
+            this.btnPoolsListScrollDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnPoolsListScrollDown_MouseUp);
+            // 
+            // panel155
+            // 
+            this.panel155.BackColor = System.Drawing.Color.Transparent;
+            this.panel155.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel155.BackgroundImage")));
+            this.panel155.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel155.Controls.Add(this.label228);
+            this.panel155.Location = new System.Drawing.Point(0, 0);
+            this.panel155.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel155.Name = "panel155";
+            this.panel155.Size = new System.Drawing.Size(159, 23);
+            this.panel155.TabIndex = 208;
+            // 
+            // label228
+            // 
+            this.label228.AutoSize = true;
+            this.label228.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label228.Font = new System.Drawing.Font("Century Gothic", 8F);
+            this.label228.ForeColor = System.Drawing.Color.Gray;
+            this.label228.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label228.Location = new System.Drawing.Point(5, 4);
+            this.label228.Margin = new System.Windows.Forms.Padding(0);
+            this.label228.Name = "label228";
+            this.label228.Size = new System.Drawing.Size(100, 16);
+            this.label228.TabIndex = 153;
+            this.label228.Text = "POOL SELECTION";
+            this.label228.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // panelPoolsListContainer
             // 
             this.panelPoolsListContainer.AutoScroll = true;
@@ -21370,7 +21356,7 @@
             this.panelPoolsListContainer.Controls.Add(this.listViewPoolsList);
             this.panelPoolsListContainer.Controls.Add(this.panel160);
             this.panelPoolsListContainer.Controls.Add(this.panel161);
-            this.panelPoolsListContainer.Location = new System.Drawing.Point(6, 29);
+            this.panelPoolsListContainer.Location = new System.Drawing.Point(0, 23);
             this.panelPoolsListContainer.Name = "panelPoolsListContainer";
             this.panelPoolsListContainer.Size = new System.Drawing.Size(154, 517);
             this.panelPoolsListContainer.TabIndex = 297;
@@ -21436,64 +21422,108 @@
             this.panel161.Size = new System.Drawing.Size(80, 500);
             this.panel161.TabIndex = 165;
             // 
-            // panel159
+            // panel156
             // 
-            this.panel159.BackColor = System.Drawing.Color.Transparent;
-            this.panel159.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel159.BackgroundImage")));
-            this.panel159.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel159.Controls.Add(this.label231);
-            this.panel159.Location = new System.Drawing.Point(180, 86);
-            this.panel159.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel159.Name = "panel159";
-            this.panel159.Size = new System.Drawing.Size(561, 23);
-            this.panel159.TabIndex = 209;
+            this.panel156.BackColor = System.Drawing.Color.Transparent;
+            this.panel156.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel156.BackgroundImage")));
+            this.panel156.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel156.Controls.Add(this.label320);
+            this.panel156.Location = new System.Drawing.Point(0, 0);
+            this.panel156.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel156.Name = "panel156";
+            this.panel156.Size = new System.Drawing.Size(561, 23);
+            this.panel156.TabIndex = 325;
             // 
-            // label231
+            // label320
             // 
-            this.label231.AutoSize = true;
-            this.label231.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label231.Font = new System.Drawing.Font("Century Gothic", 8F);
-            this.label231.ForeColor = System.Drawing.Color.Gray;
-            this.label231.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label231.Location = new System.Drawing.Point(5, 4);
-            this.label231.Margin = new System.Windows.Forms.Padding(0);
-            this.label231.Name = "label231";
-            this.label231.Size = new System.Drawing.Size(149, 16);
-            this.label231.TabIndex = 153;
-            this.label231.Text = "RECENT BLOCKS MINED BY";
-            this.label231.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label320.AutoSize = true;
+            this.label320.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label320.Font = new System.Drawing.Font("Century Gothic", 8F);
+            this.label320.ForeColor = System.Drawing.Color.Gray;
+            this.label320.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label320.Location = new System.Drawing.Point(5, 4);
+            this.label320.Margin = new System.Windows.Forms.Padding(0);
+            this.label320.Name = "label320";
+            this.label320.Size = new System.Drawing.Size(39, 16);
+            this.label320.TabIndex = 153;
+            this.label320.Text = "POOL";
+            this.label320.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // panel155
+            // panel158
             // 
-            this.panel155.BackColor = System.Drawing.Color.Transparent;
-            this.panel155.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel155.BackgroundImage")));
-            this.panel155.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel155.Controls.Add(this.label228);
-            this.panel155.Location = new System.Drawing.Point(3, 0);
-            this.panel155.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel155.Name = "panel155";
-            this.panel155.Size = new System.Drawing.Size(159, 23);
-            this.panel155.TabIndex = 208;
+            this.panel158.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.panel158.Controls.Add(this.formsPlotPoolHashrate);
+            this.panel158.Controls.Add(this.panel164);
+            this.panel158.Location = new System.Drawing.Point(180, 312);
+            this.panel158.Name = "panel158";
+            this.panel158.Size = new System.Drawing.Size(561, 232);
+            this.panel158.TabIndex = 314;
             // 
-            // label228
+            // formsPlotPoolHashrate
             // 
-            this.label228.AutoSize = true;
-            this.label228.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label228.Font = new System.Drawing.Font("Century Gothic", 8F);
-            this.label228.ForeColor = System.Drawing.Color.Gray;
-            this.label228.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label228.Location = new System.Drawing.Point(5, 4);
-            this.label228.Margin = new System.Windows.Forms.Padding(0);
-            this.label228.Name = "label228";
-            this.label228.Size = new System.Drawing.Size(100, 16);
-            this.label228.TabIndex = 153;
-            this.label228.Text = "POOL SELECTION";
-            this.label228.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.formsPlotPoolHashrate.Location = new System.Drawing.Point(0, 24);
+            this.formsPlotPoolHashrate.Margin = new System.Windows.Forms.Padding(0);
+            this.formsPlotPoolHashrate.Name = "formsPlotPoolHashrate";
+            this.formsPlotPoolHashrate.Size = new System.Drawing.Size(558, 209);
+            this.formsPlotPoolHashrate.TabIndex = 292;
+            // 
+            // panel164
+            // 
+            this.panel164.BackColor = System.Drawing.Color.Transparent;
+            this.panel164.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel164.BackgroundImage")));
+            this.panel164.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel164.Controls.Add(this.label319);
+            this.panel164.Location = new System.Drawing.Point(0, 0);
+            this.panel164.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel164.Name = "panel164";
+            this.panel164.Size = new System.Drawing.Size(561, 23);
+            this.panel164.TabIndex = 209;
+            // 
+            // label319
+            // 
+            this.label319.AutoSize = true;
+            this.label319.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label319.Font = new System.Drawing.Font("Century Gothic", 8F);
+            this.label319.ForeColor = System.Drawing.Color.Gray;
+            this.label319.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label319.Location = new System.Drawing.Point(5, 4);
+            this.label319.Margin = new System.Windows.Forms.Padding(0);
+            this.label319.Name = "label319";
+            this.label319.Size = new System.Drawing.Size(149, 16);
+            this.label319.TabIndex = 153;
+            this.label319.Text = "ESTIMATED HASHRATE FOR ";
+            this.label319.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // PoolsListScrollTimer
             // 
             this.PoolsListScrollTimer.Interval = 50;
             this.PoolsListScrollTimer.Tick += new System.EventHandler(this.PoolsListScrollTimer_Tick);
+            // 
+            // panel124
+            // 
+            this.panel124.Controls.Add(this.panel156);
+            this.panel124.Controls.Add(this.label321);
+            this.panel124.Controls.Add(this.lblMiningPoolLink);
+            this.panel124.Controls.Add(this.label322);
+            this.panel124.Controls.Add(this.label323);
+            this.panel124.Controls.Add(this.lblMiningPoolBlockShare24h);
+            this.panel124.Controls.Add(this.label326);
+            this.panel124.Controls.Add(this.label325);
+            this.panel124.Controls.Add(this.lblMiningPoolBlockShare1w);
+            this.panel124.Controls.Add(this.label324);
+            this.panel124.Controls.Add(this.label329);
+            this.panel124.Controls.Add(this.lblMiningPoolBlockShareAll);
+            this.panel124.Controls.Add(this.label328);
+            this.panel124.Controls.Add(this.label327);
+            this.panel124.Controls.Add(this.lblMiningPoolBlocks24h);
+            this.panel124.Controls.Add(this.lblMiningPoolPool);
+            this.panel124.Controls.Add(this.lblMiningPoolHashrate);
+            this.panel124.Controls.Add(this.lblMiningPoolBlocks1w);
+            this.panel124.Controls.Add(this.lblMiningPoolBlocksAll);
+            this.panel124.Location = new System.Drawing.Point(180, 0);
+            this.panel124.Name = "panel124";
+            this.panel124.Size = new System.Drawing.Size(561, 88);
+            this.panel124.TabIndex = 347;
             // 
             // SATSuma
             // 
@@ -21503,7 +21533,7 @@
             this.BackgroundImage = global::SATSuma.Properties.Resources.Genesis;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
-            this.ClientSize = new System.Drawing.Size(940, 754);
+            this.ClientSize = new System.Drawing.Size(1940, 754);
             this.Controls.Add(this.panelMiningPools);
             this.Controls.Add(this.panelChartsForPoolsScreen);
             this.Controls.Add(this.panelBitcoinDashboard);
@@ -21946,19 +21976,22 @@
             this.panel154.ResumeLayout(false);
             this.panel154.PerformLayout();
             this.panelMiningPools.ResumeLayout(false);
-            this.panelMiningPools.PerformLayout();
+            this.panel123.ResumeLayout(false);
+            this.panel159.ResumeLayout(false);
+            this.panel159.PerformLayout();
+            this.panelBlocksByPoolContainer.ResumeLayout(false);
+            this.panel120.ResumeLayout(false);
+            this.panel157.ResumeLayout(false);
+            this.panel155.ResumeLayout(false);
+            this.panel155.PerformLayout();
+            this.panelPoolsListContainer.ResumeLayout(false);
             this.panel156.ResumeLayout(false);
             this.panel156.PerformLayout();
-            this.panel157.ResumeLayout(false);
             this.panel158.ResumeLayout(false);
             this.panel164.ResumeLayout(false);
             this.panel164.PerformLayout();
-            this.panelBlocksByPoolContainer.ResumeLayout(false);
-            this.panelPoolsListContainer.ResumeLayout(false);
-            this.panel159.ResumeLayout(false);
-            this.panel159.PerformLayout();
-            this.panel155.ResumeLayout(false);
-            this.panel155.PerformLayout();
+            this.panel124.ResumeLayout(false);
+            this.panel124.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -23283,6 +23316,9 @@
         private System.Windows.Forms.Panel panel28;
         private System.Windows.Forms.Label label109;
         private System.Windows.Forms.Panel panel30;
+        private System.Windows.Forms.Panel panel120;
+        private System.Windows.Forms.Panel panel123;
+        private System.Windows.Forms.Panel panel124;
     }
 }
 

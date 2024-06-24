@@ -27,11 +27,11 @@ https://satsuma.btcdir.org/download/
 * Stuff to do:
 * Taproot support on xpub screen 
 * documentation for new pools screens (code done, just do online help)
-* testing, particularly new pools screens and pools screens on own node
+* testing, particularly new pools screens on own node and make sure everything on settings screen restores correctly multple times (in case the fixed theme restore bug exists similarly elsewhere)
 * check tooltips everywhere
-* chart background colours on the 2 pools screens don't change with themes
-* theme choice not being remembered sometimes. 
-* reduce number of file accesses to themes file
+* change pools charts background colours or not?
+* select a custom theme from main menu, apply it, then can't apply a different custom theme (apply button doesn't reappear)
+* replace time period buttons (pools, charts, etc) with comboboxes?
 */
 
 #region Using
@@ -398,10 +398,6 @@ namespace SATSuma
         public SATSuma()
         {
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
-            InitializeComponent();
-
-            // get all the settings from the settings file
-            SettingsManager.Initialize();
 
             #region check user data files exist and restore them from restore folder if they don't
             // files to be checked
@@ -437,6 +433,11 @@ namespace SATSuma
             }
             #endregion
 
+            // get all the settings from the settings file
+            SettingsManager.Initialize();
+            // get all the themes from the themes file
+            ThemesManager.Initialize();
+
             #region restore saved UIScale
             RestoreUIScale(); // read UIScale from settings file
 
@@ -460,13 +461,17 @@ namespace SATSuma
             {
                 UIScale = 1.5;
 
-                SaveSettings();
+               //zz SaveSettings();
             }
+
+            InitializeComponent();
+
             // set the form dimensions
             this.Width = (int)(940 * UIScale);
             this.Height = (int)(754 * UIScale);
-            #endregion
             
+            #endregion
+
             #region rounded panels
             Control[] panelsToRound = { panelXpubContainer, panelXpubScrollbar, panel32, panel74, panel76, panel77, panel99, panel84, panel88, panel89, panel90, panel86, panel87, panel103, panel46, panel51, panel91, panel70, panel71, panel16, panel21, panel85, panel53, panel96, panel106, panel107, panel92, panelAddToBookmarks, panelAddToBookmarksBorder,
                 panelLeftPanel, panelOwnNodeAddressTXInfo, panelOwnNodeBlockTXInfo, panelTransactionMiddle, panelErrorMessage, panelSettingsUIScale, panelSettingsUIScaleContainer, panelDCAMessages, panelDCASummary, panelDCAInputs, panel119, panelPriceConvert, panelDCAChartContainer, panel117, panel121,
@@ -18112,6 +18117,8 @@ namespace SATSuma
         #endregion
         #endregion
 
+        bool preventSavingSettings = true;
+
         #region ⚡SETTINGS SCREEN⚡
         #region user input own node url
         private void TextBoxSettingsOwnNodeURL_Enter(object sender, EventArgs e)
@@ -19206,141 +19213,144 @@ namespace SATSuma
         {
             try
             {
-                if (btnUSD.Enabled == false)
+                if (!preventSavingSettings)
                 {
-                    currencySelected = "D";
-                }
-                if (btnGBP.Enabled == false)
-                {
-                    currencySelected = "P";
-                }
-                if (btnEUR.Enabled == false)
-                {
-                    currencySelected = "E";
-                }
-                if (btnXAU.Enabled == false)
-                {
-                    currencySelected = "G";
-                }
-                if (testNet == false && RunMempoolSpaceLightningAPI == true)
-                {
-                    selectedNetwork = "M";
-                }
-                if (testNet == true && RunMempoolSpaceLightningAPI == true)
-                {
-                    selectedNetwork = "T";
-                }
-                if (testNet == false && RunMempoolSpaceLightningAPI == false)
-                {
-                    selectedNetwork = "C";
-                }
-                if (String.Compare(lblOfflineMode.Text, "✔️") == 0)
-                {
-                    OfflineModeSelected = "1";
-                }
-                else
-                {
-                    OfflineModeSelected = "0";
-                }
-                if (RunBlockchairComAPI)
-                {
-                    blockchairComJSONSelected = "1";
-                }
-                else
-                {
-                    blockchairComJSONSelected = "0";
-                }
-                if (RunBitcoinExplorerAPI)
-                {
-                    bitcoinExplorerEnpointsSelected = "1";
-                }
-                else
-                {
-                    bitcoinExplorerEnpointsSelected = "0";
-                }
-                if (RunBlockchainInfoAPI)
-                {
-                    blockchainInfoEndpointsSelected = "1";
-                }
-                else
-                {
-                    blockchainInfoEndpointsSelected = "0";
-                }
-                if (enableDirectory)
-                {
-                    directoryEnabled = "1";
-                }
-                else
-                {
-                    directoryEnabled = "0";
-                }
-                if (String.Compare(lblAlwaysOnTop.Text, "✔️") == 0)
-                {
-                    alwaysOnTop = "1";
-                }
-                else
-                {
-                    alwaysOnTop = "0";
-                }
-                if (String.Compare(startupScreenToSave, "") == 0)
-                {
-                    startupScreenToSave = "blocks----";
-                }
-                if (String.Compare(lblScaleAmount.Text, "smallest") == 0)
-                {
-                    UIScaleToBeSavedToSettings = 1;
-                }
-                else
-                {
-                    if (String.Compare(lblScaleAmount.Text, "small") == 0)
+                    if (btnUSD.Enabled == false)
                     {
-                        UIScaleToBeSavedToSettings = 2;
+                        currencySelected = "D";
+                    }
+                    if (btnGBP.Enabled == false)
+                    {
+                        currencySelected = "P";
+                    }
+                    if (btnEUR.Enabled == false)
+                    {
+                        currencySelected = "E";
+                    }
+                    if (btnXAU.Enabled == false)
+                    {
+                        currencySelected = "G";
+                    }
+                    if (testNet == false && RunMempoolSpaceLightningAPI == true)
+                    {
+                        selectedNetwork = "M";
+                    }
+                    if (testNet == true && RunMempoolSpaceLightningAPI == true)
+                    {
+                        selectedNetwork = "T";
+                    }
+                    if (testNet == false && RunMempoolSpaceLightningAPI == false)
+                    {
+                        selectedNetwork = "C";
+                    }
+                    if (String.Compare(lblOfflineMode.Text, "✔️") == 0)
+                    {
+                        OfflineModeSelected = "1";
                     }
                     else
                     {
-                        if (String.Compare(lblScaleAmount.Text, "normal") == 0)
+                        OfflineModeSelected = "0";
+                    }
+                    if (RunBlockchairComAPI)
+                    {
+                        blockchairComJSONSelected = "1";
+                    }
+                    else
+                    {
+                        blockchairComJSONSelected = "0";
+                    }
+                    if (RunBitcoinExplorerAPI)
+                    {
+                        bitcoinExplorerEnpointsSelected = "1";
+                    }
+                    else
+                    {
+                        bitcoinExplorerEnpointsSelected = "0";
+                    }
+                    if (RunBlockchainInfoAPI)
+                    {
+                        blockchainInfoEndpointsSelected = "1";
+                    }
+                    else
+                    {
+                        blockchainInfoEndpointsSelected = "0";
+                    }
+                    if (enableDirectory)
+                    {
+                        directoryEnabled = "1";
+                    }
+                    else
+                    {
+                        directoryEnabled = "0";
+                    }
+                    if (String.Compare(lblAlwaysOnTop.Text, "✔️") == 0)
+                    {
+                        alwaysOnTop = "1";
+                    }
+                    else
+                    {
+                        alwaysOnTop = "0";
+                    }
+                    if (String.Compare(startupScreenToSave, "") == 0)
+                    {
+                        startupScreenToSave = "blocks----";
+                    }
+                    if (String.Compare(lblScaleAmount.Text, "smallest") == 0)
+                    {
+                        UIScaleToBeSavedToSettings = 1;
+                    }
+                    else
+                    {
+                        if (String.Compare(lblScaleAmount.Text, "small") == 0)
                         {
-                            UIScaleToBeSavedToSettings = 3;
+                            UIScaleToBeSavedToSettings = 2;
                         }
                         else
                         {
-                            if (String.Compare(lblScaleAmount.Text, "big") == 0)
+                            if (String.Compare(lblScaleAmount.Text, "normal") == 0)
                             {
-                                UIScaleToBeSavedToSettings = 4;
+                                UIScaleToBeSavedToSettings = 3;
                             }
                             else
                             {
-                                if (String.Compare(lblScaleAmount.Text, "biggest") == 0)
+                                if (String.Compare(lblScaleAmount.Text, "big") == 0)
                                 {
-                                    UIScaleToBeSavedToSettings = 5;
+                                    UIScaleToBeSavedToSettings = 4;
                                 }
                                 else
                                 {
-                                    UIScaleToBeSavedToSettings = 3;
+                                    if (String.Compare(lblScaleAmount.Text, "biggest") == 0)
+                                    {
+                                        UIScaleToBeSavedToSettings = 5;
+                                    }
+                                    else
+                                    {
+                                        UIScaleToBeSavedToSettings = 3;
+                                    }
                                 }
                             }
                         }
                     }
-                }
-                if (RunCoingeckoAPI)
-                {
-                    coingeckoAPISelected = "1";
-                }
-                else
-                {
-                    coingeckoAPISelected = "0";
-                }
-                if (RunMempoolSpacePriceAPI)
-                {
-                    mempoolSpacePriceAPISelected = "1";
-                }
-                else
-                {
-                    mempoolSpacePriceAPISelected = "0";
-                }
+                    if (RunCoingeckoAPI)
+                    {
+                        coingeckoAPISelected = "1";
+                    }
+                    else
+                    {
+                        coingeckoAPISelected = "0";
+                    }
+                    if (RunMempoolSpacePriceAPI)
+                    {
+                        mempoolSpacePriceAPISelected = "1";
+                    }
+                    else
+                    {
+                        mempoolSpacePriceAPISelected = "0";
+                    }
 
-                var newSettings = new Settings { SettingsCurrencySelected = currencySelected, SettingsSelectedNetwork = selectedNetwork, SettingsBlockchairComJSONSelected = blockchairComJSONSelected, SettingsBitcoinExplorerEnpointsSelected = bitcoinExplorerEnpointsSelected, SettingsBlockchainInfoEndpointsSelected = blockchainInfoEndpointsSelected, SettingsOfflineModeSelected = OfflineModeSelected, SettingsDirectoryEnabled = directoryEnabled, SettingsAlwaysOnTop = alwaysOnTop, SettingsDataRefreshPeriod = numericUpDownDashboardRefresh.Value.ToString().PadLeft(4, '0'), SettingsNumberOfConsecutiveUnusedAddresses = numericUpDownMaxNumberOfConsecutiveUnusedAddresses.Value.ToString().PadLeft(2, '0'), SettingsNumberUpDownDerivationPathsToCheck = numberUpDownDerivationPathsToCheck.Value.ToString().PadLeft(3, '0'), SettingsStartupScreen = startupScreenToSave, SettingsUIScale = Convert.ToString(UIScaleToBeSavedToSettings), SettingsCoingeckoAPISelected = coingeckoAPISelected, SettingsMempoolSpacePriceAPISelected = mempoolSpacePriceAPISelected, SettingsNode = ownNode, SettingsDefaultTheme = defaultTheme };
-                WriteSettingsToJsonFile(newSettings);
+                    var newSettings = new Settings { SettingsCurrencySelected = currencySelected, SettingsSelectedNetwork = selectedNetwork, SettingsBlockchairComJSONSelected = blockchairComJSONSelected, SettingsBitcoinExplorerEnpointsSelected = bitcoinExplorerEnpointsSelected, SettingsBlockchainInfoEndpointsSelected = blockchainInfoEndpointsSelected, SettingsOfflineModeSelected = OfflineModeSelected, SettingsDirectoryEnabled = directoryEnabled, SettingsAlwaysOnTop = alwaysOnTop, SettingsDataRefreshPeriod = numericUpDownDashboardRefresh.Value.ToString().PadLeft(4, '0'), SettingsNumberOfConsecutiveUnusedAddresses = numericUpDownMaxNumberOfConsecutiveUnusedAddresses.Value.ToString().PadLeft(2, '0'), SettingsNumberUpDownDerivationPathsToCheck = numberUpDownDerivationPathsToCheck.Value.ToString().PadLeft(3, '0'), SettingsStartupScreen = startupScreenToSave, SettingsUIScale = Convert.ToString(UIScaleToBeSavedToSettings), SettingsCoingeckoAPISelected = coingeckoAPISelected, SettingsMempoolSpacePriceAPISelected = mempoolSpacePriceAPISelected, SettingsNode = ownNode, SettingsDefaultTheme = defaultTheme };
+                    WriteSettingsToJsonFile(newSettings);
+                }
             }
             catch (Exception ex)
             {
@@ -19375,7 +19385,6 @@ namespace SATSuma
             File.WriteAllText(filePath, json);
         }
         #endregion
-
         #region restore settings
         private void RestoreSavedSettings()
         {
@@ -19423,7 +19432,10 @@ namespace SATSuma
                 if (screenMap.ContainsKey(SettingsManager.Settings.SettingsStartupScreen))
                 {
                     startupScreenToSave = SettingsManager.Settings.SettingsStartupScreen;
-                    comboBoxStartupScreen.Texts = screenMap[SettingsManager.Settings.SettingsStartupScreen];
+                    comboBoxStartupScreen.Invoke((MethodInvoker)delegate
+                    {
+                        comboBoxStartupScreen.Texts = screenMap[SettingsManager.Settings.SettingsStartupScreen];
+                    });
                 }
                 #endregion
                 #region restore own node url
@@ -19791,7 +19803,7 @@ namespace SATSuma
                 #endregion
                 #region determine default theme
                 // check if there is a default theme saved in the file
-                var themes = ReadThemesFromJsonFile();
+                var themes = ThemesManager.Themes;
                 foreach (Theme theme in themes)
                 {
                     if (String.Compare(theme.ThemeName, SettingsManager.Settings.SettingsDefaultTheme) == 0)
@@ -19973,6 +19985,7 @@ namespace SATSuma
 
                         RestoreThemeAsync(theme);
                         defaultThemeInFile = SettingsManager.Settings.SettingsDefaultTheme;
+                        defaultTheme = SettingsManager.Settings.SettingsDefaultTheme;
                         return;
                     }
                 }
@@ -20384,7 +20397,7 @@ namespace SATSuma
                     BtnMenuThemeGenesis.BackgroundImage = Resources.marker;
                 });
                 ResetCustomThemeCombos();
-                var themes = ReadThemesFromJsonFile();
+                var themes = ThemesManager.Themes;
                 foreach (Theme theme in themes)
                 {
                     if (String.Compare(theme.ThemeName, "Genesis (preset)") == 0)
@@ -20437,7 +20450,7 @@ namespace SATSuma
                     btnMenuThemeFranklin.BackgroundImage = Resources.marker;
                 });
                 ResetCustomThemeCombos();
-                var themes = ReadThemesFromJsonFile();
+                var themes = ThemesManager.Themes;
                 foreach (Theme theme in themes)
                 {
                     if (String.Compare(theme.ThemeName, "Franklin (preset)") == 0)
@@ -20490,7 +20503,7 @@ namespace SATSuma
                     btnMenuThemeSatsuma.BackgroundImage = Resources.marker;
                 });
                 ResetCustomThemeCombos();
-                var themes = ReadThemesFromJsonFile();
+                var themes = ThemesManager.Themes;
                 foreach (Theme theme in themes)
                 {
                     if (String.Compare(theme.ThemeName, "Satsuma (preset)") == 0)
@@ -20543,7 +20556,7 @@ namespace SATSuma
                     btnMenuThemeHoneyBadger.BackgroundImage = Resources.marker;
                 });
                 ResetCustomThemeCombos();
-                var themes = ReadThemesFromJsonFile();
+                var themes = ThemesManager.Themes;
                 foreach (Theme theme in themes)
                 {
                     if (String.Compare(theme.ThemeName, "HoneyBadger (preset)") == 0)
@@ -20596,7 +20609,7 @@ namespace SATSuma
                     btnMenuThemeStackSats.BackgroundImage = Resources.marker;
                 });
                 ResetCustomThemeCombos();
-                var themes = ReadThemesFromJsonFile();
+                var themes = ThemesManager.Themes;
                 foreach (Theme theme in themes)
                 {
                     if (String.Compare(theme.ThemeName, "StackSats (preset)") == 0)
@@ -20649,7 +20662,7 @@ namespace SATSuma
                     btnMenuThemeSymbol.BackgroundImage = Resources.marker;
                 });
                 ResetCustomThemeCombos();
-                var themes = ReadThemesFromJsonFile();
+                var themes = ThemesManager.Themes;
                 foreach (Theme theme in themes)
                 {
                     if (String.Compare(theme.ThemeName, "Symbol (preset)") == 0)
@@ -20772,7 +20785,7 @@ namespace SATSuma
                 {
 
                     CloseThemeMenu();
-                    var themes = ReadThemesFromJsonFile();
+                    var themes = ThemesManager.Themes;
                     foreach (Theme theme in themes)
                     {
                         if (String.Compare(theme.ThemeName, comboBoxHeaderCustomThemes.Texts) == 0)
@@ -22546,32 +22559,6 @@ namespace SATSuma
             }
         }
         #endregion
-        #region read theme from file
-        private static List<Theme> ReadThemesFromJsonFile()
-        {
-            string themesFileName = "SATSuma_themes.json";
-            string appDataDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            string applicationDirectory = Path.Combine(appDataDirectory, "SATSuma");
-            // Create the application directory if it doesn't exist
-            Directory.CreateDirectory(applicationDirectory);
-            string themesFilePath = Path.Combine(applicationDirectory, themesFileName);
-            string filePath = themesFilePath;
-
-            if (!System.IO.File.Exists(filePath))
-            {
-                System.IO.File.Create(filePath).Dispose();
-            }
-            // Read the contents of the JSON file into a string
-            string json = System.IO.File.ReadAllText(filePath);
-
-            var themes = JsonConvert.DeserializeObject<List<Theme>>(json);
-
-            // If the JSON file doesn't exist or is empty, return an empty list
-            themes ??= new List<Theme>();
-
-            return themes;
-        }
-        #endregion
         #region construct theme record to be saved
         private void TextBoxThemeName_TextChanged(object sender, EventArgs e)
         {
@@ -22766,7 +22753,7 @@ namespace SATSuma
                 var newTheme = new Theme { ThemeName = textBoxThemeName.Text, DataFields = datafields, Labels = labels, Headings = headings, Tables = tables, TableHeadings = tableheadings, OtherText = othertext, PriceBlock = priceblock, StatusErrors = statuserrors, Buttons = buttons, ButtonText = buttontext, Lines = lines, TextBoxes = textboxes, ProgressBars = progressbars, TableBackgrounds = tablebackgrounds, TableTitleBars = tabletitlebars, ShowTime = showtime, HeadingBGDefault = headingbgdefault, HeadingBGNone = headingbgnone, HeadingBGCustom = headingbgcustom, HeadingBackgrounds = headingbackgrounds, WindowBackground = windowbackground, WindowImage = windowimage, BackgroundGenesis = backgroundgenesis, BackgroundFranklin = backgroundFranklin, BackgroundSatsuma = backgroundSatsuma, BackgroundHoneyBadger = backgroundHoneyBadger, BackgroundSymbol = backgroundSymbol, BackgroundStackSats = backgroundStackSats, BackgroundCustomColor = backgroundcustomcolor, BackgroundCustomImage = backgroundcustomimage, Panels = panels, ChartsDark = chartsDark, OrangeInfinity = orangeinfinity, BorderRadius = borderradius, FiatConversionText = fiatconversions, Opacity = opacity, TitlesBackgroundImage = titlesBackgroundImage, ProgressBarStyle = progBarStyle };
 
                 // Read the existing themes from the JSON file
-                var themes = ReadThemesFromJsonFile();
+                var themes = ThemesManager.Themes;
 
                 // check here for duplicate themename
                 foreach (Theme theme in themes)
@@ -22817,6 +22804,7 @@ namespace SATSuma
 
             // Write the JSON string to the themes.json file
             System.IO.File.WriteAllText(filePath, json);
+            ThemesManager.Initialize(); // refresh the themes list 
         }
         #endregion
         #region select previously saved theme from list (doesn't apply to list embedded in main menu)
@@ -22824,7 +22812,7 @@ namespace SATSuma
         {
             try
             {
-                var themes = ReadThemesFromJsonFile();
+                var themes = ThemesManager.Themes;
                 foreach (Theme theme in themes)
                 {
                     if (String.Compare(theme.ThemeName, comboBoxCustomizeScreenThemeList.Texts) == 0)
@@ -23553,6 +23541,8 @@ namespace SATSuma
             {
                 firstTimeLoadingScreen = false;
                 await Task.Delay(6000).ConfigureAwait(true);
+                preventSavingSettings = false;
+                SaveSettings();
             }
             else
             {
@@ -25859,8 +25849,8 @@ namespace SATSuma
                     return;
                 }
                 // Read the existing thenes from the JSON file
-                var themes = ReadThemesFromJsonFile();
-
+                var themes = ThemesManager.Themes;
+                
                 // Find the index of the theme with the specified data
                 int index = themes.FindIndex(theme =>
                     String.Equals(theme.ThemeName, comboBoxCustomizeScreenThemeList.Texts, StringComparison.OrdinalIgnoreCase));
@@ -27351,7 +27341,7 @@ namespace SATSuma
         {
             try
             {
-                var themes = ReadThemesFromJsonFile();
+                var themes = ThemesManager.Themes;
                 List<string> themeNames = themes.Select(t => t.ThemeName).ToList();
                 themeNames.RemoveAll(theme => theme.Contains("(preset)")); // exclude the preset themes
                 comboBoxCustomizeScreenThemeList.DataSource = themeNames; // show all the themes in the combobox on customize screen
@@ -31908,6 +31898,41 @@ namespace SATSuma
             }
         }
         #endregion
+
+        public static class ThemesManager
+        {
+            public static List<Theme> Themes { get; private set; }
+
+            public static void Initialize()
+            {
+                Themes = ReadThemesFromJsonFile();
+            }
+            private static List<Theme> ReadThemesFromJsonFile()
+            {
+                string themesFileName = "SATSuma_themes.json";
+                string appDataDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                string applicationDirectory = Path.Combine(appDataDirectory, "SATSuma");
+                // Create the application directory if it doesn't exist
+                Directory.CreateDirectory(applicationDirectory);
+                string themesFilePath = Path.Combine(applicationDirectory, themesFileName);
+                string filePath = themesFilePath;
+
+                if (!System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Create(filePath).Dispose();
+                }
+                // Read the contents of the JSON file into a string
+                string json = System.IO.File.ReadAllText(filePath);
+
+                var themes = JsonConvert.DeserializeObject<List<Theme>>(json);
+
+                // If the JSON file doesn't exist or is empty, return an empty list
+                themes ??= new List<Theme>();
+
+                return themes;
+            }
+        }
+        
 
         #region bookmark
         public class Bookmark

@@ -1324,6 +1324,9 @@
             this.panel154 = new System.Windows.Forms.Panel();
             this.label318 = new System.Windows.Forms.Label();
             this.panelMiningPools = new System.Windows.Forms.Panel();
+            this.panel124 = new System.Windows.Forms.Panel();
+            this.panel156 = new System.Windows.Forms.Panel();
+            this.label320 = new System.Windows.Forms.Label();
             this.panel123 = new System.Windows.Forms.Panel();
             this.panel159 = new System.Windows.Forms.Panel();
             this.label231 = new System.Windows.Forms.Label();
@@ -1342,14 +1345,11 @@
             this.listViewPoolsList = new System.Windows.Forms.ListView();
             this.panel160 = new System.Windows.Forms.Panel();
             this.panel161 = new System.Windows.Forms.Panel();
-            this.panel156 = new System.Windows.Forms.Panel();
-            this.label320 = new System.Windows.Forms.Label();
             this.panel158 = new System.Windows.Forms.Panel();
             this.formsPlotPoolHashrate = new ScottPlot.FormsPlot();
             this.panel164 = new System.Windows.Forms.Panel();
             this.label319 = new System.Windows.Forms.Label();
             this.PoolsListScrollTimer = new System.Windows.Forms.Timer(this.components);
-            this.panel124 = new System.Windows.Forms.Panel();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel109.SuspendLayout();
             this.panel12.SuspendLayout();
@@ -1591,6 +1591,8 @@
             this.panel153.SuspendLayout();
             this.panel154.SuspendLayout();
             this.panelMiningPools.SuspendLayout();
+            this.panel124.SuspendLayout();
+            this.panel156.SuspendLayout();
             this.panel123.SuspendLayout();
             this.panel159.SuspendLayout();
             this.panelBlocksByPoolContainer.SuspendLayout();
@@ -1598,10 +1600,8 @@
             this.panel157.SuspendLayout();
             this.panel155.SuspendLayout();
             this.panelPoolsListContainer.SuspendLayout();
-            this.panel156.SuspendLayout();
             this.panel158.SuspendLayout();
             this.panel164.SuspendLayout();
-            this.panel124.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTime
@@ -1611,7 +1611,7 @@
             this.lblTime.BackColor = System.Drawing.Color.Transparent;
             this.lblTime.Font = new System.Drawing.Font("Consolas", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTime.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
-            this.lblTime.Location = new System.Drawing.Point(1848, 44);
+            this.lblTime.Location = new System.Drawing.Point(848, 44);
             this.lblTime.Margin = new System.Windows.Forms.Padding(0);
             this.lblTime.Name = "lblTime";
             this.lblTime.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -21160,6 +21160,59 @@
             this.panelMiningPools.TabIndex = 291;
             this.panelMiningPools.Visible = false;
             // 
+            // panel124
+            // 
+            this.panel124.Controls.Add(this.panel156);
+            this.panel124.Controls.Add(this.label321);
+            this.panel124.Controls.Add(this.lblMiningPoolLink);
+            this.panel124.Controls.Add(this.label322);
+            this.panel124.Controls.Add(this.label323);
+            this.panel124.Controls.Add(this.lblMiningPoolBlockShare24h);
+            this.panel124.Controls.Add(this.label326);
+            this.panel124.Controls.Add(this.label325);
+            this.panel124.Controls.Add(this.lblMiningPoolBlockShare1w);
+            this.panel124.Controls.Add(this.label324);
+            this.panel124.Controls.Add(this.label329);
+            this.panel124.Controls.Add(this.lblMiningPoolBlockShareAll);
+            this.panel124.Controls.Add(this.label328);
+            this.panel124.Controls.Add(this.label327);
+            this.panel124.Controls.Add(this.lblMiningPoolBlocks24h);
+            this.panel124.Controls.Add(this.lblMiningPoolPool);
+            this.panel124.Controls.Add(this.lblMiningPoolHashrate);
+            this.panel124.Controls.Add(this.lblMiningPoolBlocks1w);
+            this.panel124.Controls.Add(this.lblMiningPoolBlocksAll);
+            this.panel124.Location = new System.Drawing.Point(180, 0);
+            this.panel124.Name = "panel124";
+            this.panel124.Size = new System.Drawing.Size(561, 88);
+            this.panel124.TabIndex = 347;
+            // 
+            // panel156
+            // 
+            this.panel156.BackColor = System.Drawing.Color.Transparent;
+            this.panel156.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel156.BackgroundImage")));
+            this.panel156.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel156.Controls.Add(this.label320);
+            this.panel156.Location = new System.Drawing.Point(0, 0);
+            this.panel156.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel156.Name = "panel156";
+            this.panel156.Size = new System.Drawing.Size(561, 23);
+            this.panel156.TabIndex = 325;
+            // 
+            // label320
+            // 
+            this.label320.AutoSize = true;
+            this.label320.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label320.Font = new System.Drawing.Font("Century Gothic", 8F);
+            this.label320.ForeColor = System.Drawing.Color.Gray;
+            this.label320.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label320.Location = new System.Drawing.Point(5, 4);
+            this.label320.Margin = new System.Windows.Forms.Padding(0);
+            this.label320.Name = "label320";
+            this.label320.Size = new System.Drawing.Size(39, 16);
+            this.label320.TabIndex = 153;
+            this.label320.Text = "POOL";
+            this.label320.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // panel123
             // 
             this.panel123.Controls.Add(this.panel159);
@@ -21422,33 +21475,6 @@
             this.panel161.Size = new System.Drawing.Size(80, 500);
             this.panel161.TabIndex = 165;
             // 
-            // panel156
-            // 
-            this.panel156.BackColor = System.Drawing.Color.Transparent;
-            this.panel156.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel156.BackgroundImage")));
-            this.panel156.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel156.Controls.Add(this.label320);
-            this.panel156.Location = new System.Drawing.Point(0, 0);
-            this.panel156.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel156.Name = "panel156";
-            this.panel156.Size = new System.Drawing.Size(561, 23);
-            this.panel156.TabIndex = 325;
-            // 
-            // label320
-            // 
-            this.label320.AutoSize = true;
-            this.label320.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label320.Font = new System.Drawing.Font("Century Gothic", 8F);
-            this.label320.ForeColor = System.Drawing.Color.Gray;
-            this.label320.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label320.Location = new System.Drawing.Point(5, 4);
-            this.label320.Margin = new System.Windows.Forms.Padding(0);
-            this.label320.Name = "label320";
-            this.label320.Size = new System.Drawing.Size(39, 16);
-            this.label320.TabIndex = 153;
-            this.label320.Text = "POOL";
-            this.label320.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // panel158
             // 
             this.panel158.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
@@ -21499,32 +21525,6 @@
             this.PoolsListScrollTimer.Interval = 50;
             this.PoolsListScrollTimer.Tick += new System.EventHandler(this.PoolsListScrollTimer_Tick);
             // 
-            // panel124
-            // 
-            this.panel124.Controls.Add(this.panel156);
-            this.panel124.Controls.Add(this.label321);
-            this.panel124.Controls.Add(this.lblMiningPoolLink);
-            this.panel124.Controls.Add(this.label322);
-            this.panel124.Controls.Add(this.label323);
-            this.panel124.Controls.Add(this.lblMiningPoolBlockShare24h);
-            this.panel124.Controls.Add(this.label326);
-            this.panel124.Controls.Add(this.label325);
-            this.panel124.Controls.Add(this.lblMiningPoolBlockShare1w);
-            this.panel124.Controls.Add(this.label324);
-            this.panel124.Controls.Add(this.label329);
-            this.panel124.Controls.Add(this.lblMiningPoolBlockShareAll);
-            this.panel124.Controls.Add(this.label328);
-            this.panel124.Controls.Add(this.label327);
-            this.panel124.Controls.Add(this.lblMiningPoolBlocks24h);
-            this.panel124.Controls.Add(this.lblMiningPoolPool);
-            this.panel124.Controls.Add(this.lblMiningPoolHashrate);
-            this.panel124.Controls.Add(this.lblMiningPoolBlocks1w);
-            this.panel124.Controls.Add(this.lblMiningPoolBlocksAll);
-            this.panel124.Location = new System.Drawing.Point(180, 0);
-            this.panel124.Name = "panel124";
-            this.panel124.Size = new System.Drawing.Size(561, 88);
-            this.panel124.TabIndex = 347;
-            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(5F, 12F);
@@ -21533,7 +21533,7 @@
             this.BackgroundImage = global::SATSuma.Properties.Resources.Genesis;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
-            this.ClientSize = new System.Drawing.Size(1940, 754);
+            this.ClientSize = new System.Drawing.Size(940, 754);
             this.Controls.Add(this.panelMiningPools);
             this.Controls.Add(this.panelChartsForPoolsScreen);
             this.Controls.Add(this.panelBitcoinDashboard);
@@ -21976,6 +21976,10 @@
             this.panel154.ResumeLayout(false);
             this.panel154.PerformLayout();
             this.panelMiningPools.ResumeLayout(false);
+            this.panel124.ResumeLayout(false);
+            this.panel124.PerformLayout();
+            this.panel156.ResumeLayout(false);
+            this.panel156.PerformLayout();
             this.panel123.ResumeLayout(false);
             this.panel159.ResumeLayout(false);
             this.panel159.PerformLayout();
@@ -21985,13 +21989,9 @@
             this.panel155.ResumeLayout(false);
             this.panel155.PerformLayout();
             this.panelPoolsListContainer.ResumeLayout(false);
-            this.panel156.ResumeLayout(false);
-            this.panel156.PerformLayout();
             this.panel158.ResumeLayout(false);
             this.panel164.ResumeLayout(false);
             this.panel164.PerformLayout();
-            this.panel124.ResumeLayout(false);
-            this.panel124.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -27,11 +27,13 @@ https://satsuma.btcdir.org/download/
 * Stuff to do:
 * Taproot support on xpub screen 
 * documentation for new pools screens (code done, just do online help)
-* testing, particularly new pools screens on own node and make sure everything on settings screen restores correctly multple times (in case the fixed theme restore bug exists similarly elsewhere)
+* testing, particularly new pools screens on own node
 * check tooltips everywhere
 * change pools charts background colours or not?
-* select a custom theme from main menu, apply it, then can't apply a different custom theme (apply button doesn't reappear)
+* select a custom theme from main menu button not being coloured correctly after custom theme applied.
 * replace time period buttons (pools, charts, etc) with comboboxes?
+* edit themes to match table backgrounds and panel backgrounds
+* give loading panel background image if there is one, or use panel colour as now
 */
 
 #region Using
@@ -460,8 +462,6 @@ namespace SATSuma
             else // If nothing in settings, set it to the default 150% and save to settings
             {
                 UIScale = 1.5;
-
-               //zz SaveSettings();
             }
 
             InitializeComponent();
@@ -20355,7 +20355,9 @@ namespace SATSuma
                     {
                         btnMenuApplyCustomTheme.Enabled = true;
                         btnMenuApplyCustomTheme.Text = "apply theme";
+                        btnMenuApplyCustomTheme.BringToFront();
                     });
+
                     lblApplyThemeButtonDisabledMask.Invoke((MethodInvoker)delegate
                     {
                         lblApplyThemeButtonDisabledMask.Visible = false;
@@ -20788,7 +20790,7 @@ namespace SATSuma
                     var themes = ThemesManager.Themes;
                     foreach (Theme theme in themes)
                     {
-                        if (String.Compare(theme.ThemeName, comboBoxHeaderCustomThemes.Texts) == 0)
+                        if (String.Compare(theme.ThemeName, comboBoxHeaderCustomThemes.Texts.TrimStart()) == 0) // the theme names are displayed with 3 leading spaces in the combobox so trim them out for the compare
                         {
                             BtnMenuThemeGenesis.Enabled = true;
                             btnMenuThemeFranklin.Enabled = true;
@@ -20814,6 +20816,7 @@ namespace SATSuma
                             comboBoxHeaderCustomThemes.Invoke((MethodInvoker)delegate
                             {
                                 comboBoxHeaderCustomThemes.Texts = "   select theme ▼";
+                                comboBoxHeaderCustomThemes.BringToFront();
                             });
                             comboBoxCustomizeScreenThemeList.Invoke((MethodInvoker)delegate
                             {
@@ -24493,7 +24496,7 @@ namespace SATSuma
                     });
                 }
                 //blocklist
-                Control[] listBlockListHeadingsToColor = { label143, lblBlockListBlockHeight, label6 };
+                Control[] listBlockListHeadingsToColor = { label143, lblBlockListBlockHeight, label6, label109 };
                 foreach (Control control in listBlockListHeadingsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -25018,7 +25021,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listListViewBackgroundsToColor = { panelAddressTxContainer, panel134, panel128, panel157, panel147, panelUTXOsContainer, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panelUTXOError, panel137, panel122, panel56, panel27, panelTransactionOutputs, panelTransactionInputs, listViewBlockList, listViewTransactionInputs, listViewTransactionOutputs, listViewXpubAddresses, listViewBookmarks, listViewAddressTransactions, listViewAddressUTXOs, listViewPoolsByBlock, listViewPoolsHashrate, listViewBlockTransactions, panel66, panel24, panel25, panelXpubScrollbar, panel33, panel101, panelXpubContainer, panelPoolsListContainer, panelBlocksByPoolContainer, listViewPoolsList, listViewBlocksByPool, panel157 };
+                Control[] listListViewBackgroundsToColor = { panel120, panel123, panelAddressTxContainer, panel134, panel128, panel157, panel147, panelUTXOsContainer, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panelUTXOError, panel137, panel122, panel56, panel27, panelTransactionOutputs, panelTransactionInputs, listViewBlockList, listViewTransactionInputs, listViewTransactionOutputs, listViewXpubAddresses, listViewBookmarks, listViewAddressTransactions, listViewAddressUTXOs, listViewPoolsByBlock, listViewPoolsHashrate, listViewBlockTransactions, panel66, panel24, panel25, panelXpubScrollbar, panel33, panel101, panelXpubContainer, panelPoolsListContainer, panelBlocksByPoolContainer, listViewPoolsList, listViewBlocksByPool, panel157 };
                 foreach (Control control in listListViewBackgroundsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -25555,7 +25558,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listPanelsToColor = { panel30, panel125, panel132, panel92, panelAddToBookmarks, panel46, panel103, panelOwnNodeBlockTXInfo, panel119, panelPriceConvert, panel106, panel107, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21, panelSettingsUIScale, panelDCAMessages, panelDCASummary, panelDCAInputs, panelRefreshChart, panelPriceSourceIndicators, panel80, panel153, panel158, panel120, panel123, panel124 };
+                Control[] listPanelsToColor = { panel30, panel125, panel132, panel92, panelAddToBookmarks, panel46, panel103, panelOwnNodeBlockTXInfo, panel119, panelPriceConvert, panel106, panel107, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21, panelSettingsUIScale, panelDCAMessages, panelDCASummary, panelDCAInputs, panelRefreshChart, panelPriceSourceIndicators, panel80, panel153, panel158, panel124 };
                 foreach (Control control in listPanelsToColor)
                 {
                     {
@@ -27346,7 +27349,14 @@ namespace SATSuma
                 themeNames.RemoveAll(theme => theme.Contains("(preset)")); // exclude the preset themes
                 comboBoxCustomizeScreenThemeList.DataSource = themeNames; // show all the themes in the combobox on customize screen
                 comboBoxCustomizeScreenThemeList.Texts = "select theme";
-                comboBoxHeaderCustomThemes.DataSource = themeNames;
+                
+                List<string> themeNamesWithSpaces = themes
+    .Select(t => t.ThemeName)
+    .Where(theme => !theme.Contains("(preset)"))
+    .Select(theme => "   " + theme) // Add 3 preceding spaces to align the combobox text with the rest of the menu
+    .ToList();
+
+                comboBoxHeaderCustomThemes.DataSource = themeNamesWithSpaces;
                 comboBoxHeaderCustomThemes.Texts = "   select theme ▼";
             }
             catch (Exception ex)
@@ -29267,6 +29277,7 @@ namespace SATSuma
                         Opacity = 1, // Set the opacity to 100%
                         Location = panelScreenLocation // Set the location of the loadingScreen form
                     };
+
                     loadingScreen.Show(this);
                     await BriefPauseAsync(100).ConfigureAwait(true);
                     #endregion

@@ -30,7 +30,7 @@
         {
             this.SuspendLayout();
             // 
-            // loadingScreen
+            // LoadingScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -42,7 +42,7 @@
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Margin = new System.Windows.Forms.Padding(2);
-            this.Name = "loadingScreen";
+            this.Name = "LoadingScreen";
             this.Opacity = 0.5D;
             this.ShowIcon = false;
             this.ShowInTaskbar = false;

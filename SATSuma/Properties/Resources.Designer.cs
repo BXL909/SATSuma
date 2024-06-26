@@ -563,6 +563,16 @@ namespace SATSuma.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap WobblySatsuma {
+            get {
+                object obj = ResourceManager.GetObject("WobblySatsuma", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap YellowFade {
             get {
                 object obj = ResourceManager.GetObject("YellowFade", resourceCulture);

@@ -526,7 +526,7 @@ namespace SATSuma
             var backgroundColor = MakeColorLighter(WindowBackgroundColor, 5); 
             var backgroundColorString = ColorTranslator.ToHtml(backgroundColor);
             document.Body.Style = $"background-color: {backgroundColorString};";
-
+            
             // Change the color of all text
             var spanColor = TextColor;
             var spanColorString = ColorTranslator.ToHtml(spanColor);
@@ -557,6 +557,11 @@ namespace SATSuma
             var divElements = document.GetElementsByTagName("div");
             foreach (HtmlElement divElement in divElements)
             {
+                if (String.Compare(divElement.GetAttribute("className"), "site-content") == 0)
+                {
+                    divElement.Style = $"background-color: {backgroundColorString}";
+
+                }
                 if (String.Compare(divElement.GetAttribute("className"), "content-area") == 0)
                 {
                     divElement.Style = "padding-left: 10px; padding-bottom: 40px;";

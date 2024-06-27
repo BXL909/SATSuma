@@ -5,35 +5,28 @@
 ⠀⠀⣴⣿⣿⣿⣿⣿⣿⣿⠟⠿⠿⡿⠀⢰⣿⠁⢈⣿⣿⣿⣿⣿⣿⣿⣿⣦⠀   ⠀ \___ \ / /\ \ | |  \___ \| | | | '_ ` _ \ / _` |
 ⠀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣤⣄⠀⠀⠀⠈⠉⠀⠸⠿⣿⣿⣿⣿⣿⣿⣿⣿⣧⠀  ⠀ ____) / ____ \| |  ____) | |_| | | | | | | (_| |
 ⢰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠀⠀⢠⣶⣶⣤⡀⠀⠈⢻⣿⣿⣿⣿⣿⣿⣿⡆  ⠀|_____/_/    \_\_| |_____/ \__,_|_| |_| |_|\__,_| 
-⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃⠀⠀⠼⣿⣿⡿⠃⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣷   A block explorer, Xpub viewer, bitcoin & lightning
-⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⠀⠀⢀⣀⣀⠀⠀⠀⠀⢴⣿⣿⣿⣿⣿⣿⣿⣿⣿   dashboard with the ability to create encryted marke
-⢿⣿⣿⣿⣿⣿⣿⣿⢿⣿⠁⠀⠀⣼⣿⣿⣿⣦⠀⠀⠈⢻⣿⣿⣿⣿⣿⣿⣿⡿   bookmarks and notes for addresses, blocks, xpubs &
-⠸⣿⣿⣿⣿⣿⣿⣏⠀⠀⠀⠀⠀⠛⠛⠿⠟⠋⠀⠀⠀⣾⣿⣿⣿⣿⣿⣿⣿⠇   transactions. Xpub queries will only work on the 
-⠀⢻⣿⣿⣿⣿⣿⣿⣿⣿⠇⠀⣤⡄⠀⣀⣀⣀⣀⣠⣾⣿⣿⣿⣿⣿⣿⣿⡟⠀   user's own node. Keys to unlock encrypted bookmarks
-⠀⠀⠻⣿⣿⣿⣿⣿⣿⣿⣄⣰⣿⠁⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠀⠀   are not stored anywhere and are uncrecoverable. The
-⠀⠀⠀⠙⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠋⠀⠀⠀   bookmarks file is SATSuma_bookmarks.json, and the
-⠀⠀⠀⠀⠀⠙⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠋⠀⠀⠀⠀⠀   themes file is SATSuma_themes.json, both are in the
-⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠻⠿⢿⣿⣿⣿⣿⡿⠿⠟⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀   user's application data directory.
+⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃⠀⠀⠼⣿⣿⡿⠃⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣷   A block explorer, Xpub viewer, bitcoin & lightning dashboard, DCA calculator, multiple onchain & market
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⠀⠀⢀⣀⣀⠀⠀⠀⠀⢴⣿⣿⣿⣿⣿⣿⣿⣿⣿   charts, directory, fiat converter and loads more, with the ability to create encryted bookmarks and 
+⢿⣿⣿⣿⣿⣿⣿⣿⢿⣿⠁⠀⠀⣼⣿⣿⣿⣦⠀⠀⠈⢻⣿⣿⣿⣿⣿⣿⣿⡿   notes, select from multiple preset themes or create your own. Xpub queries will only work on the users's
+⠸⣿⣿⣿⣿⣿⣿⣏⠀⠀⠀⠀⠀⠛⠛⠿⠟⠋⠀⠀⠀⣾⣿⣿⣿⣿⣿⣿⣿⠇   own node. Keys to unlock encrypted bookmarks are not stored anywhere and are uncrecoverable. Data and
+⠀⢻⣿⣿⣿⣿⣿⣿⣿⣿⠇⠀⣤⡄⠀⣀⣀⣀⣀⣠⣾⣿⣿⣿⣿⣿⣿⣿⡟⠀   config files (bookmarks, themes and settings) are all saved to the user's application data directory.
+⠀⠀⠻⣿⣿⣿⣿⣿⣿⣿⣄⣰⣿⠁⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠀⠀   
+⠀⠀⠀⠙⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠋⠀⠀⠀   🍊 Homepage https://satsuma.btcdir.org/
+⠀⠀⠀⠀⠀⠙⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠋⠀⠀⠀⠀⠀   🍊 Version history https://satsuma.btcdir.org/version-history/
+⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠻⠿⢿⣿⣿⣿⣿⡿⠿⠟⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀   🍊 Download https://satsuma.btcdir.org/download/
 
-🍊 Homepage
-https://satsuma.btcdir.org/
+..........................................................................................................................................
 
-🍊 Version history 
-https://satsuma.btcdir.org/version-history/
-            
-🍊 Download
-https://satsuma.btcdir.org/download/
-
-* Stuff to do:
-* Taproot support on xpub screen 
-* documentation for new pools screens (code done, just do online help)
-* testing, particularly new pools screens on own node
-* check tooltips everywhere
-* change pools charts background colours or not?
-* select a custom theme from main menu button not being coloured correctly after custom theme applied.
-* replace time period buttons (pools, charts, etc) with comboboxes?
-* edit themes to match table backgrounds and panel backgrounds
-* give loading panel background image if there is one, or use panel colour as now
+Stuff to do:
+.Taproot support on xpub screen 
+.documentation for new pools screens (code done, just do online help)
+.testing, particularly new pools screens on own node
+.check tooltips everywhere
+.change pools charts background colours or not?
+.select a custom theme from main menu button not being coloured correctly after custom theme applied.
+.replace time period buttons (pools, charts, etc) with comboboxes?
+.edit themes to match table backgrounds and panel backgrounds
+.give loading panel background image if there is one, or use panel colour as now
 */
 
 #region Using
@@ -196,6 +189,7 @@ namespace SATSuma
         bool offlineMode; // disables all comms apart from to full node
         bool testNet; // testnet or mainnet
         bool isTextBoxSettingsOwnNodeURLWatermarkTextDisplayed = true; // settings screen for watermarked node field
+        bool preventSavingSettings = true; // suppress auto-saves during initial launch.
         private string NodeURL = "https://mempool.space/api/"; // default value. Can be changed by user.
         private string xpubNodeURL; // no default value. User must provide path to own node
         string xpubNodeURLInFile; // stores the xpub node URL from the file to check whether a newly supplied one is different, in which case we'll update the file
@@ -475,7 +469,7 @@ namespace SATSuma
             #region rounded panels
             Control[] panelsToRound = { panelXpubContainer, panelXpubScrollbar, panel32, panel74, panel76, panel77, panel99, panel84, panel88, panel89, panel90, panel86, panel87, panel103, panel46, panel51, panel91, panel70, panel71, panel16, panel21, panel85, panel53, panel96, panel106, panel107, panel92, panelAddToBookmarks, panelAddToBookmarksBorder,
                 panelLeftPanel, panelOwnNodeAddressTXInfo, panelOwnNodeBlockTXInfo, panelTransactionMiddle, panelErrorMessage, panelSettingsUIScale, panelSettingsUIScaleContainer, panelDCAMessages, panelDCASummary, panelDCAInputs, panel119, panelPriceConvert, panelDCAChartContainer, panel117, panel121,
-                panel122, panel101, panel27, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panel134, panelBookmarksContainer, panel33, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panel128, panel147, panel80, panel153, panel157, panel158,
+                panel122, panel101, panel27, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panel134, panelBookmarksContainer, panel33, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panel128, panel147, panel80, panel153, panel158,
                 panelTransactionInputs, panelTransactionOutputs, panel24, panel25, panelAddressTxContainer, panel120, panel123, panel124 };
             foreach (Control control in panelsToRound)
             {
@@ -9952,7 +9946,7 @@ namespace SATSuma
         #endregion
         #endregion
 
-        #region ⚡ MINING POOLS BY BLOCKS SCREEN ⚡
+        #region ⚡MINING POOLS BY BLOCKS SCREEN⚡
 
         private async void SetupPoolsByBlocksScreen()
         {
@@ -10427,7 +10421,7 @@ namespace SATSuma
 
         #endregion
 
-        #region ⚡ MINING POOLS BY HASHRATE SCREEN ⚡
+        #region ⚡MINING POOLS BY HASHRATE SCREEN⚡
 
         private async void SetupPoolsByHashrateScreen()
         {
@@ -10885,7 +10879,7 @@ namespace SATSuma
 
         #endregion
 
-        #region ⚡ charts for pools (block and hashrate) screens ⚡
+        #region ⚡CHARTS FOR POOLS (BLOCK & HASHRATE) SCREENS⚡
         private async void ChartsHashrateForPoolsScreen(string timeperiod)
         {
             try
@@ -11110,7 +11104,7 @@ namespace SATSuma
         }
         #endregion
 
-        #region ⚡ POOL SCREEN ⚡
+        #region ⚡POOL SCREEN⚡
         private async void SetupPoolScreen()
         {
             try
@@ -18117,8 +18111,6 @@ namespace SATSuma
         #endregion
         #endregion
 
-        bool preventSavingSettings = true;
-
         #region ⚡SETTINGS SCREEN⚡
         #region user input own node url
         private void TextBoxSettingsOwnNodeURL_Enter(object sender, EventArgs e)
@@ -23765,7 +23757,7 @@ namespace SATSuma
                 #region rounded panels
                 Control[] panelsToInvalidate = { panelXpubContainer, panelXpubScrollbar, panel92, panel32, panel74, panel76, panel77, panel99, panel84, panel88, panel89, panel90, panel86, panel87, panel103, panel46, panel51, panel91, panel70, panel71, panel16, panel21, panel85, panel53, panel96, panel106, panel107, panelAddToBookmarks,
                     panelAddToBookmarksBorder, panelOwnNodeAddressTXInfo, panelOwnNodeBlockTXInfo, panelTransactionMiddle, panelErrorMessage, panelDCAMessages, panelDCASummary, panelDCAInputs, panel119, panelPriceConvert, panelDCAChartContainer, panel117, panel121, panel122, panel120, 
-                    panel101, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panel134, panelBookmarksContainer, panel33, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panel128, panel147, panel80, panel153, panel157, panel158, panel160,
+                    panel101, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panel134, panelBookmarksContainer, panel33, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panel128, panel147, panel80, panel153, panel158, panel160,
                 panelTransactionInputs, panelTransactionOutputs, panel24, panel25, panelAddressTxContainer, panel123, panel124 };
                 foreach (Control control in panelsToInvalidate)
                 {
@@ -25558,7 +25550,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listPanelsToColor = { panel30, panel125, panel132, panel92, panelAddToBookmarks, panel46, panel103, panelOwnNodeBlockTXInfo, panel119, panelPriceConvert, panel106, panel107, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21, panelSettingsUIScale, panelDCAMessages, panelDCASummary, panelDCAInputs, panelRefreshChart, panelPriceSourceIndicators, panel80, panel153, panel158, panel124 };
+                Control[] listPanelsToColor = { panel123, panel120, panel30, panel125, panel132, panel92, panelAddToBookmarks, panel46, panel103, panelOwnNodeBlockTXInfo, panel119, panelPriceConvert, panel106, panel107, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21, panelSettingsUIScale, panelDCAMessages, panelDCASummary, panelDCAInputs, panelRefreshChart, panelPriceSourceIndicators, panel80, panel153, panel158, panel124 };
                 foreach (Control control in listPanelsToColor)
                 {
                     {
@@ -33491,6 +33483,5 @@ namespace SATSuma
         #endregion
 
         #endregion
-
     }
 }

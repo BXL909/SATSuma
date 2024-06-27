@@ -21257,7 +21257,7 @@
             this.panelBlocksByPoolContainer.Controls.Add(this.btnViewBlockFromBlocksByPool);
             this.panelBlocksByPoolContainer.Location = new System.Drawing.Point(0, 23);
             this.panelBlocksByPoolContainer.Name = "panelBlocksByPoolContainer";
-            this.panelBlocksByPoolContainer.Size = new System.Drawing.Size(561, 180);
+            this.panelBlocksByPoolContainer.Size = new System.Drawing.Size(561, 184);
             this.panelBlocksByPoolContainer.TabIndex = 301;
             // 
             // listViewBlocksByPool
@@ -21320,7 +21320,7 @@
             this.panel157.BackColor = System.Drawing.Color.Transparent;
             this.panel157.Controls.Add(this.btnPoolsListScrollUp);
             this.panel157.Controls.Add(this.btnPoolsListScrollDown);
-            this.panel157.Location = new System.Drawing.Point(137, 23);
+            this.panel157.Location = new System.Drawing.Point(135, 23);
             this.panel157.Name = "panel157";
             this.panel157.Size = new System.Drawing.Size(24, 521);
             this.panel157.TabIndex = 298;
@@ -21411,7 +21411,7 @@
             this.panelPoolsListContainer.Controls.Add(this.panel161);
             this.panelPoolsListContainer.Location = new System.Drawing.Point(0, 23);
             this.panelPoolsListContainer.Name = "panelPoolsListContainer";
-            this.panelPoolsListContainer.Size = new System.Drawing.Size(154, 517);
+            this.panelPoolsListContainer.Size = new System.Drawing.Size(154, 521);
             this.panelPoolsListContainer.TabIndex = 297;
             this.panelPoolsListContainer.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelPoolsListContainer_Paint);
             // 
@@ -21464,7 +21464,7 @@
             this.panel160.BackColor = System.Drawing.Color.White;
             this.panel160.Location = new System.Drawing.Point(0, 0);
             this.panel160.Name = "panel160";
-            this.panel160.Size = new System.Drawing.Size(140, 16);
+            this.panel160.Size = new System.Drawing.Size(142, 16);
             this.panel160.TabIndex = 285;
             // 
             // panel161
@@ -21534,8 +21534,8 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
-            this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelMiningPools);
+            this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelMiningBlocks);
             this.Controls.Add(this.panelChartsForPoolsScreen);
             this.Controls.Add(this.panelCharts);

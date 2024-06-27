@@ -22,11 +22,8 @@ Stuff to do:
 .documentation for new pools screens (code done, just do online help)
 .testing, particularly new pools screens on own node
 .check tooltips everywhere
-.change pools charts background colours or not?
-.select a custom theme from main menu button not being coloured correctly after custom theme applied.
 .replace time period buttons (pools, charts, etc) with comboboxes?
-.edit themes to match table backgrounds and panel backgrounds
-.give loading panel background image if there is one, or use panel colour as now
+.connector arrow on bookmarks screen when scrolling
 */
 
 #region Using
@@ -63,6 +60,8 @@ using SATSuma.Properties;
 using ScottPlot.Renderable;
 using System.Numerics;
 using static SATSuma.SATSuma;
+using System.Runtime.Remoting.Channels;
+using ScottPlot.Plottable;
 #endregion
 
 namespace SATSuma
@@ -470,7 +469,7 @@ namespace SATSuma
             Control[] panelsToRound = { panelXpubContainer, panelXpubScrollbar, panel32, panel74, panel76, panel77, panel99, panel84, panel88, panel89, panel90, panel86, panel87, panel103, panel46, panel51, panel91, panel70, panel71, panel16, panel21, panel85, panel53, panel96, panel106, panel107, panel92, panelAddToBookmarks, panelAddToBookmarksBorder,
                 panelLeftPanel, panelOwnNodeAddressTXInfo, panelOwnNodeBlockTXInfo, panelTransactionMiddle, panelErrorMessage, panelSettingsUIScale, panelSettingsUIScaleContainer, panelDCAMessages, panelDCASummary, panelDCAInputs, panel119, panelPriceConvert, panelDCAChartContainer, panel117, panel121,
                 panel122, panel101, panel27, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panel134, panelBookmarksContainer, panel33, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panel128, panel147, panel80, panel153, panel158,
-                panelTransactionInputs, panelTransactionOutputs, panel24, panel25, panelAddressTxContainer, panel120, panel123, panel124 };
+                panelTransactionInputs, panelTransactionOutputs, panel24, panel25, panelAddressTxContainer, panel120, panel123, panel124, panelPriceSourceIndicatorsOuter };
             foreach (Control control in panelsToRound)
             {
                 control.Paint += Panel_Paint;
@@ -1496,9 +1495,9 @@ namespace SATSuma
                                     lblHeaderPriceChart.Location = new Point((lblHeaderPrice.Location.X + lblHeaderPrice.Width) - (int)(7 * UIScale), lblHeaderPriceChart.Location.Y);
                                 });
                             }
-                            panelPriceSourceIndicators.Invoke((MethodInvoker)delegate
+                            panelPriceSourceIndicatorsOuter.Invoke((MethodInvoker)delegate
                             {
-                                panelPriceSourceIndicators.Location = new Point((lblHeaderPrice.Location.X + lblHeaderPrice.Width) - (int)(8 * UIScale), panelPriceSourceIndicators.Location.Y);
+                                panelPriceSourceIndicatorsOuter.Location = new Point((lblHeaderPrice.Location.X + lblHeaderPrice.Width) - (int)(8 * UIScale), panelPriceSourceIndicatorsOuter.Location.Y);
                             });
                             lblHeaderConverterChart.Invoke((MethodInvoker)delegate
                             {
@@ -4530,6 +4529,7 @@ namespace SATSuma
                     panelUTXOsContainer.VerticalScroll.Value = 0;
                     addressUTXOsScrollPosition = 0;
                 }
+                lblHeaderBlockAge.Focus();
             }
             catch (Exception ex)
             {
@@ -6674,7 +6674,7 @@ namespace SATSuma
                     panelTransactionInputs.VerticalScroll.Value = 0;
                     TransactionInputsScrollPosition = 0;
                 }
-
+                lblHeaderBlockAge.Focus();
 
 
                 //                if (btnViewAddressFromTXInput.Visible) // user must have clicked a row given that the button is visible
@@ -6702,7 +6702,7 @@ namespace SATSuma
                     panelTransactionOutputs.VerticalScroll.Value = 0;
                     TransactionOutputsScrollPosition = 0;
                 }
-
+                lblHeaderBlockAge.Focus();
 
                 //if (btnViewAddressFromTXOutput.Visible) // user must have clicked a row given that the button is visible
                 // {
@@ -9897,6 +9897,7 @@ namespace SATSuma
                     panelXpubContainer.VerticalScroll.Value = 0;
                     XpubAddressesScrollPosition = 0;
                 }
+                lblHeaderBlockAge.Focus();
             }
             catch (Exception ex)
             {
@@ -10280,6 +10281,7 @@ namespace SATSuma
                         panelPoolsBlocksContainer.VerticalScroll.Value = 0;
                         poolsBlocksScrollPosition = 0;
                     }
+                    lblHeaderBlockAge.Focus();
                 }
             }
             catch (Exception ex)
@@ -10348,7 +10350,6 @@ namespace SATSuma
         {
             try
             {
-
                 foreach (ListViewItem item in listViewPoolsByBlock.Items)
                 {
                     if (item != null)
@@ -10361,7 +10362,7 @@ namespace SATSuma
                             }
                             btnViewPoolFromMiningBlocks.Invoke((MethodInvoker)delegate
                             {
-                                btnViewPoolFromMiningBlocks.Location = new Point(btnViewPoolFromMiningBlocks.Location.X, item.Position.Y);
+                                btnViewPoolFromMiningBlocks.Location = new Point(btnViewPoolFromMiningBlocks.Location.X, item.Position.Y - poolsBlocksScrollPosition);
                                 btnViewPoolFromMiningBlocks.Height = item.Bounds.Height;
                             });
                         }
@@ -10376,6 +10377,7 @@ namespace SATSuma
                 }
                 btnViewPoolFromMiningBlocks.Visible = listViewPoolsByBlock.SelectedItems.Count > 0;
                 lblHeaderBlockAge.Focus();
+
             }
             catch (Exception ex)
             {
@@ -16628,6 +16630,7 @@ namespace SATSuma
                     panelBookmarksContainer.VerticalScroll.Value = 0;
                     bookmarksScrollPosition = 0;
                 }
+                lblHeaderBlockAge.Focus();
             }
             catch (Exception ex)
             {
@@ -20692,7 +20695,7 @@ namespace SATSuma
                 });
                 comboBoxHeaderCustomThemes.Invoke((MethodInvoker)delegate
                 {
-                    comboBoxHeaderCustomThemes.Texts = "   select theme ▼";
+                    comboBoxHeaderCustomThemes.Texts = "   saved themes ▼";
                 });
                 comboBoxCustomizeScreenThemeList.Invoke((MethodInvoker)delegate
                 {
@@ -20775,7 +20778,7 @@ namespace SATSuma
         {
             try
             {
-                if (String.Compare(comboBoxHeaderCustomThemes.Texts, "   select theme ▼") != 0)
+                if (String.Compare(comboBoxHeaderCustomThemes.Texts, "   saved themes ▼") != 0)
                 {
 
                     CloseThemeMenu();
@@ -20807,7 +20810,7 @@ namespace SATSuma
                             });
                             comboBoxHeaderCustomThemes.Invoke((MethodInvoker)delegate
                             {
-                                comboBoxHeaderCustomThemes.Texts = "   select theme ▼";
+                                comboBoxHeaderCustomThemes.Texts = "   saved themes ▼";
                                 comboBoxHeaderCustomThemes.BringToFront();
                             });
                             comboBoxCustomizeScreenThemeList.Invoke((MethodInvoker)delegate
@@ -22837,7 +22840,7 @@ namespace SATSuma
                                     });
                                     comboBoxHeaderCustomThemes.Invoke((MethodInvoker)delegate
                                     {
-                                        comboBoxHeaderCustomThemes.Texts = "   select theme ▼";
+                                        comboBoxHeaderCustomThemes.Texts = "   saved themes ▼";
                                     });
                                     comboBoxCustomizeScreenThemeList.Invoke((MethodInvoker)delegate
                                     {
@@ -23758,7 +23761,7 @@ namespace SATSuma
                 Control[] panelsToInvalidate = { panelXpubContainer, panelXpubScrollbar, panel92, panel32, panel74, panel76, panel77, panel99, panel84, panel88, panel89, panel90, panel86, panel87, panel103, panel46, panel51, panel91, panel70, panel71, panel16, panel21, panel85, panel53, panel96, panel106, panel107, panelAddToBookmarks,
                     panelAddToBookmarksBorder, panelOwnNodeAddressTXInfo, panelOwnNodeBlockTXInfo, panelTransactionMiddle, panelErrorMessage, panelDCAMessages, panelDCASummary, panelDCAInputs, panel119, panelPriceConvert, panelDCAChartContainer, panel117, panel121, panel122, panel120, 
                     panel101, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panel134, panelBookmarksContainer, panel33, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panel128, panel147, panel80, panel153, panel158, panel160,
-                panelTransactionInputs, panelTransactionOutputs, panel24, panel25, panelAddressTxContainer, panel123, panel124 };
+                panelTransactionInputs, panelTransactionOutputs, panel24, panel25, panelAddressTxContainer, panel123, panel124, panelPriceSourceIndicatorsOuter };
                 foreach (Control control in panelsToInvalidate)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24393,6 +24396,9 @@ namespace SATSuma
                 }
                 toolTipForLblHeaderPrice.ForeColor = thiscolor;
                 toolTipGeneralUse.ForeColor = thiscolor;
+
+
+
             }
             catch (Exception ex)
             {
@@ -25562,6 +25568,12 @@ namespace SATSuma
                 }
                 toolTipForLblHeaderPrice.BackColor = thiscolor;
                 toolTipGeneralUse.BackColor = thiscolor;
+
+                // border around the price sources indicators. It takes its colour from panel colour and lightens it. Resize and reposition inner panel to make sure nothing is affected by auto resize by UIScale.
+                panelPriceSourceIndicatorsOuter.BackColor = MakeColorLighter(thiscolor, 40);
+                panelPriceSourceIndicatorsOuter.Width = panelPriceSourceIndicators.Width + 2;
+                panelPriceSourceIndicatorsOuter.Height = panelPriceSourceIndicators.Height + 2;
+                panelPriceSourceIndicators.Location = new Point(1, 1);
             }
             catch (Exception ex)
             {
@@ -25801,6 +25813,16 @@ namespace SATSuma
             comboBoxHeaderCustomThemes.Invoke((MethodInvoker)delegate
             {
                 comboBoxHeaderCustomThemes.BackColor = menuAndHeaderButtonsColour;
+            });
+        }
+
+        private void comboBoxHeaderCustomThemes_Paint(object sender, PaintEventArgs e)
+        {
+            //force combobox to show correct colour after a new custom theme is selected
+            comboBoxHeaderCustomThemes.Invoke((MethodInvoker)delegate
+            {
+                comboBoxHeaderCustomThemes.BackColor = BtnMenuThemeGenesis.BackColor;
+                comboBoxHeaderCustomThemes.ForeColor = BtnMenuThemeGenesis.ForeColor;
             });
         }
 
@@ -26757,9 +26779,9 @@ namespace SATSuma
                     {
                         UpdateLabelValueAsync(lblHeaderPrice, price);
                     }
-                    panelPriceSourceIndicators.Invoke((MethodInvoker)delegate
+                    panelPriceSourceIndicatorsOuter.Invoke((MethodInvoker)delegate
                     {
-                        panelPriceSourceIndicators.Location = new Point((lblHeaderPrice.Location.X + lblHeaderPrice.Width) - (int)(8 * UIScale), panelPriceSourceIndicators.Location.Y);
+                        panelPriceSourceIndicatorsOuter.Location = new Point((lblHeaderPrice.Location.X + lblHeaderPrice.Width) - (int)(8 * UIScale), panelPriceSourceIndicatorsOuter.Location.Y);
                     });
 
                     UpdateLabelValueAsync(lblMarketCapUSD, mCap);
@@ -26966,7 +26988,6 @@ namespace SATSuma
             {
                 if (readyToShowRedAndGreenLabelsYet == true)
                 {
-
                     double currentValueDouble;
                     double newValueDouble = 0;
                     // get the normal state colour. Will revert to this after making red or green
@@ -27030,7 +27051,24 @@ namespace SATSuma
                     // Wait a moment
                     await Task.Delay(5000).ConfigureAwait(true);
 
-                    // Restore original color
+                    // Restore original color (set currentColor again in case a theme change has occurred during the red/green value change)
+
+                    if (label == lblHeaderPrice || label == lblBlockNumber)
+                    {
+                        currentColor = label175.ForeColor;
+                    }
+                    else
+                    {
+                        if (label.Name.Contains("Fiat"))
+                        {
+                            currentColor = label288.ForeColor;
+                        }
+                        else
+                        {
+                            currentColor = label154.ForeColor;
+                        }
+                    }
+
                     label.ForeColor = currentColor;
                 }
                 else
@@ -27349,7 +27387,7 @@ namespace SATSuma
     .ToList();
 
                 comboBoxHeaderCustomThemes.DataSource = themeNamesWithSpaces;
-                comboBoxHeaderCustomThemes.Texts = "   select theme ▼";
+                comboBoxHeaderCustomThemes.Texts = "   saved themes ▼";
             }
             catch (Exception ex)
             {
@@ -27452,38 +27490,80 @@ namespace SATSuma
                 listViewBookmarks.Visible = true;
                 if (listViewTransactionInputs.Visible)
                 {
-                    listViewTransactionInputs.Visible = false;
-                    listViewTransactionInputs.Visible = true;
+                    if (listViewTransactionInputs.SelectedItems.Count > 0)
+                    {
+                        int selectedIndex = listViewTransactionInputs.SelectedIndices[0];
+                        listViewTransactionInputs.SelectedItems.Clear();
+                        listViewTransactionInputs.Items[selectedIndex].Selected = true;
+                        listViewTransactionInputs.Items[selectedIndex].Focused = true;
+                        listViewTransactionInputs.EnsureVisible(selectedIndex);
+                    }
                 }
                 if (listViewTransactionOutputs.Visible)
                 {
-                    listViewTransactionOutputs.Visible = false;
-                    listViewTransactionOutputs.Visible = true;
+                    if (listViewTransactionOutputs.SelectedItems.Count > 0)
+                    {
+                        int selectedIndex = listViewTransactionOutputs.SelectedIndices[0];
+                        listViewTransactionOutputs.SelectedItems.Clear();
+                        listViewTransactionOutputs.Items[selectedIndex].Selected = true;
+                        listViewTransactionOutputs.Items[selectedIndex].Focused = true;
+                        listViewTransactionOutputs.EnsureVisible(selectedIndex);
+                    }
                 }
                 if (listViewAddressTransactions.Visible)
                 {
-                    listViewAddressTransactions.Visible = false;
-                    listViewAddressTransactions.Visible = true;
+                    if (listViewAddressTransactions.SelectedItems.Count > 0)
+                    {
+                        int selectedIndex = listViewAddressTransactions.SelectedIndices[0];
+                        listViewAddressTransactions.SelectedItems.Clear();
+                        listViewAddressTransactions.Items[selectedIndex].Selected = true;
+                        listViewAddressTransactions.Items[selectedIndex].Focused = true;
+                        listViewAddressTransactions.EnsureVisible(selectedIndex);
+                    }
                 }
                 if (listViewXpubAddresses.Visible)
                 {
-                    listViewXpubAddresses.Visible = false;
-                    listViewXpubAddresses.Visible = true;
+                    if (listViewXpubAddresses.SelectedItems.Count > 0)
+                    {
+                        int selectedIndex = listViewXpubAddresses.SelectedIndices[0];
+                        listViewXpubAddresses.SelectedItems.Clear();
+                        listViewXpubAddresses.Items[selectedIndex].Selected = true;
+                        listViewXpubAddresses.Items[selectedIndex].Focused = true;
+                        listViewXpubAddresses.EnsureVisible(selectedIndex);
+                    }
                 }
                 if (listViewPoolsList.Visible)
                 {
-                    listViewPoolsList.Visible = false;
-                    listViewPoolsList.Visible = true;
+                    if (listViewPoolsList.SelectedItems.Count > 0)
+                    {
+                        int selectedIndex = listViewPoolsList.SelectedIndices[0];
+                        listViewPoolsList.SelectedItems.Clear();
+                        listViewPoolsList.Items[selectedIndex].Selected = true;
+                        listViewPoolsList.Items[selectedIndex].Focused = true;
+                        listViewPoolsList.EnsureVisible(selectedIndex);
+                    }
                 }
                 if (listViewPoolsByBlock.Visible)
                 {
-                    listViewPoolsByBlock.Visible = false;
-                    listViewPoolsByBlock.Visible = true;
+                    if (listViewPoolsByBlock.SelectedItems.Count > 0)
+                    {
+                        int selectedIndex = listViewPoolsByBlock.SelectedIndices[0];
+                        listViewPoolsByBlock.SelectedItems.Clear();
+                        listViewPoolsByBlock.Items[selectedIndex].Selected = true;
+                        listViewPoolsByBlock.Items[selectedIndex].Focused = true;
+                        listViewPoolsByBlock.EnsureVisible(selectedIndex);
+                    }
                 }
                 if (listViewPoolsHashrate.Visible)
                 {
-                    listViewPoolsHashrate.Visible = false;
-                    listViewPoolsHashrate.Visible = true;
+                    if (listViewPoolsHashrate.SelectedItems.Count > 0)
+                    {
+                        int selectedIndex = listViewPoolsHashrate.SelectedIndices[0];
+                        listViewPoolsHashrate.SelectedItems.Clear();
+                        listViewPoolsHashrate.Items[selectedIndex].Selected = true;
+                        listViewPoolsHashrate.Items[selectedIndex].Focused = true;
+                        listViewPoolsHashrate.EnsureVisible(selectedIndex);
+                    }
                 }
                 if (panel157.Visible)
                 {

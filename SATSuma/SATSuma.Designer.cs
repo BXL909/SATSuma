@@ -1350,6 +1350,7 @@
             this.panel164 = new System.Windows.Forms.Panel();
             this.label319 = new System.Windows.Forms.Label();
             this.PoolsListScrollTimer = new System.Windows.Forms.Timer(this.components);
+            this.panelPriceSourceIndicatorsOuter = new System.Windows.Forms.Panel();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel109.SuspendLayout();
             this.panel12.SuspendLayout();
@@ -1602,6 +1603,7 @@
             this.panelPoolsListContainer.SuspendLayout();
             this.panel158.SuspendLayout();
             this.panel164.SuspendLayout();
+            this.panelPriceSourceIndicatorsOuter.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTime
@@ -10773,7 +10775,7 @@
             this.panelPriceSourceIndicators.Controls.Add(this.lblMempoolSpacePriceIndicator);
             this.panelPriceSourceIndicators.Controls.Add(this.lblBitcoinExplorerPriceIndicator);
             this.panelPriceSourceIndicators.Controls.Add(this.label226);
-            this.panelPriceSourceIndicators.Location = new System.Drawing.Point(307, 93);
+            this.panelPriceSourceIndicators.Location = new System.Drawing.Point(1, 1);
             this.panelPriceSourceIndicators.Name = "panelPriceSourceIndicators";
             this.panelPriceSourceIndicators.Size = new System.Drawing.Size(64, 11);
             this.panelPriceSourceIndicators.TabIndex = 284;
@@ -17419,8 +17421,9 @@
             this.comboBoxHeaderCustomThemes.Name = "comboBoxHeaderCustomThemes";
             this.comboBoxHeaderCustomThemes.Size = new System.Drawing.Size(120, 18);
             this.comboBoxHeaderCustomThemes.TabIndex = 251;
-            this.comboBoxHeaderCustomThemes.Texts = "   select theme ▼";
+            this.comboBoxHeaderCustomThemes.Texts = "   saved themes ▼";
             this.comboBoxHeaderCustomThemes.OnSelectedIndexChanged += new System.EventHandler(this.ComboBoxHeaderCustomThemes_OnSelectedIndexChanged);
+            this.comboBoxHeaderCustomThemes.Paint += new System.Windows.Forms.PaintEventHandler(this.comboBoxHeaderCustomThemes_Paint);
             this.comboBoxHeaderCustomThemes.MouseEnter += new System.EventHandler(this.ComboBoxHeaderCustomThemes_MouseEnter);
             this.comboBoxHeaderCustomThemes.MouseLeave += new System.EventHandler(this.ComboBoxHeaderCustomThemes_MouseLeave);
             // 
@@ -19622,7 +19625,7 @@
             this.btnViewPoolFromMiningBlocks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnViewPoolFromMiningBlocks.Font = new System.Drawing.Font("Consolas", 7F);
             this.btnViewPoolFromMiningBlocks.ForeColor = System.Drawing.Color.White;
-            this.btnViewPoolFromMiningBlocks.Location = new System.Drawing.Point(3, 97);
+            this.btnViewPoolFromMiningBlocks.Location = new System.Drawing.Point(3, 91);
             this.btnViewPoolFromMiningBlocks.Margin = new System.Windows.Forms.Padding(1);
             this.btnViewPoolFromMiningBlocks.Name = "btnViewPoolFromMiningBlocks";
             this.btnViewPoolFromMiningBlocks.Size = new System.Drawing.Size(60, 15);
@@ -21525,6 +21528,15 @@
             this.PoolsListScrollTimer.Interval = 50;
             this.PoolsListScrollTimer.Tick += new System.EventHandler(this.PoolsListScrollTimer_Tick);
             // 
+            // panelPriceSourceIndicatorsOuter
+            // 
+            this.panelPriceSourceIndicatorsOuter.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            this.panelPriceSourceIndicatorsOuter.Controls.Add(this.panelPriceSourceIndicators);
+            this.panelPriceSourceIndicatorsOuter.Location = new System.Drawing.Point(277, 93);
+            this.panelPriceSourceIndicatorsOuter.Name = "panelPriceSourceIndicatorsOuter";
+            this.panelPriceSourceIndicatorsOuter.Size = new System.Drawing.Size(66, 13);
+            this.panelPriceSourceIndicatorsOuter.TabIndex = 292;
+            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(5F, 12F);
@@ -21534,9 +21546,11 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
+            this.Controls.Add(this.panelPriceSourceIndicatorsOuter);
+            this.Controls.Add(this.panelBookmarks);
+            this.Controls.Add(this.panelMiningBlocks);
             this.Controls.Add(this.panelMiningPools);
             this.Controls.Add(this.panelBlockList);
-            this.Controls.Add(this.panelMiningBlocks);
             this.Controls.Add(this.panelChartsForPoolsScreen);
             this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelBitcoinDashboard);
@@ -21545,7 +21559,6 @@
             this.Controls.Add(this.panelAddressUTXO);
             this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelBlock);
-            this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelDirectory);
@@ -21553,7 +21566,6 @@
             this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.panelMiningHashrate);
             this.Controls.Add(this.panelXpub);
-            this.Controls.Add(this.panelPriceSourceIndicators);
             this.Controls.Add(this.progressBarRefreshData);
             this.Controls.Add(this.lblHeaderPriceChange);
             this.Controls.Add(this.lblHeaderFeeRatesChart);
@@ -21992,6 +22004,7 @@
             this.panel158.ResumeLayout(false);
             this.panel164.ResumeLayout(false);
             this.panel164.PerformLayout();
+            this.panelPriceSourceIndicatorsOuter.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -23319,6 +23332,7 @@
         private System.Windows.Forms.Panel panel120;
         private System.Windows.Forms.Panel panel123;
         private System.Windows.Forms.Panel panel124;
+        private System.Windows.Forms.Panel panelPriceSourceIndicatorsOuter;
     }
 }
 

@@ -1,29 +1,31 @@
 ﻿/*  
-⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣴⣶⣾⣿⣿⣿⣿⣷⣶⣦⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀  ⠀  _____      _______ _____                       
-⠀⠀⠀⠀⠀⣠⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⣄⠀⠀⠀⠀⠀  ⠀ / ____|  /\|__   __/ ____|                 v2.2    
-⠀⠀⠀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⠀⠀ ⠀ ⠀| (___   /  \  | | | (___  _   _ _ __ ___   __ _ 
-⠀⠀⣴⣿⣿⣿⣿⣿⣿⣿⠟⠿⠿⡿⠀⢰⣿⠁⢈⣿⣿⣿⣿⣿⣿⣿⣿⣦⠀   ⠀ \___ \ / /\ \ | |  \___ \| | | | '_ ` _ \ / _` |
-⠀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣤⣄⠀⠀⠀⠈⠉⠀⠸⠿⣿⣿⣿⣿⣿⣿⣿⣿⣧⠀  ⠀ ____) / ____ \| |  ____) | |_| | | | | | | (_| |
-⢰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠀⠀⢠⣶⣶⣤⡀⠀⠈⢻⣿⣿⣿⣿⣿⣿⣿⡆  ⠀|_____/_/    \_\_| |_____/ \__,_|_| |_| |_|\__,_| 
-⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃⠀⠀⠼⣿⣿⡿⠃⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣷   A block explorer, Xpub viewer, bitcoin & lightning dashboard, DCA calculator, multiple onchain & market
-⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⠀⠀⢀⣀⣀⠀⠀⠀⠀⢴⣿⣿⣿⣿⣿⣿⣿⣿⣿   charts, directory, fiat converter and loads more, with the ability to create encryted bookmarks and 
-⢿⣿⣿⣿⣿⣿⣿⣿⢿⣿⠁⠀⠀⣼⣿⣿⣿⣦⠀⠀⠈⢻⣿⣿⣿⣿⣿⣿⣿⡿   notes, select from multiple preset themes or create your own. Xpub queries will only work on the users's
-⠸⣿⣿⣿⣿⣿⣿⣏⠀⠀⠀⠀⠀⠛⠛⠿⠟⠋⠀⠀⠀⣾⣿⣿⣿⣿⣿⣿⣿⠇   own node. Keys to unlock encrypted bookmarks are not stored anywhere and are uncrecoverable. Data and
-⠀⢻⣿⣿⣿⣿⣿⣿⣿⣿⠇⠀⣤⡄⠀⣀⣀⣀⣀⣠⣾⣿⣿⣿⣿⣿⣿⣿⡟⠀   config files (bookmarks, themes and settings) are all saved to the user's application data directory.
-⠀⠀⠻⣿⣿⣿⣿⣿⣿⣿⣄⣰⣿⠁⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠀⠀   
-⠀⠀⠀⠙⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠋⠀⠀⠀   🍊 Homepage https://satsuma.btcdir.org/
-⠀⠀⠀⠀⠀⠙⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠋⠀⠀⠀⠀⠀   🍊 Version history https://satsuma.btcdir.org/version-history/
-⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠻⠿⢿⣿⣿⣿⣿⡿⠿⠟⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀   🍊 Download https://satsuma.btcdir.org/download/
-
 ..........................................................................................................................................
-
-Stuff to do:
-.Taproot support on xpub screen 
-.documentation for new pools screens (code done, just do online help)
-.testing, particularly new pools screens on own node
-.check tooltips everywhere
-.replace time period buttons (pools, charts, etc) with comboboxes?
-.connector arrow on bookmarks screen when scrolling
+.
+. ⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣴⣶⣾⣿⣿⣿⣿⣷⣶⣦⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀  ⠀  _____      _______ _____                       
+. ⠀⠀⠀⠀⠀⣠⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⣄⠀⠀⠀⠀⠀  ⠀ / ____|  /\|__   __/ ____|                 v2.2    
+. ⠀⠀⠀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⠀⠀ ⠀ ⠀| (___   /  \  | | | (___  _   _ _ __ ___   __ _ 
+. ⠀⠀⣴⣿⣿⣿⣿⣿⣿⣿⠟⠿⠿⡿⠀⢰⣿⠁⢈⣿⣿⣿⣿⣿⣿⣿⣿⣦⠀   ⠀ \___ \ / /\ \ | |  \___ \| | | | '_ ` _ \ / _` |
+. ⠀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣤⣄⠀⠀⠀⠈⠉⠀⠸⠿⣿⣿⣿⣿⣿⣿⣿⣿⣧⠀  ⠀ ____) / ____ \| |  ____) | |_| | | | | | | (_| |
+. ⢰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠀⠀⢠⣶⣶⣤⡀⠀⠈⢻⣿⣿⣿⣿⣿⣿⣿⡆  ⠀|_____/_/    \_\_| |_____/ \__,_|_| |_| |_|\__,_| 
+. ⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃⠀⠀⠼⣿⣿⡿⠃⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣷   A block explorer, Xpub viewer, bitcoin & lightning dashboard, DCA calculator, multiple onchain & market
+. ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⠀⠀⢀⣀⣀⠀⠀⠀⠀⢴⣿⣿⣿⣿⣿⣿⣿⣿⣿   charts, directory, fiat converter and loads more, with the ability to create encryted bookmarks and 
+. ⢿⣿⣿⣿⣿⣿⣿⣿⢿⣿⠁⠀⠀⣼⣿⣿⣿⣦⠀⠀⠈⢻⣿⣿⣿⣿⣿⣿⣿⡿   notes, select from multiple preset themes or create your own. Xpub queries will only work on the users's
+. ⠸⣿⣿⣿⣿⣿⣿⣏⠀⠀⠀⠀⠀⠛⠛⠿⠟⠋⠀⠀⠀⣾⣿⣿⣿⣿⣿⣿⣿⠇   own node. Keys to unlock encrypted bookmarks are not stored anywhere and are uncrecoverable. Data and
+. ⠀⢻⣿⣿⣿⣿⣿⣿⣿⣿⠇⠀⣤⡄⠀⣀⣀⣀⣀⣠⣾⣿⣿⣿⣿⣿⣿⣿⡟⠀   config files (bookmarks, themes and settings) are all saved to the user's application data directory.
+. ⠀⠀⠻⣿⣿⣿⣿⣿⣿⣿⣄⣰⣿⠁⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠀⠀   
+. ⠀⠀⠀⠙⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠋⠀⠀⠀   🍊 Homepage.......... https://satsuma.btcdir.org/
+. ⠀⠀⠀⠀⠀⠙⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠋⠀⠀⠀⠀⠀   🍊 Version history... https://satsuma.btcdir.org/version-history/
+. ⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠻⠿⢿⣿⣿⣿⣿⡿⠿⠟⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀   🍊 Download.......... https://satsuma.btcdir.org/download/
+.
+..........................................................................................................................................
+.
+. Stuff to do:
+. Taproot support on xpub screen 
+. documentation for new pools screens (code done, just do online help)
+. testing, particularly new pools screens on own node
+. check tooltips everywhere
+. replace time period buttons (pools, charts, etc) with comboboxes?
+..........................................................................................................................................
 */
 
 #region Using
@@ -469,7 +471,7 @@ namespace SATSuma
             Control[] panelsToRound = { panelXpubContainer, panelXpubScrollbar, panel32, panel74, panel76, panel77, panel99, panel84, panel88, panel89, panel90, panel86, panel87, panel103, panel46, panel51, panel91, panel70, panel71, panel16, panel21, panel85, panel53, panel96, panel106, panel107, panel92, panelAddToBookmarks, panelAddToBookmarksBorder,
                 panelLeftPanel, panelOwnNodeAddressTXInfo, panelOwnNodeBlockTXInfo, panelTransactionMiddle, panelErrorMessage, panelSettingsUIScale, panelSettingsUIScaleContainer, panelDCAMessages, panelDCASummary, panelDCAInputs, panel119, panelPriceConvert, panelDCAChartContainer, panel117, panel121,
                 panel122, panel101, panel27, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panel134, panelBookmarksContainer, panel33, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panel128, panel147, panel80, panel153, panel158,
-                panelTransactionInputs, panelTransactionOutputs, panel24, panel25, panelAddressTxContainer, panel120, panel123, panel124, panelPriceSourceIndicatorsOuter };
+                panelTransactionInputs, panelTransactionOutputs, panel24, panel25, panelAddressTxContainer, panel120, panel123, panel124, panelPriceSourceIndicatorsOuter, panel133, panel148 };
             foreach (Control control in panelsToRound)
             {
                 control.Paint += Panel_Paint;
@@ -15966,7 +15968,6 @@ namespace SATSuma
                     {
                         if (item.Selected)
                         {
-
                             item.EnsureVisible();
 
                             if (String.Compare(item.SubItems[1].Text, "xpub") == 0)
@@ -16414,15 +16415,15 @@ namespace SATSuma
                     Rectangle itemRect = listViewBookmarks.GetItemRect(listViewBookmarks.SelectedIndices[0]);
                     panel169.Invoke((MethodInvoker)delegate
                     {
-                        panel169.Top = itemRect.Top + (int)(46 * UIScale);
+                        panel169.Top = itemRect.Top + (itemRect.Height / 2);
                     });
                     label335.Invoke((MethodInvoker)delegate
                     {
-                        label335.Top = itemRect.Top + (int)(38 * UIScale);
+                        label335.Top = itemRect.Top;
                     });
                     panel171.Invoke((MethodInvoker)delegate
                     {
-                        panel171.Height = panel170.Top - panel169.Top;
+                        panel171.Height = panel170.Top - panel169.Top + 30;
                         panel171.Top = panel169.Top;
                     });
                 }
@@ -23761,7 +23762,7 @@ namespace SATSuma
                 Control[] panelsToInvalidate = { panelXpubContainer, panelXpubScrollbar, panel92, panel32, panel74, panel76, panel77, panel99, panel84, panel88, panel89, panel90, panel86, panel87, panel103, panel46, panel51, panel91, panel70, panel71, panel16, panel21, panel85, panel53, panel96, panel106, panel107, panelAddToBookmarks,
                     panelAddToBookmarksBorder, panelOwnNodeAddressTXInfo, panelOwnNodeBlockTXInfo, panelTransactionMiddle, panelErrorMessage, panelDCAMessages, panelDCASummary, panelDCAInputs, panel119, panelPriceConvert, panelDCAChartContainer, panel117, panel121, panel122, panel120, 
                     panel101, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panel134, panelBookmarksContainer, panel33, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panel128, panel147, panel80, panel153, panel158, panel160,
-                panelTransactionInputs, panelTransactionOutputs, panel24, panel25, panelAddressTxContainer, panel123, panel124, panelPriceSourceIndicatorsOuter };
+                panelTransactionInputs, panelTransactionOutputs, panel24, panel25, panelAddressTxContainer, panel123, panel124, panelPriceSourceIndicatorsOuter, panel133, panel148 };
                 foreach (Control control in panelsToInvalidate)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24912,7 +24913,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listLinesToColor = { panel14, panel17, panel19, panel61, panel169, panel170, panel171, panel105 };
+                Control[] listLinesToColor = { panel14, panel17, panel19, panel61, panel169, panel170, panel171, panel105, panel127 };
                 foreach (Control control in listLinesToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -25040,7 +25041,7 @@ namespace SATSuma
             try
             {
                 listViewHeaderColor = thiscolor;
-                Control[] tableTitleBarsToColor = { panel126, panel143, panel67, panel68, panel117, panel121, panel100, panelBookmarksContainer, panel144, panel150, panel160, panel162, panel165, panel167, panel172 };
+                Control[] tableTitleBarsToColor = { panel126, panel143, panel67, panel68, panel117, panel121, panel100, panel144, panel150, panel160, panel162, panel165, panel167, panel172 };
                 foreach (Control control in tableTitleBarsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -25556,7 +25557,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listPanelsToColor = { panel123, panel120, panel30, panel125, panel132, panel92, panelAddToBookmarks, panel46, panel103, panelOwnNodeBlockTXInfo, panel119, panelPriceConvert, panel106, panel107, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21, panelSettingsUIScale, panelDCAMessages, panelDCASummary, panelDCAInputs, panelRefreshChart, panelPriceSourceIndicators, panel80, panel153, panel158, panel124 };
+                Control[] listPanelsToColor = { panel123, panel120, panel30, panel125, panel132, panel92, panelAddToBookmarks, panelBookmarksContainer, panel46, panel103, panelOwnNodeBlockTXInfo, panel119, panelPriceConvert, panel106, panel107, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21, panelSettingsUIScale, panelDCAMessages, panelDCASummary, panelDCAInputs, panelRefreshChart, panelPriceSourceIndicators, panel80, panel153, panel158, panel124, label334, panel133, panel148 };
                 foreach (Control control in listPanelsToColor)
                 {
                     {

@@ -611,7 +611,6 @@
             this.panel33 = new System.Windows.Forms.Panel();
             this.btnBookmarksListUp = new CustomControls.RJControls.RJButton();
             this.btnBookmarksListDown = new CustomControls.RJControls.RJButton();
-            this.panel169 = new System.Windows.Forms.Panel();
             this.panel32 = new System.Windows.Forms.Panel();
             this.panelBookmarkKeyContainer = new System.Windows.Forms.Panel();
             this.textBoxBookmarkKey = new System.Windows.Forms.TextBox();
@@ -625,6 +624,9 @@
             this.lblSelectedBookmarkType = new System.Windows.Forms.Label();
             this.lblBookmarkDataInFull = new System.Windows.Forms.Label();
             this.panelBookmarksContainer = new System.Windows.Forms.Panel();
+            this.panel169 = new System.Windows.Forms.Panel();
+            this.panel171 = new System.Windows.Forms.Panel();
+            this.label335 = new System.Windows.Forms.Label();
             this.listViewBookmarks = new System.Windows.Forms.ListView();
             this.panel100 = new System.Windows.Forms.Panel();
             this.panel170 = new System.Windows.Forms.Panel();
@@ -648,8 +650,6 @@
             this.label142 = new System.Windows.Forms.Label();
             this.panel27 = new System.Windows.Forms.Panel();
             this.label334 = new System.Windows.Forms.Label();
-            this.panel171 = new System.Windows.Forms.Panel();
-            this.label335 = new System.Windows.Forms.Label();
             this.BookmarksScrollTimer = new System.Windows.Forms.Timer(this.components);
             this.lblHeaderMoscowTimeLabel = new System.Windows.Forms.Label();
             this.lblHeaderMarketCap = new System.Windows.Forms.Label();
@@ -1351,6 +1351,9 @@
             this.label319 = new System.Windows.Forms.Label();
             this.PoolsListScrollTimer = new System.Windows.Forms.Timer(this.components);
             this.panelPriceSourceIndicatorsOuter = new System.Windows.Forms.Panel();
+            this.panel127 = new System.Windows.Forms.Panel();
+            this.panel133 = new System.Windows.Forms.Panel();
+            this.panel148 = new System.Windows.Forms.Panel();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel109.SuspendLayout();
             this.panel12.SuspendLayout();
@@ -10027,16 +10030,16 @@
             // panelBookmarks
             // 
             this.panelBookmarks.BackColor = System.Drawing.Color.Transparent;
+            this.panelBookmarks.Controls.Add(this.panel127);
             this.panelBookmarks.Controls.Add(this.panel33);
-            this.panelBookmarks.Controls.Add(this.panel169);
             this.panelBookmarks.Controls.Add(this.panel32);
             this.panelBookmarks.Controls.Add(this.panelBookmarksContainer);
             this.panelBookmarks.Controls.Add(this.panel170);
             this.panelBookmarks.Controls.Add(this.panel36);
             this.panelBookmarks.Controls.Add(this.panel27);
             this.panelBookmarks.Controls.Add(this.label334);
-            this.panelBookmarks.Controls.Add(this.panel171);
-            this.panelBookmarks.Controls.Add(this.label335);
+            this.panelBookmarks.Controls.Add(this.panel133);
+            this.panelBookmarks.Controls.Add(this.panel148);
             this.panelBookmarks.Location = new System.Drawing.Point(162, 187);
             this.panelBookmarks.Name = "panelBookmarks";
             this.panelBookmarks.Size = new System.Drawing.Size(773, 556);
@@ -10102,15 +10105,6 @@
             this.btnBookmarksListDown.Click += new System.EventHandler(this.BtnBookmarksListDown_Click);
             this.btnBookmarksListDown.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnBookmarksListDown_MouseDown);
             this.btnBookmarksListDown.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnBookmarksListDown_MouseUp);
-            // 
-            // panel169
-            // 
-            this.panel169.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panel169.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panel169.Location = new System.Drawing.Point(5, 101);
-            this.panel169.Name = "panel169";
-            this.panel169.Size = new System.Drawing.Size(18, 1);
-            this.panel169.TabIndex = 282;
             // 
             // panel32
             // 
@@ -10326,11 +10320,44 @@
             this.panelBookmarksContainer.AutoScroll = true;
             this.panelBookmarksContainer.Controls.Add(this.listViewBookmarks);
             this.panelBookmarksContainer.Controls.Add(this.panel100);
-            this.panelBookmarksContainer.Location = new System.Drawing.Point(30, 37);
+            this.panelBookmarksContainer.Controls.Add(this.panel169);
+            this.panelBookmarksContainer.Controls.Add(this.panel171);
+            this.panelBookmarksContainer.Controls.Add(this.label335);
+            this.panelBookmarksContainer.Location = new System.Drawing.Point(0, 37);
             this.panelBookmarksContainer.Name = "panelBookmarksContainer";
-            this.panelBookmarksContainer.Size = new System.Drawing.Size(715, 396);
+            this.panelBookmarksContainer.Size = new System.Drawing.Size(745, 396);
             this.panelBookmarksContainer.TabIndex = 213;
             this.panelBookmarksContainer.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelBookmarksContainer_Paint);
+            // 
+            // panel169
+            // 
+            this.panel169.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.panel169.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.panel169.Location = new System.Drawing.Point(11, 59);
+            this.panel169.Name = "panel169";
+            this.panel169.Size = new System.Drawing.Size(17, 1);
+            this.panel169.TabIndex = 282;
+            // 
+            // panel171
+            // 
+            this.panel171.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.panel171.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.panel171.Location = new System.Drawing.Point(11, 111);
+            this.panel171.Name = "panel171";
+            this.panel171.Size = new System.Drawing.Size(1, 176);
+            this.panel171.TabIndex = 285;
+            // 
+            // label335
+            // 
+            this.label335.AutoSize = true;
+            this.label335.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label335.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label335.Location = new System.Drawing.Point(18, 39);
+            this.label335.Name = "label335";
+            this.label335.Size = new System.Drawing.Size(19, 17);
+            this.label335.TabIndex = 286;
+            this.label335.Text = "◀";
+            this.toolTipGeneralUse.SetToolTip(this.label335, "Number of transactions in the \r\nXXmempool of connected node");
             // 
             // listViewBookmarks
             // 
@@ -10344,7 +10371,7 @@
             this.listViewBookmarks.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewBookmarks.HideSelection = false;
             this.listViewBookmarks.LabelWrap = false;
-            this.listViewBookmarks.Location = new System.Drawing.Point(0, 2);
+            this.listViewBookmarks.Location = new System.Drawing.Point(30, 2);
             this.listViewBookmarks.Margin = new System.Windows.Forms.Padding(0);
             this.listViewBookmarks.MultiSelect = false;
             this.listViewBookmarks.Name = "listViewBookmarks";
@@ -10368,18 +10395,18 @@
             // panel100
             // 
             this.panel100.BackColor = System.Drawing.Color.IndianRed;
-            this.panel100.Location = new System.Drawing.Point(1, -2);
+            this.panel100.Location = new System.Drawing.Point(0, -2);
             this.panel100.Name = "panel100";
-            this.panel100.Size = new System.Drawing.Size(695, 380);
+            this.panel100.Size = new System.Drawing.Size(733, 20);
             this.panel100.TabIndex = 165;
             // 
             // panel170
             // 
             this.panel170.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
             this.panel170.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panel170.Location = new System.Drawing.Point(5, 462);
+            this.panel170.Location = new System.Drawing.Point(11, 460);
             this.panel170.Name = "panel170";
-            this.panel170.Size = new System.Drawing.Size(18, 1);
+            this.panel170.Size = new System.Drawing.Size(12, 1);
             this.panel170.TabIndex = 283;
             // 
             // panel36
@@ -10644,9 +10671,9 @@
             // panel27
             // 
             this.panel27.BackColor = System.Drawing.Color.White;
-            this.panel27.Location = new System.Drawing.Point(30, 37);
+            this.panel27.Location = new System.Drawing.Point(0, 37);
             this.panel27.Name = "panel27";
-            this.panel27.Size = new System.Drawing.Size(717, 398);
+            this.panel27.Size = new System.Drawing.Size(747, 398);
             this.panel27.TabIndex = 216;
             // 
             // label334
@@ -10654,33 +10681,12 @@
             this.label334.AutoSize = true;
             this.label334.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.label334.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label334.Location = new System.Drawing.Point(18, 455);
+            this.label334.Location = new System.Drawing.Point(18, 453);
             this.label334.Name = "label334";
             this.label334.Size = new System.Drawing.Size(19, 17);
             this.label334.TabIndex = 287;
             this.label334.Text = "▶";
             this.toolTipGeneralUse.SetToolTip(this.label334, "Number of transactions in the \r\nXXmempool of connected node");
-            // 
-            // panel171
-            // 
-            this.panel171.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panel171.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panel171.Location = new System.Drawing.Point(5, 182);
-            this.panel171.Name = "panel171";
-            this.panel171.Size = new System.Drawing.Size(1, 176);
-            this.panel171.TabIndex = 285;
-            // 
-            // label335
-            // 
-            this.label335.AutoSize = true;
-            this.label335.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label335.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label335.Location = new System.Drawing.Point(18, 88);
-            this.label335.Name = "label335";
-            this.label335.Size = new System.Drawing.Size(19, 17);
-            this.label335.TabIndex = 286;
-            this.label335.Text = "◀";
-            this.toolTipGeneralUse.SetToolTip(this.label335, "Number of transactions in the \r\nXXmempool of connected node");
             // 
             // BookmarksScrollTimer
             // 
@@ -21530,12 +21536,37 @@
             // 
             // panelPriceSourceIndicatorsOuter
             // 
-            this.panelPriceSourceIndicatorsOuter.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            this.panelPriceSourceIndicatorsOuter.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.panelPriceSourceIndicatorsOuter.Controls.Add(this.panelPriceSourceIndicators);
             this.panelPriceSourceIndicatorsOuter.Location = new System.Drawing.Point(277, 93);
             this.panelPriceSourceIndicatorsOuter.Name = "panelPriceSourceIndicatorsOuter";
             this.panelPriceSourceIndicatorsOuter.Size = new System.Drawing.Size(66, 13);
             this.panelPriceSourceIndicatorsOuter.TabIndex = 292;
+            // 
+            // panel127
+            // 
+            this.panel127.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.panel127.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.panel127.Location = new System.Drawing.Point(11, 432);
+            this.panel127.Name = "panel127";
+            this.panel127.Size = new System.Drawing.Size(1, 28);
+            this.panel127.TabIndex = 288;
+            // 
+            // panel133
+            // 
+            this.panel133.BackColor = System.Drawing.Color.DimGray;
+            this.panel133.Location = new System.Drawing.Point(0, 410);
+            this.panel133.Name = "panel133";
+            this.panel133.Size = new System.Drawing.Size(22, 58);
+            this.panel133.TabIndex = 289;
+            // 
+            // panel148
+            // 
+            this.panel148.BackColor = System.Drawing.Color.DimGray;
+            this.panel148.Location = new System.Drawing.Point(0, 450);
+            this.panel148.Name = "panel148";
+            this.panel148.Size = new System.Drawing.Size(60, 22);
+            this.panel148.TabIndex = 290;
             // 
             // SATSuma
             // 
@@ -21752,6 +21783,7 @@
             this.panelBookmarkKeyContainer.ResumeLayout(false);
             this.panelBookmarkKeyContainer.PerformLayout();
             this.panelBookmarksContainer.ResumeLayout(false);
+            this.panelBookmarksContainer.PerformLayout();
             this.panel36.ResumeLayout(false);
             this.panel36.PerformLayout();
             this.panelDeleteAllBookmarksConfirm.ResumeLayout(false);
@@ -23333,6 +23365,9 @@
         private System.Windows.Forms.Panel panel123;
         private System.Windows.Forms.Panel panel124;
         private System.Windows.Forms.Panel panelPriceSourceIndicatorsOuter;
+        private System.Windows.Forms.Panel panel127;
+        private System.Windows.Forms.Panel panel133;
+        private System.Windows.Forms.Panel panel148;
     }
 }
 

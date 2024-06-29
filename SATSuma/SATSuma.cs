@@ -480,7 +480,7 @@ namespace SATSuma
             #region rounded panels (textbox containers)
             Control[] panelContainersToRound = { panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer, panelBookmarkKeyContainer,
                 panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelAppearanceTextbox1Container, panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer,
-                panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, panelUniversalSearchContainer, panel75, panel95, panel93, panel98, panel111, panel113, panel114, panel115, panelSubmittedAddressContainerUTXO, panelComboBoxChartSelectContainer };
+                panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, panelUniversalSearchContainer, panel75, panel95, panel93, panel98, panel111, panel113, panel114, panel115, panelSubmittedAddressContainerUTXO, panelComboBoxChartSelectContainer, panel149, panel173, panel174, panel175 };
             foreach (Control control in panelContainersToRound)
             {
                 control.Paint += Panel_Paint;
@@ -10028,89 +10028,48 @@ namespace SATSuma
         }
         
         #region change time period
-        private void BtnPoolsBlocks24h_Click(object sender, EventArgs e)
-        {
-            poolsBlocksTimePeriod = "24h";
-            EnableTimePeriodButtons();
-            btnPoolsBlocks24h.Enabled = false;
-            SetupPoolsByBlocksScreen();
-        }
 
-        private void BtnPoolsBlocks3d_Click(object sender, EventArgs e)
+        private void ComboBoxPoolsBlocksTimePeriod_OnSelectedIndexChanged(object sender, EventArgs e)
         {
-            poolsBlocksTimePeriod = "3d";
-            EnableTimePeriodButtons();
-            btnPoolsBlocks3d.Enabled = false;
-            SetupPoolsByBlocksScreen();
-        }
-
-        private void BtnPoolsBlocks1w_Click(object sender, EventArgs e)
-        {
-            poolsBlocksTimePeriod = "1w";
-            EnableTimePeriodButtons();
-            btnPoolsBlocks1w.Enabled = false;
-            SetupPoolsByBlocksScreen();
-        }
-
-        private void BtnPoolsBlocks1m_Click(object sender, EventArgs e)
-        {
-            poolsBlocksTimePeriod = "1m";
-            EnableTimePeriodButtons();
-            btnPoolsBlocks1m.Enabled = false;
-            SetupPoolsByBlocksScreen();
-        }
-
-        private void BtnPoolsBlocks3m_Click(object sender, EventArgs e)
-        {
-            poolsBlocksTimePeriod = "3m";
-            EnableTimePeriodButtons();
-            btnPoolsBlocks3m.Enabled = false;
-            SetupPoolsByBlocksScreen();
-        }
-
-        private void BtnPoolsBlocks6m_Click(object sender, EventArgs e)
-        {
-            poolsBlocksTimePeriod = "6m";
-            EnableTimePeriodButtons();
-            btnPoolsBlocks6m.Enabled = false;
-            SetupPoolsByBlocksScreen();
-        }
-
-        private void BtnPoolsBlocks1y_Click(object sender, EventArgs e)
-        {
-            poolsBlocksTimePeriod = "1y";
-            EnableTimePeriodButtons();
-            btnPoolsBlocks1y.Enabled = false;
-            SetupPoolsByBlocksScreen();
-        }
-
-        private void BtnPoolsBlocks2y_Click(object sender, EventArgs e)
-        {
-            poolsBlocksTimePeriod = "2y";
-            EnableTimePeriodButtons();
-            btnPoolsBlocks2y.Enabled = false;
-            SetupPoolsByBlocksScreen();
-        }
-
-        private void BtnPoolsBlocks3y_Click(object sender, EventArgs e)
-        {
-            poolsBlocksTimePeriod = "3y";
-            EnableTimePeriodButtons();
-            btnPoolsBlocks3y.Enabled = false;
-            SetupPoolsByBlocksScreen();
-        }
-
-        private void EnableTimePeriodButtons()
-        {
-            Control[] controlsToShow = { btnPoolsBlocks1m, btnPoolsBlocks1w, btnPoolsBlocks1y, btnPoolsBlocks24h, btnPoolsBlocks2y, btnPoolsBlocks3d, btnPoolsBlocks3m, btnPoolsBlocks3y, btnPoolsBlocks6m };
-            foreach (Control control in controlsToShow)
+            if (comboBoxPoolsBlocksTimePeriod.SelectedIndex == 0)
             {
-                control.Invoke((MethodInvoker)delegate
-                {
-                    control.Enabled = true;
-                });
+                poolsBlocksTimePeriod = "24h";
             }
+            if (comboBoxPoolsBlocksTimePeriod.SelectedIndex == 1)
+            {
+                poolsBlocksTimePeriod = "3d";
+            }
+            if (comboBoxPoolsBlocksTimePeriod.SelectedIndex == 2)
+            {
+                poolsBlocksTimePeriod = "1w";
+            }
+            if (comboBoxPoolsBlocksTimePeriod.SelectedIndex == 3)
+            {
+                poolsBlocksTimePeriod = "1m";
+            }
+            if (comboBoxPoolsBlocksTimePeriod.SelectedIndex == 4)
+            {
+                poolsBlocksTimePeriod = "3m";
+            }
+            if (comboBoxPoolsBlocksTimePeriod.SelectedIndex == 5)
+            {
+                poolsBlocksTimePeriod = "6m";
+            }
+            if (comboBoxPoolsBlocksTimePeriod.SelectedIndex == 6)
+            {
+                poolsBlocksTimePeriod = "1y";
+            }
+            if (comboBoxPoolsBlocksTimePeriod.SelectedIndex == 7)
+            {
+                poolsBlocksTimePeriod = "2y";
+            }
+            if (comboBoxPoolsBlocksTimePeriod.SelectedIndex == 8)
+            {
+                poolsBlocksTimePeriod = "3y";
+            }
+            SetupPoolsByBlocksScreen();
         }
+
         #endregion
 
         #region listview scrolling
@@ -10388,7 +10347,7 @@ namespace SATSuma
         }
         #endregion
 
-        #region jump to pools list screen 
+        #region navigate to the other pools screens
         private void BtnViewPoolFromMiningBlocks_Click(object sender, EventArgs e)
         {
             // get the name of the pool from the selected row so the pools list can use it to preselect that pool
@@ -10420,6 +10379,22 @@ namespace SATSuma
             }
             
             BtnMenuMiningPools_ClickAsync(sender, e);
+        }
+
+        private void ComboBoxPoolsBlocksSelectSorting_OnSelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxPoolsBlocksSelectSorting.SelectedIndex == 0)
+            {
+                return;
+            }
+            if (comboBoxPoolsBlocksSelectSorting.SelectedIndex == 1)
+            {
+                comboBoxPoolsHashrateSortingSelect.Invoke((MethodInvoker)delegate
+                {
+                    comboBoxPoolsHashrateSortingSelect.Texts = "by hashrate";
+                });
+                BtnMenuPoolsByHashrate_ClickAsync(sender, e);
+            }
         }
         #endregion
 
@@ -10503,72 +10478,38 @@ namespace SATSuma
         }
 
         #region change time period
-        private void BtnPoolsHashrate1w_Click(object sender, EventArgs e)
-        {
-            poolsHashrateTimePeriod = "1w";
-            EnablePoolsHashrateTimePeriodButtons();
-            btnPoolsHashrate1w.Enabled = false;
-            SetupPoolsByHashrateScreen();
-        }
 
-        private void BtnPoolsHashrate1m_Click(object sender, EventArgs e)
+        private void ComboBoxPoolsHashrateTimePeriod_OnSelectedIndexChanged(object sender, EventArgs e)
         {
-            poolsHashrateTimePeriod = "1m";
-            EnablePoolsHashrateTimePeriodButtons();
-            btnPoolsHashrate1m.Enabled = false;
-            SetupPoolsByHashrateScreen();
-        }
-
-        private void BtnPoolsHashrate3m_Click(object sender, EventArgs e)
-        {
-            poolsHashrateTimePeriod = "3m";
-            EnablePoolsHashrateTimePeriodButtons();
-            btnPoolsHashrate3m.Enabled = false;
-            SetupPoolsByHashrateScreen();
-        }
-
-        private void BtnPoolsHashrate6m_Click(object sender, EventArgs e)
-        {
-            poolsHashrateTimePeriod = "6m";
-            EnablePoolsHashrateTimePeriodButtons();
-            btnPoolsHashrate6m.Enabled = false;
-            SetupPoolsByHashrateScreen();
-        }
-
-        private void BtnPoolsHashrate1y_Click(object sender, EventArgs e)
-        {
-            poolsHashrateTimePeriod = "1y";
-            EnablePoolsHashrateTimePeriodButtons();
-            btnPoolsHashrate1y.Enabled = false;
-            SetupPoolsByHashrateScreen();
-        }
-
-        private void BtnPoolsHashrate2y_Click(object sender, EventArgs e)
-        {
-            poolsHashrateTimePeriod = "2y";
-            EnablePoolsHashrateTimePeriodButtons();
-            btnPoolsHashrate2y.Enabled = false;
-            SetupPoolsByHashrateScreen();
-        }
-
-        private void BtnPoolsHashrate3y_Click(object sender, EventArgs e)
-        {
-            poolsHashrateTimePeriod = "3y";
-            EnablePoolsHashrateTimePeriodButtons();
-            btnPoolsHashrate3y.Enabled = false;
-            SetupPoolsByHashrateScreen();
-        }
-
-        private void EnablePoolsHashrateTimePeriodButtons()
-        {
-            Control[] controlsToShow = { btnPoolsHashrate1m, btnPoolsHashrate1w, btnPoolsHashrate1y, btnPoolsHashrate2y, btnPoolsHashrate3m, btnPoolsHashrate3y, btnPoolsHashrate6m };
-            foreach (Control control in controlsToShow)
+            if (comboBoxPoolsHashrateTimePeriod.SelectedIndex == 0)
             {
-                control.Invoke((MethodInvoker)delegate
-                {
-                    control.Enabled = true;
-                });
+                poolsHashrateTimePeriod = "1w";
             }
+            if (comboBoxPoolsHashrateTimePeriod.SelectedIndex == 1)
+            {
+                poolsHashrateTimePeriod = "1m";
+            }
+            if (comboBoxPoolsHashrateTimePeriod.SelectedIndex == 2)
+            {
+                poolsHashrateTimePeriod = "3m";
+            }
+            if (comboBoxPoolsHashrateTimePeriod.SelectedIndex == 3)
+            {
+                poolsHashrateTimePeriod = "6m";
+            }
+            if (comboBoxPoolsHashrateTimePeriod.SelectedIndex == 4)
+            {
+                poolsHashrateTimePeriod = "1y";
+            }
+            if (comboBoxPoolsHashrateTimePeriod.SelectedIndex == 5)
+            {
+                poolsHashrateTimePeriod = "2y";
+            }
+            if (comboBoxPoolsHashrateTimePeriod.SelectedIndex == 6)
+            {
+                poolsHashrateTimePeriod = "3y";
+            }
+            SetupPoolsByHashrateScreen();
         }
         #endregion
 
@@ -10846,7 +10787,7 @@ namespace SATSuma
 
         #endregion
 
-        #region jump to pools list screen
+        #region go to other pools screens
         private void BtnViewPoolFromPoolsHashrate_Click(object sender, EventArgs e)
         {
             // get the name of the pool from the selected row so the pools list can use it to preselect that pool
@@ -10878,6 +10819,22 @@ namespace SATSuma
             }
 
             BtnMenuMiningPools_ClickAsync(sender, e);
+        }
+
+        private void ComboBoxPoolsHashrateSortingSelect_OnSelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxPoolsHashrateSortingSelect.SelectedIndex == 0)
+            {
+                comboBoxPoolsBlocksSelectSorting.Invoke((MethodInvoker)delegate
+                {
+                    comboBoxPoolsBlocksSelectSorting.Texts = "by blocks mined";
+                });
+                BtnMenuPoolsByBlocks_ClickAsync(sender, e);
+            }
+            if (comboBoxPoolsHashrateSortingSelect.SelectedIndex == 1)
+            {
+                return;
+            }
         }
         #endregion
 
@@ -23632,7 +23589,7 @@ namespace SATSuma
                 btnViewBlockFromAddressUTXO.BorderRadius = (int)((radius - 4) * UIScale);
 
                 //mining pools - blocks, hashrate & list
-                RJButton[] PoolsBlocksButtonBorders = { btnSortPoolsByBlocks, btnSortPoolsByHashrate, btnPoolsBlocks1m, btnPoolsBlocks1w, btnPoolsBlocks1y, btnPoolsBlocks24h, btnPoolsBlocks2y, btnPoolsBlocks3d, btnPoolsBlocks3m, btnPoolsBlocks3y, btnPoolsBlocks6m, btnPoolsBlocksScrollDown, btnPoolsBlocksScrollUp, btnSortPoolsByBlocksH, btnSortPoolsByHashrateH, btnPoolsHashrate1m, btnPoolsHashrate1w, btnPoolsHashrate1y, btnPoolsHashrate2y, btnPoolsHashrate3m, btnPoolsHashrate3y, btnPoolsHashrate6m, btnPoolsHashrateScrollDown, btnPoolsHashrateScrollUp, btnPoolsListScrollDown, btnPoolsListScrollUp, btnPoolsListScrollUp, btnPoolsListScrollDown };
+                RJButton[] PoolsBlocksButtonBorders = { btnPoolsBlocksScrollDown, btnPoolsBlocksScrollUp, btnPoolsHashrateScrollDown, btnPoolsHashrateScrollUp, btnPoolsListScrollDown, btnPoolsListScrollUp, btnPoolsListScrollUp, btnPoolsListScrollDown };
                 foreach (RJButton button in PoolsBlocksButtonBorders)
                 {
                     button.Invoke((MethodInvoker)delegate
@@ -23774,7 +23731,7 @@ namespace SATSuma
                 #region panels (textbox containers)
                 Control[] textboxPanelsToInvalidate = { panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer,
                     panelBookmarkKeyContainer, panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelSettingsUIScaleContainer, panelAppearanceTextbox1Container,
-                    panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, panelUniversalSearchContainer, panel75, panel95, panel93, panel98, panel111, panel113, panel114, panel115, panel27, panelSubmittedAddressContainerUTXO, panelComboBoxChartSelectContainer };
+                    panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, panelUniversalSearchContainer, panel75, panel95, panel93, panel98, panel111, panel113, panel114, panel115, panel27, panelSubmittedAddressContainerUTXO, panelComboBoxChartSelectContainer, panel149, panel173, panel174, panel175 };
                 foreach (Control control in textboxPanelsToInvalidate)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -23873,7 +23830,7 @@ namespace SATSuma
                     });
                 }
                 //mining pools - blocks & hashrate & list
-                Control[] listPoolsBlocksButtonTextToColor = { btnSortPoolsByBlocks, btnSortPoolsByHashrate, btnPoolsBlocks1m, btnPoolsBlocks1w, btnPoolsBlocks1y, btnPoolsBlocks24h, btnPoolsBlocks2y, btnPoolsBlocks3d, btnPoolsBlocks3m, btnPoolsBlocks3y, btnPoolsBlocks6m, btnPoolsBlocksScrollDown, btnPoolsBlocksScrollUp, btnViewPoolFromMiningBlocks, btnSortPoolsByHashrateH, btnPoolsHashrate1m, btnPoolsHashrate1w, btnPoolsHashrate1y, btnPoolsHashrate2y, btnPoolsHashrate3m, btnPoolsHashrate3y, btnPoolsHashrate6m, btnPoolsHashrateScrollDown, btnPoolsHashrateScrollUp, btnViewPoolFromPoolsHashrate, btnPoolsListScrollUp, btnPoolsListScrollDown, btnViewBlockFromBlocksByPool, btnViewPoolFromBlockList, btnViewPoolFromBlockScreen };
+                Control[] listPoolsBlocksButtonTextToColor = { btnPoolsBlocksScrollDown, btnPoolsBlocksScrollUp, btnViewPoolFromMiningBlocks, btnPoolsHashrateScrollDown, btnPoolsHashrateScrollUp, btnViewPoolFromPoolsHashrate, btnPoolsListScrollUp, btnPoolsListScrollDown, btnViewBlockFromBlocksByPool, btnViewPoolFromBlockList, btnViewPoolFromBlockScreen };
                 foreach (Control control in listPoolsBlocksButtonTextToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24830,7 +24787,7 @@ namespace SATSuma
                     });
                 }
                 //mining pools - blocks & hashrate & list
-                Control[] listPoolsBlocksButtonTextToColor = { btnSortPoolsByBlocks, btnSortPoolsByHashrate, btnPoolsBlocks1m, btnPoolsBlocks1w, btnPoolsBlocks1y, btnPoolsBlocks24h, btnPoolsBlocks2y, btnPoolsBlocks3d, btnPoolsBlocks3m, btnPoolsBlocks3y, btnPoolsBlocks6m, btnPoolsBlocksScrollDown, btnPoolsBlocksScrollUp, btnViewPoolFromMiningBlocks, btnSortPoolsByHashrateH, btnPoolsHashrate1m, btnPoolsHashrate1w, btnPoolsHashrate1y, btnPoolsHashrate2y, btnPoolsHashrate3m, btnPoolsHashrate3y, btnPoolsHashrate6m, btnPoolsHashrateScrollDown, btnPoolsHashrateScrollUp, btnViewPoolFromPoolsHashrate, btnSortPoolsByBlocksH, btnPoolsListScrollUp, btnPoolsListScrollDown, btnViewBlockFromBlocksByPool, btnViewPoolFromBlockList, btnViewPoolFromBlockScreen };
+                Control[] listPoolsBlocksButtonTextToColor = { btnPoolsBlocksScrollDown, btnPoolsBlocksScrollUp, btnViewPoolFromMiningBlocks, btnPoolsHashrateScrollDown, btnPoolsHashrateScrollUp, btnViewPoolFromPoolsHashrate, btnPoolsListScrollUp, btnPoolsListScrollDown, btnViewBlockFromBlocksByPool, btnViewPoolFromBlockList, btnViewPoolFromBlockScreen };
                 foreach (Control control in listPoolsBlocksButtonTextToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24941,7 +24898,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listTextBoxesToColor = { lblMempoolSpacePriceAPI, lblSolidProgressBars, lblDashedProgressBars, lblShowClock, btnDataRefreshPeriodDown, btnDataRefreshPeriodUp, btnBiggerScale, btnSmallerScale, btnNonZeroBalancesUp, btnNonZeroBalancesDown, btnDerivationPathsDown, btnDerivationPathsUp, panel93, panel95, panel98, numericUpDownOpacity, btnOpacityDown, btnOpacityUp, btnNumericUpDownSubmittedBlockNumberUp, btnNumericUpDownSubmittedBlockNumberDown, numericUpDownSubmittedBlockNumber, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, panel75, textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textboxSubmittedAddressUTXO, textBoxTransactionID, textBoxXpubScreenOwnNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, lblAlwaysOnTop, textBoxThemeName, lblTitleBackgroundCustom, lblTitlesBackgroundImage, lblTitleBackgroundNone, lblBackgroundFranklinSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected, lblBackgroundGenesisSelected, lblBackgroundSatsumaSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblSettingsOwnNodeSelected, lblSettingsNodeMainnetSelected, lblSettingsNodeTestnetSelected, lblBitcoinExplorerEndpoints, lblCoingeckoComJSON, lblBlockchainInfoEndpoints, lblBlockchairComJSON, lblOfflineMode, lblConfirmReset, lblChartsDarkBackground, lblChartsLightBackground, lblChartsMediumBackground, textBoxConvertBTCtoFiat, textBoxConvertEURtoBTC, textBoxConvertGBPtoBTC, textBoxConvertUSDtoBTC, textBoxConvertXAUtoBTC, panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelSubmittedAddressContainerUTXO, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer, panelBookmarkKeyContainer, panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelAppearanceTextbox1Container, panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, lblInfinity1, lblInfinity2, lblInfinity3, lblEnableDirectory, numericUpDownBlockHeightToStartListFrom, btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, panelUniversalSearchContainer, textBoxUniversalSearch, panelSettingsUIScaleContainer, textBoxDCAAmountInput, panel111, panel113, panel114, panel115, comboBoxChartSelect, panelComboBoxChartSelectContainer };
+                Control[] listTextBoxesToColor = { lblMempoolSpacePriceAPI, lblSolidProgressBars, lblDashedProgressBars, lblShowClock, btnDataRefreshPeriodDown, btnDataRefreshPeriodUp, btnBiggerScale, btnSmallerScale, btnNonZeroBalancesUp, btnNonZeroBalancesDown, btnDerivationPathsDown, btnDerivationPathsUp, panel93, panel95, panel98, numericUpDownOpacity, btnOpacityDown, btnOpacityUp, btnNumericUpDownSubmittedBlockNumberUp, btnNumericUpDownSubmittedBlockNumberDown, numericUpDownSubmittedBlockNumber, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, panel75, textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textboxSubmittedAddressUTXO, textBoxTransactionID, textBoxXpubScreenOwnNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, lblAlwaysOnTop, textBoxThemeName, lblTitleBackgroundCustom, lblTitlesBackgroundImage, lblTitleBackgroundNone, lblBackgroundFranklinSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected, lblBackgroundGenesisSelected, lblBackgroundSatsumaSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblSettingsOwnNodeSelected, lblSettingsNodeMainnetSelected, lblSettingsNodeTestnetSelected, lblBitcoinExplorerEndpoints, lblCoingeckoComJSON, lblBlockchainInfoEndpoints, lblBlockchairComJSON, lblOfflineMode, lblConfirmReset, lblChartsDarkBackground, lblChartsLightBackground, lblChartsMediumBackground, textBoxConvertBTCtoFiat, textBoxConvertEURtoBTC, textBoxConvertGBPtoBTC, textBoxConvertUSDtoBTC, textBoxConvertXAUtoBTC, panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelSubmittedAddressContainerUTXO, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer, panelBookmarkKeyContainer, panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelAppearanceTextbox1Container, panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, lblInfinity1, lblInfinity2, lblInfinity3, lblEnableDirectory, numericUpDownBlockHeightToStartListFrom, btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, panelUniversalSearchContainer, textBoxUniversalSearch, panelSettingsUIScaleContainer, textBoxDCAAmountInput, panel111, panel113, panel114, panel115, comboBoxChartSelect, panelComboBoxChartSelectContainer, panel149, panel173, comboBoxPoolsBlocksSelectSorting, comboBoxPoolsBlocksTimePeriod, panel174, panel175, comboBoxPoolsHashrateSortingSelect, comboBoxPoolsHashrateTimePeriod };
                 foreach (Control control in listTextBoxesToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -25817,7 +25774,7 @@ namespace SATSuma
             });
         }
 
-        private void comboBoxHeaderCustomThemes_Paint(object sender, PaintEventArgs e)
+        private void ComboBoxHeaderCustomThemes_Paint(object sender, PaintEventArgs e)
         {
             //force combobox to show correct colour after a new custom theme is selected
             comboBoxHeaderCustomThemes.Invoke((MethodInvoker)delegate
@@ -30021,14 +29978,7 @@ namespace SATSuma
                 panelMiningBlocks.Visible = true;
                 panelChartsForPoolsScreen.Visible = true;
                 panelChartsForPoolsScreen.BringToFront();
-                btnSortPoolsByBlocks.Invoke((MethodInvoker)delegate
-                {
-                    btnSortPoolsByBlocks.Enabled = false;
-                });
-                btnSortPoolsByHashrate.Invoke((MethodInvoker)delegate
-                {
-                    btnSortPoolsByHashrate.Enabled = true;
-                });
+
                 CheckNetworkStatusAsync();
                 if (!fullScreenLoadingScreenVisible && loadingScreen != null)
                 {
@@ -33560,6 +33510,9 @@ namespace SATSuma
                 return InitialBlockReward / (decimal)Math.Pow(2, halvings);
             }
         }
+
+
+
 
         #endregion
 

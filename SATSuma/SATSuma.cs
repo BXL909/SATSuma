@@ -24,7 +24,8 @@
 . documentation for new pools screens (code done, just do online help)
 . testing, particularly new pools screens on own node
 . check tooltips everywhere
-. replace time period buttons (pools, charts, etc) with comboboxes?
+. test all UIScales, particularly small)
+. test all new scrollbars. May need repainting at some point to avoid glitches
 ..........................................................................................................................................
 */
 
@@ -119,14 +120,14 @@ namespace SATSuma
         private bool isPoolsBlocksButtonPressed;
         private bool PoolsBlocksDownButtonPressed;
         private bool PoolsBlocksUpButtonPressed;
-        string poolsBlocksTimePeriod = "3y";
+        string poolsBlocksTimePeriod = "all";
         #endregion
         #region pools by hashrate screen variables
         private int poolsHashrateScrollPosition;
         private bool isPoolsHashrateButtonPressed;
         private bool PoolsHashrateDownButtonPressed;
         private bool PoolsHashrateUpButtonPressed;
-        string poolsHashrateTimePeriod = "3y";
+        string poolsHashrateTimePeriod = "all";
         #endregion
         #region mining pools screen variables
         private int poolsListScrollPosition;
@@ -253,8 +254,6 @@ namespace SATSuma
         bool btnShowAllAddressTXWasEnabled = true; // Address screen - store button state during queries to return to that state afterwards
         bool btnShowConfirmedAddressTXWasEnabled; // Address screen - store button state during queries to return to that state afterwards
         bool btnShowUnconfirmedAddressTXWasEnabled = true; // Address screen - store button state during queries to return to that state afterwards
-        bool btnFirstAddressTransactionWasEnabled; // Address screen - store button state during queries to return to that state afterwards
-        bool btnNextAddressTransactionsWasEnabled; // Address screen - store button state during queries to return to that state afterwards
         bool BtnViewTransactionFromAddressWasEnabled; // Address screen - store button state during queries to return to that state afterwards
         bool BtnViewBlockFromAddressWasEnabled; // Address screen - store button state during queries to return to that state afterwards
         bool textBoxSubmittedAddressWasEnabled = true; // Address screen - store button state during queries to return to that state afterwards
@@ -273,16 +272,6 @@ namespace SATSuma
         bool numericUpDownBlockHeightToStartListFromWasEnabled = true; // Block List screen - store button state during queries to return to that state afterwards
         bool btnNumericUpDownBlockHeightToStartListFromUpWasEnabled = true; // Block List screen - store button state during queries to return to that state afterwards
         bool btnNumericUpDownBlockHeightToStartListFromDownWasEnabled = true; // Block List screen - store button state during queries to return to that state afterwards
-        bool btnChartPeriod1mWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
-        bool btnChartPeriod1wWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
-        bool btnChartPeriod1yWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
-        bool btnChartPeriod24hWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
-        bool btnChartPeriod2yWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
-        bool btnChartPeriod3dWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
-        bool btnChartPeriod3mWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
-        bool btnChartPeriod3yWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
-        bool btnChartPeriod6mWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
-        bool btnChartPeriodAllWasEnabled; // Chart screen - store button state during queries to return to that state afterwards
         bool btnHashrateScaleLinearWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnHashrateScaleLogWasEnabled = true; // Chart screen - store button state during queries to return to that state afterwards
         bool btnChartDifficultyLinearWasEnabled; // Chart screen - store button state during queries to return to that state afterwards
@@ -311,6 +300,15 @@ namespace SATSuma
         private bool isDerivationPathsDownHeldDown; // Xpub screen - stores numericupdown button states for continuous value changes
         private bool isOpacityUpHeldDown; // Create theme screen - stores numericupdown button states for continuous value changes
         private bool isOpacityDownHeldDown; // Create theme screen - stores numericupdown button states for continuous value changes
+        #endregion
+        #region variables used to hold scroll increments for scrollbars
+        int addressUTXOScrollbarIncrement;
+        int txInScrollbarIncrement;
+        int txOutScrollbarIncrement;
+        int xpubScrollbarIncrement;
+        int poolsBlocksScrollbarIncrement;
+        int poolsListScrollbarIncrement;
+        int bookmarksScrollbarIncrement;
         #endregion
         #region colour variables
         Color subItemBackColor = Color.FromArgb(20, 20, 20);
@@ -468,10 +466,10 @@ namespace SATSuma
             #endregion
 
             #region rounded panels
-            Control[] panelsToRound = { panelXpubContainer, panelXpubScrollbar, panel32, panel74, panel76, panel77, panel99, panel84, panel88, panel89, panel90, panel86, panel87, panel103, panel46, panel51, panel91, panel70, panel71, panel16, panel21, panel85, panel53, panel96, panel106, panel107, panel92, panelAddToBookmarks, panelAddToBookmarksBorder,
+            Control[] panelsToRound = { panelXpubContainer, panelXpubScrollContainer, panel32, panel74, panel76, panel77, panel99, panel84, panel88, panel89, panel90, panel86, panel87, panel103, panel46, panel51, panel91, panel70, panel71, panel16, panel21, panel85, panel53, panel96, panel106, panel107, panel92, panelAddToBookmarks, panelAddToBookmarksBorder,
                 panelLeftPanel, panelOwnNodeAddressTXInfo, panelOwnNodeBlockTXInfo, panelTransactionMiddle, panelErrorMessage, panelSettingsUIScale, panelSettingsUIScaleContainer, panelDCAMessages, panelDCASummary, panelDCAInputs, panel119, panelPriceConvert, panelDCAChartContainer, panel117, panel121,
-                panel122, panel101, panel27, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panel134, panelBookmarksContainer, panel33, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panel128, panel147, panel80, panel153, panel158,
-                panelTransactionInputs, panelTransactionOutputs, panel24, panel25, panelAddressTxContainer, panel120, panel123, panel124, panelPriceSourceIndicatorsOuter, panel133, panel148 };
+                panel122, panel101, panel27, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panelAddressUTXOScrollContainer, panelBookmarksContainer, panelBookmarksScrollContainer, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panelPoolsBlocksScrollContainer, panel147, panel80, panel153, panel158,
+                panelTransactionInputs, panelTransactionOutputs, panelTXInScrollContainer, panelTXOutScrollContainer, panelAddressTxContainer, panel120, panel123, panel124, panelPriceSourceIndicatorsOuter, panel133, panel148, panelBookmarksScrollbarInner, panelTXInScrollbarInner, panelTXOutScrollbarInner, panelAddressUTXOScrollbarInner, panelPoolsBlocksScrollbarInner, panelXpubScrollbarInner };
             foreach (Control control in panelsToRound)
             {
                 control.Paint += Panel_Paint;
@@ -480,7 +478,7 @@ namespace SATSuma
             #region rounded panels (textbox containers)
             Control[] panelContainersToRound = { panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer, panelBookmarkKeyContainer,
                 panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelAppearanceTextbox1Container, panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer,
-                panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, panelUniversalSearchContainer, panel75, panel95, panel93, panel98, panel111, panel113, panel114, panel115, panelSubmittedAddressContainerUTXO, panelComboBoxChartSelectContainer, panel149, panel173, panel174, panel175 };
+                panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, panelUniversalSearchContainer, panel75, panel95, panel93, panel98, panel111, panel113, panel114, panel115, panelSubmittedAddressContainerUTXO, panelComboBoxChartSelectContainer, panel149, panel173, panel174, panel175, panel176, panelPoolsListScrollbarInner };
             foreach (Control control in panelContainersToRound)
             {
                 control.Paint += Panel_Paint;
@@ -579,7 +577,6 @@ namespace SATSuma
                 this.Visible = true;
                 AddressInvalidHideControls(); // Address screen - initially address textbox is empty so hide the controls
                 // prepopulate chart with fee rates (only if user hasn't selected one of the charts for their startup screen)
-                btnChartPeriodAll.Enabled = false;
                 if (!comboBoxStartupScreen.Texts.StartsWith("chart - "))
                 {
                     ChartFeeRates();
@@ -3678,8 +3675,6 @@ namespace SATSuma
                     btnShowAllAddressTXWasEnabled = btnShowAllTX.Enabled;
                     btnShowConfirmedAddressTXWasEnabled = btnShowConfirmedTX.Enabled;
                     btnShowUnconfirmedAddressTXWasEnabled = btnShowUnconfirmedTX.Enabled;
-                    //btnFirstAddressTransactionWasEnabled = btnFirstAddressTransaction.Enabled;
-                    //btnNextAddressTransactionsWasEnabled = btnNextAddressTransactions.Enabled;
                     BtnViewTransactionFromAddressWasEnabled = BtnViewTransactionFromAddress.Enabled;
                     BtnViewBlockFromAddressWasEnabled = BtnViewBlockFromAddress.Enabled;
                     textBoxSubmittedAddressWasEnabled = textboxSubmittedAddress.Enabled;
@@ -3700,8 +3695,6 @@ namespace SATSuma
                     btnShowAllTX.Enabled = btnShowAllAddressTXWasEnabled;
                     btnShowConfirmedTX.Enabled = btnShowConfirmedAddressTXWasEnabled;
                     btnShowUnconfirmedTX.Enabled = btnShowUnconfirmedAddressTXWasEnabled;
-                    //btnFirstAddressTransaction.Enabled = btnFirstAddressTransactionWasEnabled;
-                    //btnNextAddressTransactions.Enabled = btnNextAddressTransactionsWasEnabled;
                     BtnViewTransactionFromAddress.Enabled = BtnViewTransactionFromAddressWasEnabled;
                     BtnViewBlockFromAddress.Enabled = BtnViewBlockFromAddressWasEnabled;
                     textboxSubmittedAddress.Enabled = textBoxSubmittedAddressWasEnabled;
@@ -4034,6 +4027,15 @@ namespace SATSuma
 
                         }
 
+                        #region scrollbar
+                        //int rowHeight = listViewAddressUTXOs.Margin.Vertical + listViewAddressUTXOs.Padding.Vertical + listViewAddressUTXOs.GetItemRect(0).Height;
+                        decimal displayRatio = Convert.ToDecimal(panelAddressUTXOScrollbarOuter.Height) / Convert.ToDecimal(listViewAddressUTXOs.Height);
+                        panelAddressUTXOScrollbarInner.Height = (int)(panelAddressUTXOScrollbarOuter.Height * displayRatio);
+                        int distanceToBeScrolled = panelAddressUTXOScrollbarOuter.Height - panelAddressUTXOScrollbarInner.Height;
+                        int numberOfRowsLeftToShow = listViewAddressUTXOs.Items.Count - 28;
+                        addressUTXOScrollbarIncrement = Convert.ToInt32(distanceToBeScrolled / numberOfRowsLeftToShow);
+                        #endregion
+
                         if (listViewAddressUTXOs.Items.Count > 29)
                         {
                             btnAddressUTXOScrollUp.Enabled = true;
@@ -4336,7 +4338,7 @@ namespace SATSuma
             {
                 if (lblAddressTypeUTXO.Visible)
                 {
-                    Control[] controlsToHide = { lblLargestUTXO, lblSmallestUTXO, label230, label308, panel143, panel134, lblAddressUTXOPositionInList, label314, panelUTXOsContainer, panel137, listViewAddressUTXOs, lblAddressConfirmedUnspentUTXO, lblAddressConfirmedUnspentOutputsUTXO,
+                    Control[] controlsToHide = { lblLargestUTXO, lblSmallestUTXO, label230, label308, panel143, panelAddressUTXOScrollContainer, lblAddressUTXOPositionInList, label314, panelUTXOsContainer, panel137, listViewAddressUTXOs, lblAddressConfirmedUnspentUTXO, lblAddressConfirmedUnspentOutputsUTXO,
                         lblAddressConfirmedSpentUTXO, lblAddressConfirmedSpentOutputsUTXO, lblAddressTypeUTXO, panel135, panel141, btnViewAddressTXFromUTXO, label303, label313, label315, panel136, label309, lblAddressConfirmedSpentUTXOFiat, lblAddressConfirmedUnspentUTXOFiat, panelAddressTxContainer };
                     foreach (Control control in controlsToHide)
                     {
@@ -4357,7 +4359,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] controlsToShow = { lblLargestUTXO, lblSmallestUTXO, label230, label308, panel143, panel134, lblAddressUTXOPositionInList, label314, panel137, panelUTXOsContainer, listViewAddressUTXOs, lblAddressConfirmedUnspentUTXO, lblAddressConfirmedUnspentOutputsUTXO, lblAddressConfirmedSpentUTXO, lblAddressConfirmedSpentOutputsUTXO,
+                Control[] controlsToShow = { lblLargestUTXO, lblSmallestUTXO, label230, label308, panel143, panelAddressUTXOScrollContainer, lblAddressUTXOPositionInList, label314, panel137, panelUTXOsContainer, listViewAddressUTXOs, lblAddressConfirmedUnspentUTXO, lblAddressConfirmedUnspentOutputsUTXO, lblAddressConfirmedSpentUTXO, lblAddressConfirmedSpentOutputsUTXO,
                      lblAddressTypeUTXO, panel135, panel141, btnViewAddressTXFromUTXO, label303, label313, label315, panel136, label309, panelAddressTxContainer  };
                 foreach (Control control in controlsToShow)
                 {
@@ -4427,6 +4429,7 @@ namespace SATSuma
 
                     addressUTXOsScrollPosition += rowHeight;
                     panelUTXOsContainer.VerticalScroll.Value = addressUTXOsScrollPosition;
+                    panelAddressUTXOScrollbarInner.Location = new Point(panelAddressUTXOScrollbarInner.Location.X, panelAddressUTXOScrollbarInner.Location.Y + addressUTXOScrollbarIncrement);
                     lblHeaderBlockAge.Focus();
                 }
             }
@@ -4475,6 +4478,7 @@ namespace SATSuma
                     int rowHeight = listViewAddressUTXOs.Margin.Vertical + listViewAddressUTXOs.Padding.Vertical + listViewAddressUTXOs.GetItemRect(0).Height;
                     addressUTXOsScrollPosition -= rowHeight;
                     panelUTXOsContainer.VerticalScroll.Value = addressUTXOsScrollPosition;
+                    panelAddressUTXOScrollbarInner.Location = new Point(panelAddressUTXOScrollbarInner.Location.X, panelAddressUTXOScrollbarInner.Location.Y - addressUTXOScrollbarIncrement);
                     lblHeaderBlockAge.Focus();
                 }
             }
@@ -4553,8 +4557,13 @@ namespace SATSuma
                             if (addressUTXOsScrollPosition < panelUTXOsContainer.VerticalScroll.Maximum + rowHeight)
                             {
                                 addressUTXOsScrollPosition += rowHeight;
+                                panelUTXOsContainer.VerticalScroll.Value = addressUTXOsScrollPosition;
+                                panelAddressUTXOScrollbarInner.Location = new Point(panelAddressUTXOScrollbarInner.Location.X, panelAddressUTXOScrollbarInner.Location.Y + addressUTXOScrollbarIncrement);
                             }
-                            panelUTXOsContainer.VerticalScroll.Value = addressUTXOsScrollPosition;
+                        }
+                        else
+                        {
+                            panelAddressUTXOScrollbarInner.Location = new Point(panelAddressUTXOScrollbarInner.Location.X, panelAddressUTXOScrollbarOuter.Height - panelAddressUTXOScrollbarInner.Height);
                         }
                     }
                     else if (UTXOsUpButtonPressed)
@@ -4564,8 +4573,14 @@ namespace SATSuma
                         {
                             addressUTXOsScrollPosition -= rowHeight;
                             panelUTXOsContainer.VerticalScroll.Value = addressUTXOsScrollPosition;
+                            panelAddressUTXOScrollbarInner.Location = new Point(panelAddressUTXOScrollbarInner.Location.X, panelAddressUTXOScrollbarInner.Location.Y - addressUTXOScrollbarIncrement);
+                        }
+                        else
+                        {
+                            panelAddressUTXOScrollbarInner.Location = new Point(panelAddressUTXOScrollbarInner.Location.X, 0);
                         }
                     }
+                    
                 }
                 else
                 {
@@ -5482,7 +5497,7 @@ namespace SATSuma
                     }
                     else
                     {
-                        Control[] controlsToHide = { panelTransactionHeadline, panelTransactionDiagram, panel24, panel25, panelTransactionOutputs, panelTransactionInputs, btnTransactionInputsUp, btnTransactionInputDown, btnTransactionOutputsUp, btnTransactionOutputsDown, listViewTransactionInputs, listViewTransactionOutputs, btnViewAddressFromTXInput, btnViewAddressFromTXOutput, label107, label102 };
+                        Control[] controlsToHide = { panelTransactionHeadline, panelTransactionDiagram, panelTXInScrollContainer, panelTXOutScrollContainer, panelTransactionOutputs, panelTransactionInputs, btnTransactionInputsUp, btnTransactionInputDown, btnTransactionOutputsUp, btnTransactionOutputsDown, listViewTransactionInputs, listViewTransactionOutputs, btnViewAddressFromTXInput, btnViewAddressFromTXOutput, label107, label102 };
                         foreach (Control control in controlsToHide)
                         {
                             control.Invoke((MethodInvoker)delegate
@@ -5499,7 +5514,7 @@ namespace SATSuma
                 }
                 else
                 {
-                    Control[] controlsToHide = { panelTransactionHeadline, panelTransactionDiagram, panel24, panel25, panelTransactionOutputs, panelTransactionInputs, btnTransactionInputsUp, btnTransactionInputDown, btnTransactionOutputsUp, btnTransactionOutputsDown, listViewTransactionInputs, listViewTransactionOutputs, btnViewAddressFromTXInput, btnViewAddressFromTXOutput, label107, label102 };
+                    Control[] controlsToHide = { panelTransactionHeadline, panelTransactionDiagram, panelTXInScrollContainer, panelTXOutScrollContainer, panelTransactionOutputs, panelTransactionInputs, btnTransactionInputsUp, btnTransactionInputDown, btnTransactionOutputsUp, btnTransactionOutputsDown, listViewTransactionInputs, listViewTransactionOutputs, btnViewAddressFromTXInput, btnViewAddressFromTXOutput, label107, label102 };
                     foreach (Control control in controlsToHide)
                     {
                         control.Invoke((MethodInvoker)delegate
@@ -5967,6 +5982,15 @@ namespace SATSuma
                         }
                     }
 
+                    #region scrollbar
+                    int rowHeight2 = listViewTransactionInputs.Margin.Vertical + listViewTransactionInputs.Padding.Vertical + listViewTransactionInputs.GetItemRect(0).Height;
+                    decimal displayRatio = Convert.ToDecimal(panelTXInScrollbarOuter.Height) / Convert.ToDecimal(listViewTransactionInputs.Height);
+                    panelTXInScrollbarInner.Height = (int)(panelTXInScrollbarOuter.Height * displayRatio);
+                    int distanceToBeScrolled = panelTXInScrollbarOuter.Height - panelTXInScrollbarInner.Height;
+                    int numberOfRowsLeftToShow = listViewTransactionInputs.Items.Count - 7;
+                    txInScrollbarIncrement = Convert.ToInt32(distanceToBeScrolled / numberOfRowsLeftToShow);
+                    #endregion
+
                     if (listViewTransactionInputs.Items.Count > 6)
                     {
                         btnTransactionInputsUp.Enabled = true;
@@ -6051,6 +6075,14 @@ namespace SATSuma
                             listViewTransactionOutputs.Items.Add(item); // add row
                         });
                     }
+                    #region scrollbar
+                    int rowHeight3 = listViewTransactionOutputs.Margin.Vertical + listViewTransactionOutputs.Padding.Vertical + listViewTransactionOutputs.GetItemRect(0).Height;
+                    decimal displayRatio2 = Convert.ToDecimal(panelTXOutScrollbarOuter.Height) / Convert.ToDecimal(listViewTransactionOutputs.Height);
+                    panelTXOutScrollbarInner.Height = (int)(panelTXOutScrollbarOuter.Height * displayRatio2);
+                    int distanceToBeScrolled2 = panelTXOutScrollbarOuter.Height - panelTXOutScrollbarInner.Height;
+                    int numberOfRowsLeftToShow2 = listViewTransactionOutputs.Items.Count - 7;
+                    txOutScrollbarIncrement = Convert.ToInt32(distanceToBeScrolled2 / numberOfRowsLeftToShow2);
+                    #endregion
 
                     if (listViewTransactionOutputs.Items.Count > 6)
                     {
@@ -6089,7 +6121,7 @@ namespace SATSuma
                 HandleException(ex, "GetTransaction");
             }
 
-            Control[] controlsToShow = { panelTransactionHeadline, panelTransactionDiagram, panel24, panel25, panelTransactionOutputs, panelTransactionInputs, btnTransactionInputsUp, btnTransactionInputDown, btnTransactionOutputsUp, btnTransactionOutputsDown, listViewTransactionInputs, listViewTransactionOutputs, btnViewAddressFromTXOutput, label107, label102 };
+            Control[] controlsToShow = { panelTransactionHeadline, panelTransactionDiagram, panelTXInScrollContainer, panelTXOutScrollContainer, panelTransactionOutputs, panelTransactionInputs, btnTransactionInputsUp, btnTransactionInputDown, btnTransactionOutputsUp, btnTransactionOutputsDown, listViewTransactionInputs, listViewTransactionOutputs, btnViewAddressFromTXOutput, label107, label102 };
             foreach (Control control in controlsToShow)
             {
                 control.Invoke((MethodInvoker)delegate
@@ -6391,8 +6423,8 @@ namespace SATSuma
                     int rowHeight = listViewTransactionInputs.Margin.Vertical + listViewTransactionInputs.Padding.Vertical + listViewTransactionInputs.GetItemRect(0).Height;
                     TransactionInputsScrollPosition += rowHeight;
                     panelTransactionInputs.VerticalScroll.Value = TransactionInputsScrollPosition;
+                    panelTXInScrollbarInner.Location = new Point(panelTXInScrollbarInner.Location.X, panelTXInScrollbarInner.Location.Y + txInScrollbarIncrement);
                     lblHeaderBlockAge.Focus();
-                    //panelTransactionInputs.VerticalScroll.Value++;
                 }
             }
             catch (Exception ex)
@@ -6411,9 +6443,8 @@ namespace SATSuma
                     int rowHeight = listViewTransactionInputs.Margin.Vertical + listViewTransactionInputs.Padding.Vertical + listViewTransactionInputs.GetItemRect(0).Height;
                     TransactionOutputsScrollPosition += rowHeight;
                     panelTransactionOutputs.VerticalScroll.Value = TransactionOutputsScrollPosition;
+                    panelTXOutScrollbarInner.Location = new Point(panelTXOutScrollbarInner.Location.X, panelTXOutScrollbarInner.Location.Y + txOutScrollbarIncrement);
                     lblHeaderBlockAge.Focus();
-
-                    //panelTransactionOutputs.VerticalScroll.Value++;
                 }
             }
             catch (Exception ex)
@@ -6497,8 +6528,13 @@ namespace SATSuma
                             if (TransactionInputsScrollPosition < panelTransactionInputs.VerticalScroll.Maximum + rowHeight)
                             {
                                 TransactionInputsScrollPosition += rowHeight;
+                                panelTXInScrollbarInner.Location = new Point(panelTXInScrollbarInner.Location.X, panelTXInScrollbarInner.Location.Y + txInScrollbarIncrement);
+                                panelTransactionInputs.VerticalScroll.Value = TransactionInputsScrollPosition;
                             }
-                            panelTransactionInputs.VerticalScroll.Value = TransactionInputsScrollPosition;
+                        }
+                        else
+                        {
+                            panelTXInScrollbarInner.Location = new Point(panelTXInScrollbarInner.Location.X, panelTXInScrollbarOuter.Height - panelTXInScrollbarInner.Height);
                         }
                     }
                     else if (InputUpButtonPressed)
@@ -6507,7 +6543,12 @@ namespace SATSuma
                         if (TransactionInputsScrollPosition > panelTransactionInputs.VerticalScroll.Minimum + rowHeight)
                         {
                             TransactionInputsScrollPosition -= rowHeight;
+                            panelTXInScrollbarInner.Location = new Point(panelTXInScrollbarInner.Location.X, panelTXInScrollbarInner.Location.Y - txInScrollbarIncrement);
                             panelTransactionInputs.VerticalScroll.Value = TransactionInputsScrollPosition;
+                        }
+                        else
+                        {
+                            panelTXInScrollbarInner.Location = new Point(panelTXInScrollbarInner.Location.X, 0);
                         }
                     }
                 }
@@ -6536,8 +6577,13 @@ namespace SATSuma
                             if (TransactionOutputsScrollPosition < panelTransactionOutputs.VerticalScroll.Maximum + rowHeight)
                             {
                                 TransactionOutputsScrollPosition += rowHeight;
+                                panelTXOutScrollbarInner.Location = new Point(panelTXOutScrollbarInner.Location.X, panelTXOutScrollbarInner.Location.Y + txOutScrollbarIncrement);
+                                panelTransactionOutputs.VerticalScroll.Value = TransactionOutputsScrollPosition;
                             }
-                            panelTransactionOutputs.VerticalScroll.Value = TransactionOutputsScrollPosition;
+                        }
+                        else
+                        {
+                            panelTXOutScrollbarInner.Location = new Point(panelTXOutScrollbarInner.Location.X, panelTXOutScrollbarOuter.Height - panelTXOutScrollbarInner.Height);
                         }
                     }
                     else if (OutputUpButtonPressed)
@@ -6546,7 +6592,12 @@ namespace SATSuma
                         if (TransactionOutputsScrollPosition > panelTransactionOutputs.VerticalScroll.Minimum + rowHeight)
                         {
                             TransactionOutputsScrollPosition -= rowHeight;
+                            panelTXOutScrollbarInner.Location = new Point(panelTXOutScrollbarInner.Location.X, panelTXOutScrollbarInner.Location.Y - txOutScrollbarIncrement);
                             panelTransactionOutputs.VerticalScroll.Value = TransactionOutputsScrollPosition;
+                        }
+                        else
+                        {
+                            panelTXOutScrollbarInner.Location = new Point(panelTXOutScrollbarInner.Location.X, 0);
                         }
                     }
                 }
@@ -6571,8 +6622,8 @@ namespace SATSuma
                     int rowHeight = listViewTransactionInputs.Margin.Vertical + listViewTransactionInputs.Padding.Vertical + listViewTransactionInputs.GetItemRect(0).Height;
                     TransactionInputsScrollPosition -= rowHeight;
                     panelTransactionInputs.VerticalScroll.Value = TransactionInputsScrollPosition;
+                    panelTXInScrollbarInner.Location = new Point(panelTXInScrollbarInner.Location.X, panelTXInScrollbarInner.Location.Y - txInScrollbarIncrement);
                     lblHeaderBlockAge.Focus();
-                    //panelTransactionInputs.VerticalScroll.Value--;
                 }
             }
             catch (Exception ex)
@@ -6591,8 +6642,8 @@ namespace SATSuma
                     int rowHeight = listViewTransactionOutputs.Margin.Vertical + listViewTransactionOutputs.Padding.Vertical + listViewTransactionOutputs.GetItemRect(0).Height;
                     TransactionOutputsScrollPosition -= rowHeight;
                     panelTransactionOutputs.VerticalScroll.Value = TransactionOutputsScrollPosition;
+                    panelTXOutScrollbarInner.Location = new Point(panelTXOutScrollbarInner.Location.X, panelTXOutScrollbarInner.Location.Y - txOutScrollbarIncrement);
                     lblHeaderBlockAge.Focus();
-                    //panelTransactionOutputs.VerticalScroll.Value--;
                 }
             }
             catch (Exception ex)
@@ -7847,9 +7898,9 @@ namespace SATSuma
                 {
                     panelXpubContainer.Visible = false;
                 });
-                panelXpubScrollbar.Invoke((MethodInvoker)delegate
+                panelXpubScrollContainer.Invoke((MethodInvoker)delegate
                 {
-                    panelXpubScrollbar.Visible = false;
+                    panelXpubScrollContainer.Visible = false;
                 });
                 btnViewAddressFromXpub.Invoke((MethodInvoker)delegate
                 {
@@ -8433,7 +8484,7 @@ namespace SATSuma
                     btnViewAddressFromXpub.Visible = false;
                 });
 
-                Control[] controlsToShow = { panelXpubResults, panel101, panelXpubContainer, listViewXpubAddresses, progressBarCheckAllAddressTypes, progressBarCheckEachAddressType, lblCheckAllAddressTypesCount, lblCheckEachAddressTypeCount, label140, label141, panelXpubScrollbar };
+                Control[] controlsToShow = { panelXpubResults, panel101, panelXpubContainer, listViewXpubAddresses, progressBarCheckAllAddressTypes, progressBarCheckEachAddressType, lblCheckAllAddressTypesCount, lblCheckEachAddressTypeCount, label140, label141, panelXpubScrollContainer };
                 foreach (Control control in controlsToShow)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -8442,9 +8493,9 @@ namespace SATSuma
                     });
                 }
 
-                panelXpubScrollbar.Invoke((MethodInvoker)delegate
+                panelXpubScrollContainer.Invoke((MethodInvoker)delegate
                 {
-                    panelXpubScrollbar.BringToFront();
+                    panelXpubScrollContainer.BringToFront();
                 });
 
                 string submittedXpub = Convert.ToString(textBoxSubmittedXpub.Text);
@@ -9500,6 +9551,14 @@ namespace SATSuma
                     listViewXpubAddresses.Items[0].Selected = true;
                 }
 
+                #region scrollbar
+                decimal displayRatio = Convert.ToDecimal(panelXpubScrollContainer.Height) / Convert.ToDecimal(listViewXpubAddresses.Height);
+                panelXpubScrollbarInner.Height = (int)(panelXpubScrollbarOuter.Height * displayRatio);
+                int distanceToBeScrolled = panelXpubScrollbarOuter.Height - panelXpubScrollbarInner.Height;
+                int numberOfRowsLeftToShow = listViewXpubAddresses.Items.Count - 25;
+                xpubScrollbarIncrement = Convert.ToInt32(distanceToBeScrolled / numberOfRowsLeftToShow);
+                #endregion
+
                 DerivationPath = 0;
                 #endregion
                 #region totals after processing, hide progress bars, re-enable textboxes
@@ -9757,6 +9816,7 @@ namespace SATSuma
 
                     XpubAddressesScrollPosition += rowHeight;
                     panelXpubContainer.VerticalScroll.Value = XpubAddressesScrollPosition;
+                    panelXpubScrollbarInner.Location = new Point(panelXpubScrollbarInner.Location.X, panelXpubScrollbarInner.Location.Y + xpubScrollbarIncrement);
                     lblHeaderBlockAge.Focus();
                 }
             }
@@ -9806,6 +9866,7 @@ namespace SATSuma
                     int rowHeight = listViewXpubAddresses.Margin.Vertical + listViewXpubAddresses.Padding.Vertical + listViewXpubAddresses.GetItemRect(0).Height;
                     XpubAddressesScrollPosition -= rowHeight;
                     panelXpubContainer.VerticalScroll.Value = XpubAddressesScrollPosition;
+                    panelXpubScrollbarInner.Location = new Point(panelXpubScrollbarInner.Location.X, panelXpubScrollbarInner.Location.Y - xpubScrollbarIncrement);
                     lblHeaderBlockAge.Focus();
                 }
             }
@@ -9860,8 +9921,13 @@ namespace SATSuma
                             if (XpubAddressesScrollPosition < panelXpubContainer.VerticalScroll.Maximum + rowHeight)
                             {
                                 XpubAddressesScrollPosition += rowHeight;
+                                panelXpubScrollbarInner.Location = new Point(panelXpubScrollbarInner.Location.X, panelXpubScrollbarInner.Location.Y + xpubScrollbarIncrement);
+                                panelXpubContainer.VerticalScroll.Value = XpubAddressesScrollPosition;
                             }
-                            panelXpubContainer.VerticalScroll.Value = XpubAddressesScrollPosition;
+                        }
+                        else
+                        {
+                            panelXpubScrollbarInner.Location = new Point(panelXpubScrollbarInner.Location.X, panelXpubScrollbarOuter.Height - panelXpubScrollbarInner.Height);
                         }
                     }
                     else if (XpubUpButtonPressed)
@@ -9871,6 +9937,11 @@ namespace SATSuma
                         {
                             XpubAddressesScrollPosition -= rowHeight;
                             panelXpubContainer.VerticalScroll.Value = XpubAddressesScrollPosition;
+                            panelXpubScrollbarInner.Location = new Point(panelXpubScrollbarInner.Location.X, panelXpubScrollbarInner.Location.Y - xpubScrollbarIncrement);
+                        }
+                        else
+                        {
+                            panelXpubScrollbarInner.Location = new Point(panelXpubScrollbarInner.Location.X, 0);
                         }
                     }
                 }
@@ -10012,6 +10083,14 @@ namespace SATSuma
 
                     }
 
+                    #region scrollbar
+                    decimal displayRatio = Convert.ToDecimal(panelPoolsBlocksScrollbarOuter.Height) / Convert.ToDecimal(listViewPoolsByBlock.Height);
+                    panelPoolsBlocksScrollbarInner.Height = (int)(panelPoolsBlocksScrollbarOuter.Height * displayRatio);
+                    int distanceToBeScrolled = panelPoolsBlocksScrollbarOuter.Height - panelPoolsBlocksScrollbarInner.Height;
+                    int numberOfRowsLeftToShow = listViewPoolsByBlock.Items.Count - 33;
+                    poolsBlocksScrollbarIncrement = Convert.ToInt32(distanceToBeScrolled / numberOfRowsLeftToShow);
+                    #endregion
+
                     if (listViewPoolsByBlock.Items.Count > 0)
                     {
                         listViewPoolsByBlock.Items[0].Selected = true;
@@ -10067,6 +10146,10 @@ namespace SATSuma
             {
                 poolsBlocksTimePeriod = "3y";
             }
+            if (comboBoxPoolsBlocksTimePeriod.SelectedIndex == 9)
+            {
+                poolsBlocksTimePeriod = "all";
+            }
             SetupPoolsByBlocksScreen();
         }
 
@@ -10083,6 +10166,7 @@ namespace SATSuma
                     int rowHeight = listViewPoolsByBlock.Margin.Vertical + listViewPoolsByBlock.Padding.Vertical + listViewPoolsByBlock.GetItemRect(0).Height;
                     poolsBlocksScrollPosition -= rowHeight;
                     panelPoolsBlocksContainer.VerticalScroll.Value = poolsBlocksScrollPosition;
+                    panelPoolsBlocksScrollbarInner.Location = new Point(panelPoolsBlocksScrollbarInner.Location.X, panelPoolsBlocksScrollbarInner.Location.Y - poolsBlocksScrollbarIncrement);
                     lblHeaderBlockAge.Focus();
                 }
             }
@@ -10133,6 +10217,7 @@ namespace SATSuma
 
                     poolsBlocksScrollPosition += rowHeight;
                     panelPoolsBlocksContainer.VerticalScroll.Value = poolsBlocksScrollPosition;
+                    panelPoolsBlocksScrollbarInner.Location = new Point(panelPoolsBlocksScrollbarInner.Location.X, panelPoolsBlocksScrollbarInner.Location.Y + poolsBlocksScrollbarIncrement);
                     lblHeaderBlockAge.Focus();
                 }
             }
@@ -10186,8 +10271,13 @@ namespace SATSuma
                             if (poolsBlocksScrollPosition < panelPoolsBlocksContainer.VerticalScroll.Maximum + rowHeight)
                             {
                                 poolsBlocksScrollPosition += rowHeight;
+                                panelPoolsBlocksScrollbarInner.Location = new Point(panelPoolsBlocksScrollbarInner.Location.X, panelPoolsBlocksScrollbarInner.Location.Y + poolsBlocksScrollbarIncrement);
+                                panelPoolsBlocksContainer.VerticalScroll.Value = poolsBlocksScrollPosition;
                             }
-                            panelPoolsBlocksContainer.VerticalScroll.Value = poolsBlocksScrollPosition;
+                        }
+                        else
+                        {
+                            panelPoolsBlocksScrollbarInner.Location = new Point(panelPoolsBlocksScrollbarInner.Location.X, panelPoolsBlocksScrollbarOuter.Height - panelPoolsBlocksScrollbarInner.Height);
                         }
                     }
                     else if (PoolsBlocksUpButtonPressed)
@@ -10197,6 +10287,11 @@ namespace SATSuma
                         {
                             poolsBlocksScrollPosition -= rowHeight;
                             panelPoolsBlocksContainer.VerticalScroll.Value = poolsBlocksScrollPosition;
+                            panelPoolsBlocksScrollbarInner.Location = new Point(panelPoolsBlocksScrollbarInner.Location.X, panelPoolsBlocksScrollbarInner.Location.Y - poolsBlocksScrollbarIncrement);
+                        }
+                        else
+                        {
+                            panelPoolsBlocksScrollbarInner.Location = new Point(panelPoolsBlocksScrollbarInner.Location.X, 0);
                         }
                     }
                 }
@@ -10508,6 +10603,10 @@ namespace SATSuma
             if (comboBoxPoolsHashrateTimePeriod.SelectedIndex == 6)
             {
                 poolsHashrateTimePeriod = "3y";
+            }
+            if (comboBoxPoolsHashrateTimePeriod.SelectedIndex == 7)
+            {
+                poolsHashrateTimePeriod = "all";
             }
             SetupPoolsByHashrateScreen();
         }
@@ -11070,10 +11169,12 @@ namespace SATSuma
         {
             try
             {
+                // if we haven't already got the pools list, get them now
                 if (listViewPoolsList.Items.Count == 0)
                 {
                     LightUpNodeLight();
-                    var PoolsListJson = await _miningPoolsListService.GetMiningPoolsListAsync().ConfigureAwait(true);
+                    var PoolsListJson = "[{\"name\":\"Unknown\",\"slug\":\"unknown\",\"unique_id\":0},{\"name\":\"BlockFills\",\"slug\":\"blockfills\",\"unique_id\":1},{\"name\":\"ULTIMUSPOOL\",\"slug\":\"ultimuspool\",\"unique_id\":2},{\"name\":\"Terra Pool\",\"slug\":\"terrapool\",\"unique_id\":3},{\"name\":\"Luxor\",\"slug\":\"luxor\",\"unique_id\":4},{\"name\":\"1THash\",\"slug\":\"1thash\",\"unique_id\":5},{\"name\":\"BTC.com\",\"slug\":\"btccom\",\"unique_id\":6},{\"name\":\"Bitfarms\",\"slug\":\"bitfarms\",\"unique_id\":7},{\"name\":\"Huobi.pool\",\"slug\":\"huobipool\",\"unique_id\":8},{\"name\":\"WAYI.CN\",\"slug\":\"wayicn\",\"unique_id\":9},{\"name\":\"CanoePool\",\"slug\":\"canoepool\",\"unique_id\":10},{\"name\":\"BTC.TOP\",\"slug\":\"btctop\",\"unique_id\":11},{\"name\":\"Bitcoin.com\",\"slug\":\"bitcoincom\",\"unique_id\":12},{\"name\":\"175btc\",\"slug\":\"175btc\",\"unique_id\":13},{\"name\":\"GBMiners\",\"slug\":\"gbminers\",\"unique_id\":14},{\"name\":\"A-XBT\",\"slug\":\"axbt\",\"unique_id\":15},{\"name\":\"ASICMiner\",\"slug\":\"asicminer\",\"unique_id\":16},{\"name\":\"BitMinter\",\"slug\":\"bitminter\",\"unique_id\":17},{\"name\":\"BitcoinRussia\",\"slug\":\"bitcoinrussia\",\"unique_id\":18},{\"name\":\"BTCServ\",\"slug\":\"btcserv\",\"unique_id\":19},{\"name\":\"simplecoin.us\",\"slug\":\"simplecoinus\",\"unique_id\":20},{\"name\":\"BTC Guild\",\"slug\":\"btcguild\",\"unique_id\":21},{\"name\":\"Poolin\",\"slug\":\"poolin\",\"unique_id\":94},{\"name\":\"SecretSuperstar\",\"slug\":\"secretsuperstar\",\"unique_id\":95},{\"name\":\"tigerpool.net\",\"slug\":\"tigerpoolnet\",\"unique_id\":96},{\"name\":\"Sigmapool.com\",\"slug\":\"sigmapoolcom\",\"unique_id\":97},{\"name\":\"okpool.top\",\"slug\":\"okpooltop\",\"unique_id\":98},{\"name\":\"Hummerpool\",\"slug\":\"hummerpool\",\"unique_id\":99},{\"name\":\"Tangpool\",\"slug\":\"tangpool\",\"unique_id\":100},{\"name\":\"BytePool\",\"slug\":\"bytepool\",\"unique_id\":101},{\"name\":\"SpiderPool\",\"slug\":\"spiderpool\",\"unique_id\":102},{\"name\":\"NovaBlock\",\"slug\":\"novablock\",\"unique_id\":103},{\"name\":\"MiningCity\",\"slug\":\"miningcity\",\"unique_id\":104},{\"name\":\"Binance Pool\",\"slug\":\"binancepool\",\"unique_id\":105},{\"name\":\"Minerium\",\"slug\":\"minerium\",\"unique_id\":106},{\"name\":\"Lubian.com\",\"slug\":\"lubiancom\",\"unique_id\":107},{\"name\":\"OKKONG\",\"slug\":\"okkong\",\"unique_id\":108},{\"name\":\"AAO Pool\",\"slug\":\"aaopool\",\"unique_id\":109},{\"name\":\"EMCDPool\",\"slug\":\"emcdpool\",\"unique_id\":110},{\"name\":\"Foundry USA\",\"slug\":\"foundryusa\",\"unique_id\":111},{\"name\":\"SBI Crypto\",\"slug\":\"sbicrypto\",\"unique_id\":112},{\"name\":\"ArkPool\",\"slug\":\"arkpool\",\"unique_id\":113},{\"name\":\"PureBTC.COM\",\"slug\":\"purebtccom\",\"unique_id\":114},{\"name\":\"MARA Pool\",\"slug\":\"marapool\",\"unique_id\":115},{\"name\":\"KuCoinPool\",\"slug\":\"kucoinpool\",\"unique_id\":116},{\"name\":\"Entrust Charity Pool\",\"slug\":\"entrustcharitypool\",\"unique_id\":117},{\"name\":\"OKMINER\",\"slug\":\"okminer\",\"unique_id\":118},{\"name\":\"Titan\",\"slug\":\"titan\",\"unique_id\":119},{\"name\":\"PEGA Pool\",\"slug\":\"pegapool\",\"unique_id\":120},{\"name\":\"BTC Nuggets\",\"slug\":\"btcnuggets\",\"unique_id\":121},{\"name\":\"CloudHashing\",\"slug\":\"cloudhashing\",\"unique_id\":122},{\"name\":\"digitalX Mintsy\",\"slug\":\"digitalxmintsy\",\"unique_id\":123},{\"name\":\"Telco 214\",\"slug\":\"telco214\",\"unique_id\":124},{\"name\":\"BTC Pool Party\",\"slug\":\"btcpoolparty\",\"unique_id\":125},{\"name\":\"Multipool\",\"slug\":\"multipool\",\"unique_id\":126},{\"name\":\"transactioncoinmining\",\"slug\":\"transactioncoinmining\",\"unique_id\":127},{\"name\":\"BTCDig\",\"slug\":\"btcdig\",\"unique_id\":128},{\"name\":\"Tricky's BTC Pool\",\"slug\":\"trickysbtcpool\",\"unique_id\":129},{\"name\":\"BTCMP\",\"slug\":\"btcmp\",\"unique_id\":130},{\"name\":\"Eobot\",\"slug\":\"eobot\",\"unique_id\":131},{\"name\":\"UNOMP\",\"slug\":\"unomp\",\"unique_id\":132},{\"name\":\"Patels\",\"slug\":\"patels\",\"unique_id\":133},{\"name\":\"GoGreenLight\",\"slug\":\"gogreenlight\",\"unique_id\":134},{\"name\":\"BitcoinIndia\",\"slug\":\"bitcoinindia\",\"unique_id\":135},{\"name\":\"EkanemBTC\",\"slug\":\"ekanembtc\",\"unique_id\":136},{\"name\":\"CANOE\",\"slug\":\"canoe\",\"unique_id\":137},{\"name\":\"tiger\",\"slug\":\"tiger\",\"unique_id\":138},{\"name\":\"1M1X\",\"slug\":\"1m1x\",\"unique_id\":139},{\"name\":\"Zulupool\",\"slug\":\"zulupool\",\"unique_id\":140},{\"name\":\"SECPOOL\",\"slug\":\"secpool\",\"unique_id\":141},{\"name\":\"OCEAN\",\"slug\":\"ocean\",\"unique_id\":142},{\"name\":\"WhitePool\",\"slug\":\"whitepool\",\"unique_id\":143}]";
+//                    var PoolsListJson = await _miningPoolsListService.GetMiningPoolsListAsync().ConfigureAwait(true);
                     var poolsList = JsonConvert.DeserializeObject<List<PoolForList>>(PoolsListJson); // Deserialize into a list
 
                     if (poolsList != null)
@@ -11120,10 +11221,18 @@ namespace SATSuma
                             panel161.Height = listBoxHeight;
 
                         }
+                        #region scrollbar
+                        int rowHeight2 = listViewPoolsList.Margin.Vertical + listViewPoolsList.Padding.Vertical + listViewPoolsList.GetItemRect(0).Height;
+                        decimal displayRatio = Convert.ToDecimal(panelPoolsListScrollContainer.Height) / Convert.ToDecimal(listViewPoolsList.Height);
+                        panelPoolsListScrollbarInner.Height = (int)(panelPoolsListScrollbarOuter.Height * displayRatio);
+                        panelPoolsListScrollbarInner.Height = Convert.ToInt32(panelPoolsListScrollbarInner.Height * 1.45);
+                        int distanceToBeScrolled = panelPoolsListScrollbarOuter.Height - panelPoolsListScrollbarInner.Height;
+                        int numberOfRowsLeftToShow = listViewPoolsList.Items.Count - 32;
+                        poolsListScrollbarIncrement = Convert.ToInt32(distanceToBeScrolled / numberOfRowsLeftToShow);
+                        #endregion
                     }
                 }
                 
-                // if we haven't already got the pools list, get them now
                 if (poolNameToPass != "empty") // we want to select a pool set by the pools hashrate or pools blocks screen
                 {
                     int counter = 0;
@@ -11173,8 +11282,13 @@ namespace SATSuma
                 {
                     int rowHeight = listViewPoolsList.Margin.Vertical + listViewPoolsList.Padding.Vertical + listViewPoolsList.GetItemRect(0).Height;
                     poolsListScrollPosition -= rowHeight;
+                    panelPoolsListScrollbarInner.Location = new Point(panelPoolsListScrollbarInner.Location.X, panelPoolsListScrollbarInner.Location.Y - poolsListScrollbarIncrement);
                     panelPoolsListContainer.VerticalScroll.Value = poolsListScrollPosition;
                     lblHeaderBlockAge.Focus();
+                }
+                else
+                {
+                    panelPoolsListScrollbarInner.Location = new Point(panelPoolsListScrollbarInner.Location.X, 0);
                 }
             }
             catch (Exception ex)
@@ -11222,6 +11336,7 @@ namespace SATSuma
                 {
 
                     poolsListScrollPosition += rowHeight;
+                    panelPoolsListScrollbarInner.Location = new Point(panelPoolsListScrollbarInner.Location.X, panelPoolsListScrollbarInner.Location.Y + poolsListScrollbarIncrement);
                     panelPoolsListContainer.VerticalScroll.Value = poolsListScrollPosition;
                     lblHeaderBlockAge.Focus();
                 }
@@ -11276,8 +11391,13 @@ namespace SATSuma
                             if (poolsListScrollPosition < panelPoolsListContainer.VerticalScroll.Maximum + rowHeight)
                             {
                                 poolsListScrollPosition += rowHeight;
+                                panelPoolsListScrollbarInner.Location = new Point(panelPoolsListScrollbarInner.Location.X, panelPoolsListScrollbarInner.Location.Y + poolsListScrollbarIncrement);
+                                panelPoolsListContainer.VerticalScroll.Value = poolsListScrollPosition;
                             }
-                            panelPoolsListContainer.VerticalScroll.Value = poolsListScrollPosition;
+                        }
+                        else
+                        {
+                            panelPoolsListScrollbarInner.Location = new Point(panelPoolsListScrollbarInner.Location.X, panelPoolsListScrollbarOuter.Height - panelPoolsListScrollbarInner.Height);
                         }
                     }
                     else if (PoolsListUpButtonPressed)
@@ -11286,7 +11406,12 @@ namespace SATSuma
                         if (poolsListScrollPosition > panelPoolsListContainer.VerticalScroll.Minimum)
                         {
                             poolsListScrollPosition -= rowHeight;
+                            panelPoolsListScrollbarInner.Location = new Point(panelPoolsListScrollbarInner.Location.X, panelPoolsListScrollbarInner.Location.Y - poolsListScrollbarIncrement);
                             panelPoolsListContainer.VerticalScroll.Value = poolsListScrollPosition;
+                        }
+                        else
+                        {
+                            panelPoolsListScrollbarInner.Location = new Point(panelPoolsListScrollbarInner.Location.X, 0);
                         }
                     }
                 }
@@ -11403,7 +11528,7 @@ namespace SATSuma
                 GetPoolStats(slug);
                 GetTenRecentBlocksFromPool(slug);
                 ChartsHashrateForPoolScreen(slug);
-                panel157.Invalidate();
+                panelPoolsListScrollContainer.Invalidate();
                 panel160.Invalidate();
                 panelPoolsListContainer.Invalidate();
             }
@@ -12177,9 +12302,11 @@ namespace SATSuma
                 if (String.Compare(chartPeriod, "24h") == 0 || String.Compare(chartPeriod, "3d") == 0 || String.Compare(chartPeriod, "1w") == 0)
                 {
                     chartPeriod = "all";
-                    btnChartPeriodAll.Enabled = false;
+                    comboBoxChartsTimePeriod.OnSelectedIndexChanged -= ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
+                    comboBoxChartsTimePeriod.SelectedIndex = 9;
+                    comboBoxChartsTimePeriod.Texts = "all data";
+                    comboBoxChartsTimePeriod.OnSelectedIndexChanged += ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
                 }
-
                 DisableIrrelevantTimePeriods();
 
                 // clear any previous graph
@@ -12291,11 +12418,13 @@ namespace SATSuma
                 // if chart period too short for this chart, set it to max instead
                 if (String.Compare(chartPeriod, "24h") == 0
                 || String.Compare(chartPeriod, "3d") == 0
-                || String.Compare(chartPeriod, "1w") == 0
-                || String.Compare(chartPeriod, "1m") == 0)
+                || String.Compare(chartPeriod, "1w") == 0)
                 {
                     chartPeriod = "all";
-                    btnChartPeriodAll.Enabled = false;
+                    comboBoxChartsTimePeriod.OnSelectedIndexChanged -= ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
+                    comboBoxChartsTimePeriod.SelectedIndex = 9;
+                    comboBoxChartsTimePeriod.Texts = "all data";
+                    comboBoxChartsTimePeriod.OnSelectedIndexChanged += ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
                 }
                 DisableIrrelevantTimePeriods();
 
@@ -12393,11 +12522,14 @@ namespace SATSuma
 
                 if (String.Compare(chartPeriod, "24h") == 0
                 || String.Compare(chartPeriod, "3d") == 0
-                || String.Compare(chartPeriod, "1w") == 0
-                || String.Compare(chartPeriod, "2y") == 0)
+                || String.Compare(chartPeriod, "1w") == 0)
                 {
                     chartPeriod = "all";
-                    btnChartPeriodAll.Enabled = false;
+                    comboBoxChartsTimePeriod.OnSelectedIndexChanged -= ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
+                    comboBoxChartsTimePeriod.SelectedIndex = 9;
+                    comboBoxChartsTimePeriod.Texts = "all data";
+                    comboBoxChartsTimePeriod.OnSelectedIndexChanged += ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
+
                 }
 
                 DisableIrrelevantTimePeriods();
@@ -12518,7 +12650,11 @@ namespace SATSuma
                 || String.Compare(chartPeriod, "1w") == 0)
                 {
                     chartPeriod = "all";
-                    btnChartPeriodAll.Enabled = false;
+                    comboBoxChartsTimePeriod.OnSelectedIndexChanged -= ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
+                    comboBoxChartsTimePeriod.SelectedIndex = 9;
+                    comboBoxChartsTimePeriod.Texts = "all data";
+                    comboBoxChartsTimePeriod.OnSelectedIndexChanged += ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
+
                 }
 
                 DisableIrrelevantTimePeriods();
@@ -12618,7 +12754,10 @@ namespace SATSuma
                 || String.Compare(chartPeriod, "1w") == 0)
                 {
                     chartPeriod = "all";
-                    btnChartPeriodAll.Enabled = false;
+                    comboBoxChartsTimePeriod.OnSelectedIndexChanged -= ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
+                    comboBoxChartsTimePeriod.SelectedIndex = 9;
+                    comboBoxChartsTimePeriod.Texts = "all data";
+                    comboBoxChartsTimePeriod.OnSelectedIndexChanged += ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
                 }
 
                 DisableIrrelevantTimePeriods();
@@ -12990,11 +13129,13 @@ namespace SATSuma
                 // if chart period too short for this chart, set it to max instead
                 if (String.Compare(chartPeriod, "24h") == 0
                 || String.Compare(chartPeriod, "3d") == 0
-                || String.Compare(chartPeriod, "1w") == 0
-                || String.Compare(chartPeriod, "1m") == 0)
+                || String.Compare(chartPeriod, "1w") == 0)
                 {
                     chartPeriod = "all";
-                    btnChartPeriodAll.Enabled = false;
+                    comboBoxChartsTimePeriod.OnSelectedIndexChanged -= ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
+                    comboBoxChartsTimePeriod.SelectedIndex = 9;
+                    comboBoxChartsTimePeriod.Texts = "all data";
+                    comboBoxChartsTimePeriod.OnSelectedIndexChanged += ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
                 }
 
                 DisableIrrelevantTimePeriods();
@@ -13090,11 +13231,13 @@ namespace SATSuma
 
                 if (String.Compare(chartPeriod, "24h") == 0
                 || String.Compare(chartPeriod, "3d") == 0
-                || String.Compare(chartPeriod, "1w") == 0
-                || String.Compare(chartPeriod, "2y") == 0)
+                || String.Compare(chartPeriod, "1w") == 0)
                 {
                     chartPeriod = "all";
-                    btnChartPeriodAll.Enabled = false;
+                    comboBoxChartsTimePeriod.OnSelectedIndexChanged -= ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
+                    comboBoxChartsTimePeriod.SelectedIndex = 9;
+                    comboBoxChartsTimePeriod.Texts = "all data";
+                    comboBoxChartsTimePeriod.OnSelectedIndexChanged += ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
                 }
 
                 DisableIrrelevantTimePeriods();
@@ -13224,7 +13367,10 @@ namespace SATSuma
                 || String.Compare(chartPeriod, "2y") == 0)
                 {
                     chartPeriod = "all";
-                    btnChartPeriodAll.Enabled = false;
+                    comboBoxChartsTimePeriod.OnSelectedIndexChanged -= ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
+                    comboBoxChartsTimePeriod.SelectedIndex = 9;
+                    comboBoxChartsTimePeriod.Texts = "all data";
+                    comboBoxChartsTimePeriod.OnSelectedIndexChanged += ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
                 }
                 DisableIrrelevantTimePeriods();
 
@@ -13326,7 +13472,10 @@ namespace SATSuma
                 || String.Compare(chartPeriod, "2y") == 0)
                 {
                     chartPeriod = "all";
-                    btnChartPeriodAll.Enabled = false;
+                    comboBoxChartsTimePeriod.OnSelectedIndexChanged -= ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
+                    comboBoxChartsTimePeriod.SelectedIndex = 9;
+                    comboBoxChartsTimePeriod.Texts = "all data";
+                    comboBoxChartsTimePeriod.OnSelectedIndexChanged += ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
                 }
 
                 DisableIrrelevantTimePeriods();
@@ -13457,7 +13606,10 @@ namespace SATSuma
                 || String.Compare(chartPeriod, "2y") == 0)
                 {
                     chartPeriod = "all";
-                    btnChartPeriodAll.Enabled = false;
+                    comboBoxChartsTimePeriod.OnSelectedIndexChanged -= ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
+                    comboBoxChartsTimePeriod.SelectedIndex = 9;
+                    comboBoxChartsTimePeriod.Texts = "all data";
+                    comboBoxChartsTimePeriod.OnSelectedIndexChanged += ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
                 }
 
                 DisableIrrelevantTimePeriods();
@@ -13596,7 +13748,11 @@ namespace SATSuma
                 || String.Compare(chartPeriod, "2y") == 0)
                 {
                     chartPeriod = "all";
-                    btnChartPeriodAll.Enabled = false;
+                    comboBoxChartsTimePeriod.OnSelectedIndexChanged -= ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
+                    comboBoxChartsTimePeriod.SelectedIndex = 9;
+                    comboBoxChartsTimePeriod.Texts = "all data";
+                    comboBoxChartsTimePeriod.OnSelectedIndexChanged += ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
+
                 }
 
                 DisableIrrelevantTimePeriods();
@@ -13757,7 +13913,11 @@ namespace SATSuma
                 || String.Compare(chartPeriod, "2y") == 0)
                 {
                     chartPeriod = "all";
-                    btnChartPeriodAll.Enabled = false;
+                    comboBoxChartsTimePeriod.OnSelectedIndexChanged -= ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
+                    comboBoxChartsTimePeriod.SelectedIndex = 9;
+                    comboBoxChartsTimePeriod.Texts = "all data";
+                    comboBoxChartsTimePeriod.OnSelectedIndexChanged += ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
+
                 }
 
                 btnChartMarketCapScaleLinear.Enabled = false;
@@ -13898,7 +14058,11 @@ namespace SATSuma
                 || String.Compare(chartPeriod, "2y") == 0)
                 {
                     chartPeriod = "all";
-                    btnChartPeriodAll.Enabled = false;
+                    comboBoxChartsTimePeriod.OnSelectedIndexChanged -= ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
+                    comboBoxChartsTimePeriod.SelectedIndex = 9;
+                    comboBoxChartsTimePeriod.Texts = "all data";
+                    comboBoxChartsTimePeriod.OnSelectedIndexChanged += ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
+
                 }
 
                 btnChartMarketCapScaleLog.Enabled = false;
@@ -14060,7 +14224,11 @@ namespace SATSuma
                 || String.Compare(chartPeriod, "2y") == 0)
                 {
                     chartPeriod = "all";
-                    btnChartPeriodAll.Enabled = false;
+                    comboBoxChartsTimePeriod.OnSelectedIndexChanged -= ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
+                    comboBoxChartsTimePeriod.SelectedIndex = 9;
+                    comboBoxChartsTimePeriod.Texts = "all data";
+                    comboBoxChartsTimePeriod.OnSelectedIndexChanged += ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
+
                 }
 
                 DisableIrrelevantTimePeriods();
@@ -14164,7 +14332,11 @@ namespace SATSuma
                 || String.Compare(chartPeriod, "2y") == 0)
                 {
                     chartPeriod = "all";
-                    btnChartPeriodAll.Enabled = false;
+                    comboBoxChartsTimePeriod.OnSelectedIndexChanged -= ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
+                    comboBoxChartsTimePeriod.SelectedIndex = 9;
+                    comboBoxChartsTimePeriod.Texts = "all data";
+                    comboBoxChartsTimePeriod.OnSelectedIndexChanged += ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
+
                 }
 
                 DisableIrrelevantTimePeriods();
@@ -14377,7 +14549,11 @@ namespace SATSuma
                 || String.Compare(chartPeriod, "2y") == 0)
                 {
                     chartPeriod = "all";
-                    btnChartPeriodAll.Enabled = false;
+                    comboBoxChartsTimePeriod.OnSelectedIndexChanged -= ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
+                    comboBoxChartsTimePeriod.SelectedIndex = 9;
+                    comboBoxChartsTimePeriod.Texts = "all data";
+                    comboBoxChartsTimePeriod.OnSelectedIndexChanged += ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
+
                 }
 
                 DisableIrrelevantTimePeriods();
@@ -14547,70 +14723,39 @@ namespace SATSuma
             {
                 if (String.Compare(chartType, "hashrate") == 0 || String.Compare(chartType, "hashratelog") == 0)
                 {
-                    btnChartPeriod24h.Enabled = false;
-                    btnChartPeriod3d.Enabled = false;
-                    btnChartPeriod1w.Enabled = false;
-                    btnChartPeriod1m.Enabled = false;
-                    if (String.Compare(chartPeriod, "3m") != 0)
-                    {
-                        btnChartPeriod3m.Enabled = true;
-                    }
-                    if (String.Compare(chartPeriod, "6m") != 0)
-                    {
-                        btnChartPeriod6m.Enabled = true;
-                    }
-                    if (String.Compare(chartPeriod, "1y") != 0)
-                    {
-                        btnChartPeriod1y.Enabled = true;
-                    }
-                    if (String.Compare(chartPeriod, "2y") != 0)
-                    {
-                        btnChartPeriod2y.Enabled = true;
-                    }
-                    if (String.Compare(chartPeriod, "3y") != 0)
-                    {
-                        btnChartPeriod3y.Enabled = true;
-                    }
-                    if (String.Compare(chartPeriod, "all") != 0)
-                    {
-                        btnChartPeriodAll.Enabled = true;
-                    }
+                    comboBoxChartsTimePeriod.OnSelectedIndexChanged -= ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
+                    comboBoxChartsTimePeriod.Items[0] = "24 hours (disabled)";
+                    comboBoxChartsTimePeriod.Items[1] = "3 days (disabled)";
+                    comboBoxChartsTimePeriod.Items[2] = "1 week (disabled)";
+                    comboBoxChartsTimePeriod.Items[3] = "1 month";
+                    comboBoxChartsTimePeriod.Items[4] = "3 months";
+                    comboBoxChartsTimePeriod.Items[5] = "6 months";
+                    comboBoxChartsTimePeriod.Items[6] = "1 year";
+                    comboBoxChartsTimePeriod.Items[7] = "2 years";
+                    comboBoxChartsTimePeriod.Items[8] = "3 years";
+                    comboBoxChartsTimePeriod.Items[9] = "all data";
+                    comboBoxChartsTimePeriod.OnSelectedIndexChanged += ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
                 }
                 else
                 {
                     if (String.Compare(chartType, "difficulty") == 0 || String.Compare(chartType, "difficultylog") == 0)
                     {
-                        btnChartPeriod24h.Enabled = false;
-                        btnChartPeriod3d.Enabled = false;
-                        btnChartPeriod1w.Enabled = false;
-                        btnChartPeriod1m.Enabled = false;
-                        if (String.Compare(chartPeriod, "3m") != 0)
-                        {
-                            btnChartPeriod3m.Enabled = true;
-                        }
-                        if (String.Compare(chartPeriod, "6m") != 0)
-                        {
-                            btnChartPeriod6m.Enabled = true;
-                        }
-                        if (String.Compare(chartPeriod, "1y") != 0)
-                        {
-                            btnChartPeriod1y.Enabled = true;
-                        }
-                        if (String.Compare(chartPeriod, "2y") != 0)
-                        {
-                            btnChartPeriod2y.Enabled = true;
-                        }
-                        if (String.Compare(chartPeriod, "3y") != 0)
-                        {
-                            btnChartPeriod3y.Enabled = true;
-                        }
-                        if (String.Compare(chartPeriod, "all") != 0)
-                        {
-                            btnChartPeriodAll.Enabled = true;
-                        }
+                        comboBoxChartsTimePeriod.OnSelectedIndexChanged -= ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
+                        comboBoxChartsTimePeriod.Items[0] = "24 hours (disabled)";
+                        comboBoxChartsTimePeriod.Items[1] = "3 days (disabled)";
+                        comboBoxChartsTimePeriod.Items[2] = "1 week (disabled)";
+                        comboBoxChartsTimePeriod.Items[3] = "1 month";
+                        comboBoxChartsTimePeriod.Items[4] = "3 months";
+                        comboBoxChartsTimePeriod.Items[5] = "6 months";
+                        comboBoxChartsTimePeriod.Items[6] = "1 year";
+                        comboBoxChartsTimePeriod.Items[7] = "2 years";
+                        comboBoxChartsTimePeriod.Items[8] = "3 years";
+                        comboBoxChartsTimePeriod.Items[9] = "all data";
+                        comboBoxChartsTimePeriod.OnSelectedIndexChanged += ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
                     }
                     else
                     {
+
                         if (String.Compare(chartType, "price") == 0
                         || String.Compare(chartType, "pricelog") == 0
                         || String.Compare(chartType, "circulation") == 0
@@ -14621,79 +14766,35 @@ namespace SATSuma
                         || String.Compare(chartType, "marketcap") == 0
                         || String.Compare(chartType, "marketcaplog") == 0)
                         {
-                            btnChartPeriod24h.Enabled = false;
-                            btnChartPeriod3d.Enabled = false;
-                            btnChartPeriod1w.Enabled = false;
-                            btnChartPeriod2y.Enabled = false;
-                            if (String.Compare(chartPeriod, "1m") != 0)
-                            {
-                                btnChartPeriod1m.Enabled = true;
-                            }
-                            if (String.Compare(chartPeriod, "3m") != 0)
-                            {
-                                btnChartPeriod3m.Enabled = true;
-                            }
-                            if (String.Compare(chartPeriod, "6m") != 0)
-                            {
-                                btnChartPeriod6m.Enabled = true;
-                            }
-                            if (String.Compare(chartPeriod, "1y") != 0)
-                            {
-                                btnChartPeriod1y.Enabled = true;
-                            }
-                            if (String.Compare(chartPeriod, "3y") != 0)
-                            {
-                                btnChartPeriod3y.Enabled = true;
-                            }
-                            if (String.Compare(chartPeriod, "all") != 0)
-                            {
-                                btnChartPeriodAll.Enabled = true;
-                            }
+                            comboBoxChartsTimePeriod.OnSelectedIndexChanged -= ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
+                            comboBoxChartsTimePeriod.Items[0] = "24 hours (disabled)";
+                            comboBoxChartsTimePeriod.Items[1] = "3 days (disabled)";
+                            comboBoxChartsTimePeriod.Items[2] = "1 week (disabled)";
+                            comboBoxChartsTimePeriod.Items[3] = "1 month";
+                            comboBoxChartsTimePeriod.Items[4] = "3 months";
+                            comboBoxChartsTimePeriod.Items[5] = "6 months";
+                            comboBoxChartsTimePeriod.Items[6] = "1 year";
+                            comboBoxChartsTimePeriod.Items[7] = "2 years (disabled)";
+                            comboBoxChartsTimePeriod.Items[8] = "3 years";
+                            comboBoxChartsTimePeriod.Items[9] = "all data";
+                            comboBoxChartsTimePeriod.OnSelectedIndexChanged += ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
                         }
                         else
                         {
                             if (String.Compare(chartType, "nodesbycountry") == 0)
                             {
-                                if (String.Compare(chartPeriod, "24h") != 0)
-                                {
-                                    btnChartPeriod24h.Enabled = false;
-                                }
-                                if (String.Compare(chartPeriod, "3d") != 0)
-                                {
-                                    btnChartPeriod3d.Enabled = false;
-                                }
-                                if (String.Compare(chartPeriod, "1w") != 0)
-                                {
-                                    btnChartPeriod1w.Enabled = false;
-                                }
-                                if (String.Compare(chartPeriod, "1m") != 0)
-                                {
-                                    btnChartPeriod1m.Enabled = false;
-                                }
-                                if (String.Compare(chartPeriod, "3m") != 0)
-                                {
-                                    btnChartPeriod3m.Enabled = false;
-                                }
-                                if (String.Compare(chartPeriod, "6m") != 0)
-                                {
-                                    btnChartPeriod6m.Enabled = false;
-                                }
-                                if (String.Compare(chartPeriod, "1y") != 0)
-                                {
-                                    btnChartPeriod1y.Enabled = false;
-                                }
-                                if (String.Compare(chartPeriod, "2y") != 0)
-                                {
-                                    btnChartPeriod2y.Enabled = false;
-                                }
-                                if (String.Compare(chartPeriod, "3y") != 0)
-                                {
-                                    btnChartPeriod3y.Enabled = false;
-                                }
-                                if (String.Compare(chartPeriod, "all") != 0)
-                                {
-                                    btnChartPeriodAll.Enabled = false;
-                                }
+                                comboBoxChartsTimePeriod.OnSelectedIndexChanged -= ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
+                                comboBoxChartsTimePeriod.Items[0] = "24 hours (disabled)";
+                                comboBoxChartsTimePeriod.Items[1] = "3 days (disabled)";
+                                comboBoxChartsTimePeriod.Items[2] = "1 week (disabled)";
+                                comboBoxChartsTimePeriod.Items[3] = "1 month (disabled)";
+                                comboBoxChartsTimePeriod.Items[4] = "3 months (disabled)";
+                                comboBoxChartsTimePeriod.Items[5] = "6 months (disabled)";
+                                comboBoxChartsTimePeriod.Items[6] = "1 year (disabled)";
+                                comboBoxChartsTimePeriod.Items[7] = "2 years (disabled)";
+                                comboBoxChartsTimePeriod.Items[8] = "3 years (disabled)";
+                                comboBoxChartsTimePeriod.Items[9] = "all data (disabled)";
+                                comboBoxChartsTimePeriod.OnSelectedIndexChanged += ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
                             }
                             else
                             {
@@ -14701,81 +14802,34 @@ namespace SATSuma
                                 || String.Compare(chartType, "lightningchannels") == 0
                                 || String.Compare(chartType, "lightningnodesbynetwork") == 0)
                                 {
-                                    btnChartPeriod24h.Enabled = false;
-                                    btnChartPeriod3d.Enabled = false;
-                                    btnChartPeriod1w.Enabled = false;
-                                    if (String.Compare(chartPeriod, "1m") != 0)
-                                    {
-                                        btnChartPeriod1m.Enabled = true;
-                                    }
-                                    if (String.Compare(chartPeriod, "3m") != 0)
-                                    {
-                                        btnChartPeriod3m.Enabled = true;
-                                    }
-                                    if (String.Compare(chartPeriod, "6m") != 0)
-                                    {
-                                        btnChartPeriod6m.Enabled = true;
-                                    }
-                                    if (String.Compare(chartPeriod, "1y") != 0)
-                                    {
-                                        btnChartPeriod1y.Enabled = true;
-                                    }
-                                    if (String.Compare(chartPeriod, "2y") != 0)
-                                    {
-                                        btnChartPeriod2y.Enabled = true;
-                                    }
-                                    if (String.Compare(chartPeriod, "3y") != 0)
-                                    {
-                                        btnChartPeriod3y.Enabled = true;
-                                    }
-                                    if (String.Compare(chartPeriod, "all") != 0)
-                                    {
-                                        btnChartPeriodAll.Enabled = true;
-                                    }
+                                    comboBoxChartsTimePeriod.OnSelectedIndexChanged -= ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
+                                    comboBoxChartsTimePeriod.Items[0] = "24 hours (disabled)";
+                                    comboBoxChartsTimePeriod.Items[1] = "3 days (disabled)";
+                                    comboBoxChartsTimePeriod.Items[2] = "1 week (disabled)";
+                                    comboBoxChartsTimePeriod.Items[3] = "1 month";
+                                    comboBoxChartsTimePeriod.Items[4] = "3 months";
+                                    comboBoxChartsTimePeriod.Items[5] = "6 months";
+                                    comboBoxChartsTimePeriod.Items[6] = "1 year";
+                                    comboBoxChartsTimePeriod.Items[7] = "2 years";
+                                    comboBoxChartsTimePeriod.Items[8] = "3 years";
+                                    comboBoxChartsTimePeriod.Items[9] = "all data";
+                                    comboBoxChartsTimePeriod.OnSelectedIndexChanged += ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
                                 }
 
                                 else
                                 {
-                                    if (String.Compare(chartPeriod, "24h") != 0)
-                                    {
-                                        btnChartPeriod24h.Enabled = true;
-                                    }
-                                    if (String.Compare(chartPeriod, "3d") != 0)
-                                    {
-                                        btnChartPeriod3d.Enabled = true;
-                                    }
-                                    if (String.Compare(chartPeriod, "1w") != 0)
-                                    {
-                                        btnChartPeriod1w.Enabled = true;
-                                    }
-                                    if (String.Compare(chartPeriod, "1m") != 0)
-                                    {
-                                        btnChartPeriod1m.Enabled = true;
-                                    }
-                                    if (String.Compare(chartPeriod, "3m") != 0)
-                                    {
-                                        btnChartPeriod3m.Enabled = true;
-                                    }
-                                    if (String.Compare(chartPeriod, "6m") != 0)
-                                    {
-                                        btnChartPeriod6m.Enabled = true;
-                                    }
-                                    if (String.Compare(chartPeriod, "1y") != 0)
-                                    {
-                                        btnChartPeriod1y.Enabled = true;
-                                    }
-                                    if (String.Compare(chartPeriod, "2y") != 0)
-                                    {
-                                        btnChartPeriod2y.Enabled = true;
-                                    }
-                                    if (String.Compare(chartPeriod, "3y") != 0)
-                                    {
-                                        btnChartPeriod3y.Enabled = true;
-                                    }
-                                    if (String.Compare(chartPeriod, "all") != 0)
-                                    {
-                                        btnChartPeriodAll.Enabled = true;
-                                    }
+                                    comboBoxChartsTimePeriod.OnSelectedIndexChanged -= ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
+                                    comboBoxChartsTimePeriod.Items[0] = "24 hours";
+                                    comboBoxChartsTimePeriod.Items[1] = "3 days";
+                                    comboBoxChartsTimePeriod.Items[2] = "1 week";
+                                    comboBoxChartsTimePeriod.Items[3] = "1 month";
+                                    comboBoxChartsTimePeriod.Items[4] = "3 months";
+                                    comboBoxChartsTimePeriod.Items[5] = "6 months";
+                                    comboBoxChartsTimePeriod.Items[6] = "1 year";
+                                    comboBoxChartsTimePeriod.Items[7] = "2 years";
+                                    comboBoxChartsTimePeriod.Items[8] = "3 years";
+                                    comboBoxChartsTimePeriod.Items[9] = "all data";
+                                    comboBoxChartsTimePeriod.OnSelectedIndexChanged += ComboBoxChartsTimePeriod_OnSelectedIndexChanged;
                                 }
                             }
                         }
@@ -14796,16 +14850,6 @@ namespace SATSuma
                 {
                     ignoreMouseMoveOnChart = true;
                     // get current state of buttons before disabling them
-                    btnChartPeriod1mWasEnabled = btnChartPeriod1m.Enabled;
-                    btnChartPeriod1wWasEnabled = btnChartPeriod1w.Enabled;
-                    btnChartPeriod1yWasEnabled = btnChartPeriod1y.Enabled;
-                    btnChartPeriod24hWasEnabled = btnChartPeriod24h.Enabled;
-                    btnChartPeriod2yWasEnabled = btnChartPeriod2y.Enabled;
-                    btnChartPeriod3dWasEnabled = btnChartPeriod3d.Enabled;
-                    btnChartPeriod3mWasEnabled = btnChartPeriod3m.Enabled;
-                    btnChartPeriod3yWasEnabled = btnChartPeriod3y.Enabled;
-                    btnChartPeriod6mWasEnabled = btnChartPeriod6m.Enabled;
-                    btnChartPeriodAllWasEnabled = btnChartPeriodAll.Enabled;
                     btnHashrateScaleLogWasEnabled = btnHashrateScaleLog.Enabled;
                     btnHashrateScaleLinearWasEnabled = btnHashrateScaleLinear.Enabled;
                     btnChartAddressScaleLinearWasEnabled = btnChartAddressScaleLinear.Enabled;
@@ -14819,8 +14863,7 @@ namespace SATSuma
 
                     //disable them all
 
-                    Control[] disableTheseControls = { btnChartPeriod1m, btnChartPeriod1w, btnChartPeriod1y,
-                        btnChartPeriod24h, btnChartPeriod2y, btnChartPeriod3d, btnChartPeriod3m, btnChartPeriod3y, btnChartPeriod6m, btnChartPeriodAll, btnHashrateScaleLinear,
+                    Control[] disableTheseControls = { btnHashrateScaleLinear,
                         btnHashrateScaleLog, btnChartAddressScaleLinear, btnChartAddressScaleLog, btnPriceChartScaleLog, btnPriceChartScaleLinear,
                         btnChartMarketCapScaleLog, btnChartMarketCapScaleLinear, btnChartDifficultyLinear, btnChartDifficultyLog };
                     foreach (Control control in disableTheseControls)
@@ -14834,16 +14877,6 @@ namespace SATSuma
                 else
                 {
                     // use previously saved states to reinstate buttons
-                    btnChartPeriod1m.Enabled = btnChartPeriod1mWasEnabled;
-                    btnChartPeriod1w.Enabled = btnChartPeriod1wWasEnabled;
-                    btnChartPeriod1y.Enabled = btnChartPeriod1yWasEnabled;
-                    btnChartPeriod24h.Enabled = btnChartPeriod24hWasEnabled;
-                    btnChartPeriod2y.Enabled = btnChartPeriod2yWasEnabled;
-                    btnChartPeriod3d.Enabled = btnChartPeriod3dWasEnabled;
-                    btnChartPeriod3m.Enabled = btnChartPeriod3mWasEnabled;
-                    btnChartPeriod3y.Enabled = btnChartPeriod3yWasEnabled;
-                    btnChartPeriod6m.Enabled = btnChartPeriod6mWasEnabled;
-                    btnChartPeriodAll.Enabled = btnChartPeriodAllWasEnabled;
                     btnChartAddressScaleLinear.Enabled = btnChartAddressScaleLinearWasEnabled;
                     btnChartAddressScaleLog.Enabled = btnChartAddressScaleLogWasEnabled;
                     btnHashrateScaleLinear.Enabled = btnHashrateScaleLinearWasEnabled;
@@ -15007,114 +15040,133 @@ namespace SATSuma
         }
         #endregion
         #region change chart time period
-        private void BtnChartPeriod_Click(object sender, EventArgs e)
+
+        private void ComboBoxChartsTimePeriod_OnSelectedIndexChanged(object sender, EventArgs e)
         {
-            try
+            if (comboBoxChartsTimePeriod.SelectedIndex == 0)
             {
-                Control[] chartPeriodButtons = { btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll };
-
-                Button clickedButton = (Button)sender;
-                clickedButton.Enabled = false;
-
-                foreach (Control control in chartPeriodButtons)
-                {
-                    if (control is Button && control == clickedButton)
-                    {
-                        chartPeriod = clickedButton.Text;
-                    }
-                    if (control is Button && control != clickedButton)
-                    {
-                        control.Enabled = true;
-                    }
-                }
-                if (String.Compare(chartType, "utxo") == 0)
-                {
-                    ChartUTXO();
-                }
-                if (String.Compare(chartType, "utxolog") == 0)
-                {
-                    ChartUTXOLog();
-                }
-                if (String.Compare(chartType, "hashrate") == 0)
-                {
-                    ChartHashrate();
-                }
-                if (String.Compare(chartType, "hashratelog") == 0)
-                {
-                    ChartHashrateLog();
-                }
-                if (String.Compare(chartType, "blockfees") == 0)
-                {
-                    ChartBlockFees();
-                }
-                if (String.Compare(chartType, "difficulty") == 0)
-                {
-                    ChartDifficulty();
-                }
-                if (String.Compare(chartType, "difficultylog") == 0)
-                {
-                    ChartDifficultyLog();
-                }
-                if (String.Compare(chartType, "price") == 0)
-                {
-                    ChartPrice();
-                }
-                if (String.Compare(chartType, "pricelog") == 0)
-                {
-                    ChartPriceLog();
-                }
-                if (String.Compare(chartType, "reward") == 0)
-                {
-                    ChartReward();
-                }
-                if (String.Compare(chartType, "feerates") == 0)
-                {
-                    ChartFeeRates();
-                }
-                if (String.Compare(chartType, "blocksize") == 0)
-                {
-                    ChartBlockSize();
-                }
-                if (String.Compare(chartType, "addresses") == 0)
-                {
-                    ChartUniqueAddresses();
-                }
-                if (String.Compare(chartType, "addresseslog") == 0)
-                {
-                    ChartUniqueAddressesLog();
-                }
-                if (String.Compare(chartType, "poolranking") == 0)
-                {
-                    ChartPoolsRanking();
-                }
-                if (String.Compare(chartType, "lightningnodesbynetwork") == 0)
-                {
-                    ChartNodesByNetwork();
-                }
-                if (String.Compare(chartType, "lightningcapacity") == 0)
-                {
-                    ChartLightningCapacity();
-                }
-                if (String.Compare(chartType, "lightningchannels") == 0)
-                {
-                    ChartLightningChannels();
-                }
-                if (String.Compare(chartType, "marketcap") == 0)
-                {
-                    ChartMarketCap();
-                }
-                if (String.Compare(chartType, "marketcaplog") == 0)
-                {
-                    ChartMarketCapLog();
-                }
-                if (String.Compare(chartType, "circulation") == 0)
-                {
-                    ChartCirculation();
-                }
+                chartPeriod = "24h";
             }
-            catch (Exception ex)
+            if (comboBoxChartsTimePeriod.SelectedIndex == 1)
             {
-                HandleException(ex, "switching chart time period");
+                chartPeriod = "3d";
+            }
+            if (comboBoxChartsTimePeriod.SelectedIndex == 2)
+            {
+                chartPeriod = "1w";
+            }
+            if (comboBoxChartsTimePeriod.SelectedIndex == 3)
+            {
+                chartPeriod = "1m";
+            }
+            if (comboBoxChartsTimePeriod.SelectedIndex == 4)
+            {
+                chartPeriod = "3m";
+            }
+            if (comboBoxChartsTimePeriod.SelectedIndex == 5)
+            {
+                chartPeriod = "6m";
+            }
+            if (comboBoxChartsTimePeriod.SelectedIndex == 6)
+            {
+                chartPeriod = "1y";
+            }
+            if (comboBoxChartsTimePeriod.SelectedIndex == 7)
+            {
+                chartPeriod = "2y";
+            }
+            if (comboBoxChartsTimePeriod.SelectedIndex == 8)
+            {
+                chartPeriod = "3y";
+            }
+            if (comboBoxChartsTimePeriod.SelectedIndex == 9)
+            {
+                chartPeriod = "all";
+            }
+
+            if (String.Compare(chartType, "utxo") == 0)
+            {
+                ChartUTXO();
+            }
+            if (String.Compare(chartType, "utxolog") == 0)
+            {
+                ChartUTXOLog();
+            }
+            if (String.Compare(chartType, "hashrate") == 0)
+            {
+                ChartHashrate();
+            }
+            if (String.Compare(chartType, "hashratelog") == 0)
+            {
+                ChartHashrateLog();
+            }
+            if (String.Compare(chartType, "blockfees") == 0)
+            {
+                ChartBlockFees();
+            }
+            if (String.Compare(chartType, "difficulty") == 0)
+            {
+                ChartDifficulty();
+            }
+            if (String.Compare(chartType, "difficultylog") == 0)
+            {
+                ChartDifficultyLog();
+            }
+            if (String.Compare(chartType, "price") == 0)
+            {
+                ChartPrice();
+            }
+            if (String.Compare(chartType, "pricelog") == 0)
+            {
+                ChartPriceLog();
+            }
+            if (String.Compare(chartType, "reward") == 0)
+            {
+                ChartReward();
+            }
+            if (String.Compare(chartType, "feerates") == 0)
+            {
+                ChartFeeRates();
+            }
+            if (String.Compare(chartType, "blocksize") == 0)
+            {
+                ChartBlockSize();
+            }
+            if (String.Compare(chartType, "addresses") == 0)
+            {
+                ChartUniqueAddresses();
+            }
+            if (String.Compare(chartType, "addresseslog") == 0)
+            {
+                ChartUniqueAddressesLog();
+            }
+            if (String.Compare(chartType, "poolranking") == 0)
+            {
+                ChartPoolsRanking();
+            }
+            if (String.Compare(chartType, "lightningnodesbynetwork") == 0)
+            {
+                ChartNodesByNetwork();
+            }
+            if (String.Compare(chartType, "lightningcapacity") == 0)
+            {
+                ChartLightningCapacity();
+            }
+            if (String.Compare(chartType, "lightningchannels") == 0)
+            {
+                ChartLightningChannels();
+            }
+            if (String.Compare(chartType, "marketcap") == 0)
+            {
+                ChartMarketCap();
+            }
+            if (String.Compare(chartType, "marketcaplog") == 0)
+            {
+                ChartMarketCapLog();
+            }
+            if (String.Compare(chartType, "circulation") == 0)
+            {
+                ChartCirculation();
             }
         }
         #endregion
@@ -15667,7 +15719,7 @@ namespace SATSuma
                     {
                         // there is at least one bookmark
                         panel32.Visible = true;
-                        panel33.Visible = true;
+                        panelBookmarksScrollContainer.Visible = true;
                         panel100.Visible = true;
                         listViewBookmarks.Visible = true;
                         btnDeleteAllBookmarks.Enabled = true;
@@ -15685,7 +15737,7 @@ namespace SATSuma
                         lblBookmarkNoteInFull.Text = "";
                     });
                     panel32.Visible = false;
-                    panel33.Visible = false;
+                    panelBookmarksScrollContainer.Visible = false;
                     panel100.Visible = false;
                     listViewBookmarks.Visible = false;
                     btnDeleteAllBookmarks.Enabled = false;
@@ -15840,6 +15892,14 @@ namespace SATSuma
                         counterAllBookmarks++;
                     }
                 }
+
+                #region scrollbar
+                decimal displayRatio = Convert.ToDecimal(panelBookmarksScrollContainer.Height) / Convert.ToDecimal(listViewBookmarks.Height);
+                panelBookmarksScrollbarInner.Height = (int)(panelBookmarksScrollbarOuter.Height * displayRatio);
+                int distanceToBeScrolled = panelBookmarksScrollbarOuter.Height - panelBookmarksScrollbarInner.Height;
+                int numberOfRowsLeftToShow = listViewBookmarks.Items.Count - 23;
+                bookmarksScrollbarIncrement = Convert.ToInt32(distanceToBeScrolled / numberOfRowsLeftToShow);
+                #endregion
 
                 if (listViewBookmarks.Items.Count > 23)
                 {
@@ -16447,6 +16507,7 @@ namespace SATSuma
                 {
                     bookmarksScrollPosition += rowHeight;
                     panelBookmarksContainer.VerticalScroll.Value = bookmarksScrollPosition;
+                    panelBookmarksScrollbarInner.Location = new Point(panelBookmarksScrollbarInner.Location.X, panelBookmarksScrollbarInner.Location.Y + bookmarksScrollbarIncrement);
                     lblHeaderBlockAge.Focus();
                 }
             }
@@ -16496,6 +16557,7 @@ namespace SATSuma
                     int rowHeight = listViewBookmarks.Margin.Vertical + listViewBookmarks.Padding.Vertical + listViewBookmarks.GetItemRect(0).Height;
                     bookmarksScrollPosition -= rowHeight;
                     panelBookmarksContainer.VerticalScroll.Value = bookmarksScrollPosition;
+                    panelBookmarksScrollbarInner.Location = new Point(panelBookmarksScrollbarInner.Location.X, panelBookmarksScrollbarInner.Location.Y - bookmarksScrollbarIncrement);
                     lblHeaderBlockAge.Focus();
                 }
             }
@@ -16549,8 +16611,14 @@ namespace SATSuma
                             if (bookmarksScrollPosition < panelBookmarksContainer.VerticalScroll.Maximum + rowHeight)
                             {
                                 bookmarksScrollPosition += rowHeight;
+                                panelBookmarksScrollbarInner.Location = new Point(panelBookmarksScrollbarInner.Location.X, panelBookmarksScrollbarInner.Location.Y + bookmarksScrollbarIncrement);
+                                panelBookmarksContainer.VerticalScroll.Value = bookmarksScrollPosition;
                             }
-                            panelBookmarksContainer.VerticalScroll.Value = bookmarksScrollPosition;
+                            
+                        }
+                        else
+                        {
+                            panelBookmarksScrollbarInner.Location = new Point(panelBookmarksScrollbarInner.Location.X, panelBookmarksScrollbarOuter.Height - panelBookmarksScrollbarInner.Height);
                         }
                     }
                     else if (bookmarksUpButtonPressed)
@@ -16560,6 +16628,11 @@ namespace SATSuma
                         {
                             bookmarksScrollPosition -= rowHeight;
                             panelBookmarksContainer.VerticalScroll.Value = bookmarksScrollPosition;
+                            panelBookmarksScrollbarInner.Location = new Point(panelBookmarksScrollbarInner.Location.X, panelBookmarksScrollbarInner.Location.Y - bookmarksScrollbarIncrement);
+                        }
+                        else
+                        {
+                            panelBookmarksScrollbarInner.Location = new Point(panelBookmarksScrollbarInner.Location.X, 0);
                         }
                     }
                 }
@@ -20082,6 +20155,11 @@ namespace SATSuma
                             lblScaleAmount.Text = "normal";
                         });
                         UIScaleToBeSavedToSettings = 3;
+                        // enable the shrink button
+                        btnSmallerScale.Invoke((MethodInvoker)delegate
+                        {
+                            btnSmallerScale.Enabled = true;
+                        });
                         SaveSettings();
                     }
                     else
@@ -20165,29 +20243,17 @@ namespace SATSuma
                                 lblScaleAmount.Text = "small";
                             });
                             UIScaleToBeSavedToSettings = 2;
+                            // disable the shrink button
+                            btnSmallerScale.Invoke((MethodInvoker)delegate
+                            {
+                                btnSmallerScale.Enabled = false;
+                            });
+
                             SaveSettings();
                         }
                         else
                         {
-                            if (String.Compare(lblScaleAmount.Text, "small") == 0)
-                            {
-                                lblScaleAmount.Invoke((MethodInvoker)delegate
-                                {
-                                    lblScaleAmount.Text = "smallest";
-                                });
-                                UIScaleToBeSavedToSettings = 1;
-
-                                // disable the shrink button
-                                btnSmallerScale.Invoke((MethodInvoker)delegate
-                                {
-                                    btnSmallerScale.Enabled = false;
-                                });
-                                SaveSettings();
-                            }
-                            else
-                            {
-                                return;
-                            }
+                            return;
                         }
                     }
                 }
@@ -22338,10 +22404,10 @@ namespace SATSuma
                     this.Invoke((MethodInvoker)delegate
                     {
                         this.BackColor = colorDlgForFormBackground.Color;
-                        panel33.BackColor = colorDlgForFormBackground.Color;
-                        panelXpubScrollbar.BackColor = colorDlgForFormBackground.Color;
-                        panel24.BackColor = colorDlgForFormBackground.Color;
-                        panel25.BackColor = colorDlgForFormBackground.Color;
+                        panelBookmarksScrollContainer.BackColor = colorDlgForFormBackground.Color;
+                        panelXpubScrollContainer.BackColor = colorDlgForFormBackground.Color;
+                        panelTXInScrollContainer.BackColor = colorDlgForFormBackground.Color;
+                        panelTXOutScrollContainer.BackColor = colorDlgForFormBackground.Color;
                         this.BackgroundImage = null;
                     });
                     Control[] controlsToHide = { lblTime, lblBackgroundStackSatsSelected, lblBackgroundSymbolSelected, lblBackgroundGenesisSelected, lblBackgroundFranklinSelected, lblBackgroundSatsumaSelected, lblBackgroundCustomImageSelected };
@@ -23637,7 +23703,7 @@ namespace SATSuma
                 }
 
                 // chart
-                RJButton[] chartButtonBorders = { btnSaveChart, btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll, btnChartDifficultyLog, btnChartDifficultyLinear, btnHashrateScaleLog, btnHashrateScaleLinear, btnChartMarketCapScaleLog, btnChartMarketCapScaleLinear, btnPriceChartScaleLog, btnPriceChartScaleLinear, btnChartUTXOScaleLog, btnChartUTXOScaleLinear, btnChartAddressScaleLog, btnChartAddressScaleLinear };
+                RJButton[] chartButtonBorders = { btnSaveChart, btnChartDifficultyLog, btnChartDifficultyLinear, btnHashrateScaleLog, btnHashrateScaleLinear, btnChartMarketCapScaleLog, btnChartMarketCapScaleLinear, btnPriceChartScaleLog, btnPriceChartScaleLinear, btnChartUTXOScaleLog, btnChartUTXOScaleLinear, btnChartAddressScaleLog, btnChartAddressScaleLinear };
                 foreach (RJButton button in chartButtonBorders)
                 {
                     button.Invoke((MethodInvoker)delegate
@@ -23716,10 +23782,10 @@ namespace SATSuma
             try
             {
                 #region rounded panels
-                Control[] panelsToInvalidate = { panelXpubContainer, panelXpubScrollbar, panel92, panel32, panel74, panel76, panel77, panel99, panel84, panel88, panel89, panel90, panel86, panel87, panel103, panel46, panel51, panel91, panel70, panel71, panel16, panel21, panel85, panel53, panel96, panel106, panel107, panelAddToBookmarks,
+                Control[] panelsToInvalidate = { panelXpubContainer, panelXpubScrollContainer, panel92, panel32, panel74, panel76, panel77, panel99, panel84, panel88, panel89, panel90, panel86, panel87, panel103, panel46, panel51, panel91, panel70, panel71, panel16, panel21, panel85, panel53, panel96, panel106, panel107, panelAddToBookmarks,
                     panelAddToBookmarksBorder, panelOwnNodeAddressTXInfo, panelOwnNodeBlockTXInfo, panelTransactionMiddle, panelErrorMessage, panelDCAMessages, panelDCASummary, panelDCAInputs, panel119, panelPriceConvert, panelDCAChartContainer, panel117, panel121, panel122, panel120, 
-                    panel101, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panel134, panelBookmarksContainer, panel33, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panel128, panel147, panel80, panel153, panel158, panel160,
-                panelTransactionInputs, panelTransactionOutputs, panel24, panel25, panelAddressTxContainer, panel123, panel124, panelPriceSourceIndicatorsOuter, panel133, panel148 };
+                    panel101, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panelAddressUTXOScrollContainer, panelBookmarksContainer, panelBookmarksScrollContainer, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panelPoolsBlocksScrollContainer, panel147, panel80, panel153, panel158, panel160,
+                panelTransactionInputs, panelTransactionOutputs, panelTXInScrollContainer, panelTXOutScrollContainer, panelAddressTxContainer, panel123, panel124, panelPriceSourceIndicatorsOuter, panel133, panel148, panelPoolsListScrollbarInner, panelBookmarksScrollbarInner, panelTXInScrollbarInner, panelTXOutScrollbarInner, panelAddressUTXOScrollbarInner, panelPoolsBlocksScrollbarInner, panelXpubScrollbarInner };
                 foreach (Control control in panelsToInvalidate)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -23731,7 +23797,7 @@ namespace SATSuma
                 #region panels (textbox containers)
                 Control[] textboxPanelsToInvalidate = { panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer,
                     panelBookmarkKeyContainer, panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelSettingsUIScaleContainer, panelAppearanceTextbox1Container,
-                    panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, panelUniversalSearchContainer, panel75, panel95, panel93, panel98, panel111, panel113, panel114, panel115, panel27, panelSubmittedAddressContainerUTXO, panelComboBoxChartSelectContainer, panel149, panel173, panel174, panel175 };
+                    panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, panelUniversalSearchContainer, panel75, panel95, panel93, panel98, panel111, panel113, panel114, panel115, panel27, panelSubmittedAddressContainerUTXO, panelComboBoxChartSelectContainer, panel149, panel173, panel174, panel175, panel176 };
                 foreach (Control control in textboxPanelsToInvalidate)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -23884,7 +23950,7 @@ namespace SATSuma
                     });
                 }
                 //charts
-                Control[] listChartsButtonsTextToColor = { btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll, btnPriceChartScaleLinear, btnPriceChartScaleLog, btnChartMarketCapScaleLinear, btnChartMarketCapScaleLog, btnChartUTXOScaleLinear, btnChartUTXOScaleLog, btnChartAddressScaleLinear, btnChartAddressScaleLog, btnSaveChart, btnChartDifficultyLinear, btnChartDifficultyLog, btnHashrateScaleLinear, btnHashrateScaleLog };
+                Control[] listChartsButtonsTextToColor = { btnPriceChartScaleLinear, btnPriceChartScaleLog, btnChartMarketCapScaleLinear, btnChartMarketCapScaleLog, btnChartUTXOScaleLinear, btnChartUTXOScaleLog, btnChartAddressScaleLinear, btnChartAddressScaleLog, btnSaveChart, btnChartDifficultyLinear, btnChartDifficultyLog, btnHashrateScaleLinear, btnHashrateScaleLog };
                 foreach (Control control in listChartsButtonsTextToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24787,7 +24853,7 @@ namespace SATSuma
                     });
                 }
                 //mining pools - blocks & hashrate & list
-                Control[] listPoolsBlocksButtonTextToColor = { btnPoolsBlocksScrollDown, btnPoolsBlocksScrollUp, btnViewPoolFromMiningBlocks, btnPoolsHashrateScrollDown, btnPoolsHashrateScrollUp, btnViewPoolFromPoolsHashrate, btnPoolsListScrollUp, btnPoolsListScrollDown, btnViewBlockFromBlocksByPool, btnViewPoolFromBlockList, btnViewPoolFromBlockScreen };
+                Control[] listPoolsBlocksButtonTextToColor = { btnPoolsBlocksScrollDown, btnPoolsBlocksScrollUp, btnViewPoolFromMiningBlocks, btnPoolsHashrateScrollDown, btnPoolsHashrateScrollUp, btnViewPoolFromPoolsHashrate, btnPoolsListScrollUp, btnPoolsListScrollDown, btnViewBlockFromBlocksByPool, btnViewPoolFromBlockList, btnViewPoolFromBlockScreen, panelPoolsListScrollbarInner };
                 foreach (Control control in listPoolsBlocksButtonTextToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24823,7 +24889,7 @@ namespace SATSuma
                     });
                 }
                 //charts
-                Control[] listChartsButtonsToColor = { btnChartPeriod24h, btnChartPeriod3d, btnChartPeriod1w, btnChartPeriod1m, btnChartPeriod3m, btnChartPeriod6m, btnChartPeriod1y, btnChartPeriod2y, btnChartPeriod3y, btnChartPeriodAll, btnPriceChartScaleLinear, btnPriceChartScaleLog, btnChartMarketCapScaleLinear, btnChartMarketCapScaleLog, btnChartUTXOScaleLinear, btnChartUTXOScaleLog, btnChartAddressScaleLinear, btnChartAddressScaleLog, btnSaveChart, btnHashrateScaleLinear, btnHashrateScaleLog, btnChartDifficultyLinear, btnChartDifficultyLog };
+                Control[] listChartsButtonsToColor = { btnPriceChartScaleLinear, btnPriceChartScaleLog, btnChartMarketCapScaleLinear, btnChartMarketCapScaleLog, btnChartUTXOScaleLinear, btnChartUTXOScaleLog, btnChartAddressScaleLinear, btnChartAddressScaleLog, btnSaveChart, btnHashrateScaleLinear, btnHashrateScaleLog, btnChartDifficultyLinear, btnChartDifficultyLog };
                 foreach (Control control in listChartsButtonsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24898,7 +24964,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listTextBoxesToColor = { lblMempoolSpacePriceAPI, lblSolidProgressBars, lblDashedProgressBars, lblShowClock, btnDataRefreshPeriodDown, btnDataRefreshPeriodUp, btnBiggerScale, btnSmallerScale, btnNonZeroBalancesUp, btnNonZeroBalancesDown, btnDerivationPathsDown, btnDerivationPathsUp, panel93, panel95, panel98, numericUpDownOpacity, btnOpacityDown, btnOpacityUp, btnNumericUpDownSubmittedBlockNumberUp, btnNumericUpDownSubmittedBlockNumberDown, numericUpDownSubmittedBlockNumber, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, panel75, textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textboxSubmittedAddressUTXO, textBoxTransactionID, textBoxXpubScreenOwnNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, lblAlwaysOnTop, textBoxThemeName, lblTitleBackgroundCustom, lblTitlesBackgroundImage, lblTitleBackgroundNone, lblBackgroundFranklinSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected, lblBackgroundGenesisSelected, lblBackgroundSatsumaSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblSettingsOwnNodeSelected, lblSettingsNodeMainnetSelected, lblSettingsNodeTestnetSelected, lblBitcoinExplorerEndpoints, lblCoingeckoComJSON, lblBlockchainInfoEndpoints, lblBlockchairComJSON, lblOfflineMode, lblConfirmReset, lblChartsDarkBackground, lblChartsLightBackground, lblChartsMediumBackground, textBoxConvertBTCtoFiat, textBoxConvertEURtoBTC, textBoxConvertGBPtoBTC, textBoxConvertUSDtoBTC, textBoxConvertXAUtoBTC, panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelSubmittedAddressContainerUTXO, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer, panelBookmarkKeyContainer, panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelAppearanceTextbox1Container, panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, lblInfinity1, lblInfinity2, lblInfinity3, lblEnableDirectory, numericUpDownBlockHeightToStartListFrom, btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, panelUniversalSearchContainer, textBoxUniversalSearch, panelSettingsUIScaleContainer, textBoxDCAAmountInput, panel111, panel113, panel114, panel115, comboBoxChartSelect, panelComboBoxChartSelectContainer, panel149, panel173, comboBoxPoolsBlocksSelectSorting, comboBoxPoolsBlocksTimePeriod, panel174, panel175, comboBoxPoolsHashrateSortingSelect, comboBoxPoolsHashrateTimePeriod };
+                Control[] listTextBoxesToColor = { lblMempoolSpacePriceAPI, lblSolidProgressBars, lblDashedProgressBars, lblShowClock, btnDataRefreshPeriodDown, btnDataRefreshPeriodUp, btnBiggerScale, btnSmallerScale, btnNonZeroBalancesUp, btnNonZeroBalancesDown, btnDerivationPathsDown, btnDerivationPathsUp, panel93, panel95, panel98, numericUpDownOpacity, btnOpacityDown, btnOpacityUp, btnNumericUpDownSubmittedBlockNumberUp, btnNumericUpDownSubmittedBlockNumberDown, numericUpDownSubmittedBlockNumber, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, panel75, textBox1, textBoxBookmarkProposedNote, textBoxBookmarkEncryptionKey, textboxSubmittedAddress, textboxSubmittedAddressUTXO, textBoxTransactionID, textBoxXpubScreenOwnNodeURL, numberUpDownDerivationPathsToCheck, textBoxSubmittedXpub, textBoxBookmarkKey, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, lblAlwaysOnTop, textBoxThemeName, lblTitleBackgroundCustom, lblTitlesBackgroundImage, lblTitleBackgroundNone, lblBackgroundFranklinSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected, lblBackgroundGenesisSelected, lblBackgroundSatsumaSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblSettingsOwnNodeSelected, lblSettingsNodeMainnetSelected, lblSettingsNodeTestnetSelected, lblBitcoinExplorerEndpoints, lblCoingeckoComJSON, lblBlockchainInfoEndpoints, lblBlockchairComJSON, lblOfflineMode, lblConfirmReset, lblChartsDarkBackground, lblChartsLightBackground, lblChartsMediumBackground, textBoxConvertBTCtoFiat, textBoxConvertEURtoBTC, textBoxConvertGBPtoBTC, textBoxConvertUSDtoBTC, textBoxConvertXAUtoBTC, panelThemeNameContainer, panelOptionalNotesContainer, panelEncryptionKeyContainer, panelSubmittedAddressContainer, panelSubmittedAddressContainerUTXO, panelBlockHeightToStartFromContainer, panelTransactionIDContainer, panelSubmittedXpubContainer, panelXpubScreenOwnNodeURLContainer, panelBookmarkKeyContainer, panelConvertBTCToFiatContainer, panelConvertUSDToBTCContainer, panelConvertEURToBTCContainer, panelConvertGBPToBTCContainer, panelConvertXAUToBTCContainer, panelSettingsOwnNodeURLContainer, panelAppearanceTextbox1Container, panelComboBoxStartupScreenContainer, panelCustomizeThemeListContainer, panelHeadingBackgroundSelect, panelSelectBlockNumberContainer, lblInfinity1, lblInfinity2, lblInfinity3, lblEnableDirectory, numericUpDownBlockHeightToStartListFrom, btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, panelUniversalSearchContainer, textBoxUniversalSearch, panelSettingsUIScaleContainer, textBoxDCAAmountInput, panel111, panel113, panel114, panel115, comboBoxChartSelect, panelComboBoxChartSelectContainer, panel149, panel173, comboBoxPoolsBlocksSelectSorting, comboBoxPoolsBlocksTimePeriod, panel174, panel175, comboBoxPoolsHashrateSortingSelect, comboBoxPoolsHashrateTimePeriod, panel176, comboBoxChartsTimePeriod };
                 foreach (Control control in listTextBoxesToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24977,7 +25043,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listListViewBackgroundsToColor = { panel120, panel123, panelAddressTxContainer, panel134, panel128, panel157, panel147, panelUTXOsContainer, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panelUTXOError, panel137, panel122, panel56, panel27, panelTransactionOutputs, panelTransactionInputs, listViewBlockList, listViewTransactionInputs, listViewTransactionOutputs, listViewXpubAddresses, listViewBookmarks, listViewAddressTransactions, listViewAddressUTXOs, listViewPoolsByBlock, listViewPoolsHashrate, listViewBlockTransactions, panel66, panel24, panel25, panelXpubScrollbar, panel33, panel101, panelXpubContainer, panelPoolsListContainer, panelBlocksByPoolContainer, listViewPoolsList, listViewBlocksByPool, panel157 };
+                Control[] listListViewBackgroundsToColor = { panel120, panel123, panelAddressTxContainer, panelAddressUTXOScrollContainer, panelPoolsBlocksScrollContainer, panelPoolsListScrollContainer, panel147, panelUTXOsContainer, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panelUTXOError, panel137, panel122, panel56, panel27, panelTransactionOutputs, panelTransactionInputs, listViewBlockList, listViewTransactionInputs, listViewTransactionOutputs, listViewXpubAddresses, listViewBookmarks, listViewAddressTransactions, listViewAddressUTXOs, listViewPoolsByBlock, listViewPoolsHashrate, listViewBlockTransactions, panel66, panelTXInScrollContainer, panelTXOutScrollContainer, panelXpubScrollContainer, panelBookmarksScrollContainer, panel101, panelXpubContainer, panelPoolsListContainer, panelBlocksByPoolContainer, listViewPoolsList, listViewBlocksByPool, panelPoolsListScrollContainer };
                 foreach (Control control in listListViewBackgroundsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -25527,6 +25593,13 @@ namespace SATSuma
                 toolTipForLblHeaderPrice.BackColor = thiscolor;
                 toolTipGeneralUse.BackColor = thiscolor;
 
+                panelPoolsListScrollbarInner.BackColor = MakeColorLighter (thiscolor, 10);
+                panelBookmarksScrollbarInner.BackColor = MakeColorLighter (thiscolor, 10);
+                panelTXInScrollbarInner.BackColor = MakeColorLighter (thiscolor, 10);
+                panelTXOutScrollbarInner.BackColor = MakeColorLighter (thiscolor, 10);
+                panelAddressUTXOScrollbarInner.BackColor = MakeColorLighter (thiscolor, 10);
+                panelPoolsBlocksScrollbarInner.BackColor = MakeColorLighter (thiscolor, 10);
+                panelXpubScrollbarInner.BackColor = MakeColorLighter (thiscolor, 10);
                 // border around the price sources indicators. It takes its colour from panel colour and lightens it. Resize and reposition inner panel to make sure nothing is affected by auto resize by UIScale.
                 panelPriceSourceIndicatorsOuter.BackColor = MakeColorLighter(thiscolor, 40);
                 panelPriceSourceIndicatorsOuter.Width = panelPriceSourceIndicators.Width + 2;
@@ -27523,10 +27596,10 @@ namespace SATSuma
                         listViewPoolsHashrate.EnsureVisible(selectedIndex);
                     }
                 }
-                if (panel157.Visible)
+                if (panelPoolsListScrollContainer.Visible)
                 {
-                    panel157.Visible = false;
-                    panel157.Visible = true;
+                    panelPoolsListScrollContainer.Visible = false;
+                    panelPoolsListScrollContainer.Visible = true;
                 }
                 if (panel160.Visible)
                 {
@@ -27868,6 +27941,39 @@ namespace SATSuma
                 {
                     cornerRadius = (int)(6 * UIScale);
                 }
+                if (String.Compare(panel.Name, "panel177") == 0)
+                {
+                    cornerRadius = (int)(6 * UIScale);
+                }
+                if (String.Compare(panel.Name, "panelPoolsListScrollbarInner") == 0)
+                {
+                    cornerRadius = (int)(6 * UIScale);
+                }
+                if (String.Compare(panel.Name, "panelBookmarksScrollbarInner") == 0)
+                {
+                    cornerRadius = (int)(6 * UIScale);
+                }
+                if (String.Compare(panel.Name, "panelTXInScrollbarInner") == 0)
+                {
+                    cornerRadius = (int)(6 * UIScale);
+                }
+                if (String.Compare(panel.Name, "panelTXOutScrollbarInner") == 0)
+                {
+                    cornerRadius = (int)(6 * UIScale);
+                }
+                if (String.Compare(panel.Name, "panelAddressUTXOScrollbarInner") == 0)
+                {
+                    cornerRadius = (int)(6 * UIScale);
+                }
+                if (String.Compare(panel.Name, "panelMiningBlocksScrollInner") == 0)
+                {
+                    cornerRadius = (int)(6 * UIScale);
+                }
+                if (String.Compare(panel.Name, "panelXpubScrollbarInner") == 0)
+                {
+                    cornerRadius = (int)(6 * UIScale);
+                }
+                
                 cornerRadius *= 2;
                 path.AddArc(0, 0, cornerRadius, cornerRadius, 180, 90);
                 path.AddArc(panel.Width - cornerRadius, 0, cornerRadius, cornerRadius, 270, 90);

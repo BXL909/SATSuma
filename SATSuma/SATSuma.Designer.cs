@@ -473,14 +473,18 @@
             this.panelTransaction = new System.Windows.Forms.Panel();
             this.label107 = new System.Windows.Forms.Label();
             this.label102 = new System.Windows.Forms.Label();
-            this.panel24 = new System.Windows.Forms.Panel();
+            this.panelTXInScrollContainer = new System.Windows.Forms.Panel();
+            this.panelTXInScrollbarOuter = new System.Windows.Forms.Panel();
+            this.panelTXInScrollbarInner = new System.Windows.Forms.Panel();
             this.btnTransactionInputDown = new CustomControls.RJControls.RJButton();
             this.btnTransactionInputsUp = new CustomControls.RJControls.RJButton();
             this.panelTransactionInputs = new System.Windows.Forms.Panel();
             this.listViewTransactionInputs = new System.Windows.Forms.ListView();
             this.panel165 = new System.Windows.Forms.Panel();
             this.panel166 = new System.Windows.Forms.Panel();
-            this.panel25 = new System.Windows.Forms.Panel();
+            this.panelTXOutScrollContainer = new System.Windows.Forms.Panel();
+            this.panelTXOutScrollbarOuter = new System.Windows.Forms.Panel();
+            this.panelTXOutScrollbarInner = new System.Windows.Forms.Panel();
             this.btnTransactionOutputsDown = new CustomControls.RJControls.RJButton();
             this.btnTransactionOutputsUp = new CustomControls.RJControls.RJButton();
             this.panelTransactionOutputs = new System.Windows.Forms.Panel();
@@ -521,7 +525,7 @@
             this.TXInScrollTimer = new System.Windows.Forms.Timer(this.components);
             this.TXOutScrollTimer = new System.Windows.Forms.Timer(this.components);
             this.panelXpub = new System.Windows.Forms.Panel();
-            this.panelXpubScrollbar = new System.Windows.Forms.Panel();
+            this.panelXpubScrollContainer = new System.Windows.Forms.Panel();
             this.btnXpubAddressesDown = new CustomControls.RJControls.RJButton();
             this.btnXpubAddressesUp = new CustomControls.RJControls.RJButton();
             this.panelXpubContainer = new System.Windows.Forms.Panel();
@@ -609,7 +613,9 @@
             this.lblHeaderFeesMediumPriority = new System.Windows.Forms.Label();
             this.panelBookmarks = new System.Windows.Forms.Panel();
             this.panel127 = new System.Windows.Forms.Panel();
-            this.panel33 = new System.Windows.Forms.Panel();
+            this.panelBookmarksScrollContainer = new System.Windows.Forms.Panel();
+            this.panelBookmarksScrollbarOuter = new System.Windows.Forms.Panel();
+            this.panelBookmarksScrollbarInner = new System.Windows.Forms.Panel();
             this.btnBookmarksListUp = new CustomControls.RJControls.RJButton();
             this.btnBookmarksListDown = new CustomControls.RJControls.RJButton();
             this.panel32 = new System.Windows.Forms.Panel();
@@ -922,6 +928,8 @@
             this.panelChartDifficultyScaleButtons = new System.Windows.Forms.Panel();
             this.btnChartDifficultyLog = new CustomControls.RJControls.RJButton();
             this.btnChartDifficultyLinear = new CustomControls.RJControls.RJButton();
+            this.panel176 = new System.Windows.Forms.Panel();
+            this.comboBoxChartsTimePeriod = new CustomControls.RJControls.RJComboBox();
             this.panelHashrateScaleButtons = new System.Windows.Forms.Panel();
             this.btnHashrateScaleLog = new CustomControls.RJControls.RJButton();
             this.btnHashrateScaleLinear = new CustomControls.RJControls.RJButton();
@@ -944,17 +952,7 @@
             this.panel78 = new System.Windows.Forms.Panel();
             this.label217 = new System.Windows.Forms.Label();
             this.formsPlot3 = new ScottPlot.FormsPlot();
-            this.btnChartPeriodAll = new CustomControls.RJControls.RJButton();
             this.formsPlot2 = new ScottPlot.FormsPlot();
-            this.btnChartPeriod3y = new CustomControls.RJControls.RJButton();
-            this.btnChartPeriod24h = new CustomControls.RJControls.RJButton();
-            this.btnChartPeriod3d = new CustomControls.RJControls.RJButton();
-            this.btnChartPeriod2y = new CustomControls.RJControls.RJButton();
-            this.btnChartPeriod1w = new CustomControls.RJControls.RJButton();
-            this.btnChartPeriod1m = new CustomControls.RJControls.RJButton();
-            this.btnChartPeriod1y = new CustomControls.RJControls.RJButton();
-            this.btnChartPeriod3m = new CustomControls.RJControls.RJButton();
-            this.btnChartPeriod6m = new CustomControls.RJControls.RJButton();
             this.panelPriceConverter = new System.Windows.Forms.Panel();
             this.panel119 = new System.Windows.Forms.Panel();
             this.panelConvertXAUToBTCContainer = new System.Windows.Forms.Panel();
@@ -1247,7 +1245,9 @@
             this.label317 = new System.Windows.Forms.Label();
             this.label315 = new System.Windows.Forms.Label();
             this.label313 = new System.Windows.Forms.Label();
-            this.panel134 = new System.Windows.Forms.Panel();
+            this.panelAddressUTXOScrollContainer = new System.Windows.Forms.Panel();
+            this.panelAddressUTXOScrollbarOuter = new System.Windows.Forms.Panel();
+            this.panelAddressUTXOScrollbarInner = new System.Windows.Forms.Panel();
             this.btnAddressUTXOScrollDown = new CustomControls.RJControls.RJButton();
             this.btnAddressUTXOScrollUp = new CustomControls.RJControls.RJButton();
             this.btnViewAddressTXFromUTXO = new CustomControls.RJControls.RJButton();
@@ -1280,7 +1280,9 @@
             this.label311 = new System.Windows.Forms.Label();
             this.panel138 = new System.Windows.Forms.Panel();
             this.label310 = new System.Windows.Forms.Label();
-            this.panel128 = new System.Windows.Forms.Panel();
+            this.panelPoolsBlocksScrollContainer = new System.Windows.Forms.Panel();
+            this.panelPoolsBlocksScrollbarOuter = new System.Windows.Forms.Panel();
+            this.panelPoolsBlocksScrollbarInner = new System.Windows.Forms.Panel();
             this.btnPoolsBlocksScrollUp = new CustomControls.RJControls.RJButton();
             this.btnPoolsBlocksScrollDown = new CustomControls.RJControls.RJButton();
             this.panelPoolsBlocksContainer = new System.Windows.Forms.Panel();
@@ -1326,7 +1328,9 @@
             this.panel162 = new System.Windows.Forms.Panel();
             this.panel163 = new System.Windows.Forms.Panel();
             this.panel120 = new System.Windows.Forms.Panel();
-            this.panel157 = new System.Windows.Forms.Panel();
+            this.panelPoolsListScrollContainer = new System.Windows.Forms.Panel();
+            this.panelPoolsListScrollbarOuter = new System.Windows.Forms.Panel();
+            this.panelPoolsListScrollbarInner = new System.Windows.Forms.Panel();
             this.btnPoolsListScrollUp = new CustomControls.RJControls.RJButton();
             this.btnPoolsListScrollDown = new CustomControls.RJControls.RJButton();
             this.panel155 = new System.Windows.Forms.Panel();
@@ -1342,6 +1346,8 @@
             this.label319 = new System.Windows.Forms.Label();
             this.PoolsListScrollTimer = new System.Windows.Forms.Timer(this.components);
             this.panelPriceSourceIndicatorsOuter = new System.Windows.Forms.Panel();
+            this.panelXpubScrollbarOuter = new System.Windows.Forms.Panel();
+            this.panelXpubScrollbarInner = new System.Windows.Forms.Panel();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel109.SuspendLayout();
             this.panel12.SuspendLayout();
@@ -1390,10 +1396,12 @@
             this.panelSelectBlockNumberContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSubmittedBlockNumber)).BeginInit();
             this.panelTransaction.SuspendLayout();
-            this.panel24.SuspendLayout();
+            this.panelTXInScrollContainer.SuspendLayout();
+            this.panelTXInScrollbarOuter.SuspendLayout();
             this.panelTransactionInputs.SuspendLayout();
             this.panel165.SuspendLayout();
-            this.panel25.SuspendLayout();
+            this.panelTXOutScrollContainer.SuspendLayout();
+            this.panelTXOutScrollbarOuter.SuspendLayout();
             this.panelTransactionOutputs.SuspendLayout();
             this.panel167.SuspendLayout();
             this.panelTransactionIDContainer.SuspendLayout();
@@ -1401,7 +1409,7 @@
             this.panelTransactionDiagram.SuspendLayout();
             this.panelTransactionMiddle.SuspendLayout();
             this.panelXpub.SuspendLayout();
-            this.panelXpubScrollbar.SuspendLayout();
+            this.panelXpubScrollContainer.SuspendLayout();
             this.panelXpubContainer.SuspendLayout();
             this.panelXpubResults.SuspendLayout();
             this.panel26.SuspendLayout();
@@ -1421,7 +1429,8 @@
             this.panel57.SuspendLayout();
             this.panel40.SuspendLayout();
             this.panelBookmarks.SuspendLayout();
-            this.panel33.SuspendLayout();
+            this.panelBookmarksScrollContainer.SuspendLayout();
+            this.panelBookmarksScrollbarOuter.SuspendLayout();
             this.panel32.SuspendLayout();
             this.panelBookmarkKeyContainer.SuspendLayout();
             this.panelBookmarksContainer.SuspendLayout();
@@ -1507,6 +1516,7 @@
             this.panel139.SuspendLayout();
             this.panelComboBoxChartSelectContainer.SuspendLayout();
             this.panelChartDifficultyScaleButtons.SuspendLayout();
+            this.panel176.SuspendLayout();
             this.panelHashrateScaleButtons.SuspendLayout();
             this.panelChartMarketCapScaleButtons.SuspendLayout();
             this.panelChartLoading.SuspendLayout();
@@ -1560,7 +1570,8 @@
             this.panelAddressUTXO.SuspendLayout();
             this.panel136.SuspendLayout();
             this.panelUTXOError.SuspendLayout();
-            this.panel134.SuspendLayout();
+            this.panelAddressUTXOScrollContainer.SuspendLayout();
+            this.panelAddressUTXOScrollbarOuter.SuspendLayout();
             this.panelUTXOsContainer.SuspendLayout();
             this.panel135.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AddressQRCodePictureboxUTXO)).BeginInit();
@@ -1572,7 +1583,8 @@
             this.panel149.SuspendLayout();
             this.panel145.SuspendLayout();
             this.panel138.SuspendLayout();
-            this.panel128.SuspendLayout();
+            this.panelPoolsBlocksScrollContainer.SuspendLayout();
+            this.panelPoolsBlocksScrollbarOuter.SuspendLayout();
             this.panelPoolsBlocksContainer.SuspendLayout();
             this.panelMiningHashrate.SuspendLayout();
             this.panel174.SuspendLayout();
@@ -1593,12 +1605,14 @@
             this.panel159.SuspendLayout();
             this.panelBlocksByPoolContainer.SuspendLayout();
             this.panel120.SuspendLayout();
-            this.panel157.SuspendLayout();
+            this.panelPoolsListScrollContainer.SuspendLayout();
+            this.panelPoolsListScrollbarOuter.SuspendLayout();
             this.panel155.SuspendLayout();
             this.panelPoolsListContainer.SuspendLayout();
             this.panel158.SuspendLayout();
             this.panel164.SuspendLayout();
             this.panelPriceSourceIndicatorsOuter.SuspendLayout();
+            this.panelXpubScrollbarOuter.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTime
@@ -1608,7 +1622,7 @@
             this.lblTime.BackColor = System.Drawing.Color.Transparent;
             this.lblTime.Font = new System.Drawing.Font("Consolas", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTime.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
-            this.lblTime.Location = new System.Drawing.Point(1848, 44);
+            this.lblTime.Location = new System.Drawing.Point(848, 44);
             this.lblTime.Margin = new System.Windows.Forms.Padding(0);
             this.lblTime.Name = "lblTime";
             this.lblTime.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -2045,7 +2059,7 @@
             this.btnSaveChart.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSaveChart.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSaveChart.ForeColor = System.Drawing.Color.White;
-            this.btnSaveChart.Location = new System.Drawing.Point(704, 7);
+            this.btnSaveChart.Location = new System.Drawing.Point(368, 35);
             this.btnSaveChart.Margin = new System.Windows.Forms.Padding(0);
             this.btnSaveChart.Name = "btnSaveChart";
             this.btnSaveChart.Padding = new System.Windows.Forms.Padding(2, 0, 0, 0);
@@ -8054,9 +8068,9 @@
             this.panelTransaction.BackColor = System.Drawing.Color.Transparent;
             this.panelTransaction.Controls.Add(this.label107);
             this.panelTransaction.Controls.Add(this.label102);
-            this.panelTransaction.Controls.Add(this.panel24);
+            this.panelTransaction.Controls.Add(this.panelTXInScrollContainer);
             this.panelTransaction.Controls.Add(this.panelTransactionInputs);
-            this.panelTransaction.Controls.Add(this.panel25);
+            this.panelTransaction.Controls.Add(this.panelTXOutScrollContainer);
             this.panelTransaction.Controls.Add(this.panelTransactionOutputs);
             this.panelTransaction.Controls.Add(this.panelTransactionIDContainer);
             this.panelTransaction.Controls.Add(this.lblInvalidTransaction);
@@ -8098,16 +8112,34 @@
             this.label102.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.label102.Visible = false;
             // 
-            // panel24
+            // panelTXInScrollContainer
             // 
-            this.panel24.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
-            this.panel24.Controls.Add(this.btnTransactionInputDown);
-            this.panel24.Controls.Add(this.btnTransactionInputsUp);
-            this.panel24.Location = new System.Drawing.Point(355, 424);
-            this.panel24.Name = "panel24";
-            this.panel24.Size = new System.Drawing.Size(24, 125);
-            this.panel24.TabIndex = 213;
-            this.panel24.Visible = false;
+            this.panelTXInScrollContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
+            this.panelTXInScrollContainer.Controls.Add(this.panelTXInScrollbarOuter);
+            this.panelTXInScrollContainer.Controls.Add(this.btnTransactionInputDown);
+            this.panelTXInScrollContainer.Controls.Add(this.btnTransactionInputsUp);
+            this.panelTXInScrollContainer.Location = new System.Drawing.Point(355, 424);
+            this.panelTXInScrollContainer.Name = "panelTXInScrollContainer";
+            this.panelTXInScrollContainer.Size = new System.Drawing.Size(24, 125);
+            this.panelTXInScrollContainer.TabIndex = 213;
+            this.panelTXInScrollContainer.Visible = false;
+            // 
+            // panelTXInScrollbarOuter
+            // 
+            this.panelTXInScrollbarOuter.BackColor = System.Drawing.Color.Transparent;
+            this.panelTXInScrollbarOuter.Controls.Add(this.panelTXInScrollbarInner);
+            this.panelTXInScrollbarOuter.Location = new System.Drawing.Point(4, 26);
+            this.panelTXInScrollbarOuter.Name = "panelTXInScrollbarOuter";
+            this.panelTXInScrollbarOuter.Size = new System.Drawing.Size(17, 73);
+            this.panelTXInScrollbarOuter.TabIndex = 350;
+            // 
+            // panelTXInScrollbarInner
+            // 
+            this.panelTXInScrollbarInner.BackColor = System.Drawing.Color.RosyBrown;
+            this.panelTXInScrollbarInner.Location = new System.Drawing.Point(3, 0);
+            this.panelTXInScrollbarInner.Name = "panelTXInScrollbarInner";
+            this.panelTXInScrollbarInner.Size = new System.Drawing.Size(11, 30);
+            this.panelTXInScrollbarInner.TabIndex = 0;
             // 
             // btnTransactionInputDown
             // 
@@ -8219,16 +8251,34 @@
             this.panel166.Size = new System.Drawing.Size(25, 16);
             this.panel166.TabIndex = 0;
             // 
-            // panel25
+            // panelTXOutScrollContainer
             // 
-            this.panel25.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
-            this.panel25.Controls.Add(this.btnTransactionOutputsDown);
-            this.panel25.Controls.Add(this.btnTransactionOutputsUp);
-            this.panel25.Location = new System.Drawing.Point(734, 424);
-            this.panel25.Name = "panel25";
-            this.panel25.Size = new System.Drawing.Size(24, 125);
-            this.panel25.TabIndex = 215;
-            this.panel25.Visible = false;
+            this.panelTXOutScrollContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
+            this.panelTXOutScrollContainer.Controls.Add(this.panelTXOutScrollbarOuter);
+            this.panelTXOutScrollContainer.Controls.Add(this.btnTransactionOutputsDown);
+            this.panelTXOutScrollContainer.Controls.Add(this.btnTransactionOutputsUp);
+            this.panelTXOutScrollContainer.Location = new System.Drawing.Point(734, 424);
+            this.panelTXOutScrollContainer.Name = "panelTXOutScrollContainer";
+            this.panelTXOutScrollContainer.Size = new System.Drawing.Size(24, 125);
+            this.panelTXOutScrollContainer.TabIndex = 215;
+            this.panelTXOutScrollContainer.Visible = false;
+            // 
+            // panelTXOutScrollbarOuter
+            // 
+            this.panelTXOutScrollbarOuter.BackColor = System.Drawing.Color.Transparent;
+            this.panelTXOutScrollbarOuter.Controls.Add(this.panelTXOutScrollbarInner);
+            this.panelTXOutScrollbarOuter.Location = new System.Drawing.Point(4, 26);
+            this.panelTXOutScrollbarOuter.Name = "panelTXOutScrollbarOuter";
+            this.panelTXOutScrollbarOuter.Size = new System.Drawing.Size(17, 73);
+            this.panelTXOutScrollbarOuter.TabIndex = 351;
+            // 
+            // panelTXOutScrollbarInner
+            // 
+            this.panelTXOutScrollbarInner.BackColor = System.Drawing.Color.RosyBrown;
+            this.panelTXOutScrollbarInner.Location = new System.Drawing.Point(3, 0);
+            this.panelTXOutScrollbarInner.Name = "panelTXOutScrollbarInner";
+            this.panelTXOutScrollbarInner.Size = new System.Drawing.Size(11, 30);
+            this.panelTXOutScrollbarInner.TabIndex = 0;
             // 
             // btnTransactionOutputsDown
             // 
@@ -8750,7 +8800,7 @@
             // panelXpub
             // 
             this.panelXpub.BackColor = System.Drawing.Color.Transparent;
-            this.panelXpub.Controls.Add(this.panelXpubScrollbar);
+            this.panelXpub.Controls.Add(this.panelXpubScrollContainer);
             this.panelXpub.Controls.Add(this.panelXpubContainer);
             this.panelXpub.Controls.Add(this.panelXpubResults);
             this.panelXpub.Controls.Add(this.panel99);
@@ -8762,16 +8812,17 @@
             this.panelXpub.Visible = false;
             this.panelXpub.VisibleChanged += new System.EventHandler(this.HideBookmarksShowFees);
             // 
-            // panelXpubScrollbar
+            // panelXpubScrollContainer
             // 
-            this.panelXpubScrollbar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
-            this.panelXpubScrollbar.Controls.Add(this.btnXpubAddressesDown);
-            this.panelXpubScrollbar.Controls.Add(this.btnXpubAddressesUp);
-            this.panelXpubScrollbar.Location = new System.Drawing.Point(720, 85);
-            this.panelXpubScrollbar.Name = "panelXpubScrollbar";
-            this.panelXpubScrollbar.Size = new System.Drawing.Size(24, 464);
-            this.panelXpubScrollbar.TabIndex = 214;
-            this.panelXpubScrollbar.Visible = false;
+            this.panelXpubScrollContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
+            this.panelXpubScrollContainer.Controls.Add(this.panelXpubScrollbarOuter);
+            this.panelXpubScrollContainer.Controls.Add(this.btnXpubAddressesDown);
+            this.panelXpubScrollContainer.Controls.Add(this.btnXpubAddressesUp);
+            this.panelXpubScrollContainer.Location = new System.Drawing.Point(720, 85);
+            this.panelXpubScrollContainer.Name = "panelXpubScrollContainer";
+            this.panelXpubScrollContainer.Size = new System.Drawing.Size(24, 464);
+            this.panelXpubScrollContainer.TabIndex = 214;
+            this.panelXpubScrollContainer.Visible = false;
             // 
             // btnXpubAddressesDown
             // 
@@ -10023,7 +10074,7 @@
             // 
             this.panelBookmarks.BackColor = System.Drawing.Color.Transparent;
             this.panelBookmarks.Controls.Add(this.panel127);
-            this.panelBookmarks.Controls.Add(this.panel33);
+            this.panelBookmarks.Controls.Add(this.panelBookmarksScrollContainer);
             this.panelBookmarks.Controls.Add(this.panel32);
             this.panelBookmarks.Controls.Add(this.panelBookmarksContainer);
             this.panelBookmarks.Controls.Add(this.panel170);
@@ -10047,15 +10098,33 @@
             this.panel127.Size = new System.Drawing.Size(1, 28);
             this.panel127.TabIndex = 288;
             // 
-            // panel33
+            // panelBookmarksScrollContainer
             // 
-            this.panel33.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
-            this.panel33.Controls.Add(this.btnBookmarksListUp);
-            this.panel33.Controls.Add(this.btnBookmarksListDown);
-            this.panel33.Location = new System.Drawing.Point(724, 37);
-            this.panel33.Name = "panel33";
-            this.panel33.Size = new System.Drawing.Size(24, 398);
-            this.panel33.TabIndex = 214;
+            this.panelBookmarksScrollContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(29)))), ((int)(((byte)(29)))));
+            this.panelBookmarksScrollContainer.Controls.Add(this.panelBookmarksScrollbarOuter);
+            this.panelBookmarksScrollContainer.Controls.Add(this.btnBookmarksListUp);
+            this.panelBookmarksScrollContainer.Controls.Add(this.btnBookmarksListDown);
+            this.panelBookmarksScrollContainer.Location = new System.Drawing.Point(724, 37);
+            this.panelBookmarksScrollContainer.Name = "panelBookmarksScrollContainer";
+            this.panelBookmarksScrollContainer.Size = new System.Drawing.Size(24, 398);
+            this.panelBookmarksScrollContainer.TabIndex = 214;
+            // 
+            // panelBookmarksScrollbarOuter
+            // 
+            this.panelBookmarksScrollbarOuter.BackColor = System.Drawing.Color.Transparent;
+            this.panelBookmarksScrollbarOuter.Controls.Add(this.panelBookmarksScrollbarInner);
+            this.panelBookmarksScrollbarOuter.Location = new System.Drawing.Point(4, 26);
+            this.panelBookmarksScrollbarOuter.Name = "panelBookmarksScrollbarOuter";
+            this.panelBookmarksScrollbarOuter.Size = new System.Drawing.Size(17, 346);
+            this.panelBookmarksScrollbarOuter.TabIndex = 349;
+            // 
+            // panelBookmarksScrollbarInner
+            // 
+            this.panelBookmarksScrollbarInner.BackColor = System.Drawing.Color.RosyBrown;
+            this.panelBookmarksScrollbarInner.Location = new System.Drawing.Point(3, 0);
+            this.panelBookmarksScrollbarInner.Name = "panelBookmarksScrollbarInner";
+            this.panelBookmarksScrollbarInner.Size = new System.Drawing.Size(11, 66);
+            this.panelBookmarksScrollbarInner.TabIndex = 0;
             // 
             // btnBookmarksListUp
             // 
@@ -14601,6 +14670,7 @@
             this.panelCharts.Controls.Add(this.panel139);
             this.panelCharts.Controls.Add(this.panelComboBoxChartSelectContainer);
             this.panelCharts.Controls.Add(this.panelChartDifficultyScaleButtons);
+            this.panelCharts.Controls.Add(this.panel176);
             this.panelCharts.Controls.Add(this.panelHashrateScaleButtons);
             this.panelCharts.Controls.Add(this.panelChartMarketCapScaleButtons);
             this.panelCharts.Controls.Add(this.btnSaveChart);
@@ -14610,18 +14680,8 @@
             this.panelCharts.Controls.Add(this.panelUniqueAddressesScaleButtons);
             this.panelCharts.Controls.Add(this.panel78);
             this.panelCharts.Controls.Add(this.formsPlot3);
-            this.panelCharts.Controls.Add(this.btnChartPeriodAll);
             this.panelCharts.Controls.Add(this.formsPlot2);
             this.panelCharts.Controls.Add(this.formsPlot1);
-            this.panelCharts.Controls.Add(this.btnChartPeriod3y);
-            this.panelCharts.Controls.Add(this.btnChartPeriod24h);
-            this.panelCharts.Controls.Add(this.btnChartPeriod3d);
-            this.panelCharts.Controls.Add(this.btnChartPeriod2y);
-            this.panelCharts.Controls.Add(this.btnChartPeriod1w);
-            this.panelCharts.Controls.Add(this.btnChartPeriod1m);
-            this.panelCharts.Controls.Add(this.btnChartPeriod1y);
-            this.panelCharts.Controls.Add(this.btnChartPeriod3m);
-            this.panelCharts.Controls.Add(this.btnChartPeriod6m);
             this.panelCharts.Location = new System.Drawing.Point(162, 187);
             this.panelCharts.Name = "panelCharts";
             this.panelCharts.Size = new System.Drawing.Size(773, 564);
@@ -14637,7 +14697,7 @@
             this.panel139.Location = new System.Drawing.Point(30, 8);
             this.panel139.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel139.Name = "panel139";
-            this.panel139.Size = new System.Drawing.Size(158, 23);
+            this.panel139.Size = new System.Drawing.Size(155, 23);
             this.panel139.TabIndex = 210;
             // 
             // label114
@@ -14762,6 +14822,48 @@
             this.toolTipGeneralUse.SetToolTip(this.btnChartDifficultyLinear, "Linear scale chart");
             this.btnChartDifficultyLinear.UseVisualStyleBackColor = false;
             this.btnChartDifficultyLinear.Click += new System.EventHandler(this.BtnChartDifficultyLinear_Click);
+            // 
+            // panel176
+            // 
+            this.panel176.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.panel176.Controls.Add(this.comboBoxChartsTimePeriod);
+            this.panel176.Location = new System.Drawing.Point(199, 35);
+            this.panel176.Name = "panel176";
+            this.panel176.Size = new System.Drawing.Size(155, 24);
+            this.panel176.TabIndex = 318;
+            // 
+            // comboBoxChartsTimePeriod
+            // 
+            this.comboBoxChartsTimePeriod.BackColor = System.Drawing.Color.Transparent;
+            this.comboBoxChartsTimePeriod.BackgroundImage = global::SATSuma.Properties.Resources.setupscreenDropdown;
+            this.comboBoxChartsTimePeriod.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.comboBoxChartsTimePeriod.BorderColor = System.Drawing.Color.Transparent;
+            this.comboBoxChartsTimePeriod.BorderSize = 0;
+            this.comboBoxChartsTimePeriod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxChartsTimePeriod.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comboBoxChartsTimePeriod.ForeColor = System.Drawing.Color.DimGray;
+            this.comboBoxChartsTimePeriod.IconColor = System.Drawing.Color.White;
+            this.comboBoxChartsTimePeriod.Items.AddRange(new object[] {
+            "24 hours",
+            "3 days",
+            "1 week",
+            "1 month",
+            "3 months",
+            "6 months",
+            "1 year",
+            "2 years",
+            "3 years",
+            "all data"});
+            this.comboBoxChartsTimePeriod.ListBackColor = System.Drawing.Color.Black;
+            this.comboBoxChartsTimePeriod.ListTextColor = System.Drawing.Color.DimGray;
+            this.comboBoxChartsTimePeriod.Location = new System.Drawing.Point(6, 0);
+            this.comboBoxChartsTimePeriod.Margin = new System.Windows.Forms.Padding(0);
+            this.comboBoxChartsTimePeriod.MinimumSize = new System.Drawing.Size(96, 24);
+            this.comboBoxChartsTimePeriod.Name = "comboBoxChartsTimePeriod";
+            this.comboBoxChartsTimePeriod.Size = new System.Drawing.Size(143, 24);
+            this.comboBoxChartsTimePeriod.TabIndex = 254;
+            this.comboBoxChartsTimePeriod.Texts = "all data";
+            this.comboBoxChartsTimePeriod.OnSelectedIndexChanged += new System.EventHandler(this.ComboBoxChartsTimePeriod_OnSelectedIndexChanged);
             // 
             // panelHashrateScaleButtons
             // 
@@ -15121,7 +15223,7 @@
             this.panel78.Location = new System.Drawing.Point(199, 8);
             this.panel78.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel78.Name = "panel78";
-            this.panel78.Size = new System.Drawing.Size(484, 23);
+            this.panel78.Size = new System.Drawing.Size(155, 23);
             this.panel78.TabIndex = 208;
             // 
             // label217
@@ -15148,31 +15250,6 @@
             this.formsPlot3.TabIndex = 270;
             this.formsPlot3.Visible = false;
             // 
-            // btnChartPeriodAll
-            // 
-            this.btnChartPeriodAll.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartPeriodAll.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartPeriodAll.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnChartPeriodAll.BorderRadius = 7;
-            this.btnChartPeriodAll.BorderSize = 0;
-            this.btnChartPeriodAll.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnChartPeriodAll.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnChartPeriodAll.FlatAppearance.BorderSize = 0;
-            this.btnChartPeriodAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChartPeriodAll.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChartPeriodAll.ForeColor = System.Drawing.Color.White;
-            this.btnChartPeriodAll.Location = new System.Drawing.Point(685, 35);
-            this.btnChartPeriodAll.Margin = new System.Windows.Forms.Padding(0);
-            this.btnChartPeriodAll.Name = "btnChartPeriodAll";
-            this.btnChartPeriodAll.Size = new System.Drawing.Size(48, 22);
-            this.btnChartPeriodAll.TabIndex = 176;
-            this.btnChartPeriodAll.TabStop = false;
-            this.btnChartPeriodAll.Text = "all";
-            this.btnChartPeriodAll.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartPeriodAll, "All available history");
-            this.btnChartPeriodAll.UseVisualStyleBackColor = false;
-            this.btnChartPeriodAll.Click += new System.EventHandler(this.BtnChartPeriod_Click);
-            // 
             // formsPlot2
             // 
             this.formsPlot2.Location = new System.Drawing.Point(2, 65);
@@ -15181,231 +15258,6 @@
             this.formsPlot2.Size = new System.Drawing.Size(755, 513);
             this.formsPlot2.TabIndex = 266;
             this.formsPlot2.Visible = false;
-            // 
-            // btnChartPeriod3y
-            // 
-            this.btnChartPeriod3y.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartPeriod3y.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartPeriod3y.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnChartPeriod3y.BorderRadius = 7;
-            this.btnChartPeriod3y.BorderSize = 0;
-            this.btnChartPeriod3y.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnChartPeriod3y.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnChartPeriod3y.FlatAppearance.BorderSize = 0;
-            this.btnChartPeriod3y.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChartPeriod3y.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChartPeriod3y.ForeColor = System.Drawing.Color.White;
-            this.btnChartPeriod3y.Location = new System.Drawing.Point(631, 35);
-            this.btnChartPeriod3y.Margin = new System.Windows.Forms.Padding(0);
-            this.btnChartPeriod3y.Name = "btnChartPeriod3y";
-            this.btnChartPeriod3y.Size = new System.Drawing.Size(48, 22);
-            this.btnChartPeriod3y.TabIndex = 175;
-            this.btnChartPeriod3y.TabStop = false;
-            this.btnChartPeriod3y.Text = "3y";
-            this.btnChartPeriod3y.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartPeriod3y, "3 years");
-            this.btnChartPeriod3y.UseVisualStyleBackColor = false;
-            this.btnChartPeriod3y.Click += new System.EventHandler(this.BtnChartPeriod_Click);
-            // 
-            // btnChartPeriod24h
-            // 
-            this.btnChartPeriod24h.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartPeriod24h.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartPeriod24h.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnChartPeriod24h.BorderRadius = 7;
-            this.btnChartPeriod24h.BorderSize = 0;
-            this.btnChartPeriod24h.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnChartPeriod24h.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnChartPeriod24h.FlatAppearance.BorderSize = 0;
-            this.btnChartPeriod24h.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChartPeriod24h.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChartPeriod24h.ForeColor = System.Drawing.Color.White;
-            this.btnChartPeriod24h.Location = new System.Drawing.Point(199, 35);
-            this.btnChartPeriod24h.Margin = new System.Windows.Forms.Padding(0);
-            this.btnChartPeriod24h.Name = "btnChartPeriod24h";
-            this.btnChartPeriod24h.Size = new System.Drawing.Size(48, 22);
-            this.btnChartPeriod24h.TabIndex = 167;
-            this.btnChartPeriod24h.TabStop = false;
-            this.btnChartPeriod24h.Text = "24h";
-            this.btnChartPeriod24h.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartPeriod24h, "24 hours");
-            this.btnChartPeriod24h.UseVisualStyleBackColor = false;
-            this.btnChartPeriod24h.Click += new System.EventHandler(this.BtnChartPeriod_Click);
-            // 
-            // btnChartPeriod3d
-            // 
-            this.btnChartPeriod3d.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartPeriod3d.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartPeriod3d.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnChartPeriod3d.BorderRadius = 7;
-            this.btnChartPeriod3d.BorderSize = 0;
-            this.btnChartPeriod3d.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnChartPeriod3d.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnChartPeriod3d.FlatAppearance.BorderSize = 0;
-            this.btnChartPeriod3d.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChartPeriod3d.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChartPeriod3d.ForeColor = System.Drawing.Color.White;
-            this.btnChartPeriod3d.Location = new System.Drawing.Point(253, 35);
-            this.btnChartPeriod3d.Margin = new System.Windows.Forms.Padding(0);
-            this.btnChartPeriod3d.Name = "btnChartPeriod3d";
-            this.btnChartPeriod3d.Size = new System.Drawing.Size(48, 22);
-            this.btnChartPeriod3d.TabIndex = 168;
-            this.btnChartPeriod3d.TabStop = false;
-            this.btnChartPeriod3d.Text = "3d";
-            this.btnChartPeriod3d.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartPeriod3d, "3 days");
-            this.btnChartPeriod3d.UseVisualStyleBackColor = false;
-            this.btnChartPeriod3d.Click += new System.EventHandler(this.BtnChartPeriod_Click);
-            // 
-            // btnChartPeriod2y
-            // 
-            this.btnChartPeriod2y.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartPeriod2y.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartPeriod2y.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnChartPeriod2y.BorderRadius = 7;
-            this.btnChartPeriod2y.BorderSize = 0;
-            this.btnChartPeriod2y.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnChartPeriod2y.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnChartPeriod2y.FlatAppearance.BorderSize = 0;
-            this.btnChartPeriod2y.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChartPeriod2y.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChartPeriod2y.ForeColor = System.Drawing.Color.White;
-            this.btnChartPeriod2y.Location = new System.Drawing.Point(577, 35);
-            this.btnChartPeriod2y.Margin = new System.Windows.Forms.Padding(0);
-            this.btnChartPeriod2y.Name = "btnChartPeriod2y";
-            this.btnChartPeriod2y.Size = new System.Drawing.Size(48, 22);
-            this.btnChartPeriod2y.TabIndex = 174;
-            this.btnChartPeriod2y.TabStop = false;
-            this.btnChartPeriod2y.Text = "2y";
-            this.btnChartPeriod2y.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartPeriod2y, "2 years");
-            this.btnChartPeriod2y.UseVisualStyleBackColor = false;
-            this.btnChartPeriod2y.Click += new System.EventHandler(this.BtnChartPeriod_Click);
-            // 
-            // btnChartPeriod1w
-            // 
-            this.btnChartPeriod1w.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartPeriod1w.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartPeriod1w.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnChartPeriod1w.BorderRadius = 7;
-            this.btnChartPeriod1w.BorderSize = 0;
-            this.btnChartPeriod1w.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnChartPeriod1w.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnChartPeriod1w.FlatAppearance.BorderSize = 0;
-            this.btnChartPeriod1w.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChartPeriod1w.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChartPeriod1w.ForeColor = System.Drawing.Color.White;
-            this.btnChartPeriod1w.Location = new System.Drawing.Point(307, 35);
-            this.btnChartPeriod1w.Margin = new System.Windows.Forms.Padding(0);
-            this.btnChartPeriod1w.Name = "btnChartPeriod1w";
-            this.btnChartPeriod1w.Size = new System.Drawing.Size(48, 22);
-            this.btnChartPeriod1w.TabIndex = 169;
-            this.btnChartPeriod1w.TabStop = false;
-            this.btnChartPeriod1w.Text = "1w";
-            this.btnChartPeriod1w.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartPeriod1w, "1 week");
-            this.btnChartPeriod1w.UseVisualStyleBackColor = false;
-            this.btnChartPeriod1w.Click += new System.EventHandler(this.BtnChartPeriod_Click);
-            // 
-            // btnChartPeriod1m
-            // 
-            this.btnChartPeriod1m.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartPeriod1m.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartPeriod1m.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnChartPeriod1m.BorderRadius = 7;
-            this.btnChartPeriod1m.BorderSize = 0;
-            this.btnChartPeriod1m.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnChartPeriod1m.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnChartPeriod1m.FlatAppearance.BorderSize = 0;
-            this.btnChartPeriod1m.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChartPeriod1m.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChartPeriod1m.ForeColor = System.Drawing.Color.White;
-            this.btnChartPeriod1m.Location = new System.Drawing.Point(361, 35);
-            this.btnChartPeriod1m.Margin = new System.Windows.Forms.Padding(0);
-            this.btnChartPeriod1m.Name = "btnChartPeriod1m";
-            this.btnChartPeriod1m.Size = new System.Drawing.Size(48, 22);
-            this.btnChartPeriod1m.TabIndex = 170;
-            this.btnChartPeriod1m.TabStop = false;
-            this.btnChartPeriod1m.Text = "1m";
-            this.btnChartPeriod1m.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartPeriod1m, "1 month");
-            this.btnChartPeriod1m.UseVisualStyleBackColor = false;
-            this.btnChartPeriod1m.Click += new System.EventHandler(this.BtnChartPeriod_Click);
-            // 
-            // btnChartPeriod1y
-            // 
-            this.btnChartPeriod1y.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartPeriod1y.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartPeriod1y.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnChartPeriod1y.BorderRadius = 7;
-            this.btnChartPeriod1y.BorderSize = 0;
-            this.btnChartPeriod1y.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnChartPeriod1y.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnChartPeriod1y.FlatAppearance.BorderSize = 0;
-            this.btnChartPeriod1y.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChartPeriod1y.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChartPeriod1y.ForeColor = System.Drawing.Color.White;
-            this.btnChartPeriod1y.Location = new System.Drawing.Point(523, 35);
-            this.btnChartPeriod1y.Margin = new System.Windows.Forms.Padding(0);
-            this.btnChartPeriod1y.Name = "btnChartPeriod1y";
-            this.btnChartPeriod1y.Size = new System.Drawing.Size(48, 22);
-            this.btnChartPeriod1y.TabIndex = 173;
-            this.btnChartPeriod1y.TabStop = false;
-            this.btnChartPeriod1y.Text = "1y";
-            this.btnChartPeriod1y.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartPeriod1y, "1 year");
-            this.btnChartPeriod1y.UseVisualStyleBackColor = false;
-            this.btnChartPeriod1y.Click += new System.EventHandler(this.BtnChartPeriod_Click);
-            // 
-            // btnChartPeriod3m
-            // 
-            this.btnChartPeriod3m.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartPeriod3m.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartPeriod3m.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnChartPeriod3m.BorderRadius = 7;
-            this.btnChartPeriod3m.BorderSize = 0;
-            this.btnChartPeriod3m.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnChartPeriod3m.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnChartPeriod3m.FlatAppearance.BorderSize = 0;
-            this.btnChartPeriod3m.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChartPeriod3m.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChartPeriod3m.ForeColor = System.Drawing.Color.White;
-            this.btnChartPeriod3m.Location = new System.Drawing.Point(415, 35);
-            this.btnChartPeriod3m.Margin = new System.Windows.Forms.Padding(0);
-            this.btnChartPeriod3m.Name = "btnChartPeriod3m";
-            this.btnChartPeriod3m.Size = new System.Drawing.Size(48, 22);
-            this.btnChartPeriod3m.TabIndex = 171;
-            this.btnChartPeriod3m.TabStop = false;
-            this.btnChartPeriod3m.Text = "3m";
-            this.btnChartPeriod3m.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartPeriod3m, "3 months");
-            this.btnChartPeriod3m.UseVisualStyleBackColor = false;
-            this.btnChartPeriod3m.Click += new System.EventHandler(this.BtnChartPeriod_Click);
-            // 
-            // btnChartPeriod6m
-            // 
-            this.btnChartPeriod6m.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartPeriod6m.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnChartPeriod6m.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnChartPeriod6m.BorderRadius = 7;
-            this.btnChartPeriod6m.BorderSize = 0;
-            this.btnChartPeriod6m.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnChartPeriod6m.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnChartPeriod6m.FlatAppearance.BorderSize = 0;
-            this.btnChartPeriod6m.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChartPeriod6m.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChartPeriod6m.ForeColor = System.Drawing.Color.White;
-            this.btnChartPeriod6m.Location = new System.Drawing.Point(469, 35);
-            this.btnChartPeriod6m.Margin = new System.Windows.Forms.Padding(0);
-            this.btnChartPeriod6m.Name = "btnChartPeriod6m";
-            this.btnChartPeriod6m.Size = new System.Drawing.Size(48, 22);
-            this.btnChartPeriod6m.TabIndex = 172;
-            this.btnChartPeriod6m.TabStop = false;
-            this.btnChartPeriod6m.Text = "6m";
-            this.btnChartPeriod6m.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnChartPeriod6m, "6 months");
-            this.btnChartPeriod6m.UseVisualStyleBackColor = false;
-            this.btnChartPeriod6m.Click += new System.EventHandler(this.BtnChartPeriod_Click);
             // 
             // panelPriceConverter
             // 
@@ -19726,7 +19578,7 @@
             this.panelAddressUTXO.Controls.Add(this.panelUTXOError);
             this.panelAddressUTXO.Controls.Add(this.label315);
             this.panelAddressUTXO.Controls.Add(this.label313);
-            this.panelAddressUTXO.Controls.Add(this.panel134);
+            this.panelAddressUTXO.Controls.Add(this.panelAddressUTXOScrollContainer);
             this.panelAddressUTXO.Controls.Add(this.btnViewAddressTXFromUTXO);
             this.panelAddressUTXO.Controls.Add(this.label303);
             this.panelAddressUTXO.Controls.Add(this.label308);
@@ -19827,16 +19679,34 @@
             this.label313.Text = "Spent UTXO\'s";
             this.label313.Visible = false;
             // 
-            // panel134
+            // panelAddressUTXOScrollContainer
             // 
-            this.panel134.BackColor = System.Drawing.Color.Transparent;
-            this.panel134.Controls.Add(this.btnAddressUTXOScrollDown);
-            this.panel134.Controls.Add(this.btnAddressUTXOScrollUp);
-            this.panel134.Location = new System.Drawing.Point(737, 45);
-            this.panel134.Name = "panel134";
-            this.panel134.Size = new System.Drawing.Size(24, 490);
-            this.panel134.TabIndex = 284;
-            this.panel134.Visible = false;
+            this.panelAddressUTXOScrollContainer.BackColor = System.Drawing.Color.Transparent;
+            this.panelAddressUTXOScrollContainer.Controls.Add(this.panelAddressUTXOScrollbarOuter);
+            this.panelAddressUTXOScrollContainer.Controls.Add(this.btnAddressUTXOScrollDown);
+            this.panelAddressUTXOScrollContainer.Controls.Add(this.btnAddressUTXOScrollUp);
+            this.panelAddressUTXOScrollContainer.Location = new System.Drawing.Point(737, 45);
+            this.panelAddressUTXOScrollContainer.Name = "panelAddressUTXOScrollContainer";
+            this.panelAddressUTXOScrollContainer.Size = new System.Drawing.Size(24, 490);
+            this.panelAddressUTXOScrollContainer.TabIndex = 284;
+            this.panelAddressUTXOScrollContainer.Visible = false;
+            // 
+            // panelAddressUTXOScrollbarOuter
+            // 
+            this.panelAddressUTXOScrollbarOuter.BackColor = System.Drawing.Color.Transparent;
+            this.panelAddressUTXOScrollbarOuter.Controls.Add(this.panelAddressUTXOScrollbarInner);
+            this.panelAddressUTXOScrollbarOuter.Location = new System.Drawing.Point(4, 26);
+            this.panelAddressUTXOScrollbarOuter.Name = "panelAddressUTXOScrollbarOuter";
+            this.panelAddressUTXOScrollbarOuter.Size = new System.Drawing.Size(17, 438);
+            this.panelAddressUTXOScrollbarOuter.TabIndex = 350;
+            // 
+            // panelAddressUTXOScrollbarInner
+            // 
+            this.panelAddressUTXOScrollbarInner.BackColor = System.Drawing.Color.RosyBrown;
+            this.panelAddressUTXOScrollbarInner.Location = new System.Drawing.Point(3, 0);
+            this.panelAddressUTXOScrollbarInner.Name = "panelAddressUTXOScrollbarInner";
+            this.panelAddressUTXOScrollbarInner.Size = new System.Drawing.Size(11, 66);
+            this.panelAddressUTXOScrollbarInner.TabIndex = 0;
             // 
             // btnAddressUTXOScrollDown
             // 
@@ -20167,7 +20037,7 @@
             this.panelMiningBlocks.Controls.Add(this.panel149);
             this.panelMiningBlocks.Controls.Add(this.panel145);
             this.panelMiningBlocks.Controls.Add(this.panel138);
-            this.panelMiningBlocks.Controls.Add(this.panel128);
+            this.panelMiningBlocks.Controls.Add(this.panelPoolsBlocksScrollContainer);
             this.panelMiningBlocks.Controls.Add(this.panelPoolsBlocksContainer);
             this.panelMiningBlocks.Location = new System.Drawing.Point(162, 187);
             this.panelMiningBlocks.Name = "panelMiningBlocks";
@@ -20238,7 +20108,8 @@
             "6 months",
             "1 year",
             "2 years",
-            "3 years"});
+            "3 years",
+            "all data"});
             this.comboBoxPoolsBlocksTimePeriod.ListBackColor = System.Drawing.Color.Black;
             this.comboBoxPoolsBlocksTimePeriod.ListTextColor = System.Drawing.Color.DimGray;
             this.comboBoxPoolsBlocksTimePeriod.Location = new System.Drawing.Point(6, 0);
@@ -20247,7 +20118,7 @@
             this.comboBoxPoolsBlocksTimePeriod.Name = "comboBoxPoolsBlocksTimePeriod";
             this.comboBoxPoolsBlocksTimePeriod.Size = new System.Drawing.Size(143, 24);
             this.comboBoxPoolsBlocksTimePeriod.TabIndex = 254;
-            this.comboBoxPoolsBlocksTimePeriod.Texts = "3 years";
+            this.comboBoxPoolsBlocksTimePeriod.Texts = "all data";
             this.comboBoxPoolsBlocksTimePeriod.OnSelectedIndexChanged += new System.EventHandler(this.ComboBoxPoolsBlocksTimePeriod_OnSelectedIndexChanged);
             // 
             // panel145
@@ -20304,15 +20175,33 @@
             this.label310.Text = "TIME PERIOD";
             this.label310.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // panel128
+            // panelPoolsBlocksScrollContainer
             // 
-            this.panel128.BackColor = System.Drawing.Color.Transparent;
-            this.panel128.Controls.Add(this.btnPoolsBlocksScrollUp);
-            this.panel128.Controls.Add(this.btnPoolsBlocksScrollDown);
-            this.panel128.Location = new System.Drawing.Point(391, 56);
-            this.panel128.Name = "panel128";
-            this.panel128.Size = new System.Drawing.Size(24, 490);
-            this.panel128.TabIndex = 298;
+            this.panelPoolsBlocksScrollContainer.BackColor = System.Drawing.Color.Transparent;
+            this.panelPoolsBlocksScrollContainer.Controls.Add(this.panelPoolsBlocksScrollbarOuter);
+            this.panelPoolsBlocksScrollContainer.Controls.Add(this.btnPoolsBlocksScrollUp);
+            this.panelPoolsBlocksScrollContainer.Controls.Add(this.btnPoolsBlocksScrollDown);
+            this.panelPoolsBlocksScrollContainer.Location = new System.Drawing.Point(391, 56);
+            this.panelPoolsBlocksScrollContainer.Name = "panelPoolsBlocksScrollContainer";
+            this.panelPoolsBlocksScrollContainer.Size = new System.Drawing.Size(24, 490);
+            this.panelPoolsBlocksScrollContainer.TabIndex = 298;
+            // 
+            // panelPoolsBlocksScrollbarOuter
+            // 
+            this.panelPoolsBlocksScrollbarOuter.BackColor = System.Drawing.Color.Transparent;
+            this.panelPoolsBlocksScrollbarOuter.Controls.Add(this.panelPoolsBlocksScrollbarInner);
+            this.panelPoolsBlocksScrollbarOuter.Location = new System.Drawing.Point(4, 26);
+            this.panelPoolsBlocksScrollbarOuter.Name = "panelPoolsBlocksScrollbarOuter";
+            this.panelPoolsBlocksScrollbarOuter.Size = new System.Drawing.Size(17, 438);
+            this.panelPoolsBlocksScrollbarOuter.TabIndex = 351;
+            // 
+            // panelPoolsBlocksScrollbarInner
+            // 
+            this.panelPoolsBlocksScrollbarInner.BackColor = System.Drawing.Color.RosyBrown;
+            this.panelPoolsBlocksScrollbarInner.Location = new System.Drawing.Point(3, 0);
+            this.panelPoolsBlocksScrollbarInner.Name = "panelPoolsBlocksScrollbarInner";
+            this.panelPoolsBlocksScrollbarInner.Size = new System.Drawing.Size(11, 66);
+            this.panelPoolsBlocksScrollbarInner.TabIndex = 0;
             // 
             // btnPoolsBlocksScrollUp
             // 
@@ -20533,7 +20422,8 @@
             "6 months",
             "1 year",
             "2 years",
-            "3 years"});
+            "3 years",
+            "all data"});
             this.comboBoxPoolsHashrateTimePeriod.ListBackColor = System.Drawing.Color.Black;
             this.comboBoxPoolsHashrateTimePeriod.ListTextColor = System.Drawing.Color.DimGray;
             this.comboBoxPoolsHashrateTimePeriod.Location = new System.Drawing.Point(6, 0);
@@ -20542,7 +20432,7 @@
             this.comboBoxPoolsHashrateTimePeriod.Name = "comboBoxPoolsHashrateTimePeriod";
             this.comboBoxPoolsHashrateTimePeriod.Size = new System.Drawing.Size(143, 24);
             this.comboBoxPoolsHashrateTimePeriod.TabIndex = 254;
-            this.comboBoxPoolsHashrateTimePeriod.Texts = "3 years";
+            this.comboBoxPoolsHashrateTimePeriod.Texts = "all data";
             this.comboBoxPoolsHashrateTimePeriod.OnSelectedIndexChanged += new System.EventHandler(this.ComboBoxPoolsHashrateTimePeriod_OnSelectedIndexChanged);
             // 
             // panel146
@@ -20961,7 +20851,7 @@
             // 
             // panel120
             // 
-            this.panel120.Controls.Add(this.panel157);
+            this.panel120.Controls.Add(this.panelPoolsListScrollContainer);
             this.panel120.Controls.Add(this.panel155);
             this.panel120.Controls.Add(this.panelPoolsListContainer);
             this.panel120.Location = new System.Drawing.Point(0, 0);
@@ -20969,15 +20859,33 @@
             this.panel120.Size = new System.Drawing.Size(159, 544);
             this.panel120.TabIndex = 345;
             // 
-            // panel157
+            // panelPoolsListScrollContainer
             // 
-            this.panel157.BackColor = System.Drawing.Color.Transparent;
-            this.panel157.Controls.Add(this.btnPoolsListScrollUp);
-            this.panel157.Controls.Add(this.btnPoolsListScrollDown);
-            this.panel157.Location = new System.Drawing.Point(135, 23);
-            this.panel157.Name = "panel157";
-            this.panel157.Size = new System.Drawing.Size(24, 521);
-            this.panel157.TabIndex = 298;
+            this.panelPoolsListScrollContainer.BackColor = System.Drawing.Color.Transparent;
+            this.panelPoolsListScrollContainer.Controls.Add(this.panelPoolsListScrollbarOuter);
+            this.panelPoolsListScrollContainer.Controls.Add(this.btnPoolsListScrollUp);
+            this.panelPoolsListScrollContainer.Controls.Add(this.btnPoolsListScrollDown);
+            this.panelPoolsListScrollContainer.Location = new System.Drawing.Point(135, 23);
+            this.panelPoolsListScrollContainer.Name = "panelPoolsListScrollContainer";
+            this.panelPoolsListScrollContainer.Size = new System.Drawing.Size(24, 521);
+            this.panelPoolsListScrollContainer.TabIndex = 298;
+            // 
+            // panelPoolsListScrollbarOuter
+            // 
+            this.panelPoolsListScrollbarOuter.BackColor = System.Drawing.Color.Transparent;
+            this.panelPoolsListScrollbarOuter.Controls.Add(this.panelPoolsListScrollbarInner);
+            this.panelPoolsListScrollbarOuter.Location = new System.Drawing.Point(4, 26);
+            this.panelPoolsListScrollbarOuter.Name = "panelPoolsListScrollbarOuter";
+            this.panelPoolsListScrollbarOuter.Size = new System.Drawing.Size(17, 468);
+            this.panelPoolsListScrollbarOuter.TabIndex = 348;
+            // 
+            // panelPoolsListScrollbarInner
+            // 
+            this.panelPoolsListScrollbarInner.BackColor = System.Drawing.Color.RosyBrown;
+            this.panelPoolsListScrollbarInner.Location = new System.Drawing.Point(3, 0);
+            this.panelPoolsListScrollbarInner.Name = "panelPoolsListScrollbarInner";
+            this.panelPoolsListScrollbarInner.Size = new System.Drawing.Size(11, 66);
+            this.panelPoolsListScrollbarInner.TabIndex = 0;
             // 
             // btnPoolsListScrollUp
             // 
@@ -21188,6 +21096,23 @@
             this.panelPriceSourceIndicatorsOuter.Size = new System.Drawing.Size(66, 13);
             this.panelPriceSourceIndicatorsOuter.TabIndex = 292;
             // 
+            // panelXpubScrollbarOuter
+            // 
+            this.panelXpubScrollbarOuter.BackColor = System.Drawing.Color.Transparent;
+            this.panelXpubScrollbarOuter.Controls.Add(this.panelXpubScrollbarInner);
+            this.panelXpubScrollbarOuter.Location = new System.Drawing.Point(4, 26);
+            this.panelXpubScrollbarOuter.Name = "panelXpubScrollbarOuter";
+            this.panelXpubScrollbarOuter.Size = new System.Drawing.Size(17, 412);
+            this.panelXpubScrollbarOuter.TabIndex = 352;
+            // 
+            // panelXpubScrollbarInner
+            // 
+            this.panelXpubScrollbarInner.BackColor = System.Drawing.Color.RosyBrown;
+            this.panelXpubScrollbarInner.Location = new System.Drawing.Point(3, 0);
+            this.panelXpubScrollbarInner.Name = "panelXpubScrollbarInner";
+            this.panelXpubScrollbarInner.Size = new System.Drawing.Size(11, 66);
+            this.panelXpubScrollbarInner.TabIndex = 0;
+            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(5F, 12F);
@@ -21196,27 +21121,27 @@
             this.BackgroundImage = global::SATSuma.Properties.Resources.Genesis;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
-            this.ClientSize = new System.Drawing.Size(1940, 754);
-            this.Controls.Add(this.panelMiningHashrate);
-            this.Controls.Add(this.panelMiningBlocks);
+            this.ClientSize = new System.Drawing.Size(940, 754);
+            this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelCharts);
-            this.Controls.Add(this.panelPriceSourceIndicatorsOuter);
+            this.Controls.Add(this.panelXpub);
+            this.Controls.Add(this.panelMiningBlocks);
+            this.Controls.Add(this.panelAddressUTXO);
             this.Controls.Add(this.panelBookmarks);
+            this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelMiningPools);
+            this.Controls.Add(this.panelMiningHashrate);
+            this.Controls.Add(this.panelPriceSourceIndicatorsOuter);
             this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelChartsForPoolsScreen);
             this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelPriceConverter);
-            this.Controls.Add(this.panelTransaction);
-            this.Controls.Add(this.panelAddressUTXO);
             this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelAppearance);
-            this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelDirectory);
             this.Controls.Add(this.panelDCACalculator);
             this.Controls.Add(this.panelLightningDashboard);
-            this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.progressBarRefreshData);
             this.Controls.Add(this.lblHeaderPriceChange);
             this.Controls.Add(this.lblHeaderFeeRatesChart);
@@ -21350,11 +21275,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSubmittedBlockNumber)).EndInit();
             this.panelTransaction.ResumeLayout(false);
             this.panelTransaction.PerformLayout();
-            this.panel24.ResumeLayout(false);
+            this.panelTXInScrollContainer.ResumeLayout(false);
+            this.panelTXInScrollbarOuter.ResumeLayout(false);
             this.panelTransactionInputs.ResumeLayout(false);
             this.panelTransactionInputs.PerformLayout();
             this.panel165.ResumeLayout(false);
-            this.panel25.ResumeLayout(false);
+            this.panelTXOutScrollContainer.ResumeLayout(false);
+            this.panelTXOutScrollbarOuter.ResumeLayout(false);
             this.panelTransactionOutputs.ResumeLayout(false);
             this.panelTransactionOutputs.PerformLayout();
             this.panel167.ResumeLayout(false);
@@ -21366,7 +21293,7 @@
             this.panelTransactionDiagram.PerformLayout();
             this.panelTransactionMiddle.ResumeLayout(false);
             this.panelXpub.ResumeLayout(false);
-            this.panelXpubScrollbar.ResumeLayout(false);
+            this.panelXpubScrollContainer.ResumeLayout(false);
             this.panelXpubContainer.ResumeLayout(false);
             this.panelXpubResults.ResumeLayout(false);
             this.panelXpubResults.PerformLayout();
@@ -21397,7 +21324,8 @@
             this.panel40.PerformLayout();
             this.panelBookmarks.ResumeLayout(false);
             this.panelBookmarks.PerformLayout();
-            this.panel33.ResumeLayout(false);
+            this.panelBookmarksScrollContainer.ResumeLayout(false);
+            this.panelBookmarksScrollbarOuter.ResumeLayout(false);
             this.panel32.ResumeLayout(false);
             this.panel32.PerformLayout();
             this.panelBookmarkKeyContainer.ResumeLayout(false);
@@ -21526,6 +21454,7 @@
             this.panel139.PerformLayout();
             this.panelComboBoxChartSelectContainer.ResumeLayout(false);
             this.panelChartDifficultyScaleButtons.ResumeLayout(false);
+            this.panel176.ResumeLayout(false);
             this.panelHashrateScaleButtons.ResumeLayout(false);
             this.panelChartMarketCapScaleButtons.ResumeLayout(false);
             this.panelChartLoading.ResumeLayout(false);
@@ -21606,7 +21535,8 @@
             this.panel136.ResumeLayout(false);
             this.panel136.PerformLayout();
             this.panelUTXOError.ResumeLayout(false);
-            this.panel134.ResumeLayout(false);
+            this.panelAddressUTXOScrollContainer.ResumeLayout(false);
+            this.panelAddressUTXOScrollbarOuter.ResumeLayout(false);
             this.panelUTXOsContainer.ResumeLayout(false);
             this.panelUTXOsContainer.PerformLayout();
             this.panel135.ResumeLayout(false);
@@ -21625,7 +21555,8 @@
             this.panel145.PerformLayout();
             this.panel138.ResumeLayout(false);
             this.panel138.PerformLayout();
-            this.panel128.ResumeLayout(false);
+            this.panelPoolsBlocksScrollContainer.ResumeLayout(false);
+            this.panelPoolsBlocksScrollbarOuter.ResumeLayout(false);
             this.panelPoolsBlocksContainer.ResumeLayout(false);
             this.panelMiningHashrate.ResumeLayout(false);
             this.panel174.ResumeLayout(false);
@@ -21653,7 +21584,8 @@
             this.panel159.PerformLayout();
             this.panelBlocksByPoolContainer.ResumeLayout(false);
             this.panel120.ResumeLayout(false);
-            this.panel157.ResumeLayout(false);
+            this.panelPoolsListScrollContainer.ResumeLayout(false);
+            this.panelPoolsListScrollbarOuter.ResumeLayout(false);
             this.panel155.ResumeLayout(false);
             this.panel155.PerformLayout();
             this.panelPoolsListContainer.ResumeLayout(false);
@@ -21661,6 +21593,7 @@
             this.panel164.ResumeLayout(false);
             this.panel164.PerformLayout();
             this.panelPriceSourceIndicatorsOuter.ResumeLayout(false);
+            this.panelXpubScrollbarOuter.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -21933,7 +21866,7 @@
         private System.Windows.Forms.Label label146;
         public System.Windows.Forms.Panel panelXpubContainer;
         private System.Windows.Forms.Timer XpubScrollTimer;
-        private System.Windows.Forms.Panel panelXpubScrollbar;
+        private System.Windows.Forms.Panel panelXpubScrollContainer;
         private System.Windows.Forms.TextBox textBoxXpubScreenOwnNodeURL;
         private System.Windows.Forms.Panel panelAddToBookmarks;
         private System.Windows.Forms.Label lblBookmarkProposalType;
@@ -21951,7 +21884,7 @@
         private System.Windows.Forms.TextBox textBoxBookmarkEncryptionKey;
         private System.Windows.Forms.Panel panel31;
         private System.Windows.Forms.Panel panelBookmarks;
-        private System.Windows.Forms.Panel panel33;
+        private System.Windows.Forms.Panel panelBookmarksScrollContainer;
         public System.Windows.Forms.Panel panelBookmarksContainer;
         private System.Windows.Forms.Panel panel36;
         private System.Windows.Forms.Label label144;
@@ -22160,8 +22093,8 @@
         private System.Windows.Forms.Panel panel101;
         private System.Windows.Forms.Label label102;
         private System.Windows.Forms.Label label107;
-        private System.Windows.Forms.Panel panel25;
-        private System.Windows.Forms.Panel panel24;
+        private System.Windows.Forms.Panel panelTXOutScrollContainer;
+        private System.Windows.Forms.Panel panelTXInScrollContainer;
         public System.Windows.Forms.Panel panelTransactionOutputs;
         private System.Windows.Forms.ListView listViewTransactionOutputs;
         public System.Windows.Forms.Panel panelTransactionInputs;
@@ -22348,16 +22281,6 @@
         private CustomControls.RJControls.RJButton btnViewBookmark;
         private CustomControls.RJControls.RJButton btnBookmarkUnlock;
         private CustomControls.RJControls.RJButton btnDecryptBookmark;
-        private CustomControls.RJControls.RJButton btnChartPeriod24h;
-        private CustomControls.RJControls.RJButton btnChartPeriod3d;
-        private CustomControls.RJControls.RJButton btnChartPeriodAll;
-        private CustomControls.RJControls.RJButton btnChartPeriod3y;
-        private CustomControls.RJControls.RJButton btnChartPeriod2y;
-        private CustomControls.RJControls.RJButton btnChartPeriod1y;
-        private CustomControls.RJControls.RJButton btnChartPeriod6m;
-        private CustomControls.RJControls.RJButton btnChartPeriod3m;
-        private CustomControls.RJControls.RJButton btnChartPeriod1m;
-        private CustomControls.RJControls.RJButton btnChartPeriod1w;
         private CustomControls.RJControls.RJButton btnSaveChart;
         private CustomControls.RJControls.RJButton btnCancelAddToBookmarks;
         private CustomControls.RJControls.RJButton btnCommitToBookmarks;
@@ -22819,7 +22742,7 @@
         private System.Windows.Forms.Label lblAddressConfirmedSpentOutputsUTXO;
         private System.Windows.Forms.Label lblAddressConfirmedUnspentUTXO;
         private System.Windows.Forms.Label lblAddressConfirmedSpentUTXO;
-        private System.Windows.Forms.Panel panel134;
+        private System.Windows.Forms.Panel panelAddressUTXOScrollContainer;
         public System.Windows.Forms.Panel panelUTXOsContainer;
         private System.Windows.Forms.ListView listViewAddressUTXOs;
         private System.Windows.Forms.Panel panel137;
@@ -22862,7 +22785,7 @@
         private System.Windows.Forms.Panel panelHelpAboutMenu;
         private System.Windows.Forms.Label lblUpdateFlasher;
         private System.Windows.Forms.Panel panelMiningBlocks;
-        private System.Windows.Forms.Panel panel128;
+        private System.Windows.Forms.Panel panelPoolsBlocksScrollContainer;
         private CustomControls.RJControls.RJButton btnPoolsBlocksScrollDown;
         private CustomControls.RJControls.RJButton btnPoolsBlocksScrollUp;
         public System.Windows.Forms.Panel panelPoolsBlocksContainer;
@@ -22901,7 +22824,7 @@
         private System.Windows.Forms.Panel panelMiningPools;
         private System.Windows.Forms.Panel panel155;
         private System.Windows.Forms.Label label228;
-        private System.Windows.Forms.Panel panel157;
+        private System.Windows.Forms.Panel panelPoolsListScrollContainer;
         private CustomControls.RJControls.RJButton btnPoolsListScrollUp;
         private CustomControls.RJControls.RJButton btnPoolsListScrollDown;
         public System.Windows.Forms.Panel panelPoolsListContainer;
@@ -22980,6 +22903,22 @@
         private CustomControls.RJControls.RJComboBox comboBoxPoolsHashrateSortingSelect;
         private System.Windows.Forms.Panel panel175;
         private CustomControls.RJControls.RJComboBox comboBoxPoolsHashrateTimePeriod;
+        private System.Windows.Forms.Panel panel176;
+        private CustomControls.RJControls.RJComboBox comboBoxChartsTimePeriod;
+        private System.Windows.Forms.Panel panelPoolsListScrollbarOuter;
+        private System.Windows.Forms.Panel panelPoolsListScrollbarInner;
+        private System.Windows.Forms.Panel panelBookmarksScrollbarOuter;
+        private System.Windows.Forms.Panel panelBookmarksScrollbarInner;
+        private System.Windows.Forms.Panel panelTXInScrollbarOuter;
+        private System.Windows.Forms.Panel panelTXInScrollbarInner;
+        private System.Windows.Forms.Panel panelTXOutScrollbarOuter;
+        private System.Windows.Forms.Panel panelTXOutScrollbarInner;
+        private System.Windows.Forms.Panel panelAddressUTXOScrollbarOuter;
+        private System.Windows.Forms.Panel panelAddressUTXOScrollbarInner;
+        private System.Windows.Forms.Panel panelPoolsBlocksScrollbarOuter;
+        private System.Windows.Forms.Panel panelPoolsBlocksScrollbarInner;
+        private System.Windows.Forms.Panel panelXpubScrollbarOuter;
+        private System.Windows.Forms.Panel panelXpubScrollbarInner;
     }
 }
 

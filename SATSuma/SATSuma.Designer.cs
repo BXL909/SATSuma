@@ -373,45 +373,46 @@
             this.label38 = new System.Windows.Forms.Label();
             this.lblTotalCapacity = new System.Windows.Forms.Label();
             this.panelAddress = new System.Windows.Forms.Panel();
+            this.panelAddressResults = new System.Windows.Forms.Panel();
             this.panelOwnNodeAddressTXInfo = new System.Windows.Forms.Panel();
             this.label164 = new System.Windows.Forms.Label();
+            this.panel132 = new System.Windows.Forms.Panel();
+            this.AddressQRCodePicturebox = new System.Windows.Forms.PictureBox();
+            this.lblAddressType = new System.Windows.Forms.Label();
+            this.lblAddressConfirmedTransactionCount = new System.Windows.Forms.Label();
             this.panelAddressTxContainer = new System.Windows.Forms.Panel();
             this.listViewAddressTransactions = new System.Windows.Forms.ListView();
             this.BtnViewBlockFromAddress = new CustomControls.RJControls.RJButton();
             this.panel172 = new System.Windows.Forms.Panel();
+            this.lblAddressConfirmedReceived = new System.Windows.Forms.Label();
+            this.lblAddressConfirmedSpent = new System.Windows.Forms.Label();
             this.btnViewUTXOsFromAddressTX = new CustomControls.RJControls.RJButton();
+            this.lblAddressConfirmedUnspent = new System.Windows.Forms.Label();
+            this.lblAddressConfirmedReceivedOutputs = new System.Windows.Forms.Label();
             this.btnFirstAddressTransaction = new CustomControls.RJControls.RJButton();
-            this.panel132 = new System.Windows.Forms.Panel();
-            this.AddressQRCodePicturebox = new System.Windows.Forms.PictureBox();
-            this.lblAddressType = new System.Windows.Forms.Label();
+            this.lblAddressConfirmedSpentOutputs = new System.Windows.Forms.Label();
+            this.lblAddressConfirmedUnspentOutputs = new System.Windows.Forms.Label();
+            this.btnNextAddressTransactions = new CustomControls.RJControls.RJButton();
             this.lblAddressConfirmedSpentFiat = new System.Windows.Forms.Label();
+            this.lblAddressTXPositionInList = new System.Windows.Forms.Label();
+            this.btnShowUnconfirmedTX = new CustomControls.RJControls.RJButton();
             this.lblAddressConfirmedReceivedFiat = new System.Windows.Forms.Label();
+            this.btnShowConfirmedTX = new CustomControls.RJControls.RJButton();
+            this.btnShowAllTX = new CustomControls.RJControls.RJButton();
             this.lblAddressConfirmedUnspentFiat = new System.Windows.Forms.Label();
+            this.panel41 = new System.Windows.Forms.Panel();
+            this.label61 = new System.Windows.Forms.Label();
+            this.panel42 = new System.Windows.Forms.Panel();
+            this.label59 = new System.Windows.Forms.Label();
             this.panel44 = new System.Windows.Forms.Panel();
             this.label63 = new System.Windows.Forms.Label();
             this.panel43 = new System.Windows.Forms.Panel();
             this.label67 = new System.Windows.Forms.Label();
-            this.panel42 = new System.Windows.Forms.Panel();
-            this.label59 = new System.Windows.Forms.Label();
-            this.panel41 = new System.Windows.Forms.Panel();
-            this.label61 = new System.Windows.Forms.Label();
             this.panel35 = new System.Windows.Forms.Panel();
             this.panelSubmittedAddressContainer = new System.Windows.Forms.Panel();
             this.textboxSubmittedAddress = new System.Windows.Forms.TextBox();
             this.lblInvalidAddressIndicator = new System.Windows.Forms.Label();
             this.label58 = new System.Windows.Forms.Label();
-            this.btnShowAllTX = new CustomControls.RJControls.RJButton();
-            this.btnShowConfirmedTX = new CustomControls.RJControls.RJButton();
-            this.btnShowUnconfirmedTX = new CustomControls.RJControls.RJButton();
-            this.lblAddressTXPositionInList = new System.Windows.Forms.Label();
-            this.btnNextAddressTransactions = new CustomControls.RJControls.RJButton();
-            this.lblAddressConfirmedUnspentOutputs = new System.Windows.Forms.Label();
-            this.lblAddressConfirmedSpentOutputs = new System.Windows.Forms.Label();
-            this.lblAddressConfirmedReceivedOutputs = new System.Windows.Forms.Label();
-            this.lblAddressConfirmedUnspent = new System.Windows.Forms.Label();
-            this.lblAddressConfirmedSpent = new System.Windows.Forms.Label();
-            this.lblAddressConfirmedReceived = new System.Windows.Forms.Label();
-            this.lblAddressConfirmedTransactionCount = new System.Windows.Forms.Label();
             this.pictureBoxLoadingAnimation = new System.Windows.Forms.PictureBox();
             this.panelBlock = new System.Windows.Forms.Panel();
             this.lblBlockBlockHeight = new System.Windows.Forms.Label();
@@ -526,6 +527,8 @@
             this.TXOutScrollTimer = new System.Windows.Forms.Timer(this.components);
             this.panelXpub = new System.Windows.Forms.Panel();
             this.panelXpubScrollContainer = new System.Windows.Forms.Panel();
+            this.panelXpubScrollbarOuter = new System.Windows.Forms.Panel();
+            this.panelXpubScrollbarInner = new System.Windows.Forms.Panel();
             this.btnXpubAddressesDown = new CustomControls.RJControls.RJButton();
             this.btnXpubAddressesUp = new CustomControls.RJControls.RJButton();
             this.panelXpubContainer = new System.Windows.Forms.Panel();
@@ -921,6 +924,9 @@
             this.label194 = new System.Windows.Forms.Label();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.panelCharts = new System.Windows.Forms.Panel();
+            this.label337 = new System.Windows.Forms.Label();
+            this.panel24 = new System.Windows.Forms.Panel();
+            this.label336 = new System.Windows.Forms.Label();
             this.panel139 = new System.Windows.Forms.Panel();
             this.label114 = new System.Windows.Forms.Label();
             this.panelComboBoxChartSelectContainer = new System.Windows.Forms.Panel();
@@ -1239,37 +1245,38 @@
             this.btnViewBlockFromBlocksByPool = new CustomControls.RJControls.RJButton();
             this.timer50thSec = new System.Windows.Forms.Timer(this.components);
             this.panelAddressUTXO = new System.Windows.Forms.Panel();
+            this.panelAddressUTXOResults = new System.Windows.Forms.Panel();
             this.panel136 = new System.Windows.Forms.Panel();
             this.label309 = new System.Windows.Forms.Label();
+            this.panel135 = new System.Windows.Forms.Panel();
+            this.AddressQRCodePictureboxUTXO = new System.Windows.Forms.PictureBox();
             this.panelUTXOError = new System.Windows.Forms.Panel();
             this.label317 = new System.Windows.Forms.Label();
             this.label315 = new System.Windows.Forms.Label();
+            this.lblAddressUTXOPositionInList = new System.Windows.Forms.Label();
             this.label313 = new System.Windows.Forms.Label();
+            this.panel141 = new System.Windows.Forms.Panel();
+            this.label314 = new System.Windows.Forms.Label();
+            this.lblAddressConfirmedUnspentUTXOFiat = new System.Windows.Forms.Label();
             this.panelAddressUTXOScrollContainer = new System.Windows.Forms.Panel();
             this.panelAddressUTXOScrollbarOuter = new System.Windows.Forms.Panel();
             this.panelAddressUTXOScrollbarInner = new System.Windows.Forms.Panel();
             this.btnAddressUTXOScrollDown = new CustomControls.RJControls.RJButton();
             this.btnAddressUTXOScrollUp = new CustomControls.RJControls.RJButton();
-            this.btnViewAddressTXFromUTXO = new CustomControls.RJControls.RJButton();
-            this.label303 = new System.Windows.Forms.Label();
-            this.label308 = new System.Windows.Forms.Label();
-            this.label230 = new System.Windows.Forms.Label();
+            this.lblAddressConfirmedSpentUTXOFiat = new System.Windows.Forms.Label();
             this.panelUTXOsContainer = new System.Windows.Forms.Panel();
             this.listViewAddressUTXOs = new System.Windows.Forms.ListView();
             this.panel137 = new System.Windows.Forms.Panel();
             this.panel143 = new System.Windows.Forms.Panel();
-            this.panel135 = new System.Windows.Forms.Panel();
-            this.AddressQRCodePictureboxUTXO = new System.Windows.Forms.PictureBox();
-            this.lblAddressConfirmedSpentUTXOFiat = new System.Windows.Forms.Label();
-            this.lblAddressConfirmedUnspentUTXOFiat = new System.Windows.Forms.Label();
-            this.panel141 = new System.Windows.Forms.Panel();
-            this.label314 = new System.Windows.Forms.Label();
+            this.btnViewAddressTXFromUTXO = new CustomControls.RJControls.RJButton();
+            this.label230 = new System.Windows.Forms.Label();
+            this.label303 = new System.Windows.Forms.Label();
+            this.label308 = new System.Windows.Forms.Label();
             this.panel142 = new System.Windows.Forms.Panel();
             this.panelSubmittedAddressContainerUTXO = new System.Windows.Forms.Panel();
             this.textboxSubmittedAddressUTXO = new System.Windows.Forms.TextBox();
             this.lblInvalidAddressIndicatorUTXO = new System.Windows.Forms.Label();
             this.label316 = new System.Windows.Forms.Label();
-            this.lblAddressUTXOPositionInList = new System.Windows.Forms.Label();
             this.UTXOsScrollTimer = new System.Windows.Forms.Timer(this.components);
             this.panelMiningBlocks = new System.Windows.Forms.Panel();
             this.panel173 = new System.Windows.Forms.Panel();
@@ -1346,8 +1353,6 @@
             this.label319 = new System.Windows.Forms.Label();
             this.PoolsListScrollTimer = new System.Windows.Forms.Timer(this.components);
             this.panelPriceSourceIndicatorsOuter = new System.Windows.Forms.Panel();
-            this.panelXpubScrollbarOuter = new System.Windows.Forms.Panel();
-            this.panelXpubScrollbarInner = new System.Windows.Forms.Panel();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel109.SuspendLayout();
             this.panel12.SuspendLayout();
@@ -1375,14 +1380,15 @@
             this.panel3.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panelAddress.SuspendLayout();
+            this.panelAddressResults.SuspendLayout();
             this.panelOwnNodeAddressTXInfo.SuspendLayout();
-            this.panelAddressTxContainer.SuspendLayout();
             this.panel132.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AddressQRCodePicturebox)).BeginInit();
+            this.panelAddressTxContainer.SuspendLayout();
+            this.panel41.SuspendLayout();
+            this.panel42.SuspendLayout();
             this.panel44.SuspendLayout();
             this.panel43.SuspendLayout();
-            this.panel42.SuspendLayout();
-            this.panel41.SuspendLayout();
             this.panel35.SuspendLayout();
             this.panelSubmittedAddressContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLoadingAnimation)).BeginInit();
@@ -1410,6 +1416,7 @@
             this.panelTransactionMiddle.SuspendLayout();
             this.panelXpub.SuspendLayout();
             this.panelXpubScrollContainer.SuspendLayout();
+            this.panelXpubScrollbarOuter.SuspendLayout();
             this.panelXpubContainer.SuspendLayout();
             this.panelXpubResults.SuspendLayout();
             this.panel26.SuspendLayout();
@@ -1513,6 +1520,7 @@
             this.panelThemeNameContainer.SuspendLayout();
             this.panel69.SuspendLayout();
             this.panelCharts.SuspendLayout();
+            this.panel24.SuspendLayout();
             this.panel139.SuspendLayout();
             this.panelComboBoxChartSelectContainer.SuspendLayout();
             this.panelChartDifficultyScaleButtons.SuspendLayout();
@@ -1568,14 +1576,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDCAChartLoadingAnimation)).BeginInit();
             this.panelDCAMessages.SuspendLayout();
             this.panelAddressUTXO.SuspendLayout();
+            this.panelAddressUTXOResults.SuspendLayout();
             this.panel136.SuspendLayout();
+            this.panel135.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.AddressQRCodePictureboxUTXO)).BeginInit();
             this.panelUTXOError.SuspendLayout();
+            this.panel141.SuspendLayout();
             this.panelAddressUTXOScrollContainer.SuspendLayout();
             this.panelAddressUTXOScrollbarOuter.SuspendLayout();
             this.panelUTXOsContainer.SuspendLayout();
-            this.panel135.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.AddressQRCodePictureboxUTXO)).BeginInit();
-            this.panel141.SuspendLayout();
             this.panel142.SuspendLayout();
             this.panelSubmittedAddressContainerUTXO.SuspendLayout();
             this.panelMiningBlocks.SuspendLayout();
@@ -1612,7 +1621,6 @@
             this.panel158.SuspendLayout();
             this.panel164.SuspendLayout();
             this.panelPriceSourceIndicatorsOuter.SuspendLayout();
-            this.panelXpubScrollbarOuter.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTime
@@ -1622,7 +1630,7 @@
             this.lblTime.BackColor = System.Drawing.Color.Transparent;
             this.lblTime.Font = new System.Drawing.Font("Consolas", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTime.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
-            this.lblTime.Location = new System.Drawing.Point(848, 44);
+            this.lblTime.Location = new System.Drawing.Point(1848, 44);
             this.lblTime.Margin = new System.Windows.Forms.Padding(0);
             this.lblTime.Name = "lblTime";
             this.lblTime.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -2059,14 +2067,14 @@
             this.btnSaveChart.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSaveChart.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSaveChart.ForeColor = System.Drawing.Color.White;
-            this.btnSaveChart.Location = new System.Drawing.Point(368, 35);
+            this.btnSaveChart.Location = new System.Drawing.Point(679, 35);
             this.btnSaveChart.Margin = new System.Windows.Forms.Padding(0);
             this.btnSaveChart.Name = "btnSaveChart";
             this.btnSaveChart.Padding = new System.Windows.Forms.Padding(2, 0, 0, 0);
-            this.btnSaveChart.Size = new System.Drawing.Size(28, 23);
+            this.btnSaveChart.Size = new System.Drawing.Size(73, 24);
             this.btnSaveChart.TabIndex = 275;
             this.btnSaveChart.TabStop = false;
-            this.btnSaveChart.Text = "💾";
+            this.btnSaveChart.Text = "💾 save";
             this.btnSaveChart.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnSaveChart, "save chart to image");
             this.btnSaveChart.UseVisualStyleBackColor = false;
@@ -6550,31 +6558,8 @@
             // panelAddress
             // 
             this.panelAddress.BackColor = System.Drawing.Color.Transparent;
-            this.panelAddress.Controls.Add(this.panelOwnNodeAddressTXInfo);
-            this.panelAddress.Controls.Add(this.panelAddressTxContainer);
-            this.panelAddress.Controls.Add(this.btnViewUTXOsFromAddressTX);
-            this.panelAddress.Controls.Add(this.btnFirstAddressTransaction);
-            this.panelAddress.Controls.Add(this.panel132);
-            this.panelAddress.Controls.Add(this.lblAddressConfirmedSpentFiat);
-            this.panelAddress.Controls.Add(this.lblAddressConfirmedReceivedFiat);
-            this.panelAddress.Controls.Add(this.lblAddressConfirmedUnspentFiat);
-            this.panelAddress.Controls.Add(this.panel44);
-            this.panelAddress.Controls.Add(this.panel43);
-            this.panelAddress.Controls.Add(this.panel42);
-            this.panelAddress.Controls.Add(this.panel41);
+            this.panelAddress.Controls.Add(this.panelAddressResults);
             this.panelAddress.Controls.Add(this.panel35);
-            this.panelAddress.Controls.Add(this.btnShowAllTX);
-            this.panelAddress.Controls.Add(this.btnShowConfirmedTX);
-            this.panelAddress.Controls.Add(this.btnShowUnconfirmedTX);
-            this.panelAddress.Controls.Add(this.lblAddressTXPositionInList);
-            this.panelAddress.Controls.Add(this.btnNextAddressTransactions);
-            this.panelAddress.Controls.Add(this.lblAddressConfirmedUnspentOutputs);
-            this.panelAddress.Controls.Add(this.lblAddressConfirmedSpentOutputs);
-            this.panelAddress.Controls.Add(this.lblAddressConfirmedReceivedOutputs);
-            this.panelAddress.Controls.Add(this.lblAddressConfirmedUnspent);
-            this.panelAddress.Controls.Add(this.lblAddressConfirmedSpent);
-            this.panelAddress.Controls.Add(this.lblAddressConfirmedReceived);
-            this.panelAddress.Controls.Add(this.lblAddressConfirmedTransactionCount);
             this.panelAddress.Location = new System.Drawing.Point(162, 187);
             this.panelAddress.Name = "panelAddress";
             this.panelAddress.Size = new System.Drawing.Size(773, 556);
@@ -6582,11 +6567,43 @@
             this.panelAddress.Visible = false;
             this.panelAddress.VisibleChanged += new System.EventHandler(this.HideBookmarksShowFees);
             // 
+            // panelAddressResults
+            // 
+            this.panelAddressResults.Controls.Add(this.panelOwnNodeAddressTXInfo);
+            this.panelAddressResults.Controls.Add(this.panel132);
+            this.panelAddressResults.Controls.Add(this.lblAddressConfirmedTransactionCount);
+            this.panelAddressResults.Controls.Add(this.panelAddressTxContainer);
+            this.panelAddressResults.Controls.Add(this.lblAddressConfirmedReceived);
+            this.panelAddressResults.Controls.Add(this.lblAddressConfirmedSpent);
+            this.panelAddressResults.Controls.Add(this.btnViewUTXOsFromAddressTX);
+            this.panelAddressResults.Controls.Add(this.lblAddressConfirmedUnspent);
+            this.panelAddressResults.Controls.Add(this.lblAddressConfirmedReceivedOutputs);
+            this.panelAddressResults.Controls.Add(this.btnFirstAddressTransaction);
+            this.panelAddressResults.Controls.Add(this.lblAddressConfirmedSpentOutputs);
+            this.panelAddressResults.Controls.Add(this.lblAddressConfirmedUnspentOutputs);
+            this.panelAddressResults.Controls.Add(this.btnNextAddressTransactions);
+            this.panelAddressResults.Controls.Add(this.lblAddressConfirmedSpentFiat);
+            this.panelAddressResults.Controls.Add(this.lblAddressTXPositionInList);
+            this.panelAddressResults.Controls.Add(this.btnShowUnconfirmedTX);
+            this.panelAddressResults.Controls.Add(this.lblAddressConfirmedReceivedFiat);
+            this.panelAddressResults.Controls.Add(this.btnShowConfirmedTX);
+            this.panelAddressResults.Controls.Add(this.btnShowAllTX);
+            this.panelAddressResults.Controls.Add(this.lblAddressConfirmedUnspentFiat);
+            this.panelAddressResults.Controls.Add(this.panel41);
+            this.panelAddressResults.Controls.Add(this.panel42);
+            this.panelAddressResults.Controls.Add(this.panel44);
+            this.panelAddressResults.Controls.Add(this.panel43);
+            this.panelAddressResults.Location = new System.Drawing.Point(0, 30);
+            this.panelAddressResults.Name = "panelAddressResults";
+            this.panelAddressResults.Size = new System.Drawing.Size(770, 523);
+            this.panelAddressResults.TabIndex = 149;
+            this.panelAddressResults.Visible = false;
+            // 
             // panelOwnNodeAddressTXInfo
             // 
             this.panelOwnNodeAddressTXInfo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
             this.panelOwnNodeAddressTXInfo.Controls.Add(this.label164);
-            this.panelOwnNodeAddressTXInfo.Location = new System.Drawing.Point(251, 432);
+            this.panelOwnNodeAddressTXInfo.Location = new System.Drawing.Point(251, 402);
             this.panelOwnNodeAddressTXInfo.Name = "panelOwnNodeAddressTXInfo";
             this.panelOwnNodeAddressTXInfo.Size = new System.Drawing.Size(460, 41);
             this.panelOwnNodeAddressTXInfo.TabIndex = 213;
@@ -6603,6 +6620,51 @@
             this.label164.Text = "When connected to your own full node, a maximum of 10 transactions are displayed " +
     "at a time.";
             // 
+            // panel132
+            // 
+            this.panel132.Controls.Add(this.AddressQRCodePicturebox);
+            this.panel132.Controls.Add(this.lblAddressType);
+            this.panel132.Location = new System.Drawing.Point(0, 6);
+            this.panel132.Name = "panel132";
+            this.panel132.Size = new System.Drawing.Size(156, 153);
+            this.panel132.TabIndex = 282;
+            this.panel132.Visible = false;
+            // 
+            // AddressQRCodePicturebox
+            // 
+            this.AddressQRCodePicturebox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.AddressQRCodePicturebox.Location = new System.Drawing.Point(18, 11);
+            this.AddressQRCodePicturebox.Name = "AddressQRCodePicturebox";
+            this.AddressQRCodePicturebox.Size = new System.Drawing.Size(120, 120);
+            this.AddressQRCodePicturebox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.AddressQRCodePicturebox.TabIndex = 131;
+            this.AddressQRCodePicturebox.TabStop = false;
+            // 
+            // lblAddressType
+            // 
+            this.lblAddressType.AutoSize = true;
+            this.lblAddressType.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAddressType.Location = new System.Drawing.Point(14, 133);
+            this.lblAddressType.Name = "lblAddressType";
+            this.lblAddressType.Size = new System.Drawing.Size(52, 16);
+            this.lblAddressType.TabIndex = 3;
+            this.lblAddressType.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblAddressType, "Address type");
+            this.lblAddressType.Visible = false;
+            // 
+            // lblAddressConfirmedTransactionCount
+            // 
+            this.lblAddressConfirmedTransactionCount.AutoSize = true;
+            this.lblAddressConfirmedTransactionCount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblAddressConfirmedTransactionCount.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAddressConfirmedTransactionCount.Location = new System.Drawing.Point(0, 270);
+            this.lblAddressConfirmedTransactionCount.Name = "lblAddressConfirmedTransactionCount";
+            this.lblAddressConfirmedTransactionCount.Size = new System.Drawing.Size(61, 17);
+            this.lblAddressConfirmedTransactionCount.TabIndex = 117;
+            this.lblAddressConfirmedTransactionCount.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblAddressConfirmedTransactionCount, "Number of confirmed transactions");
+            this.lblAddressConfirmedTransactionCount.Visible = false;
+            // 
             // panelAddressTxContainer
             // 
             this.panelAddressTxContainer.AutoScroll = true;
@@ -6610,7 +6672,7 @@
             this.panelAddressTxContainer.Controls.Add(this.BtnViewBlockFromAddress);
             this.panelAddressTxContainer.Controls.Add(this.panel172);
             this.panelAddressTxContainer.Controls.Add(this.BtnViewTransactionFromAddress);
-            this.panelAddressTxContainer.Location = new System.Drawing.Point(210, 36);
+            this.panelAddressTxContainer.Location = new System.Drawing.Point(210, 6);
             this.panelAddressTxContainer.Name = "panelAddressTxContainer";
             this.panelAddressTxContainer.Size = new System.Drawing.Size(544, 454);
             this.panelAddressTxContainer.TabIndex = 292;
@@ -6679,6 +6741,32 @@
             this.panel172.Size = new System.Drawing.Size(544, 16);
             this.panel172.TabIndex = 285;
             // 
+            // lblAddressConfirmedReceived
+            // 
+            this.lblAddressConfirmedReceived.AutoSize = true;
+            this.lblAddressConfirmedReceived.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblAddressConfirmedReceived.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAddressConfirmedReceived.Location = new System.Drawing.Point(0, 321);
+            this.lblAddressConfirmedReceived.Name = "lblAddressConfirmedReceived";
+            this.lblAddressConfirmedReceived.Size = new System.Drawing.Size(15, 17);
+            this.lblAddressConfirmedReceived.TabIndex = 125;
+            this.lblAddressConfirmedReceived.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.lblAddressConfirmedReceived, "Confirmed amount of \r\nXXreceived bitcoin");
+            this.lblAddressConfirmedReceived.Visible = false;
+            // 
+            // lblAddressConfirmedSpent
+            // 
+            this.lblAddressConfirmedSpent.AutoSize = true;
+            this.lblAddressConfirmedSpent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblAddressConfirmedSpent.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAddressConfirmedSpent.Location = new System.Drawing.Point(0, 400);
+            this.lblAddressConfirmedSpent.Name = "lblAddressConfirmedSpent";
+            this.lblAddressConfirmedSpent.Size = new System.Drawing.Size(15, 17);
+            this.lblAddressConfirmedSpent.TabIndex = 127;
+            this.lblAddressConfirmedSpent.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.lblAddressConfirmedSpent, "Confirmed amount of \r\nXXspent bitcoin");
+            this.lblAddressConfirmedSpent.Visible = false;
+            // 
             // btnViewUTXOsFromAddressTX
             // 
             this.btnViewUTXOsFromAddressTX.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
@@ -6691,7 +6779,7 @@
             this.btnViewUTXOsFromAddressTX.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnViewUTXOsFromAddressTX.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnViewUTXOsFromAddressTX.ForeColor = System.Drawing.Color.White;
-            this.btnViewUTXOsFromAddressTX.Location = new System.Drawing.Point(0, 524);
+            this.btnViewUTXOsFromAddressTX.Location = new System.Drawing.Point(0, 494);
             this.btnViewUTXOsFromAddressTX.Margin = new System.Windows.Forms.Padding(1);
             this.btnViewUTXOsFromAddressTX.Name = "btnViewUTXOsFromAddressTX";
             this.btnViewUTXOsFromAddressTX.Size = new System.Drawing.Size(88, 22);
@@ -6702,6 +6790,31 @@
             this.btnViewUTXOsFromAddressTX.UseVisualStyleBackColor = false;
             this.btnViewUTXOsFromAddressTX.Visible = false;
             this.btnViewUTXOsFromAddressTX.Click += new System.EventHandler(this.BtnViewUTXOsFromAddressTX_Click);
+            // 
+            // lblAddressConfirmedUnspent
+            // 
+            this.lblAddressConfirmedUnspent.AutoSize = true;
+            this.lblAddressConfirmedUnspent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblAddressConfirmedUnspent.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAddressConfirmedUnspent.Location = new System.Drawing.Point(0, 191);
+            this.lblAddressConfirmedUnspent.Name = "lblAddressConfirmedUnspent";
+            this.lblAddressConfirmedUnspent.Size = new System.Drawing.Size(15, 17);
+            this.lblAddressConfirmedUnspent.TabIndex = 129;
+            this.lblAddressConfirmedUnspent.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.lblAddressConfirmedUnspent, "Confirmed amount of \r\nXXunspent bitcoin");
+            this.lblAddressConfirmedUnspent.Visible = false;
+            // 
+            // lblAddressConfirmedReceivedOutputs
+            // 
+            this.lblAddressConfirmedReceivedOutputs.AutoSize = true;
+            this.lblAddressConfirmedReceivedOutputs.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            this.lblAddressConfirmedReceivedOutputs.Location = new System.Drawing.Point(0, 353);
+            this.lblAddressConfirmedReceivedOutputs.Name = "lblAddressConfirmedReceivedOutputs";
+            this.lblAddressConfirmedReceivedOutputs.Size = new System.Drawing.Size(70, 17);
+            this.lblAddressConfirmedReceivedOutputs.TabIndex = 133;
+            this.lblAddressConfirmedReceivedOutputs.Text = "(no data)";
+            this.toolTipGeneralUse.SetToolTip(this.lblAddressConfirmedReceivedOutputs, "Number of confirmed \r\nXXreceived outputs");
+            this.lblAddressConfirmedReceivedOutputs.Visible = false;
             // 
             // btnFirstAddressTransaction
             // 
@@ -6716,7 +6829,7 @@
             this.btnFirstAddressTransaction.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnFirstAddressTransaction.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnFirstAddressTransaction.ForeColor = System.Drawing.Color.White;
-            this.btnFirstAddressTransaction.Location = new System.Drawing.Point(612, 524);
+            this.btnFirstAddressTransaction.Location = new System.Drawing.Point(612, 494);
             this.btnFirstAddressTransaction.Margin = new System.Windows.Forms.Padding(1);
             this.btnFirstAddressTransaction.Name = "btnFirstAddressTransaction";
             this.btnFirstAddressTransaction.Size = new System.Drawing.Size(68, 22);
@@ -6728,73 +6841,232 @@
             this.btnFirstAddressTransaction.Visible = false;
             this.btnFirstAddressTransaction.Click += new System.EventHandler(this.BtnFirstTransactionForAddress_ClickAsync);
             // 
-            // panel132
+            // lblAddressConfirmedSpentOutputs
             // 
-            this.panel132.Controls.Add(this.AddressQRCodePicturebox);
-            this.panel132.Controls.Add(this.lblAddressType);
-            this.panel132.Location = new System.Drawing.Point(0, 36);
-            this.panel132.Name = "panel132";
-            this.panel132.Size = new System.Drawing.Size(156, 153);
-            this.panel132.TabIndex = 282;
-            this.panel132.Visible = false;
+            this.lblAddressConfirmedSpentOutputs.AutoSize = true;
+            this.lblAddressConfirmedSpentOutputs.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            this.lblAddressConfirmedSpentOutputs.Location = new System.Drawing.Point(0, 433);
+            this.lblAddressConfirmedSpentOutputs.Name = "lblAddressConfirmedSpentOutputs";
+            this.lblAddressConfirmedSpentOutputs.Size = new System.Drawing.Size(70, 17);
+            this.lblAddressConfirmedSpentOutputs.TabIndex = 134;
+            this.lblAddressConfirmedSpentOutputs.Text = "(no data)";
+            this.toolTipGeneralUse.SetToolTip(this.lblAddressConfirmedSpentOutputs, "Number of confirmed \r\nXXspent outputs");
+            this.lblAddressConfirmedSpentOutputs.Visible = false;
             // 
-            // AddressQRCodePicturebox
+            // lblAddressConfirmedUnspentOutputs
             // 
-            this.AddressQRCodePicturebox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.AddressQRCodePicturebox.Location = new System.Drawing.Point(18, 11);
-            this.AddressQRCodePicturebox.Name = "AddressQRCodePicturebox";
-            this.AddressQRCodePicturebox.Size = new System.Drawing.Size(120, 120);
-            this.AddressQRCodePicturebox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.AddressQRCodePicturebox.TabIndex = 131;
-            this.AddressQRCodePicturebox.TabStop = false;
+            this.lblAddressConfirmedUnspentOutputs.AutoSize = true;
+            this.lblAddressConfirmedUnspentOutputs.Font = new System.Drawing.Font("Century Gothic", 9.75F);
+            this.lblAddressConfirmedUnspentOutputs.Location = new System.Drawing.Point(0, 226);
+            this.lblAddressConfirmedUnspentOutputs.Name = "lblAddressConfirmedUnspentOutputs";
+            this.lblAddressConfirmedUnspentOutputs.Size = new System.Drawing.Size(70, 17);
+            this.lblAddressConfirmedUnspentOutputs.TabIndex = 135;
+            this.lblAddressConfirmedUnspentOutputs.Text = "(no data)";
+            this.toolTipGeneralUse.SetToolTip(this.lblAddressConfirmedUnspentOutputs, "Number of confirmed \r\nXXunspent outputs");
+            this.lblAddressConfirmedUnspentOutputs.Visible = false;
             // 
-            // lblAddressType
+            // btnNextAddressTransactions
             // 
-            this.lblAddressType.AutoSize = true;
-            this.lblAddressType.Font = new System.Drawing.Font("Century Gothic", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAddressType.Location = new System.Drawing.Point(14, 133);
-            this.lblAddressType.Name = "lblAddressType";
-            this.lblAddressType.Size = new System.Drawing.Size(52, 16);
-            this.lblAddressType.TabIndex = 3;
-            this.lblAddressType.Text = "no data";
-            this.toolTipGeneralUse.SetToolTip(this.lblAddressType, "Address type");
-            this.lblAddressType.Visible = false;
+            this.btnNextAddressTransactions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnNextAddressTransactions.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnNextAddressTransactions.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.btnNextAddressTransactions.BorderRadius = 7;
+            this.btnNextAddressTransactions.BorderSize = 0;
+            this.btnNextAddressTransactions.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnNextAddressTransactions.FlatAppearance.BorderSize = 0;
+            this.btnNextAddressTransactions.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnNextAddressTransactions.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnNextAddressTransactions.ForeColor = System.Drawing.Color.White;
+            this.btnNextAddressTransactions.Location = new System.Drawing.Point(687, 494);
+            this.btnNextAddressTransactions.Margin = new System.Windows.Forms.Padding(1);
+            this.btnNextAddressTransactions.Name = "btnNextAddressTransactions";
+            this.btnNextAddressTransactions.Size = new System.Drawing.Size(68, 22);
+            this.btnNextAddressTransactions.TabIndex = 140;
+            this.btnNextAddressTransactions.Text = "▷ older";
+            this.btnNextAddressTransactions.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnNextAddressTransactions, "view next set of transactions");
+            this.btnNextAddressTransactions.UseVisualStyleBackColor = false;
+            this.btnNextAddressTransactions.Visible = false;
+            this.btnNextAddressTransactions.Click += new System.EventHandler(this.BtnGetNextTransactionsForAddressAsync);
             // 
             // lblAddressConfirmedSpentFiat
             // 
             this.lblAddressConfirmedSpentFiat.AutoSize = true;
             this.lblAddressConfirmedSpentFiat.Font = new System.Drawing.Font("Century Gothic", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAddressConfirmedSpentFiat.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(83)))), ((int)(((byte)(0)))));
-            this.lblAddressConfirmedSpentFiat.Location = new System.Drawing.Point(0, 447);
+            this.lblAddressConfirmedSpentFiat.Location = new System.Drawing.Point(0, 417);
             this.lblAddressConfirmedSpentFiat.Name = "lblAddressConfirmedSpentFiat";
             this.lblAddressConfirmedSpentFiat.Size = new System.Drawing.Size(50, 13);
             this.lblAddressConfirmedSpentFiat.TabIndex = 216;
             this.lblAddressConfirmedSpentFiat.Text = "(no data)";
             this.lblAddressConfirmedSpentFiat.Visible = false;
             // 
+            // lblAddressTXPositionInList
+            // 
+            this.lblAddressTXPositionInList.AutoSize = true;
+            this.lblAddressTXPositionInList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblAddressTXPositionInList.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAddressTXPositionInList.ForeColor = System.Drawing.Color.Silver;
+            this.lblAddressTXPositionInList.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.lblAddressTXPositionInList.Location = new System.Drawing.Point(207, 458);
+            this.lblAddressTXPositionInList.Name = "lblAddressTXPositionInList";
+            this.lblAddressTXPositionInList.Size = new System.Drawing.Size(117, 16);
+            this.lblAddressTXPositionInList.TabIndex = 142;
+            this.lblAddressTXPositionInList.Text = "Transactions n-n of n";
+            this.lblAddressTXPositionInList.Visible = false;
+            // 
+            // btnShowUnconfirmedTX
+            // 
+            this.btnShowUnconfirmedTX.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnShowUnconfirmedTX.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnShowUnconfirmedTX.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.btnShowUnconfirmedTX.BorderRadius = 7;
+            this.btnShowUnconfirmedTX.BorderSize = 0;
+            this.btnShowUnconfirmedTX.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnShowUnconfirmedTX.FlatAppearance.BorderSize = 0;
+            this.btnShowUnconfirmedTX.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnShowUnconfirmedTX.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnShowUnconfirmedTX.ForeColor = System.Drawing.Color.White;
+            this.btnShowUnconfirmedTX.Location = new System.Drawing.Point(400, 494);
+            this.btnShowUnconfirmedTX.Margin = new System.Windows.Forms.Padding(1);
+            this.btnShowUnconfirmedTX.Name = "btnShowUnconfirmedTX";
+            this.btnShowUnconfirmedTX.Size = new System.Drawing.Size(88, 22);
+            this.btnShowUnconfirmedTX.TabIndex = 145;
+            this.btnShowUnconfirmedTX.Text = "unconfirmed";
+            this.btnShowUnconfirmedTX.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnShowUnconfirmedTX, "View unconfirmed \r\nXXtransactions only");
+            this.btnShowUnconfirmedTX.UseVisualStyleBackColor = false;
+            this.btnShowUnconfirmedTX.Visible = false;
+            this.btnShowUnconfirmedTX.Click += new System.EventHandler(this.BtnShowUnconfirmedTXForAddress_Click);
+            // 
             // lblAddressConfirmedReceivedFiat
             // 
             this.lblAddressConfirmedReceivedFiat.AutoSize = true;
             this.lblAddressConfirmedReceivedFiat.Font = new System.Drawing.Font("Century Gothic", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAddressConfirmedReceivedFiat.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(83)))), ((int)(((byte)(0)))));
-            this.lblAddressConfirmedReceivedFiat.Location = new System.Drawing.Point(0, 368);
+            this.lblAddressConfirmedReceivedFiat.Location = new System.Drawing.Point(0, 338);
             this.lblAddressConfirmedReceivedFiat.Name = "lblAddressConfirmedReceivedFiat";
             this.lblAddressConfirmedReceivedFiat.Size = new System.Drawing.Size(50, 13);
             this.lblAddressConfirmedReceivedFiat.TabIndex = 215;
             this.lblAddressConfirmedReceivedFiat.Text = "(no data)";
             this.lblAddressConfirmedReceivedFiat.Visible = false;
             // 
+            // btnShowConfirmedTX
+            // 
+            this.btnShowConfirmedTX.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnShowConfirmedTX.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnShowConfirmedTX.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.btnShowConfirmedTX.BorderRadius = 7;
+            this.btnShowConfirmedTX.BorderSize = 0;
+            this.btnShowConfirmedTX.Enabled = false;
+            this.btnShowConfirmedTX.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnShowConfirmedTX.FlatAppearance.BorderSize = 0;
+            this.btnShowConfirmedTX.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnShowConfirmedTX.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnShowConfirmedTX.ForeColor = System.Drawing.Color.White;
+            this.btnShowConfirmedTX.Location = new System.Drawing.Point(305, 494);
+            this.btnShowConfirmedTX.Margin = new System.Windows.Forms.Padding(1);
+            this.btnShowConfirmedTX.Name = "btnShowConfirmedTX";
+            this.btnShowConfirmedTX.Size = new System.Drawing.Size(88, 22);
+            this.btnShowConfirmedTX.TabIndex = 146;
+            this.btnShowConfirmedTX.Text = "confirmed";
+            this.btnShowConfirmedTX.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnShowConfirmedTX, "View confirmed \r\nXXtransactions only");
+            this.btnShowConfirmedTX.UseVisualStyleBackColor = false;
+            this.btnShowConfirmedTX.Visible = false;
+            this.btnShowConfirmedTX.Click += new System.EventHandler(this.BtnShowConfirmedTXForAddress_Click);
+            // 
+            // btnShowAllTX
+            // 
+            this.btnShowAllTX.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnShowAllTX.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnShowAllTX.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.btnShowAllTX.BorderRadius = 7;
+            this.btnShowAllTX.BorderSize = 0;
+            this.btnShowAllTX.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnShowAllTX.FlatAppearance.BorderSize = 0;
+            this.btnShowAllTX.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnShowAllTX.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnShowAllTX.ForeColor = System.Drawing.Color.White;
+            this.btnShowAllTX.Location = new System.Drawing.Point(210, 494);
+            this.btnShowAllTX.Margin = new System.Windows.Forms.Padding(1);
+            this.btnShowAllTX.Name = "btnShowAllTX";
+            this.btnShowAllTX.Size = new System.Drawing.Size(88, 22);
+            this.btnShowAllTX.TabIndex = 147;
+            this.btnShowAllTX.Text = "all";
+            this.btnShowAllTX.TextColor = System.Drawing.Color.White;
+            this.toolTipGeneralUse.SetToolTip(this.btnShowAllTX, "View confirmed and \r\nXXunconfirmed transactions");
+            this.btnShowAllTX.UseVisualStyleBackColor = false;
+            this.btnShowAllTX.Visible = false;
+            this.btnShowAllTX.Click += new System.EventHandler(this.BtnShowAllTXForAddress_Click);
+            // 
             // lblAddressConfirmedUnspentFiat
             // 
             this.lblAddressConfirmedUnspentFiat.AutoSize = true;
             this.lblAddressConfirmedUnspentFiat.Font = new System.Drawing.Font("Century Gothic", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAddressConfirmedUnspentFiat.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(83)))), ((int)(((byte)(0)))));
-            this.lblAddressConfirmedUnspentFiat.Location = new System.Drawing.Point(0, 238);
+            this.lblAddressConfirmedUnspentFiat.Location = new System.Drawing.Point(0, 208);
             this.lblAddressConfirmedUnspentFiat.Name = "lblAddressConfirmedUnspentFiat";
             this.lblAddressConfirmedUnspentFiat.Size = new System.Drawing.Size(50, 13);
             this.lblAddressConfirmedUnspentFiat.TabIndex = 214;
             this.lblAddressConfirmedUnspentFiat.Text = "(no data)";
             this.lblAddressConfirmedUnspentFiat.Visible = false;
+            // 
+            // panel41
+            // 
+            this.panel41.BackColor = System.Drawing.Color.Transparent;
+            this.panel41.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel41.BackgroundImage")));
+            this.panel41.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel41.Controls.Add(this.label61);
+            this.panel41.Location = new System.Drawing.Point(0, 166);
+            this.panel41.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel41.Name = "panel41";
+            this.panel41.Size = new System.Drawing.Size(189, 23);
+            this.panel41.TabIndex = 208;
+            this.panel41.Visible = false;
+            // 
+            // label61
+            // 
+            this.label61.AutoSize = true;
+            this.label61.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label61.Font = new System.Drawing.Font("Century Gothic", 8F);
+            this.label61.ForeColor = System.Drawing.Color.Gray;
+            this.label61.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label61.Location = new System.Drawing.Point(5, 4);
+            this.label61.Name = "label61";
+            this.label61.Size = new System.Drawing.Size(168, 16);
+            this.label61.TabIndex = 130;
+            this.label61.Text = "Confirmed unspent (balance)";
+            this.label61.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label61.Visible = false;
+            // 
+            // panel42
+            // 
+            this.panel42.BackColor = System.Drawing.Color.Transparent;
+            this.panel42.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel42.BackgroundImage")));
+            this.panel42.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel42.Controls.Add(this.label59);
+            this.panel42.Location = new System.Drawing.Point(0, 247);
+            this.panel42.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel42.Name = "panel42";
+            this.panel42.Size = new System.Drawing.Size(189, 23);
+            this.panel42.TabIndex = 209;
+            this.panel42.Visible = false;
+            // 
+            // label59
+            // 
+            this.label59.AutoSize = true;
+            this.label59.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label59.Font = new System.Drawing.Font("Century Gothic", 8F);
+            this.label59.ForeColor = System.Drawing.Color.Gray;
+            this.label59.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label59.Location = new System.Drawing.Point(5, 4);
+            this.label59.Name = "label59";
+            this.label59.Size = new System.Drawing.Size(162, 16);
+            this.label59.TabIndex = 118;
+            this.label59.Text = "Confirmed transaction count";
+            this.label59.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label59.Visible = false;
             // 
             // panel44
             // 
@@ -6802,7 +7074,7 @@
             this.panel44.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel44.BackgroundImage")));
             this.panel44.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel44.Controls.Add(this.label63);
-            this.panel44.Location = new System.Drawing.Point(0, 405);
+            this.panel44.Location = new System.Drawing.Point(0, 375);
             this.panel44.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel44.Name = "panel44";
             this.panel44.Size = new System.Drawing.Size(189, 23);
@@ -6830,7 +7102,7 @@
             this.panel43.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel43.BackgroundImage")));
             this.panel43.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel43.Controls.Add(this.label67);
-            this.panel43.Location = new System.Drawing.Point(0, 326);
+            this.panel43.Location = new System.Drawing.Point(0, 296);
             this.panel43.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel43.Name = "panel43";
             this.panel43.Size = new System.Drawing.Size(189, 23);
@@ -6851,62 +7123,6 @@
             this.label67.Text = "Confirmed received";
             this.label67.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.label67.Visible = false;
-            // 
-            // panel42
-            // 
-            this.panel42.BackColor = System.Drawing.Color.Transparent;
-            this.panel42.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel42.BackgroundImage")));
-            this.panel42.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel42.Controls.Add(this.label59);
-            this.panel42.Location = new System.Drawing.Point(0, 277);
-            this.panel42.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel42.Name = "panel42";
-            this.panel42.Size = new System.Drawing.Size(189, 23);
-            this.panel42.TabIndex = 209;
-            this.panel42.Visible = false;
-            // 
-            // label59
-            // 
-            this.label59.AutoSize = true;
-            this.label59.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label59.Font = new System.Drawing.Font("Century Gothic", 8F);
-            this.label59.ForeColor = System.Drawing.Color.Gray;
-            this.label59.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label59.Location = new System.Drawing.Point(5, 4);
-            this.label59.Name = "label59";
-            this.label59.Size = new System.Drawing.Size(162, 16);
-            this.label59.TabIndex = 118;
-            this.label59.Text = "Confirmed transaction count";
-            this.label59.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label59.Visible = false;
-            // 
-            // panel41
-            // 
-            this.panel41.BackColor = System.Drawing.Color.Transparent;
-            this.panel41.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel41.BackgroundImage")));
-            this.panel41.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel41.Controls.Add(this.label61);
-            this.panel41.Location = new System.Drawing.Point(0, 196);
-            this.panel41.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel41.Name = "panel41";
-            this.panel41.Size = new System.Drawing.Size(189, 23);
-            this.panel41.TabIndex = 208;
-            this.panel41.Visible = false;
-            // 
-            // label61
-            // 
-            this.label61.AutoSize = true;
-            this.label61.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label61.Font = new System.Drawing.Font("Century Gothic", 8F);
-            this.label61.ForeColor = System.Drawing.Color.Gray;
-            this.label61.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label61.Location = new System.Drawing.Point(5, 4);
-            this.label61.Name = "label61";
-            this.label61.Size = new System.Drawing.Size(168, 16);
-            this.label61.TabIndex = 130;
-            this.label61.Text = "Confirmed unspent (balance)";
-            this.label61.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label61.Visible = false;
             // 
             // panel35
             // 
@@ -6959,205 +7175,6 @@
             this.label58.Size = new System.Drawing.Size(98, 17);
             this.label58.TabIndex = 5;
             this.label58.Text = "Bitcoin address";
-            // 
-            // btnShowAllTX
-            // 
-            this.btnShowAllTX.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnShowAllTX.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnShowAllTX.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnShowAllTX.BorderRadius = 7;
-            this.btnShowAllTX.BorderSize = 0;
-            this.btnShowAllTX.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnShowAllTX.FlatAppearance.BorderSize = 0;
-            this.btnShowAllTX.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnShowAllTX.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnShowAllTX.ForeColor = System.Drawing.Color.White;
-            this.btnShowAllTX.Location = new System.Drawing.Point(210, 524);
-            this.btnShowAllTX.Margin = new System.Windows.Forms.Padding(1);
-            this.btnShowAllTX.Name = "btnShowAllTX";
-            this.btnShowAllTX.Size = new System.Drawing.Size(88, 22);
-            this.btnShowAllTX.TabIndex = 147;
-            this.btnShowAllTX.Text = "all";
-            this.btnShowAllTX.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnShowAllTX, "View confirmed and \r\nXXunconfirmed transactions");
-            this.btnShowAllTX.UseVisualStyleBackColor = false;
-            this.btnShowAllTX.Visible = false;
-            this.btnShowAllTX.Click += new System.EventHandler(this.BtnShowAllTXForAddress_Click);
-            // 
-            // btnShowConfirmedTX
-            // 
-            this.btnShowConfirmedTX.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnShowConfirmedTX.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnShowConfirmedTX.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnShowConfirmedTX.BorderRadius = 7;
-            this.btnShowConfirmedTX.BorderSize = 0;
-            this.btnShowConfirmedTX.Enabled = false;
-            this.btnShowConfirmedTX.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnShowConfirmedTX.FlatAppearance.BorderSize = 0;
-            this.btnShowConfirmedTX.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnShowConfirmedTX.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnShowConfirmedTX.ForeColor = System.Drawing.Color.White;
-            this.btnShowConfirmedTX.Location = new System.Drawing.Point(305, 524);
-            this.btnShowConfirmedTX.Margin = new System.Windows.Forms.Padding(1);
-            this.btnShowConfirmedTX.Name = "btnShowConfirmedTX";
-            this.btnShowConfirmedTX.Size = new System.Drawing.Size(88, 22);
-            this.btnShowConfirmedTX.TabIndex = 146;
-            this.btnShowConfirmedTX.Text = "confirmed";
-            this.btnShowConfirmedTX.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnShowConfirmedTX, "View confirmed \r\nXXtransactions only");
-            this.btnShowConfirmedTX.UseVisualStyleBackColor = false;
-            this.btnShowConfirmedTX.Visible = false;
-            this.btnShowConfirmedTX.Click += new System.EventHandler(this.BtnShowConfirmedTXForAddress_Click);
-            // 
-            // btnShowUnconfirmedTX
-            // 
-            this.btnShowUnconfirmedTX.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnShowUnconfirmedTX.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnShowUnconfirmedTX.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnShowUnconfirmedTX.BorderRadius = 7;
-            this.btnShowUnconfirmedTX.BorderSize = 0;
-            this.btnShowUnconfirmedTX.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnShowUnconfirmedTX.FlatAppearance.BorderSize = 0;
-            this.btnShowUnconfirmedTX.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnShowUnconfirmedTX.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnShowUnconfirmedTX.ForeColor = System.Drawing.Color.White;
-            this.btnShowUnconfirmedTX.Location = new System.Drawing.Point(400, 524);
-            this.btnShowUnconfirmedTX.Margin = new System.Windows.Forms.Padding(1);
-            this.btnShowUnconfirmedTX.Name = "btnShowUnconfirmedTX";
-            this.btnShowUnconfirmedTX.Size = new System.Drawing.Size(88, 22);
-            this.btnShowUnconfirmedTX.TabIndex = 145;
-            this.btnShowUnconfirmedTX.Text = "unconfirmed";
-            this.btnShowUnconfirmedTX.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnShowUnconfirmedTX, "View unconfirmed \r\nXXtransactions only");
-            this.btnShowUnconfirmedTX.UseVisualStyleBackColor = false;
-            this.btnShowUnconfirmedTX.Visible = false;
-            this.btnShowUnconfirmedTX.Click += new System.EventHandler(this.BtnShowUnconfirmedTXForAddress_Click);
-            // 
-            // lblAddressTXPositionInList
-            // 
-            this.lblAddressTXPositionInList.AutoSize = true;
-            this.lblAddressTXPositionInList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblAddressTXPositionInList.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAddressTXPositionInList.ForeColor = System.Drawing.Color.Silver;
-            this.lblAddressTXPositionInList.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.lblAddressTXPositionInList.Location = new System.Drawing.Point(207, 488);
-            this.lblAddressTXPositionInList.Name = "lblAddressTXPositionInList";
-            this.lblAddressTXPositionInList.Size = new System.Drawing.Size(117, 16);
-            this.lblAddressTXPositionInList.TabIndex = 142;
-            this.lblAddressTXPositionInList.Text = "Transactions n-n of n";
-            this.lblAddressTXPositionInList.Visible = false;
-            // 
-            // btnNextAddressTransactions
-            // 
-            this.btnNextAddressTransactions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnNextAddressTransactions.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnNextAddressTransactions.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnNextAddressTransactions.BorderRadius = 7;
-            this.btnNextAddressTransactions.BorderSize = 0;
-            this.btnNextAddressTransactions.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnNextAddressTransactions.FlatAppearance.BorderSize = 0;
-            this.btnNextAddressTransactions.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnNextAddressTransactions.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnNextAddressTransactions.ForeColor = System.Drawing.Color.White;
-            this.btnNextAddressTransactions.Location = new System.Drawing.Point(687, 524);
-            this.btnNextAddressTransactions.Margin = new System.Windows.Forms.Padding(1);
-            this.btnNextAddressTransactions.Name = "btnNextAddressTransactions";
-            this.btnNextAddressTransactions.Size = new System.Drawing.Size(68, 22);
-            this.btnNextAddressTransactions.TabIndex = 140;
-            this.btnNextAddressTransactions.Text = "▷ older";
-            this.btnNextAddressTransactions.TextColor = System.Drawing.Color.White;
-            this.toolTipGeneralUse.SetToolTip(this.btnNextAddressTransactions, "view next set of transactions");
-            this.btnNextAddressTransactions.UseVisualStyleBackColor = false;
-            this.btnNextAddressTransactions.Visible = false;
-            this.btnNextAddressTransactions.Click += new System.EventHandler(this.BtnGetNextTransactionsForAddressAsync);
-            // 
-            // lblAddressConfirmedUnspentOutputs
-            // 
-            this.lblAddressConfirmedUnspentOutputs.AutoSize = true;
-            this.lblAddressConfirmedUnspentOutputs.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.lblAddressConfirmedUnspentOutputs.Location = new System.Drawing.Point(0, 256);
-            this.lblAddressConfirmedUnspentOutputs.Name = "lblAddressConfirmedUnspentOutputs";
-            this.lblAddressConfirmedUnspentOutputs.Size = new System.Drawing.Size(70, 17);
-            this.lblAddressConfirmedUnspentOutputs.TabIndex = 135;
-            this.lblAddressConfirmedUnspentOutputs.Text = "(no data)";
-            this.toolTipGeneralUse.SetToolTip(this.lblAddressConfirmedUnspentOutputs, "Number of confirmed \r\nXXunspent outputs");
-            this.lblAddressConfirmedUnspentOutputs.Visible = false;
-            // 
-            // lblAddressConfirmedSpentOutputs
-            // 
-            this.lblAddressConfirmedSpentOutputs.AutoSize = true;
-            this.lblAddressConfirmedSpentOutputs.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.lblAddressConfirmedSpentOutputs.Location = new System.Drawing.Point(0, 463);
-            this.lblAddressConfirmedSpentOutputs.Name = "lblAddressConfirmedSpentOutputs";
-            this.lblAddressConfirmedSpentOutputs.Size = new System.Drawing.Size(70, 17);
-            this.lblAddressConfirmedSpentOutputs.TabIndex = 134;
-            this.lblAddressConfirmedSpentOutputs.Text = "(no data)";
-            this.toolTipGeneralUse.SetToolTip(this.lblAddressConfirmedSpentOutputs, "Number of confirmed \r\nXXspent outputs");
-            this.lblAddressConfirmedSpentOutputs.Visible = false;
-            // 
-            // lblAddressConfirmedReceivedOutputs
-            // 
-            this.lblAddressConfirmedReceivedOutputs.AutoSize = true;
-            this.lblAddressConfirmedReceivedOutputs.Font = new System.Drawing.Font("Century Gothic", 9.75F);
-            this.lblAddressConfirmedReceivedOutputs.Location = new System.Drawing.Point(0, 383);
-            this.lblAddressConfirmedReceivedOutputs.Name = "lblAddressConfirmedReceivedOutputs";
-            this.lblAddressConfirmedReceivedOutputs.Size = new System.Drawing.Size(70, 17);
-            this.lblAddressConfirmedReceivedOutputs.TabIndex = 133;
-            this.lblAddressConfirmedReceivedOutputs.Text = "(no data)";
-            this.toolTipGeneralUse.SetToolTip(this.lblAddressConfirmedReceivedOutputs, "Number of confirmed \r\nXXreceived outputs");
-            this.lblAddressConfirmedReceivedOutputs.Visible = false;
-            // 
-            // lblAddressConfirmedUnspent
-            // 
-            this.lblAddressConfirmedUnspent.AutoSize = true;
-            this.lblAddressConfirmedUnspent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblAddressConfirmedUnspent.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAddressConfirmedUnspent.Location = new System.Drawing.Point(0, 221);
-            this.lblAddressConfirmedUnspent.Name = "lblAddressConfirmedUnspent";
-            this.lblAddressConfirmedUnspent.Size = new System.Drawing.Size(15, 17);
-            this.lblAddressConfirmedUnspent.TabIndex = 129;
-            this.lblAddressConfirmedUnspent.Text = "0";
-            this.toolTipGeneralUse.SetToolTip(this.lblAddressConfirmedUnspent, "Confirmed amount of \r\nXXunspent bitcoin");
-            this.lblAddressConfirmedUnspent.Visible = false;
-            // 
-            // lblAddressConfirmedSpent
-            // 
-            this.lblAddressConfirmedSpent.AutoSize = true;
-            this.lblAddressConfirmedSpent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblAddressConfirmedSpent.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAddressConfirmedSpent.Location = new System.Drawing.Point(0, 430);
-            this.lblAddressConfirmedSpent.Name = "lblAddressConfirmedSpent";
-            this.lblAddressConfirmedSpent.Size = new System.Drawing.Size(15, 17);
-            this.lblAddressConfirmedSpent.TabIndex = 127;
-            this.lblAddressConfirmedSpent.Text = "0";
-            this.toolTipGeneralUse.SetToolTip(this.lblAddressConfirmedSpent, "Confirmed amount of \r\nXXspent bitcoin");
-            this.lblAddressConfirmedSpent.Visible = false;
-            // 
-            // lblAddressConfirmedReceived
-            // 
-            this.lblAddressConfirmedReceived.AutoSize = true;
-            this.lblAddressConfirmedReceived.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblAddressConfirmedReceived.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAddressConfirmedReceived.Location = new System.Drawing.Point(0, 351);
-            this.lblAddressConfirmedReceived.Name = "lblAddressConfirmedReceived";
-            this.lblAddressConfirmedReceived.Size = new System.Drawing.Size(15, 17);
-            this.lblAddressConfirmedReceived.TabIndex = 125;
-            this.lblAddressConfirmedReceived.Text = "0";
-            this.toolTipGeneralUse.SetToolTip(this.lblAddressConfirmedReceived, "Confirmed amount of \r\nXXreceived bitcoin");
-            this.lblAddressConfirmedReceived.Visible = false;
-            // 
-            // lblAddressConfirmedTransactionCount
-            // 
-            this.lblAddressConfirmedTransactionCount.AutoSize = true;
-            this.lblAddressConfirmedTransactionCount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblAddressConfirmedTransactionCount.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAddressConfirmedTransactionCount.Location = new System.Drawing.Point(0, 300);
-            this.lblAddressConfirmedTransactionCount.Name = "lblAddressConfirmedTransactionCount";
-            this.lblAddressConfirmedTransactionCount.Size = new System.Drawing.Size(61, 17);
-            this.lblAddressConfirmedTransactionCount.TabIndex = 117;
-            this.lblAddressConfirmedTransactionCount.Text = "no data";
-            this.toolTipGeneralUse.SetToolTip(this.lblAddressConfirmedTransactionCount, "Number of confirmed transactions");
-            this.lblAddressConfirmedTransactionCount.Visible = false;
             // 
             // pictureBoxLoadingAnimation
             // 
@@ -8823,6 +8840,23 @@
             this.panelXpubScrollContainer.Size = new System.Drawing.Size(24, 464);
             this.panelXpubScrollContainer.TabIndex = 214;
             this.panelXpubScrollContainer.Visible = false;
+            // 
+            // panelXpubScrollbarOuter
+            // 
+            this.panelXpubScrollbarOuter.BackColor = System.Drawing.Color.Transparent;
+            this.panelXpubScrollbarOuter.Controls.Add(this.panelXpubScrollbarInner);
+            this.panelXpubScrollbarOuter.Location = new System.Drawing.Point(4, 26);
+            this.panelXpubScrollbarOuter.Name = "panelXpubScrollbarOuter";
+            this.panelXpubScrollbarOuter.Size = new System.Drawing.Size(17, 412);
+            this.panelXpubScrollbarOuter.TabIndex = 352;
+            // 
+            // panelXpubScrollbarInner
+            // 
+            this.panelXpubScrollbarInner.BackColor = System.Drawing.Color.RosyBrown;
+            this.panelXpubScrollbarInner.Location = new System.Drawing.Point(3, 0);
+            this.panelXpubScrollbarInner.Name = "panelXpubScrollbarInner";
+            this.panelXpubScrollbarInner.Size = new System.Drawing.Size(11, 66);
+            this.panelXpubScrollbarInner.TabIndex = 0;
             // 
             // btnXpubAddressesDown
             // 
@@ -14667,6 +14701,8 @@
             // panelCharts
             // 
             this.panelCharts.BackColor = System.Drawing.Color.Transparent;
+            this.panelCharts.Controls.Add(this.label337);
+            this.panelCharts.Controls.Add(this.panel24);
             this.panelCharts.Controls.Add(this.panel139);
             this.panelCharts.Controls.Add(this.panelComboBoxChartSelectContainer);
             this.panelCharts.Controls.Add(this.panelChartDifficultyScaleButtons);
@@ -14688,13 +14724,54 @@
             this.panelCharts.TabIndex = 231;
             this.panelCharts.Visible = false;
             // 
+            // label337
+            // 
+            this.label337.AutoSize = true;
+            this.label337.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label337.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label337.ForeColor = System.Drawing.Color.Silver;
+            this.label337.Location = new System.Drawing.Point(461, 39);
+            this.label337.Margin = new System.Windows.Forms.Padding(0);
+            this.label337.Name = "label337";
+            this.label337.Size = new System.Drawing.Size(222, 17);
+            this.label337.TabIndex = 320;
+            this.label337.Text = "Export current chart as an image file";
+            this.toolTipForLblHeaderPrice.SetToolTip(this.label337, "Size of the most recently mined block");
+            // 
+            // panel24
+            // 
+            this.panel24.BackColor = System.Drawing.Color.Transparent;
+            this.panel24.BackgroundImage = global::SATSuma.Properties.Resources.titleBGLongerOrange;
+            this.panel24.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel24.Controls.Add(this.label336);
+            this.panel24.Location = new System.Drawing.Point(461, 8);
+            this.panel24.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel24.Name = "panel24";
+            this.panel24.Size = new System.Drawing.Size(291, 23);
+            this.panel24.TabIndex = 319;
+            // 
+            // label336
+            // 
+            this.label336.AutoSize = true;
+            this.label336.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label336.Font = new System.Drawing.Font("Century Gothic", 8F);
+            this.label336.ForeColor = System.Drawing.Color.Gray;
+            this.label336.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label336.Location = new System.Drawing.Point(5, 4);
+            this.label336.Margin = new System.Windows.Forms.Padding(0);
+            this.label336.Name = "label336";
+            this.label336.Size = new System.Drawing.Size(88, 16);
+            this.label336.TabIndex = 153;
+            this.label336.Text = "EXPORT CHART";
+            this.label336.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // panel139
             // 
             this.panel139.BackColor = System.Drawing.Color.Transparent;
             this.panel139.BackgroundImage = global::SATSuma.Properties.Resources.titleBGLongerOrange;
             this.panel139.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel139.Controls.Add(this.label114);
-            this.panel139.Location = new System.Drawing.Point(30, 8);
+            this.panel139.Location = new System.Drawing.Point(5, 8);
             this.panel139.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel139.Name = "panel139";
             this.panel139.Size = new System.Drawing.Size(155, 23);
@@ -14719,7 +14796,7 @@
             // 
             this.panelComboBoxChartSelectContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.panelComboBoxChartSelectContainer.Controls.Add(this.comboBoxChartSelect);
-            this.panelComboBoxChartSelectContainer.Location = new System.Drawing.Point(30, 35);
+            this.panelComboBoxChartSelectContainer.Location = new System.Drawing.Point(5, 35);
             this.panelComboBoxChartSelectContainer.Name = "panelComboBoxChartSelectContainer";
             this.panelComboBoxChartSelectContainer.Size = new System.Drawing.Size(155, 24);
             this.panelComboBoxChartSelectContainer.TabIndex = 276;
@@ -14827,7 +14904,7 @@
             // 
             this.panel176.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.panel176.Controls.Add(this.comboBoxChartsTimePeriod);
-            this.panel176.Location = new System.Drawing.Point(199, 35);
+            this.panel176.Location = new System.Drawing.Point(174, 35);
             this.panel176.Name = "panel176";
             this.panel176.Size = new System.Drawing.Size(155, 24);
             this.panel176.TabIndex = 318;
@@ -15220,7 +15297,7 @@
             this.panel78.BackgroundImage = global::SATSuma.Properties.Resources.titleBGLongerOrange;
             this.panel78.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel78.Controls.Add(this.label217);
-            this.panel78.Location = new System.Drawing.Point(199, 8);
+            this.panel78.Location = new System.Drawing.Point(174, 8);
             this.panel78.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel78.Name = "panel78";
             this.panel78.Size = new System.Drawing.Size(155, 23);
@@ -19391,7 +19468,7 @@
             // 
             this.lblAddressConfirmedUnspentOutputsUTXO.AutoSize = true;
             this.lblAddressConfirmedUnspentOutputsUTXO.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAddressConfirmedUnspentOutputsUTXO.Location = new System.Drawing.Point(0, 238);
+            this.lblAddressConfirmedUnspentOutputsUTXO.Location = new System.Drawing.Point(0, 207);
             this.lblAddressConfirmedUnspentOutputsUTXO.Name = "lblAddressConfirmedUnspentOutputsUTXO";
             this.lblAddressConfirmedUnspentOutputsUTXO.Size = new System.Drawing.Size(70, 17);
             this.lblAddressConfirmedUnspentOutputsUTXO.TabIndex = 135;
@@ -19403,7 +19480,7 @@
             // 
             this.lblAddressConfirmedSpentOutputsUTXO.AutoSize = true;
             this.lblAddressConfirmedSpentOutputsUTXO.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAddressConfirmedSpentOutputsUTXO.Location = new System.Drawing.Point(0, 445);
+            this.lblAddressConfirmedSpentOutputsUTXO.Location = new System.Drawing.Point(0, 414);
             this.lblAddressConfirmedSpentOutputsUTXO.Name = "lblAddressConfirmedSpentOutputsUTXO";
             this.lblAddressConfirmedSpentOutputsUTXO.Size = new System.Drawing.Size(70, 17);
             this.lblAddressConfirmedSpentOutputsUTXO.TabIndex = 134;
@@ -19416,7 +19493,7 @@
             this.lblAddressConfirmedUnspentUTXO.AutoSize = true;
             this.lblAddressConfirmedUnspentUTXO.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblAddressConfirmedUnspentUTXO.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAddressConfirmedUnspentUTXO.Location = new System.Drawing.Point(0, 355);
+            this.lblAddressConfirmedUnspentUTXO.Location = new System.Drawing.Point(0, 324);
             this.lblAddressConfirmedUnspentUTXO.Name = "lblAddressConfirmedUnspentUTXO";
             this.lblAddressConfirmedUnspentUTXO.Size = new System.Drawing.Size(15, 17);
             this.lblAddressConfirmedUnspentUTXO.TabIndex = 129;
@@ -19429,7 +19506,7 @@
             this.lblAddressConfirmedSpentUTXO.AutoSize = true;
             this.lblAddressConfirmedSpentUTXO.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblAddressConfirmedSpentUTXO.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAddressConfirmedSpentUTXO.Location = new System.Drawing.Point(0, 484);
+            this.lblAddressConfirmedSpentUTXO.Location = new System.Drawing.Point(0, 453);
             this.lblAddressConfirmedSpentUTXO.Name = "lblAddressConfirmedSpentUTXO";
             this.lblAddressConfirmedSpentUTXO.Size = new System.Drawing.Size(15, 17);
             this.lblAddressConfirmedSpentUTXO.TabIndex = 127;
@@ -19468,7 +19545,7 @@
             // 
             this.lblLargestUTXO.AutoSize = true;
             this.lblLargestUTXO.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblLargestUTXO.Location = new System.Drawing.Point(0, 277);
+            this.lblLargestUTXO.Location = new System.Drawing.Point(0, 246);
             this.lblLargestUTXO.Name = "lblLargestUTXO";
             this.lblLargestUTXO.Size = new System.Drawing.Size(70, 17);
             this.lblLargestUTXO.TabIndex = 286;
@@ -19480,7 +19557,7 @@
             // 
             this.lblSmallestUTXO.AutoSize = true;
             this.lblSmallestUTXO.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSmallestUTXO.Location = new System.Drawing.Point(0, 316);
+            this.lblSmallestUTXO.Location = new System.Drawing.Point(0, 285);
             this.lblSmallestUTXO.Name = "lblSmallestUTXO";
             this.lblSmallestUTXO.Size = new System.Drawing.Size(70, 17);
             this.lblSmallestUTXO.TabIndex = 288;
@@ -19574,33 +19651,42 @@
             // panelAddressUTXO
             // 
             this.panelAddressUTXO.BackColor = System.Drawing.Color.Transparent;
-            this.panelAddressUTXO.Controls.Add(this.panel136);
-            this.panelAddressUTXO.Controls.Add(this.panelUTXOError);
-            this.panelAddressUTXO.Controls.Add(this.label315);
-            this.panelAddressUTXO.Controls.Add(this.label313);
-            this.panelAddressUTXO.Controls.Add(this.panelAddressUTXOScrollContainer);
-            this.panelAddressUTXO.Controls.Add(this.btnViewAddressTXFromUTXO);
-            this.panelAddressUTXO.Controls.Add(this.label303);
-            this.panelAddressUTXO.Controls.Add(this.label308);
-            this.panelAddressUTXO.Controls.Add(this.lblSmallestUTXO);
-            this.panelAddressUTXO.Controls.Add(this.label230);
-            this.panelAddressUTXO.Controls.Add(this.lblLargestUTXO);
-            this.panelAddressUTXO.Controls.Add(this.panelUTXOsContainer);
-            this.panelAddressUTXO.Controls.Add(this.panel135);
-            this.panelAddressUTXO.Controls.Add(this.lblAddressConfirmedSpentUTXOFiat);
-            this.panelAddressUTXO.Controls.Add(this.lblAddressConfirmedUnspentUTXOFiat);
-            this.panelAddressUTXO.Controls.Add(this.panel141);
+            this.panelAddressUTXO.Controls.Add(this.panelAddressUTXOResults);
             this.panelAddressUTXO.Controls.Add(this.panel142);
-            this.panelAddressUTXO.Controls.Add(this.lblAddressUTXOPositionInList);
-            this.panelAddressUTXO.Controls.Add(this.lblAddressConfirmedUnspentOutputsUTXO);
-            this.panelAddressUTXO.Controls.Add(this.lblAddressConfirmedSpentOutputsUTXO);
-            this.panelAddressUTXO.Controls.Add(this.lblAddressConfirmedUnspentUTXO);
-            this.panelAddressUTXO.Controls.Add(this.lblAddressConfirmedSpentUTXO);
             this.panelAddressUTXO.Location = new System.Drawing.Point(162, 187);
             this.panelAddressUTXO.Name = "panelAddressUTXO";
             this.panelAddressUTXO.Size = new System.Drawing.Size(773, 556);
             this.panelAddressUTXO.TabIndex = 285;
             this.panelAddressUTXO.Visible = false;
+            // 
+            // panelAddressUTXOResults
+            // 
+            this.panelAddressUTXOResults.Controls.Add(this.panel136);
+            this.panelAddressUTXOResults.Controls.Add(this.panel135);
+            this.panelAddressUTXOResults.Controls.Add(this.lblAddressConfirmedSpentUTXO);
+            this.panelAddressUTXOResults.Controls.Add(this.panelUTXOError);
+            this.panelAddressUTXOResults.Controls.Add(this.lblAddressConfirmedUnspentUTXO);
+            this.panelAddressUTXOResults.Controls.Add(this.lblAddressConfirmedSpentOutputsUTXO);
+            this.panelAddressUTXOResults.Controls.Add(this.label315);
+            this.panelAddressUTXOResults.Controls.Add(this.lblAddressConfirmedUnspentOutputsUTXO);
+            this.panelAddressUTXOResults.Controls.Add(this.lblAddressUTXOPositionInList);
+            this.panelAddressUTXOResults.Controls.Add(this.label313);
+            this.panelAddressUTXOResults.Controls.Add(this.panel141);
+            this.panelAddressUTXOResults.Controls.Add(this.lblAddressConfirmedUnspentUTXOFiat);
+            this.panelAddressUTXOResults.Controls.Add(this.panelAddressUTXOScrollContainer);
+            this.panelAddressUTXOResults.Controls.Add(this.lblAddressConfirmedSpentUTXOFiat);
+            this.panelAddressUTXOResults.Controls.Add(this.panelUTXOsContainer);
+            this.panelAddressUTXOResults.Controls.Add(this.btnViewAddressTXFromUTXO);
+            this.panelAddressUTXOResults.Controls.Add(this.lblLargestUTXO);
+            this.panelAddressUTXOResults.Controls.Add(this.label230);
+            this.panelAddressUTXOResults.Controls.Add(this.label303);
+            this.panelAddressUTXOResults.Controls.Add(this.lblSmallestUTXO);
+            this.panelAddressUTXOResults.Controls.Add(this.label308);
+            this.panelAddressUTXOResults.Location = new System.Drawing.Point(0, 36);
+            this.panelAddressUTXOResults.Name = "panelAddressUTXOResults";
+            this.panelAddressUTXOResults.Size = new System.Drawing.Size(770, 515);
+            this.panelAddressUTXOResults.TabIndex = 149;
+            this.panelAddressUTXOResults.Visible = false;
             // 
             // panel136
             // 
@@ -19608,7 +19694,7 @@
             this.panel136.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel136.BackgroundImage")));
             this.panel136.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel136.Controls.Add(this.label309);
-            this.panel136.Location = new System.Drawing.Point(0, 403);
+            this.panel136.Location = new System.Drawing.Point(0, 372);
             this.panel136.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel136.Name = "panel136";
             this.panel136.Size = new System.Drawing.Size(189, 23);
@@ -19630,11 +19716,31 @@
             this.label309.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.label309.Visible = false;
             // 
+            // panel135
+            // 
+            this.panel135.Controls.Add(this.AddressQRCodePictureboxUTXO);
+            this.panel135.Controls.Add(this.lblAddressTypeUTXO);
+            this.panel135.Location = new System.Drawing.Point(0, 5);
+            this.panel135.Name = "panel135";
+            this.panel135.Size = new System.Drawing.Size(156, 153);
+            this.panel135.TabIndex = 282;
+            this.panel135.Visible = false;
+            // 
+            // AddressQRCodePictureboxUTXO
+            // 
+            this.AddressQRCodePictureboxUTXO.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.AddressQRCodePictureboxUTXO.Location = new System.Drawing.Point(18, 11);
+            this.AddressQRCodePictureboxUTXO.Name = "AddressQRCodePictureboxUTXO";
+            this.AddressQRCodePictureboxUTXO.Size = new System.Drawing.Size(120, 120);
+            this.AddressQRCodePictureboxUTXO.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.AddressQRCodePictureboxUTXO.TabIndex = 131;
+            this.AddressQRCodePictureboxUTXO.TabStop = false;
+            // 
             // panelUTXOError
             // 
             this.panelUTXOError.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
             this.panelUTXOError.Controls.Add(this.label317);
-            this.panelUTXOError.Location = new System.Drawing.Point(264, 258);
+            this.panelUTXOError.Location = new System.Drawing.Point(264, 227);
             this.panelUTXOError.Name = "panelUTXOError";
             this.panelUTXOError.Size = new System.Drawing.Size(403, 41);
             this.panelUTXOError.TabIndex = 296;
@@ -19658,12 +19764,26 @@
             this.label315.Font = new System.Drawing.Font("Century Gothic", 9F);
             this.label315.ForeColor = System.Drawing.Color.Silver;
             this.label315.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label315.Location = new System.Drawing.Point(0, 467);
+            this.label315.Location = new System.Drawing.Point(0, 436);
             this.label315.Name = "label315";
             this.label315.Size = new System.Drawing.Size(43, 17);
             this.label315.TabIndex = 295;
             this.label315.Text = "Value";
             this.label315.Visible = false;
+            // 
+            // lblAddressUTXOPositionInList
+            // 
+            this.lblAddressUTXOPositionInList.AutoSize = true;
+            this.lblAddressUTXOPositionInList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblAddressUTXOPositionInList.Font = new System.Drawing.Font("Century Gothic", 9F);
+            this.lblAddressUTXOPositionInList.ForeColor = System.Drawing.Color.Silver;
+            this.lblAddressUTXOPositionInList.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.lblAddressUTXOPositionInList.Location = new System.Drawing.Point(0, 190);
+            this.lblAddressUTXOPositionInList.Name = "lblAddressUTXOPositionInList";
+            this.lblAddressUTXOPositionInList.Size = new System.Drawing.Size(129, 17);
+            this.lblAddressUTXOPositionInList.TabIndex = 142;
+            this.lblAddressUTXOPositionInList.Text = "UTXO\'s currently held";
+            this.lblAddressUTXOPositionInList.Visible = false;
             // 
             // label313
             // 
@@ -19672,12 +19792,52 @@
             this.label313.Font = new System.Drawing.Font("Century Gothic", 9F);
             this.label313.ForeColor = System.Drawing.Color.Silver;
             this.label313.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label313.Location = new System.Drawing.Point(0, 428);
+            this.label313.Location = new System.Drawing.Point(0, 397);
             this.label313.Name = "label313";
             this.label313.Size = new System.Drawing.Size(83, 17);
             this.label313.TabIndex = 294;
             this.label313.Text = "Spent UTXO\'s";
             this.label313.Visible = false;
+            // 
+            // panel141
+            // 
+            this.panel141.BackColor = System.Drawing.Color.Transparent;
+            this.panel141.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel141.BackgroundImage")));
+            this.panel141.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel141.Controls.Add(this.label314);
+            this.panel141.Location = new System.Drawing.Point(0, 165);
+            this.panel141.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel141.Name = "panel141";
+            this.panel141.Size = new System.Drawing.Size(189, 23);
+            this.panel141.TabIndex = 208;
+            this.panel141.Visible = false;
+            // 
+            // label314
+            // 
+            this.label314.AutoSize = true;
+            this.label314.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label314.Font = new System.Drawing.Font("Century Gothic", 8F);
+            this.label314.ForeColor = System.Drawing.Color.Gray;
+            this.label314.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label314.Location = new System.Drawing.Point(5, 4);
+            this.label314.Name = "label314";
+            this.label314.Size = new System.Drawing.Size(160, 16);
+            this.label314.TabIndex = 130;
+            this.label314.Text = "Unspent transaction outputs";
+            this.label314.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label314.Visible = false;
+            // 
+            // lblAddressConfirmedUnspentUTXOFiat
+            // 
+            this.lblAddressConfirmedUnspentUTXOFiat.AutoSize = true;
+            this.lblAddressConfirmedUnspentUTXOFiat.Font = new System.Drawing.Font("Century Gothic", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAddressConfirmedUnspentUTXOFiat.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(83)))), ((int)(((byte)(0)))));
+            this.lblAddressConfirmedUnspentUTXOFiat.Location = new System.Drawing.Point(0, 341);
+            this.lblAddressConfirmedUnspentUTXOFiat.Name = "lblAddressConfirmedUnspentUTXOFiat";
+            this.lblAddressConfirmedUnspentUTXOFiat.Size = new System.Drawing.Size(50, 13);
+            this.lblAddressConfirmedUnspentUTXOFiat.TabIndex = 214;
+            this.lblAddressConfirmedUnspentUTXOFiat.Text = "(no data)";
+            this.lblAddressConfirmedUnspentUTXOFiat.Visible = false;
             // 
             // panelAddressUTXOScrollContainer
             // 
@@ -19685,7 +19845,7 @@
             this.panelAddressUTXOScrollContainer.Controls.Add(this.panelAddressUTXOScrollbarOuter);
             this.panelAddressUTXOScrollContainer.Controls.Add(this.btnAddressUTXOScrollDown);
             this.panelAddressUTXOScrollContainer.Controls.Add(this.btnAddressUTXOScrollUp);
-            this.panelAddressUTXOScrollContainer.Location = new System.Drawing.Point(737, 45);
+            this.panelAddressUTXOScrollContainer.Location = new System.Drawing.Point(737, 14);
             this.panelAddressUTXOScrollContainer.Name = "panelAddressUTXOScrollContainer";
             this.panelAddressUTXOScrollContainer.Size = new System.Drawing.Size(24, 490);
             this.panelAddressUTXOScrollContainer.TabIndex = 284;
@@ -19758,70 +19918,17 @@
             this.btnAddressUTXOScrollUp.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BtnAddressUTXOScrollUp_MouseDown);
             this.btnAddressUTXOScrollUp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnAddressUTXOScrollUp_MouseUp);
             // 
-            // btnViewAddressTXFromUTXO
+            // lblAddressConfirmedSpentUTXOFiat
             // 
-            this.btnViewAddressTXFromUTXO.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnViewAddressTXFromUTXO.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.btnViewAddressTXFromUTXO.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnViewAddressTXFromUTXO.BorderRadius = 7;
-            this.btnViewAddressTXFromUTXO.BorderSize = 0;
-            this.btnViewAddressTXFromUTXO.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.btnViewAddressTXFromUTXO.FlatAppearance.BorderSize = 0;
-            this.btnViewAddressTXFromUTXO.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnViewAddressTXFromUTXO.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnViewAddressTXFromUTXO.ForeColor = System.Drawing.Color.White;
-            this.btnViewAddressTXFromUTXO.Location = new System.Drawing.Point(0, 524);
-            this.btnViewAddressTXFromUTXO.Margin = new System.Windows.Forms.Padding(1);
-            this.btnViewAddressTXFromUTXO.Name = "btnViewAddressTXFromUTXO";
-            this.btnViewAddressTXFromUTXO.Size = new System.Drawing.Size(120, 22);
-            this.btnViewAddressTXFromUTXO.TabIndex = 291;
-            this.btnViewAddressTXFromUTXO.TabStop = false;
-            this.btnViewAddressTXFromUTXO.Text = "view transactions";
-            this.btnViewAddressTXFromUTXO.TextColor = System.Drawing.Color.White;
-            this.btnViewAddressTXFromUTXO.UseVisualStyleBackColor = false;
-            this.btnViewAddressTXFromUTXO.Click += new System.EventHandler(this.BtnViewAddressTXFromUTXO_Click);
-            // 
-            // label303
-            // 
-            this.label303.AutoSize = true;
-            this.label303.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label303.Font = new System.Drawing.Font("Century Gothic", 9F);
-            this.label303.ForeColor = System.Drawing.Color.Silver;
-            this.label303.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label303.Location = new System.Drawing.Point(0, 338);
-            this.label303.Name = "label303";
-            this.label303.Size = new System.Drawing.Size(43, 17);
-            this.label303.TabIndex = 290;
-            this.label303.Text = "Value";
-            this.label303.Visible = false;
-            // 
-            // label308
-            // 
-            this.label308.AutoSize = true;
-            this.label308.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label308.Font = new System.Drawing.Font("Century Gothic", 9F);
-            this.label308.ForeColor = System.Drawing.Color.Silver;
-            this.label308.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label308.Location = new System.Drawing.Point(0, 299);
-            this.label308.Name = "label308";
-            this.label308.Size = new System.Drawing.Size(91, 17);
-            this.label308.TabIndex = 289;
-            this.label308.Text = "Smallest UTXO";
-            this.label308.Visible = false;
-            // 
-            // label230
-            // 
-            this.label230.AutoSize = true;
-            this.label230.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label230.Font = new System.Drawing.Font("Century Gothic", 9F);
-            this.label230.ForeColor = System.Drawing.Color.Silver;
-            this.label230.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label230.Location = new System.Drawing.Point(0, 260);
-            this.label230.Name = "label230";
-            this.label230.Size = new System.Drawing.Size(85, 17);
-            this.label230.TabIndex = 287;
-            this.label230.Text = "Largest UTXO";
-            this.label230.Visible = false;
+            this.lblAddressConfirmedSpentUTXOFiat.AutoSize = true;
+            this.lblAddressConfirmedSpentUTXOFiat.Font = new System.Drawing.Font("Century Gothic", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAddressConfirmedSpentUTXOFiat.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(83)))), ((int)(((byte)(0)))));
+            this.lblAddressConfirmedSpentUTXOFiat.Location = new System.Drawing.Point(0, 467);
+            this.lblAddressConfirmedSpentUTXOFiat.Name = "lblAddressConfirmedSpentUTXOFiat";
+            this.lblAddressConfirmedSpentUTXOFiat.Size = new System.Drawing.Size(50, 13);
+            this.lblAddressConfirmedSpentUTXOFiat.TabIndex = 216;
+            this.lblAddressConfirmedSpentUTXOFiat.Text = "(no data)";
+            this.lblAddressConfirmedSpentUTXOFiat.Visible = false;
             // 
             // panelUTXOsContainer
             // 
@@ -19831,7 +19938,7 @@
             this.panelUTXOsContainer.Controls.Add(this.btnViewBlockFromAddressUTXO);
             this.panelUTXOsContainer.Controls.Add(this.btnViewTransactionFromAddressUTXO);
             this.panelUTXOsContainer.Controls.Add(this.panel143);
-            this.panelUTXOsContainer.Location = new System.Drawing.Point(214, 45);
+            this.panelUTXOsContainer.Location = new System.Drawing.Point(214, 14);
             this.panelUTXOsContainer.Name = "panelUTXOsContainer";
             this.panelUTXOsContainer.Size = new System.Drawing.Size(544, 490);
             this.panelUTXOsContainer.TabIndex = 283;
@@ -19887,77 +19994,70 @@
             this.panel143.TabIndex = 285;
             this.panel143.Visible = false;
             // 
-            // panel135
+            // btnViewAddressTXFromUTXO
             // 
-            this.panel135.Controls.Add(this.AddressQRCodePictureboxUTXO);
-            this.panel135.Controls.Add(this.lblAddressTypeUTXO);
-            this.panel135.Location = new System.Drawing.Point(0, 36);
-            this.panel135.Name = "panel135";
-            this.panel135.Size = new System.Drawing.Size(156, 153);
-            this.panel135.TabIndex = 282;
-            this.panel135.Visible = false;
+            this.btnViewAddressTXFromUTXO.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnViewAddressTXFromUTXO.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
+            this.btnViewAddressTXFromUTXO.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.btnViewAddressTXFromUTXO.BorderRadius = 7;
+            this.btnViewAddressTXFromUTXO.BorderSize = 0;
+            this.btnViewAddressTXFromUTXO.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.btnViewAddressTXFromUTXO.FlatAppearance.BorderSize = 0;
+            this.btnViewAddressTXFromUTXO.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnViewAddressTXFromUTXO.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnViewAddressTXFromUTXO.ForeColor = System.Drawing.Color.White;
+            this.btnViewAddressTXFromUTXO.Location = new System.Drawing.Point(0, 493);
+            this.btnViewAddressTXFromUTXO.Margin = new System.Windows.Forms.Padding(1);
+            this.btnViewAddressTXFromUTXO.Name = "btnViewAddressTXFromUTXO";
+            this.btnViewAddressTXFromUTXO.Size = new System.Drawing.Size(120, 22);
+            this.btnViewAddressTXFromUTXO.TabIndex = 291;
+            this.btnViewAddressTXFromUTXO.TabStop = false;
+            this.btnViewAddressTXFromUTXO.Text = "view transactions";
+            this.btnViewAddressTXFromUTXO.TextColor = System.Drawing.Color.White;
+            this.btnViewAddressTXFromUTXO.UseVisualStyleBackColor = false;
+            this.btnViewAddressTXFromUTXO.Click += new System.EventHandler(this.BtnViewAddressTXFromUTXO_Click);
             // 
-            // AddressQRCodePictureboxUTXO
+            // label230
             // 
-            this.AddressQRCodePictureboxUTXO.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.AddressQRCodePictureboxUTXO.Location = new System.Drawing.Point(18, 11);
-            this.AddressQRCodePictureboxUTXO.Name = "AddressQRCodePictureboxUTXO";
-            this.AddressQRCodePictureboxUTXO.Size = new System.Drawing.Size(120, 120);
-            this.AddressQRCodePictureboxUTXO.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.AddressQRCodePictureboxUTXO.TabIndex = 131;
-            this.AddressQRCodePictureboxUTXO.TabStop = false;
+            this.label230.AutoSize = true;
+            this.label230.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label230.Font = new System.Drawing.Font("Century Gothic", 9F);
+            this.label230.ForeColor = System.Drawing.Color.Silver;
+            this.label230.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label230.Location = new System.Drawing.Point(0, 229);
+            this.label230.Name = "label230";
+            this.label230.Size = new System.Drawing.Size(85, 17);
+            this.label230.TabIndex = 287;
+            this.label230.Text = "Largest UTXO";
+            this.label230.Visible = false;
             // 
-            // lblAddressConfirmedSpentUTXOFiat
+            // label303
             // 
-            this.lblAddressConfirmedSpentUTXOFiat.AutoSize = true;
-            this.lblAddressConfirmedSpentUTXOFiat.Font = new System.Drawing.Font("Century Gothic", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAddressConfirmedSpentUTXOFiat.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(83)))), ((int)(((byte)(0)))));
-            this.lblAddressConfirmedSpentUTXOFiat.Location = new System.Drawing.Point(0, 498);
-            this.lblAddressConfirmedSpentUTXOFiat.Name = "lblAddressConfirmedSpentUTXOFiat";
-            this.lblAddressConfirmedSpentUTXOFiat.Size = new System.Drawing.Size(50, 13);
-            this.lblAddressConfirmedSpentUTXOFiat.TabIndex = 216;
-            this.lblAddressConfirmedSpentUTXOFiat.Text = "(no data)";
-            this.lblAddressConfirmedSpentUTXOFiat.Visible = false;
+            this.label303.AutoSize = true;
+            this.label303.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label303.Font = new System.Drawing.Font("Century Gothic", 9F);
+            this.label303.ForeColor = System.Drawing.Color.Silver;
+            this.label303.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label303.Location = new System.Drawing.Point(0, 307);
+            this.label303.Name = "label303";
+            this.label303.Size = new System.Drawing.Size(43, 17);
+            this.label303.TabIndex = 290;
+            this.label303.Text = "Value";
+            this.label303.Visible = false;
             // 
-            // lblAddressConfirmedUnspentUTXOFiat
+            // label308
             // 
-            this.lblAddressConfirmedUnspentUTXOFiat.AutoSize = true;
-            this.lblAddressConfirmedUnspentUTXOFiat.Font = new System.Drawing.Font("Century Gothic", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAddressConfirmedUnspentUTXOFiat.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(185)))), ((int)(((byte)(83)))), ((int)(((byte)(0)))));
-            this.lblAddressConfirmedUnspentUTXOFiat.Location = new System.Drawing.Point(0, 372);
-            this.lblAddressConfirmedUnspentUTXOFiat.Name = "lblAddressConfirmedUnspentUTXOFiat";
-            this.lblAddressConfirmedUnspentUTXOFiat.Size = new System.Drawing.Size(50, 13);
-            this.lblAddressConfirmedUnspentUTXOFiat.TabIndex = 214;
-            this.lblAddressConfirmedUnspentUTXOFiat.Text = "(no data)";
-            this.lblAddressConfirmedUnspentUTXOFiat.Visible = false;
-            // 
-            // panel141
-            // 
-            this.panel141.BackColor = System.Drawing.Color.Transparent;
-            this.panel141.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel141.BackgroundImage")));
-            this.panel141.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel141.Controls.Add(this.label314);
-            this.panel141.Location = new System.Drawing.Point(0, 196);
-            this.panel141.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel141.Name = "panel141";
-            this.panel141.Size = new System.Drawing.Size(189, 23);
-            this.panel141.TabIndex = 208;
-            this.panel141.Visible = false;
-            // 
-            // label314
-            // 
-            this.label314.AutoSize = true;
-            this.label314.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label314.Font = new System.Drawing.Font("Century Gothic", 8F);
-            this.label314.ForeColor = System.Drawing.Color.Gray;
-            this.label314.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label314.Location = new System.Drawing.Point(5, 4);
-            this.label314.Name = "label314";
-            this.label314.Size = new System.Drawing.Size(160, 16);
-            this.label314.TabIndex = 130;
-            this.label314.Text = "Unspent transaction outputs";
-            this.label314.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label314.Visible = false;
+            this.label308.AutoSize = true;
+            this.label308.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label308.Font = new System.Drawing.Font("Century Gothic", 9F);
+            this.label308.ForeColor = System.Drawing.Color.Silver;
+            this.label308.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label308.Location = new System.Drawing.Point(0, 268);
+            this.label308.Name = "label308";
+            this.label308.Size = new System.Drawing.Size(91, 17);
+            this.label308.TabIndex = 289;
+            this.label308.Text = "Smallest UTXO";
+            this.label308.Visible = false;
             // 
             // panel142
             // 
@@ -20010,20 +20110,6 @@
             this.label316.Size = new System.Drawing.Size(98, 17);
             this.label316.TabIndex = 5;
             this.label316.Text = "Bitcoin address";
-            // 
-            // lblAddressUTXOPositionInList
-            // 
-            this.lblAddressUTXOPositionInList.AutoSize = true;
-            this.lblAddressUTXOPositionInList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblAddressUTXOPositionInList.Font = new System.Drawing.Font("Century Gothic", 9F);
-            this.lblAddressUTXOPositionInList.ForeColor = System.Drawing.Color.Silver;
-            this.lblAddressUTXOPositionInList.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.lblAddressUTXOPositionInList.Location = new System.Drawing.Point(0, 221);
-            this.lblAddressUTXOPositionInList.Name = "lblAddressUTXOPositionInList";
-            this.lblAddressUTXOPositionInList.Size = new System.Drawing.Size(129, 17);
-            this.lblAddressUTXOPositionInList.TabIndex = 142;
-            this.lblAddressUTXOPositionInList.Text = "UTXO\'s currently held";
-            this.lblAddressUTXOPositionInList.Visible = false;
             // 
             // UTXOsScrollTimer
             // 
@@ -21096,23 +21182,6 @@
             this.panelPriceSourceIndicatorsOuter.Size = new System.Drawing.Size(66, 13);
             this.panelPriceSourceIndicatorsOuter.TabIndex = 292;
             // 
-            // panelXpubScrollbarOuter
-            // 
-            this.panelXpubScrollbarOuter.BackColor = System.Drawing.Color.Transparent;
-            this.panelXpubScrollbarOuter.Controls.Add(this.panelXpubScrollbarInner);
-            this.panelXpubScrollbarOuter.Location = new System.Drawing.Point(4, 26);
-            this.panelXpubScrollbarOuter.Name = "panelXpubScrollbarOuter";
-            this.panelXpubScrollbarOuter.Size = new System.Drawing.Size(17, 412);
-            this.panelXpubScrollbarOuter.TabIndex = 352;
-            // 
-            // panelXpubScrollbarInner
-            // 
-            this.panelXpubScrollbarInner.BackColor = System.Drawing.Color.RosyBrown;
-            this.panelXpubScrollbarInner.Location = new System.Drawing.Point(3, 0);
-            this.panelXpubScrollbarInner.Name = "panelXpubScrollbarInner";
-            this.panelXpubScrollbarInner.Size = new System.Drawing.Size(11, 66);
-            this.panelXpubScrollbarInner.TabIndex = 0;
-            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(5F, 12F);
@@ -21121,26 +21190,26 @@
             this.BackgroundImage = global::SATSuma.Properties.Resources.Genesis;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
-            this.ClientSize = new System.Drawing.Size(940, 754);
-            this.Controls.Add(this.panelSettings);
-            this.Controls.Add(this.panelCharts);
-            this.Controls.Add(this.panelXpub);
-            this.Controls.Add(this.panelMiningBlocks);
+            this.ClientSize = new System.Drawing.Size(1940, 754);
             this.Controls.Add(this.panelAddressUTXO);
-            this.Controls.Add(this.panelBookmarks);
-            this.Controls.Add(this.panelTransaction);
-            this.Controls.Add(this.panelMiningPools);
-            this.Controls.Add(this.panelMiningHashrate);
-            this.Controls.Add(this.panelPriceSourceIndicatorsOuter);
-            this.Controls.Add(this.panelBlockList);
-            this.Controls.Add(this.panelChartsForPoolsScreen);
-            this.Controls.Add(this.panelBitcoinDashboard);
-            this.Controls.Add(this.panelPriceConverter);
             this.Controls.Add(this.panelAddress);
-            this.Controls.Add(this.panelBlock);
+            this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelAppearance);
+            this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelDirectory);
             this.Controls.Add(this.panelDCACalculator);
+            this.Controls.Add(this.panelPriceConverter);
+            this.Controls.Add(this.panelBookmarks);
+            this.Controls.Add(this.panelMiningHashrate);
+            this.Controls.Add(this.panelChartsForPoolsScreen);
+            this.Controls.Add(this.panelMiningBlocks);
+            this.Controls.Add(this.panelBlockList);
+            this.Controls.Add(this.panelXpub);
+            this.Controls.Add(this.panelBlock);
+            this.Controls.Add(this.panelTransaction);
+            this.Controls.Add(this.panelMiningPools);
+            this.Controls.Add(this.panelPriceSourceIndicatorsOuter);
+            this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.progressBarRefreshData);
             this.Controls.Add(this.lblHeaderPriceChange);
@@ -21242,21 +21311,22 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panelAddress.ResumeLayout(false);
-            this.panelAddress.PerformLayout();
+            this.panelAddressResults.ResumeLayout(false);
+            this.panelAddressResults.PerformLayout();
             this.panelOwnNodeAddressTXInfo.ResumeLayout(false);
-            this.panelAddressTxContainer.ResumeLayout(false);
-            this.panelAddressTxContainer.PerformLayout();
             this.panel132.ResumeLayout(false);
             this.panel132.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AddressQRCodePicturebox)).EndInit();
+            this.panelAddressTxContainer.ResumeLayout(false);
+            this.panelAddressTxContainer.PerformLayout();
+            this.panel41.ResumeLayout(false);
+            this.panel41.PerformLayout();
+            this.panel42.ResumeLayout(false);
+            this.panel42.PerformLayout();
             this.panel44.ResumeLayout(false);
             this.panel44.PerformLayout();
             this.panel43.ResumeLayout(false);
             this.panel43.PerformLayout();
-            this.panel42.ResumeLayout(false);
-            this.panel42.PerformLayout();
-            this.panel41.ResumeLayout(false);
-            this.panel41.PerformLayout();
             this.panel35.ResumeLayout(false);
             this.panel35.PerformLayout();
             this.panelSubmittedAddressContainer.ResumeLayout(false);
@@ -21294,6 +21364,7 @@
             this.panelTransactionMiddle.ResumeLayout(false);
             this.panelXpub.ResumeLayout(false);
             this.panelXpubScrollContainer.ResumeLayout(false);
+            this.panelXpubScrollbarOuter.ResumeLayout(false);
             this.panelXpubContainer.ResumeLayout(false);
             this.panelXpubResults.ResumeLayout(false);
             this.panelXpubResults.PerformLayout();
@@ -21450,6 +21521,9 @@
             this.panel69.ResumeLayout(false);
             this.panel69.PerformLayout();
             this.panelCharts.ResumeLayout(false);
+            this.panelCharts.PerformLayout();
+            this.panel24.ResumeLayout(false);
+            this.panel24.PerformLayout();
             this.panel139.ResumeLayout(false);
             this.panel139.PerformLayout();
             this.panelComboBoxChartSelectContainer.ResumeLayout(false);
@@ -21531,19 +21605,20 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDCAChartLoadingAnimation)).EndInit();
             this.panelDCAMessages.ResumeLayout(false);
             this.panelAddressUTXO.ResumeLayout(false);
-            this.panelAddressUTXO.PerformLayout();
+            this.panelAddressUTXOResults.ResumeLayout(false);
+            this.panelAddressUTXOResults.PerformLayout();
             this.panel136.ResumeLayout(false);
             this.panel136.PerformLayout();
+            this.panel135.ResumeLayout(false);
+            this.panel135.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.AddressQRCodePictureboxUTXO)).EndInit();
             this.panelUTXOError.ResumeLayout(false);
+            this.panel141.ResumeLayout(false);
+            this.panel141.PerformLayout();
             this.panelAddressUTXOScrollContainer.ResumeLayout(false);
             this.panelAddressUTXOScrollbarOuter.ResumeLayout(false);
             this.panelUTXOsContainer.ResumeLayout(false);
             this.panelUTXOsContainer.PerformLayout();
-            this.panel135.ResumeLayout(false);
-            this.panel135.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.AddressQRCodePictureboxUTXO)).EndInit();
-            this.panel141.ResumeLayout(false);
-            this.panel141.PerformLayout();
             this.panel142.ResumeLayout(false);
             this.panel142.PerformLayout();
             this.panelSubmittedAddressContainerUTXO.ResumeLayout(false);
@@ -21593,7 +21668,6 @@
             this.panel164.ResumeLayout(false);
             this.panel164.PerformLayout();
             this.panelPriceSourceIndicatorsOuter.ResumeLayout(false);
-            this.panelXpubScrollbarOuter.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -22919,6 +22993,11 @@
         private System.Windows.Forms.Panel panelPoolsBlocksScrollbarInner;
         private System.Windows.Forms.Panel panelXpubScrollbarOuter;
         private System.Windows.Forms.Panel panelXpubScrollbarInner;
+        private System.Windows.Forms.Label label337;
+        private System.Windows.Forms.Panel panel24;
+        private System.Windows.Forms.Label label336;
+        private System.Windows.Forms.Panel panelAddressResults;
+        private System.Windows.Forms.Panel panelAddressUTXOResults;
     }
 }
 

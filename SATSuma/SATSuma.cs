@@ -26,6 +26,10 @@
 . check tooltips everywhere
 . test all UIScales, particularly small)
 . test all new scrollbars. May need repainting at some point to avoid glitches
+. dca didn't recalculate - try to recreate and fix (maybe start date was before a market price existed?)
+. coinbase tx's not showing properly on tx screen anymore
+. put all 'results' in its own panel (as on address screen). Hide the panel first, show it last, refresh it in main navig
+. some listviews don't scroll up to the title bar when holding 'up'. Instead they then require a click on up. Tick events likely the issue
 ..........................................................................................................................................
 */
 
@@ -393,6 +397,8 @@ namespace SATSuma
         public SATSuma()
         {
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
+
+            
 
             #region check user data files exist and restore them from restore folder if they don't
             // files to be checked
@@ -2544,7 +2550,7 @@ namespace SATSuma
                         lblInvalidAddressIndicator.ForeColor = Color.OliveDrab;
                         lblInvalidAddressIndicator.Text = "✔️ valid address";
                     });
-                    AddressValidShowControls();
+                    
                     lblAddressType.Invoke((MethodInvoker)delegate
                     {
                         lblAddressType.Text = $"{addressType} address";
@@ -2579,6 +2585,7 @@ namespace SATSuma
                         return;
                     }
                     DisableEnableAddressButtons("enable"); // enable the buttons that were previously enabled again
+                    AddressValidShowControls();
                     ToggleLoadingAnimation("disable"); // stop the loading animation
                 }
                 else
@@ -3603,7 +3610,7 @@ namespace SATSuma
                     btnNextAddressTransactions.Enabled = true;
                     btnFirstAddressTransaction.Enabled = true;
                 }
-
+                
                 Control[] controlsToShow = { lblAddressTXPositionInList, label59, label61, label67, label63, listViewAddressTransactions, lblAddressConfirmedUnspent, lblAddressConfirmedUnspentOutputs, lblAddressConfirmedTransactionCount, lblAddressConfirmedReceived, lblAddressConfirmedReceivedOutputs, lblAddressConfirmedSpent, lblAddressConfirmedSpentOutputs,
                     btnShowAllTX, btnShowConfirmedTX, btnShowUnconfirmedTX, lblAddressType, panel41, panel42, panel43, panel44, panel132, listViewAddressTransactions, btnViewUTXOsFromAddressTX, btnFirstAddressTransaction, btnNextAddressTransactions, panelAddressTxContainer };
                 foreach (Control control in controlsToShow)
@@ -3613,7 +3620,8 @@ namespace SATSuma
                         control.Visible = true;
                     });
                 }
-
+                
+                
                 if (lblHeaderPrice.Text != "disabled")
                 {
                     lblAddressConfirmedReceivedFiat.Visible = true;
@@ -3634,6 +3642,11 @@ namespace SATSuma
                 listViewAddressTransactions.BringToFront();
 
                 panelOwnNodeAddressTXInfo.BringToFront();
+                panelAddressResults.Invoke((MethodInvoker)delegate
+                {
+                    panelAddressResults.Refresh();
+                    panelAddressResults.Visible = true;
+                });
             }
             catch (Exception ex)
             {
@@ -3646,6 +3659,12 @@ namespace SATSuma
         {
             try
             {
+                this.SuspendLayout();
+                panelAddressResults.Invoke((MethodInvoker)delegate
+                {
+                    panelAddressResults.Visible = false;
+                });
+                this.ResumeLayout(false);
                 if (lblAddressType.Visible)
                 {
                     Control[] controlsToHide = { btnNextAddressTransactions, btnFirstAddressTransaction, lblAddressTXPositionInList, label59, label61, label67, label63, listViewAddressTransactions, lblAddressConfirmedUnspent, lblAddressConfirmedUnspentOutputs, lblAddressConfirmedTransactionCount, lblAddressConfirmedReceived, lblAddressConfirmedReceivedOutputs, panelAddressTxContainer, 
@@ -3746,8 +3765,8 @@ namespace SATSuma
                         lblInvalidAddressIndicatorUTXO.ForeColor = Color.OliveDrab;
                         lblInvalidAddressIndicatorUTXO.Text = "✔️ valid address";
                     });
-
                     AddressValidShowControlsUTXO();
+
                     lblAddressTypeUTXO.Invoke((MethodInvoker)delegate
                     {
                         lblAddressTypeUTXO.Text = $"{addressType} address";
@@ -3781,6 +3800,7 @@ namespace SATSuma
                         return;
                     }
                     DisableEnableAddressUTXOButtons("enable"); // enable the buttons that were previously enabled again
+                    
                     ToggleLoadingAnimation("disable"); // stop the loading animation
                 }
                 else
@@ -4034,6 +4054,7 @@ namespace SATSuma
                         int distanceToBeScrolled = panelAddressUTXOScrollbarOuter.Height - panelAddressUTXOScrollbarInner.Height;
                         int numberOfRowsLeftToShow = listViewAddressUTXOs.Items.Count - 28;
                         addressUTXOScrollbarIncrement = Convert.ToInt32(distanceToBeScrolled / numberOfRowsLeftToShow);
+                        panelAddressUTXOScrollbarInner.Refresh();
                         #endregion
 
                         if (listViewAddressUTXOs.Items.Count > 29)
@@ -4338,8 +4359,14 @@ namespace SATSuma
             {
                 if (lblAddressTypeUTXO.Visible)
                 {
+                    this.SuspendLayout();
+                    panelAddressResults.Invoke((MethodInvoker)delegate
+                    {
+                        panelAddressUTXOResults.Visible = false;
+                    });
+                    this.ResumeLayout(false);
                     Control[] controlsToHide = { lblLargestUTXO, lblSmallestUTXO, label230, label308, panel143, panelAddressUTXOScrollContainer, lblAddressUTXOPositionInList, label314, panelUTXOsContainer, panel137, listViewAddressUTXOs, lblAddressConfirmedUnspentUTXO, lblAddressConfirmedUnspentOutputsUTXO,
-                        lblAddressConfirmedSpentUTXO, lblAddressConfirmedSpentOutputsUTXO, lblAddressTypeUTXO, panel135, panel141, btnViewAddressTXFromUTXO, label303, label313, label315, panel136, label309, lblAddressConfirmedSpentUTXOFiat, lblAddressConfirmedUnspentUTXOFiat, panelAddressTxContainer };
+                        lblAddressConfirmedSpentUTXO, lblAddressConfirmedSpentOutputsUTXO, lblAddressTypeUTXO, panel135, panel141, btnViewAddressTXFromUTXO, label303, label313, label315, panel136, label309, lblAddressConfirmedSpentUTXOFiat, lblAddressConfirmedUnspentUTXOFiat, panelUTXOError };
                     foreach (Control control in controlsToHide)
                     {
                         control.Invoke((MethodInvoker)delegate
@@ -4347,6 +4374,7 @@ namespace SATSuma
                             control.Visible = false;
                         });
                     }
+                    
                 }
             }
             catch (Exception ex)
@@ -4360,7 +4388,7 @@ namespace SATSuma
             try
             {
                 Control[] controlsToShow = { lblLargestUTXO, lblSmallestUTXO, label230, label308, panel143, panelAddressUTXOScrollContainer, lblAddressUTXOPositionInList, label314, panel137, panelUTXOsContainer, listViewAddressUTXOs, lblAddressConfirmedUnspentUTXO, lblAddressConfirmedUnspentOutputsUTXO, lblAddressConfirmedSpentUTXO, lblAddressConfirmedSpentOutputsUTXO,
-                     lblAddressTypeUTXO, panel135, panel141, btnViewAddressTXFromUTXO, label303, label313, label315, panel136, label309, panelAddressTxContainer  };
+                     lblAddressTypeUTXO, panel135, panel141, btnViewAddressTXFromUTXO, label303, label313, label315, panel136, label309 };
                 foreach (Control control in controlsToShow)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -4374,8 +4402,13 @@ namespace SATSuma
                     lblAddressConfirmedSpentUTXOFiat.Visible = true;
                     lblAddressConfirmedUnspentUTXOFiat.Visible = true;
                 }
-
-                listViewAddressUTXOs.BringToFront();
+                panelAddressUTXOResults.Invoke((MethodInvoker)delegate
+                {
+                    
+                    panelAddressUTXOResults.Refresh();
+                    panelAddressUTXOResults.Visible = true;
+                });
+                
             }
             catch (Exception ex)
             {
@@ -20757,7 +20790,7 @@ namespace SATSuma
                 }
                 // work out the position to place the loading form
                 Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y -= (int)(162 * UIScale);
+                panelScreenLocation.Y -= (int)(160 * UIScale);
                 panelScreenLocation.X -= (int)(13 * UIScale);
 
                 Form loadingScreen = new LoadingScreen(UIScale)
@@ -20776,8 +20809,28 @@ namespace SATSuma
                 {
                     btnMenuCreateTheme.BackgroundImage = Resources.marker;
                 });
-                HideAllScreens();
-                panelAppearance.Visible = true;
+                await HideAllScreens();
+                panelAppearance.Invoke((MethodInvoker)delegate
+                {
+                    panelAppearance.Visible = true;
+                });
+
+                Control[] controlsToRefresh = { panelAppearance, panel88, panel89, panel90, panel86, panel87, panel103, panel46, panel51, panel96, panel70, panel71, panel91 };
+                foreach (Control control in controlsToRefresh)
+                {
+                    if (control.InvokeRequired)
+                    {
+                        control.Invoke((MethodInvoker)delegate
+                        {
+                            control.Refresh();
+                        });
+                    }
+                    else
+                    {
+                        control.Refresh();
+                    }
+                }
+
                 #region close loading screen
                 //wait a moment to give time for screen to paint
                 await BriefPauseAsync(700).ConfigureAwait(true);
@@ -24383,7 +24436,7 @@ namespace SATSuma
                     });
                 }
                 //charts
-                Control[] listChartsLabelsToColor = { label262, label263, label264, label265, label266, label245, label241, label189, label256, label255, label254, label253, label252, label251, label250, label249, label247, label261, label260, label259, label258, label257, label277, label278, label279, label280, label267, label270, label269, label268, label273, label274, label275, label276 };
+                Control[] listChartsLabelsToColor = { label262, label263, label264, label265, label266, label245, label241, label189, label256, label255, label254, label253, label252, label251, label250, label249, label247, label261, label260, label259, label258, label257, label277, label278, label279, label280, label267, label270, label269, label268, label273, label274, label275, label276, label337 };
                 foreach (Control control in listChartsLabelsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24563,7 +24616,7 @@ namespace SATSuma
                     });
                 }
                 //charts
-                Control[] listChartsHeadingsToColor = { label217, label271, label272, label114 };
+                Control[] listChartsHeadingsToColor = { label217, label271, label272, label114, label336 };
                 foreach (Control control in listChartsHeadingsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -25252,7 +25305,7 @@ namespace SATSuma
                     });
                 }
                 //charts
-                Control[] listChartsHeadingsToColor = { panel78, panel139, panel49, panel50 };
+                Control[] listChartsHeadingsToColor = { panel78, panel139, panel49, panel50, panel24 };
                 foreach (Control control in listChartsHeadingsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -25409,7 +25462,7 @@ namespace SATSuma
                     });
                 }
                 //charts
-                Control[] listChartsHeadingsToColor = { panel78, panel49, panel50, panel139 };
+                Control[] listChartsHeadingsToColor = { panel78, panel49, panel50, panel139, panel24 };
                 foreach (Control control in listChartsHeadingsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -25550,7 +25603,7 @@ namespace SATSuma
                     });
                 }
                 //charts
-                Control[] listChartsHeadingsToColor = { panel78, panel49, panel50, panel139 };
+                Control[] listChartsHeadingsToColor = { panel78, panel49, panel50, panel139, panel24 };
                 foreach (Control control in listChartsHeadingsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -29353,17 +29406,55 @@ namespace SATSuma
             }
         }
 
-        private void HideAllScreens()
+        private async Task HideAllScreens()
         {
-            Control[] screensToHide = { panelBookmarks, panelBlockList, panelLightningDashboard, panelDirectory, panelCharts, panelAddress, panelBlock, panelTransaction, panelSettings, panelAppearance, panelXpub, panelDCACalculator, panelPriceConverter, panelBitcoinDashboard, panelAddressUTXO, panelMiningBlocks, panelMiningHashrate, panelMiningPools, panelChartsForPoolsScreen };
-            foreach (Control control in screensToHide)
-            {
-                control.Invoke((MethodInvoker)delegate
-                {
-                    control.Visible = false;
-                });
-            }
+            await HideScreens().ConfigureAwait(true);
+            
 
+        }
+
+        private async Task HideScreens()
+        {
+            Control[] screensToHide =
+            {
+                panelBookmarks,
+                panelBlockList,
+                panelLightningDashboard,
+                panelDirectory,
+                panelCharts,
+                panelAddress,
+                panelBlock,
+                panelTransaction,
+                panelSettings,
+                panelAppearance,
+                panelXpub,
+                panelDCACalculator,
+                panelPriceConverter,
+                panelBitcoinDashboard,
+                panelAddressUTXO,
+                panelMiningBlocks,
+                panelMiningHashrate,
+                panelMiningPools,
+                panelChartsForPoolsScreen
+            };
+
+            await Task.Run(() =>
+            {
+                foreach (Control control in screensToHide)
+                {
+                    if (control.InvokeRequired)
+                    {
+                        control.Invoke((MethodInvoker)delegate
+                        {
+                            control.Visible = false;
+                        });
+                    }
+                    else
+                    {
+                        control.Visible = false;
+                    }
+                }
+            });
         }
 
         private async void BtnMenuBitcoinDashboard_ClickAsync(object sender, EventArgs e)
@@ -29401,7 +29492,7 @@ namespace SATSuma
                     }
                     // work out the position to place the loading form
                     Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                    panelScreenLocation.Y -= (int)(162 * UIScale);
+                    panelScreenLocation.Y -= (int)(160 * UIScale);
                     panelScreenLocation.X -= (int)(13 * UIScale);
 
                     loadingScreen = new LoadingScreen(UIScale)
@@ -29418,8 +29509,12 @@ namespace SATSuma
                     await BriefPauseAsync(100).ConfigureAwait(true);
                     #endregion
                 }
-                HideAllScreens();
-                panelBitcoinDashboard.Visible = true;
+                await HideAllScreens();
+                panelBitcoinDashboard.Invoke((MethodInvoker)delegate
+                {
+                    panelBitcoinDashboard.Visible = true;
+                    panelBitcoinDashboard.Refresh();
+                });
                 if (!fullScreenLoadingScreenVisible && loadingScreen != null)
                 {
                     #region close loading screen
@@ -29480,7 +29575,7 @@ namespace SATSuma
 
                     // work out the position to place the loading form
                     Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                    panelScreenLocation.Y -= (int)(162 * UIScale);
+                    panelScreenLocation.Y -= (int)(160 * UIScale);
                     panelScreenLocation.X -= (int)(13 * UIScale);
 
                     loadingScreen = new LoadingScreen(UIScale)
@@ -29496,8 +29591,12 @@ namespace SATSuma
                     await BriefPauseAsync(100).ConfigureAwait(true);
                     #endregion
                 }
-                HideAllScreens();
-                panelLightningDashboard.Visible = true;
+                await HideAllScreens();
+                panelLightningDashboard.Invoke((MethodInvoker)delegate
+                {
+                    panelLightningDashboard.Visible = true;
+                    panelLightningDashboard.Refresh();
+                });
                 if (!fullScreenLoadingScreenVisible && loadingScreen != null)
                 {
                     #region close loading screen
@@ -29558,7 +29657,7 @@ namespace SATSuma
                     }
 
                     Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                    panelScreenLocation.Y -= (int)(162 * UIScale);
+                    panelScreenLocation.Y -= (int)(160 * UIScale);
                     panelScreenLocation.X -= (int)(13 * UIScale);
 
                     loadingScreen = new LoadingScreen(UIScale)
@@ -29574,8 +29673,12 @@ namespace SATSuma
                     await BriefPauseAsync(500).ConfigureAwait(true);
                     #endregion
                 }
-                HideAllScreens();
-                panelCharts.Visible = true;
+                await HideAllScreens();
+                panelCharts.Invoke((MethodInvoker)delegate
+                {
+                    panelCharts.Visible = true;
+                    panelCharts.Refresh();
+                });
                 if (!fullScreenLoadingScreenVisible && loadingScreen != null)
                 {
                     #region close loading screen
@@ -29634,7 +29737,7 @@ namespace SATSuma
                     }
                     // work out the position to place the loading form
                     Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                    panelScreenLocation.Y -= (int)(162 * UIScale);
+                    panelScreenLocation.Y -= (int)(160 * UIScale);
                     panelScreenLocation.X -= (int)(13 * UIScale);
 
                     loadingScreen = new LoadingScreen(UIScale)
@@ -29650,8 +29753,28 @@ namespace SATSuma
                     await BriefPauseAsync(100).ConfigureAwait(true);
                     #endregion
                 }
-                HideAllScreens();
-                panelAddress.Visible = true;
+                await HideAllScreens();
+                panelAddress.Invoke((MethodInvoker)delegate
+                {
+                    panelAddress.Visible = true;
+                });
+
+                Control[] controlsToRefresh = { panelAddress, panelAddressTxContainer, panel132, panelSubmittedAddressContainer, panelAddressResults };
+                foreach (Control control in controlsToRefresh)
+                {
+                    if (control.InvokeRequired)
+                    {
+                        control.Invoke((MethodInvoker)delegate
+                        {
+                            control.Refresh();
+                        });
+                    }
+                    else
+                    {
+                        control.Refresh();
+                    }
+                }
+
                 if (String.Compare(NodeURL, "https://mempool.space/api/") == 0 || String.Compare(NodeURL, "https://mempool.space/testnet/api/") == 0)
                 {
                     rowsReturnedByAddressTransactionsAPI = 25;
@@ -29723,7 +29846,7 @@ namespace SATSuma
                     }
                     // work out the position to place the loading form
                     Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                    panelScreenLocation.Y -= (int)(162 * UIScale);
+                    panelScreenLocation.Y -= (int)(160 * UIScale);
                     panelScreenLocation.X -= (int)(13 * UIScale);
 
                     loadingScreen = new LoadingScreen(UIScale)
@@ -29739,8 +29862,27 @@ namespace SATSuma
                     await BriefPauseAsync(100).ConfigureAwait(true);
                     #endregion
                 }
-                HideAllScreens();
-                panelAddressUTXO.Visible = true;
+                await HideAllScreens();
+                panelAddressUTXO.Invoke((MethodInvoker)delegate
+                {
+                    panelAddressUTXO.Visible = true;
+                });
+
+                Control[] controlsToRefresh = { panelAddressUTXO, panelSubmittedAddressContainerUTXO, panelAddressUTXOScrollContainer, panelUTXOsContainer, panel135, panelAddressUTXOScrollbarInner, panelAddressUTXOResults };
+                foreach (Control control in controlsToRefresh)
+                {
+                    if (control.InvokeRequired)
+                    {
+                        control.Invoke((MethodInvoker)delegate
+                        {
+                            control.Refresh();
+                        });
+                    }
+                    else
+                    {
+                        control.Refresh();
+                    }
+                }
 
                 if (textboxSubmittedAddressUTXO.Text == "" || textboxSubmittedAddress.Text == null)
                 {
@@ -29806,7 +29948,7 @@ namespace SATSuma
                     }
                     // work out the position to place the loading form
                     Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                    panelScreenLocation.Y -= (int)(162 * UIScale);
+                    panelScreenLocation.Y -= (int)(160 * UIScale);
                     panelScreenLocation.X -= (int)(13 * UIScale);
 
                     loadingScreen = new LoadingScreen(UIScale)
@@ -29822,7 +29964,7 @@ namespace SATSuma
                     await BriefPauseAsync(100).ConfigureAwait(true);
                     #endregion
                 }
-                HideAllScreens();
+                await HideAllScreens();
                 if (String.Compare(numericUpDownSubmittedBlockNumber.Text, "673298") == 0)
                 {
                     numericUpDownSubmittedBlockNumber.Invoke((MethodInvoker)delegate
@@ -29831,7 +29973,27 @@ namespace SATSuma
                     });
                     LookupBlockAsync(); // fetch all the block data automatically for the initial view. 
                 }
-                panelBlock.Visible = true;
+                panelBlock.Invoke((MethodInvoker)delegate
+                {
+                    panelBlock.Visible = true;
+                });
+
+                Control[] controlsToRefresh = { panelBlock, panel53, panel56, panel121, panel122 };
+                foreach (Control control in controlsToRefresh)
+                {
+                    if (control.InvokeRequired)
+                    {
+                        control.Invoke((MethodInvoker)delegate
+                        {
+                            control.Refresh();
+                        });
+                    }
+                    else
+                    {
+                        control.Refresh();
+                    }
+                }
+
                 if (String.Compare(NodeURL, "https://mempool.space/api/") == 0 || String.Compare(NodeURL, "https://mempool.space/testnet/api/") == 0)
                 {
                     rowsReturnedByBlockTransactionsAPI = 25;
@@ -29900,7 +30062,7 @@ namespace SATSuma
                         this.TopMost = false;
                     }
                     Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                    panelScreenLocation.Y -= (int)(162 * UIScale);
+                    panelScreenLocation.Y -= (int)(160 * UIScale);
                     panelScreenLocation.X -= (int)(13 * UIScale);
 
                     loadingScreen = new LoadingScreen(UIScale)
@@ -29916,8 +30078,28 @@ namespace SATSuma
                     await BriefPauseAsync(100).ConfigureAwait(true);
                     #endregion
                 }
-                HideAllScreens();
-                panelXpub.Visible = true;
+                await HideAllScreens();
+                panelXpub.Invoke((MethodInvoker)delegate
+                {
+                    panelXpub.Visible = true;
+                });
+
+                Control[] controlsToRefresh = { panelXpub, panel99, panel101, panelXpubContainer, panelXpubScrollbarInner, panelXpubResults, panelXpubScrollContainer };
+                foreach (Control control in controlsToRefresh)
+                {
+                    if (control.InvokeRequired)
+                    {
+                        control.Invoke((MethodInvoker)delegate
+                        {
+                            control.Refresh();
+                        });
+                    }
+                    else
+                    {
+                        control.Refresh();
+                    }
+                }
+
                 if (!fullScreenLoadingScreenVisible && loadingScreen != null)
                 {
                     #region close loading screen
@@ -29977,7 +30159,7 @@ namespace SATSuma
                     }
                     // work out the position to place the loading form
                     Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                    panelScreenLocation.Y -= (int)(162 * UIScale);
+                    panelScreenLocation.Y -= (int)(160 * UIScale);
                     panelScreenLocation.X -= (int)(13 * UIScale);
 
                     loadingScreen = new LoadingScreen(UIScale)
@@ -29993,7 +30175,7 @@ namespace SATSuma
                     await BriefPauseAsync(100).ConfigureAwait(true);
                     #endregion
                 }
-                HideAllScreens();
+                await HideAllScreens();
                 if (String.Compare(numericUpDownBlockHeightToStartListFrom.Text, "673298") == 0)
                 {
                     numericUpDownBlockHeightToStartListFrom.Invoke((MethodInvoker)delegate
@@ -30002,7 +30184,27 @@ namespace SATSuma
                     });
                     LookupBlockListAsync(); // fetch the first 15 blocks automatically for the initial view.
                 }
-                panelBlockList.Visible = true;
+                panelBlockList.Invoke((MethodInvoker)delegate
+                {
+                    panelBlockList.Visible = true;
+                });
+
+                Control[] controlsToRefresh = { panelBlockList, panel94, panel117, panel20 };
+                foreach (Control control in controlsToRefresh)
+                {
+                    if (control.InvokeRequired)
+                    {
+                        control.Invoke((MethodInvoker)delegate
+                        {
+                            control.Refresh();
+                        });
+                    }
+                    else
+                    {
+                        control.Refresh();
+                    }
+                }
+
                 CheckNetworkStatusAsync();
                 if (!fullScreenLoadingScreenVisible && loadingScreen != null)
                 {
@@ -30062,7 +30264,7 @@ namespace SATSuma
                     }
                     // work out the position to place the loading form
                     Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                    panelScreenLocation.Y -= (int)(162 * UIScale);
+                    panelScreenLocation.Y -= (int)(160 * UIScale);
                     panelScreenLocation.X -= (int)(13 * UIScale);
 
                     loadingScreen = new LoadingScreen(UIScale)
@@ -30078,12 +30280,34 @@ namespace SATSuma
                     await BriefPauseAsync(100).ConfigureAwait(true);
                     #endregion
                 }
-                HideAllScreens();
+                await HideAllScreens();
                 SetupPoolsByBlocksScreen();
 
-                panelMiningBlocks.Visible = true;
-                panelChartsForPoolsScreen.Visible = true;
-                panelChartsForPoolsScreen.BringToFront();
+                panelMiningBlocks.Invoke((MethodInvoker)delegate
+                {
+                    panelMiningBlocks.Visible = true;
+                });
+                panelChartsForPoolsScreen.Invoke((MethodInvoker)delegate
+                {
+                    panelChartsForPoolsScreen.Visible = true;
+                    panelChartsForPoolsScreen.BringToFront();
+                });
+
+                Control[] controlsToRefresh = { panelMiningBlocks, panelPoolsBlocksContainer, panelPoolsBlocksScrollContainer, panelPoolsBlocksScrollbarInner, panelChartsForPoolsScreen, panel80, panel153 };
+                foreach (Control control in controlsToRefresh)
+                {
+                    if (control.InvokeRequired)
+                    {
+                        control.Invoke((MethodInvoker)delegate
+                        {
+                            control.Refresh();
+                        });
+                    }
+                    else
+                    {
+                        control.Refresh();
+                    }
+                }
 
                 CheckNetworkStatusAsync();
                 if (!fullScreenLoadingScreenVisible && loadingScreen != null)
@@ -30143,7 +30367,7 @@ namespace SATSuma
                     }
                     // work out the position to place the loading form
                     Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                    panelScreenLocation.Y -= (int)(162 * UIScale);
+                    panelScreenLocation.Y -= (int)(160 * UIScale);
                     panelScreenLocation.X -= (int)(13 * UIScale);
 
                     loadingScreen = new LoadingScreen(UIScale)
@@ -30159,11 +30383,34 @@ namespace SATSuma
                     await BriefPauseAsync(100).ConfigureAwait(true);
                     #endregion
                 }
-                HideAllScreens();
+                await HideAllScreens();
                 SetupPoolsByHashrateScreen();
-                panelMiningHashrate.Visible = true;
-                panelChartsForPoolsScreen.Visible = true;
-                panelChartsForPoolsScreen.BringToFront();
+                panelMiningHashrate.Invoke((MethodInvoker)delegate
+                {
+                    panelMiningHashrate.Visible = true;
+                });
+                panelChartsForPoolsScreen.Invoke((MethodInvoker)delegate
+                {
+                    panelChartsForPoolsScreen.Visible = true;
+                    panelChartsForPoolsScreen.BringToFront();
+                });
+
+                Control[] controlsToRefresh = { panelMiningHashrate, panelPoolsHashrateContainer, panel147, panelChartsForPoolsScreen, panel80, panel153 };
+                foreach (Control control in controlsToRefresh)
+                {
+                    if (control.InvokeRequired)
+                    {
+                        control.Invoke((MethodInvoker)delegate
+                        {
+                            control.Refresh();
+                        });
+                    }
+                    else
+                    {
+                        control.Refresh();
+                    }
+                }
+
                 CheckNetworkStatusAsync();
                 if (!fullScreenLoadingScreenVisible && loadingScreen != null)
                 {
@@ -30222,7 +30469,7 @@ namespace SATSuma
                     }
                     // work out the position to place the loading form
                     Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                    panelScreenLocation.Y -= (int)(162 * UIScale);
+                    panelScreenLocation.Y -= (int)(160 * UIScale);
                     panelScreenLocation.X -= (int)(13 * UIScale);
 
                     loadingScreen = new LoadingScreen(UIScale)
@@ -30238,12 +30485,14 @@ namespace SATSuma
                     await BriefPauseAsync(100).ConfigureAwait(true);
                     #endregion
                 }
-                HideAllScreens();
+                await HideAllScreens();
                 panelMiningPools.Invoke((MethodInvoker)delegate
                 {
                     panelMiningPools.Visible = true;
+                    panelMiningPools.Refresh();
                     panelMiningPools.BringToFront();
                 });
+
                 SetupPoolScreen();
                 
                 
@@ -30306,7 +30555,7 @@ namespace SATSuma
                         this.TopMost = false;
                     }
                     Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                    panelScreenLocation.Y -= (int)(162 * UIScale);
+                    panelScreenLocation.Y -= (int)(160 * UIScale);
                     panelScreenLocation.X -= (int)(13 * UIScale);
 
                     loadingScreen = new LoadingScreen(UIScale)
@@ -30322,8 +30571,29 @@ namespace SATSuma
                     await BriefPauseAsync(100).ConfigureAwait(true);
                     #endregion
                 }
-                HideAllScreens();
-                panelTransaction.Visible = true;
+                await HideAllScreens();
+                
+                panelTransaction.Invoke((MethodInvoker)delegate
+                {
+                    panelTransaction.Visible = true;
+                });
+
+                Control[] controlsToRefresh = { panelTransaction, panelTransactionIDContainer, panelTXInScrollContainer, panelTXOutScrollContainer, panelTransactionMiddle, panelTransactionInputs, panelTransactionOutputs };
+                foreach (Control control in controlsToRefresh)
+                {
+                    if (control.InvokeRequired)
+                    {
+                        control.Invoke((MethodInvoker)delegate
+                        {
+                            control.Refresh();
+                        });
+                    }
+                    else
+                    {
+                        control.Refresh();
+                    }
+                }
+
                 if (!fullScreenLoadingScreenVisible && loadingScreen != null)
                 {
                     #region close loading screen
@@ -30337,6 +30607,8 @@ namespace SATSuma
                     }
                     #endregion
                 }
+                
+                
                 ResumeLayout();
                 ToggleLoadingAnimation("disable");
                 CheckNetworkStatusAsync();
@@ -30382,7 +30654,7 @@ namespace SATSuma
                         this.TopMost = false;
                     }
                     Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                    panelScreenLocation.Y -= (int)(162 * UIScale);
+                    panelScreenLocation.Y -= (int)(160 * UIScale);
                     panelScreenLocation.X -= (int)(13 * UIScale);
 
                     loadingScreen = new LoadingScreen(UIScale)
@@ -30398,10 +30670,30 @@ namespace SATSuma
                     await BriefPauseAsync(100).ConfigureAwait(true);
                     #endregion
                 }
-                HideAllScreens();
+                await HideAllScreens();
                 CheckNetworkStatusAsync();
                 SetupBookmarksScreen();
-                panelBookmarks.Visible = true;
+                panelBookmarks.Invoke((MethodInvoker)delegate
+                {
+                    panelBookmarks.Visible = true;
+                });
+
+                Control[] controlsToRefresh = { panelBookmarks, panel32, panelBookmarksScrollContainer, panelBookmarksContainer, panelBookmarksScrollbarInner };
+                foreach (Control control in controlsToRefresh)
+                {
+                    if (control.InvokeRequired)
+                    {
+                        control.Invoke((MethodInvoker)delegate
+                        {
+                            control.Refresh();
+                        });
+                    }
+                    else
+                    {
+                        control.Refresh();
+                    }
+                }
+
                 if (!fullScreenLoadingScreenVisible && loadingScreen != null)
                 {
                     #region close loading screen
@@ -30459,7 +30751,7 @@ namespace SATSuma
                     }
                     // work out the position to place the loading form
                     Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                    panelScreenLocation.Y -= (int)(162 * UIScale);
+                    panelScreenLocation.Y -= (int)(160 * UIScale);
                     panelScreenLocation.X -= (int)(13 * UIScale);
 
                     loadingScreen = new LoadingScreen(UIScale)
@@ -30475,10 +30767,30 @@ namespace SATSuma
                     await BriefPauseAsync(100).ConfigureAwait(true);
                     #endregion
                 }
-                HideAllScreens();
+                await HideAllScreens();
                 CheckNetworkStatusAsync();
                 PopulateConverterScreen();
-                panelPriceConverter.Visible = true;
+                panelPriceConverter.Invoke((MethodInvoker)delegate
+                {
+                    panelPriceConverter.Visible = true;
+                });
+
+                Control[] controlsToRefresh = { panelPriceConverter, panelPriceConvert, panel119 };
+                foreach (Control control in controlsToRefresh)
+                {
+                    if (control.InvokeRequired)
+                    {
+                        control.Invoke((MethodInvoker)delegate
+                        {
+                            control.Refresh();
+                        });
+                    }
+                    else
+                    {
+                        control.Refresh();
+                    }
+                }
+
                 if (!fullScreenLoadingScreenVisible && loadingScreen != null)
                 {
                     #region close loading screen
@@ -30536,7 +30848,7 @@ namespace SATSuma
                     }
                     // work out the position to place the loading form
                     Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                    panelScreenLocation.Y -= (int)(162 * UIScale);
+                    panelScreenLocation.Y -= (int)(160 * UIScale);
                     panelScreenLocation.X -= (int)(13 * UIScale);
 
                     loadingScreen = new LoadingScreen(UIScale)
@@ -30552,8 +30864,28 @@ namespace SATSuma
                     await BriefPauseAsync(500).ConfigureAwait(true);
                     #endregion
                 }
-                HideAllScreens();
-                panelDCACalculator.Visible = true;
+                await HideAllScreens();
+                panelDCACalculator.Invoke((MethodInvoker)delegate
+                {
+                    panelDCACalculator.Visible = true;
+                });
+
+                Control[] controlsToRefresh = { panelDCACalculator, panelDCAInputs, panelDCASummary, panelDCAChartContainer };
+                foreach (Control control in controlsToRefresh)
+                {
+                    if (control.InvokeRequired)
+                    {
+                        control.Invoke((MethodInvoker)delegate
+                        {
+                            control.Refresh();
+                        });
+                    }
+                    else
+                    {
+                        control.Refresh();
+                    }
+                }
+
                 if (!fullScreenLoadingScreenVisible && loadingScreen != null)
                 {
                     #region close loading screen
@@ -30613,7 +30945,7 @@ namespace SATSuma
                     }
                     // work out the position to place the loading form
                     Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                    panelScreenLocation.Y -= (int)(162 * UIScale);
+                    panelScreenLocation.Y -= (int)(160 * UIScale);
                     panelScreenLocation.X -= (int)(13 * UIScale);
 
                     loadingScreen = new LoadingScreen(UIScale)
@@ -30629,8 +30961,29 @@ namespace SATSuma
                     await BriefPauseAsync(100).ConfigureAwait(true);
                     #endregion
                 }
-                HideAllScreens();
-                panelDirectory.Visible = true;
+                await HideAllScreens();
+                panelDirectory.Invoke((MethodInvoker)delegate
+                {
+                    panelDirectory.Visible = true;
+                });
+
+                Control[] controlsToRefresh = { panelDirectory, panel16, panel18 };
+                foreach (Control control in controlsToRefresh)
+                {
+                    if (control.InvokeRequired)
+                    {
+                        control.Invoke((MethodInvoker)delegate
+                        {
+                            control.Refresh();
+                        });
+                    }
+                    else
+                    {
+                        control.Refresh();
+                    }
+                }
+
+
                 if (!fullScreenLoadingScreenVisible && loadingScreen != null)
                 {
                     #region close loading screen
@@ -30689,7 +31042,7 @@ namespace SATSuma
                     }
                     // work out the position to place the loading form
                     Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                    panelScreenLocation.Y -= (int)(162 * UIScale);
+                    panelScreenLocation.Y -= (int)(160 * UIScale);
                     panelScreenLocation.X -= (int)(13 * UIScale);
 
                     loadingScreen = new LoadingScreen(UIScale)
@@ -30705,8 +31058,28 @@ namespace SATSuma
                     await BriefPauseAsync(100).ConfigureAwait(true);
                     #endregion
                 }
-                HideAllScreens();
-                panelSettings.Visible = true;
+                await HideAllScreens();
+                panelSettings.Invoke((MethodInvoker)delegate
+                {
+                    panelSettings.Visible = true;
+                });
+
+                Control[] controlsToRefresh = { panelSettings, panel74, panel76, panel77, panel21, panel85, panel106, panelSettingsUIScale,  panel84, panel92 };
+                foreach (Control control in controlsToRefresh)
+                {
+                    if (control.InvokeRequired)
+                    {
+                        control.Invoke((MethodInvoker)delegate
+                        {
+                            control.Refresh();
+                        });
+                    }
+                    else
+                    {
+                        control.Refresh();
+                    }
+                }
+
                 if (!fullScreenLoadingScreenVisible && loadingScreen != null)
                 {
                     #region close loading screen
@@ -32039,6 +32412,7 @@ namespace SATSuma
         }
         #endregion
 
+        #region themes from file
         public static class ThemesManager
         {
             public static List<Theme> Themes { get; private set; }
@@ -32072,7 +32446,7 @@ namespace SATSuma
                 return themes;
             }
         }
-        
+        #endregion
 
         #region bookmark
         public class Bookmark

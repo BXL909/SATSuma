@@ -24,11 +24,9 @@
 . documentation for new pools screens (code done, just do online help)
 . testing, particularly new pools screens on own node
 . check tooltips everywhere
-. test all UIScales, particularly small)
-. test all new scrollbars. May need repainting at some point to avoid glitches
+. test all UIScales, particularly small
+. xpub scrollbar size/scroll amount not correct
 . dca didn't recalculate - try to recreate and fix (maybe start date was before a market price existed?)
-. coinbase tx's not showing properly on tx screen anymore
-. put all 'results' in its own panel (as on address screen). Hide the panel first, show it last, refresh it in main navig
 . some listviews don't scroll up to the title bar when holding 'up'. Instead they then require a click on up. Tick events likely the issue
 ..........................................................................................................................................
 */
@@ -506,6 +504,8 @@ namespace SATSuma
             #endregion
         }
 
+        bool fullScreenLoadingScreenVisible2;
+
         private void SATSuma_Load(object sender, EventArgs e)
         {
             try
@@ -741,7 +741,7 @@ namespace SATSuma
                 {
                     headerSelectedNodeStatusLight.ForeColor = Color.OliveDrab;
                 });
-                this.ResumeLayout();
+                this.ResumeLayout(false);
             }
             catch (Exception ex)
             {
@@ -769,7 +769,8 @@ namespace SATSuma
         UpdateBitcoinAndLightningDashboardsAsync()
         {
             ToggleLoadingAnimation("enable");
-
+            panelBitcoinDashboard.SuspendLayout();
+            panelLightningDashboard.SuspendLayout();
             using (WebClient client = new WebClient())
             {
                 bool errorOccurred = false;
@@ -1779,6 +1780,8 @@ namespace SATSuma
                     });
                 }
             }
+            panelLightningDashboard.ResumeLayout(false);
+            panelBitcoinDashboard.ResumeLayout(false);
             ToggleLoadingAnimation("disable");
         }
         #endregion
@@ -2528,10 +2531,12 @@ namespace SATSuma
         {
             try
             {
+                SuspendLayout();
                 BtnViewBlockFromAddress.Visible = false;
                 BtnViewTransactionFromAddress.Visible = false;
                 listViewAddressTransactions.Items.Clear(); // wipe any data in the transaction listview
                 TotalAddressTransactionRowsAdded = 0;
+                ResumeLayout(false);
 
                 string addressString = textboxSubmittedAddress.Text; // supplied address
 
@@ -2586,10 +2591,27 @@ namespace SATSuma
                     }
                     DisableEnableAddressButtons("enable"); // enable the buttons that were previously enabled again
                     AddressValidShowControls();
+                    
+                    Control[] controlsToRefresh = { panelAddress, panelAddressTxContainer, panel132, panelSubmittedAddressContainer, panelAddressResults };
+                    foreach (Control control in controlsToRefresh)
+                    {
+                        if (control.InvokeRequired)
+                        {
+                            control.Invoke((MethodInvoker)delegate
+                            {
+                                control.Refresh();
+                            });
+                        }
+                        else
+                        {
+                            control.Refresh();
+                        }
+                    }
                     ToggleLoadingAnimation("disable"); // stop the loading animation
                 }
                 else
                 {
+                    SuspendLayout();
                     if (addressString == "")
                     {
                         lblInvalidAddressIndicator.Invoke((MethodInvoker)delegate
@@ -2622,7 +2644,7 @@ namespace SATSuma
                             control.Text = string.Empty;
                         });
                     }
-
+                    ResumeLayout(false);
                     AddressInvalidHideControls();
                 }
             }
@@ -3600,6 +3622,7 @@ namespace SATSuma
         {
             try
             {
+                SuspendLayout();
                 if (String.Compare(addressScreenConfUnconfOrAllTx, "mempool") == 0) //only one page of unconfirmed tx regardless how many tx there are
                 {
                     btnNextAddressTransactions.Enabled = false;
@@ -3647,6 +3670,7 @@ namespace SATSuma
                     panelAddressResults.Refresh();
                     panelAddressResults.Visible = true;
                 });
+                ResumeLayout(false);
             }
             catch (Exception ex)
             {
@@ -3659,12 +3683,12 @@ namespace SATSuma
         {
             try
             {
-                this.SuspendLayout();
+                
                 panelAddressResults.Invoke((MethodInvoker)delegate
                 {
                     panelAddressResults.Visible = false;
                 });
-                this.ResumeLayout(false);
+                SuspendLayout();
                 if (lblAddressType.Visible)
                 {
                     Control[] controlsToHide = { btnNextAddressTransactions, btnFirstAddressTransaction, lblAddressTXPositionInList, label59, label61, label67, label63, listViewAddressTransactions, lblAddressConfirmedUnspent, lblAddressConfirmedUnspentOutputs, lblAddressConfirmedTransactionCount, lblAddressConfirmedReceived, lblAddressConfirmedReceivedOutputs, panelAddressTxContainer, 
@@ -3677,6 +3701,7 @@ namespace SATSuma
                         });
                     }
                 }
+                ResumeLayout(false);
             }
             catch (Exception ex)
             {
@@ -5530,7 +5555,11 @@ namespace SATSuma
                     }
                     else
                     {
-                        Control[] controlsToHide = { panelTransactionHeadline, panelTransactionDiagram, panelTXInScrollContainer, panelTXOutScrollContainer, panelTransactionOutputs, panelTransactionInputs, btnTransactionInputsUp, btnTransactionInputDown, btnTransactionOutputsUp, btnTransactionOutputsDown, listViewTransactionInputs, listViewTransactionOutputs, btnViewAddressFromTXInput, btnViewAddressFromTXOutput, label107, label102 };
+                        panelTransactionResults.Invoke((MethodInvoker)delegate
+                        {
+                            panelTransactionResults.Visible = false;
+                        });
+                        Control[] controlsToHide = { panelTransactionHeadline, panelTransactionDiagram, panelTXInScrollContainer, panelTXOutScrollContainer, panelTransactionOutputs, panelTransactionInputs, btnTransactionInputsUp, btnTransactionInputDown, btnTransactionOutputsUp, btnTransactionOutputsDown, listViewTransactionInputs, listViewTransactionOutputs, btnViewAddressFromTXInput, btnViewAddressFromTXOutput, label107, label102, panelTXInScrollContainer, panelTXOutScrollContainer, panelTXInScrollbarInner, panelTXOutScrollbarInner };
                         foreach (Control control in controlsToHide)
                         {
                             control.Invoke((MethodInvoker)delegate
@@ -5547,7 +5576,11 @@ namespace SATSuma
                 }
                 else
                 {
-                    Control[] controlsToHide = { panelTransactionHeadline, panelTransactionDiagram, panelTXInScrollContainer, panelTXOutScrollContainer, panelTransactionOutputs, panelTransactionInputs, btnTransactionInputsUp, btnTransactionInputDown, btnTransactionOutputsUp, btnTransactionOutputsDown, listViewTransactionInputs, listViewTransactionOutputs, btnViewAddressFromTXInput, btnViewAddressFromTXOutput, label107, label102 };
+                    panelTransactionResults.Invoke((MethodInvoker)delegate
+                    {
+                        panelTransactionResults.Visible = false;
+                    });
+                    Control[] controlsToHide = { panelTransactionHeadline, panelTransactionDiagram, panelTXInScrollContainer, panelTXOutScrollContainer, panelTransactionOutputs, panelTransactionInputs, btnTransactionInputsUp, btnTransactionInputDown, btnTransactionOutputsUp, btnTransactionOutputsDown, listViewTransactionInputs, listViewTransactionOutputs, btnViewAddressFromTXInput, btnViewAddressFromTXOutput, label107, label102, panelTXInScrollContainer, panelTXOutScrollContainer, panelTXInScrollbarInner, panelTXOutScrollbarInner };
                     foreach (Control control in controlsToHide)
                     {
                         control.Invoke((MethodInvoker)delegate
@@ -5619,6 +5652,8 @@ namespace SATSuma
         {
             try
             {
+                panelLeftPanel.SuspendLayout();
+                /*
                 #region display loading screen
                 bool wasOnTop = false;
                 if (this.TopMost == true)
@@ -5646,20 +5681,23 @@ namespace SATSuma
                 loadingTheme.Location = new Point(overlayX, overlayY);
                 loadingTheme.Show(this);
                 #endregion
-
+                */
                 string submittedTransactionID = textBoxTransactionID.Text;
                 await GetTransactionAsync(submittedTransactionID).ConfigureAwait(true);
 
                 //wait 2 secs 
-                await Wait2SecsAsync().ConfigureAwait(true);
+                //await Wait2SecsAsync().ConfigureAwait(true);
+                /*
                 //close the loading screen
                 loadingTheme.Close();
                 if (wasOnTop)
                 {
                     this.TopMost = true;
                 }
+                */
                 this.BringToFront();
                 this.Focus();
+                panelLeftPanel.ResumeLayout(false);
             }
             catch (Exception ex)
             {
@@ -5684,7 +5722,7 @@ namespace SATSuma
                     var transaction = JsonConvert.DeserializeObject<Transaction>(TransactionJson);
                     ToggleLoadingAnimation("disable"); // stop the loading animation
                     DisableEnableTransactionButtons("enable"); // enable buttons after operation is complete
-
+                    panelTransactionDiagram.SuspendLayout();
                     lblTransactionBlockHeight.Invoke((MethodInvoker)delegate
                     {
                         lblTransactionBlockHeight.Text = Convert.ToString(transaction.Status.Block_height);
@@ -5956,6 +5994,8 @@ namespace SATSuma
                         YOutputsPos += YOutputsStep;
                     }
 
+                    panelTransactionDiagram.ResumeLayout(false);
+
                     // Inputs listview
                     listViewTransactionInputs.Invoke((MethodInvoker)delegate
                     {
@@ -6140,28 +6180,51 @@ namespace SATSuma
                     {
                         listViewTransactionOutputs.Items[0].Selected = true;
                     }
-                    // Trigger a repaint of the form
-                    this.Invalidate();
+
+                    
+
+                    Control[] controlsToShow = { panelTransactionHeadline, panelTransactionDiagram, panelTXInScrollContainer, panelTXOutScrollContainer, panelTransactionOutputs, panelTransactionInputs, btnTransactionInputsUp, btnTransactionInputDown, btnTransactionOutputsUp, btnTransactionOutputsDown, listViewTransactionInputs, listViewTransactionOutputs, btnViewAddressFromTXOutput, label107, label102, panelTXInScrollContainer, panelTXOutScrollContainer, panelTXInScrollbarInner, panelTXOutScrollbarInner };
+                    foreach (Control control in controlsToShow)
+                    {
+                        control.Invoke((MethodInvoker)delegate
+                        {
+                            control.Visible = true;
+                        });
+                    }
+                    panelTransactionResults.Invoke((MethodInvoker)delegate
+                    {
+                        panelTransactionResults.Visible = true;
+                    });
+
+                    Control[] controlsToRefresh = { panelTransaction, panelTransactionIDContainer, panelTXInScrollContainer, panelTXOutScrollContainer, panelTransactionMiddle, panelTransactionInputs, panelTransactionOutputs, panelTransactionResults };
+                    foreach (Control control in controlsToRefresh)
+                    {
+                        if (control.InvokeRequired)
+                        {
+                            control.Invoke((MethodInvoker)delegate
+                            {
+                                control.Refresh();
+                            });
+                        }
+                        else
+                        {
+                            control.Refresh();
+                        }
+                    }
                 }
                 else
                 {
                     ToggleLoadingAnimation("disable"); // stop the loading animation
                     DisableEnableTransactionButtons("enable"); // enable buttons after operation is complete
                 }
+
             }
             catch (Exception ex)
             {
                 HandleException(ex, "GetTransaction");
             }
 
-            Control[] controlsToShow = { panelTransactionHeadline, panelTransactionDiagram, panelTXInScrollContainer, panelTXOutScrollContainer, panelTransactionOutputs, panelTransactionInputs, btnTransactionInputsUp, btnTransactionInputDown, btnTransactionOutputsUp, btnTransactionOutputsDown, listViewTransactionInputs, listViewTransactionOutputs, btnViewAddressFromTXOutput, label107, label102 };
-            foreach (Control control in controlsToShow)
-            {
-                control.Invoke((MethodInvoker)delegate
-                {
-                    control.Visible = true;
-                });
-            }
+
         }
         #endregion
         #region listview appearance
@@ -7919,6 +7982,11 @@ namespace SATSuma
             {
                 xpubScanComplete = false;
                 xpubValid = false;
+                SuspendLayout();
+                panelXpubAllResults.Invoke((MethodInvoker)delegate
+                {
+                    panelXpubAllResults.Visible = false;
+                });
                 panelXpubResults.Invoke((MethodInvoker)delegate
                 {
                     panelXpubResults.Visible = false;
@@ -7958,6 +8026,7 @@ namespace SATSuma
                 lblXpubConfirmedReceivedFiat.Text = $"{lblHeaderPrice.Text[0]}0.00";
                 lblXpubConfirmedSpentFiat.Text = $"{lblHeaderPrice.Text[0]}0.00";
                 lblXpubConfirmedUnspentFiat.Text = $"{lblHeaderPrice.Text[0]}0.00";
+                ResumeLayout(false);
                 if (textBoxSubmittedXpub.Text == "")
                 {
                     lblValidXpubIndicator.Invoke((MethodInvoker)delegate
@@ -8512,6 +8581,7 @@ namespace SATSuma
                 progressBarCheckEachAddressType.Maximum = MaxNumberOfConsecutiveUnusedAddresses + 1;
                 progressBarCheckAllAddressTypes.Maximum = (MaxNumberOfConsecutiveUnusedAddresses + 1) * 4 * NumberOfDerivationPathsToCheck;
 
+                SuspendLayout();
                 btnViewAddressFromXpub.Invoke((MethodInvoker)delegate
                 {
                     btnViewAddressFromXpub.Visible = false;
@@ -8530,6 +8600,27 @@ namespace SATSuma
                 {
                     panelXpubScrollContainer.BringToFront();
                 });
+                panelXpubAllResults.Invoke((MethodInvoker)delegate
+                {
+                    panelXpubAllResults.Visible = true;
+                });
+
+                Control[] controlsToRefresh = { panelXpub, panel99, panel101, panelXpubContainer, panelXpubScrollbarInner, panelXpubResults, panelXpubScrollContainer, panelXpubAllResults };
+                foreach (Control control in controlsToRefresh)
+                {
+                    if (control.InvokeRequired)
+                    {
+                        control.Invoke((MethodInvoker)delegate
+                        {
+                            control.Refresh();
+                        });
+                    }
+                    else
+                    {
+                        control.Refresh();
+                    }
+                }
+                ResumeLayout(false);
 
                 string submittedXpub = Convert.ToString(textBoxSubmittedXpub.Text);
                 #region set up the listview
@@ -9588,7 +9679,7 @@ namespace SATSuma
                 decimal displayRatio = Convert.ToDecimal(panelXpubScrollContainer.Height) / Convert.ToDecimal(listViewXpubAddresses.Height);
                 panelXpubScrollbarInner.Height = (int)(panelXpubScrollbarOuter.Height * displayRatio);
                 int distanceToBeScrolled = panelXpubScrollbarOuter.Height - panelXpubScrollbarInner.Height;
-                int numberOfRowsLeftToShow = listViewXpubAddresses.Items.Count - 25;
+                int numberOfRowsLeftToShow = listViewXpubAddresses.Items.Count - 23;
                 xpubScrollbarIncrement = Convert.ToInt32(distanceToBeScrolled / numberOfRowsLeftToShow);
                 #endregion
 
@@ -20771,6 +20862,36 @@ namespace SATSuma
         {
             try
             {
+                #region display loading screen
+                bool wasOnTop = false;
+                Form loadingScreen = null;
+                if (!fullScreenLoadingScreenVisible)
+                {
+                    if (this.TopMost == true)
+                    {
+                        wasOnTop = true;
+                        this.TopMost = false;
+                    }
+
+                    // work out the position to place the loading form
+                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                    panelScreenLocation.Y -= (int)(160 * UIScale);
+                    panelScreenLocation.X -= (int)(13 * UIScale);
+
+                    loadingScreen = new LoadingScreen(UIScale)
+                    {
+                        Owner = this,
+                        StartPosition = FormStartPosition.Manual, // Set the start position manually
+                        FormBorderStyle = FormBorderStyle.None,
+                        BackColor = panel84.BackColor, // Set the background color to match panel colours
+                        Opacity = 1, // Set the opacity to 100%
+                        Location = panelScreenLocation // Set the location of the loadingScreen form
+                    };
+                    loadingScreen.Show(this);
+                    await BriefPauseAsync(100).ConfigureAwait(true);
+                }
+                #endregion
+                await HideAllScreens();
                 lblMenuArrow.Visible = false;
                 CloseThemeMenu();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -20781,35 +20902,10 @@ namespace SATSuma
                 btnMenuCreateTheme.Enabled = false;
                 ToggleLoadingAnimation("enable");
                 SuspendLayout();
-                #region display loading screen
-                bool wasOnTop = false;
-                if (this.TopMost == true)
-                {
-                    wasOnTop = true;
-                    this.TopMost = false;
-                }
-                // work out the position to place the loading form
-                Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                panelScreenLocation.Y -= (int)(160 * UIScale);
-                panelScreenLocation.X -= (int)(13 * UIScale);
-
-                Form loadingScreen = new LoadingScreen(UIScale)
-                {
-                    Owner = this,
-                    StartPosition = FormStartPosition.Manual, // Set the start position manually
-                    FormBorderStyle = FormBorderStyle.None,
-                    BackColor = panel84.BackColor, // Set the background color to match panel colours
-                    Opacity = 1, // Set the opacity to 100%
-                    Location = panelScreenLocation // Set the location of the loadingScreen form
-                };
-                loadingScreen.Show(this);
-                await BriefPauseAsync(100).ConfigureAwait(true);
-                #endregion
                 btnMenuCreateTheme.Invoke((MethodInvoker)delegate
                 {
                     btnMenuCreateTheme.BackgroundImage = Resources.marker;
                 });
-                await HideAllScreens();
                 panelAppearance.Invoke((MethodInvoker)delegate
                 {
                     panelAppearance.Visible = true;
@@ -20841,7 +20937,7 @@ namespace SATSuma
                 {
                     this.TopMost = true;
                 }
-                ResumeLayout();
+                ResumeLayout(false);
                 ToggleLoadingAnimation("disable");
                 CheckNetworkStatusAsync();
             }
@@ -22960,14 +23056,9 @@ namespace SATSuma
         {
             try
             {
+
                 #region display loading screen
                 bool wasOnTop = false;
-                if (this.TopMost == true)
-                {
-                    wasOnTop = true;
-                    this.TopMost = false;
-                }
-                fullScreenLoadingScreenVisible = true;
                 Form loadingTheme = new LoadingTheme(UIScale)
                 {
                     Owner = this,
@@ -22976,16 +23067,27 @@ namespace SATSuma
                     BackColor = panel84.BackColor, // Set the background color to match panel colours
                     Opacity = 1,
                 };
-                loadingTheme.StartPosition = FormStartPosition.CenterParent;
 
-                // Calculate the overlay form's location to place it in the center of the parent form
-                loadingTheme.StartPosition = FormStartPosition.Manual;
-                int parentCenterX = this.Location.X + this.Width / 2;
-                int parentCenterY = this.Location.Y + this.Height / 2;
-                int overlayX = parentCenterX - loadingTheme.Width / 2;
-                int overlayY = parentCenterY - loadingTheme.Height / 2;
-                loadingTheme.Location = new Point(overlayX, overlayY);
-                loadingTheme.Show(this);
+                if (this.TopMost == true)
+                {
+                    wasOnTop = true;
+                    this.TopMost = false;
+                }
+                if (!fullScreenLoadingScreenVisible)
+                {
+                    fullScreenLoadingScreenVisible = true;
+
+                    loadingTheme.StartPosition = FormStartPosition.CenterParent;
+
+                    // Calculate the overlay form's location to place it in the center of the parent form
+                    loadingTheme.StartPosition = FormStartPosition.Manual;
+                    int parentCenterX = this.Location.X + this.Width / 2;
+                    int parentCenterY = this.Location.Y + this.Height / 2;
+                    int overlayX = parentCenterX - loadingTheme.Width / 2;
+                    int overlayY = parentCenterY - loadingTheme.Height / 2;
+                    loadingTheme.Location = new Point(overlayX, overlayY);
+                    loadingTheme.Show(this);
+                }
                 #endregion 
 
                 await BriefPauseAsync(100).ConfigureAwait(true); // this small pause gives time for the loading screen to appear before items are re-themed (the loading screen hides flicker that occurs when themes are applied)
@@ -23453,9 +23555,9 @@ namespace SATSuma
                 {
                     HandleException(ex, "RestoreTheme");
                 }
-
                 //wait 2 secs to give time for theme to be applied
                 await Wait2SecsAsync().ConfigureAwait(true);
+
                 //close the loading screen
                 loadingTheme.Close();
                 fullScreenLoadingScreenVisible = false;
@@ -28159,7 +28261,6 @@ namespace SATSuma
                         HandleException(ex, "RefreshScreens");
                     }
                 }
-
                 await UpdateBitcoinAndLightningDashboardsAsync().ConfigureAwait(true); // fetch data and populate fields for dashboards (+ a few for block list screen)
 
                 if (!testNet)
@@ -29461,30 +29562,11 @@ namespace SATSuma
         {
             try
             {
-                CloseCurrencyMenu();
-                CloseThemeMenu();
-                lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
-                {
-                    lblMenuHighlightedButtonText.Visible = true;
-                    lblMenuHighlightedButtonText.Text = "₿ dashboard";
-                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuBitcoinDashboard.Location.Y);
-                });
-                lblMenuArrow.Invoke((MethodInvoker)delegate
-                {
-                    lblMenuArrow.Height = (int)(18 * UIScale);
-                    lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuBitcoinDashboard.Location.Y);
-                    lblMenuArrow.Visible = true;
-                });
-                EnableAllMenuButtons();
-                btnMenuBitcoinDashboard.Enabled = false;
-                ToggleLoadingAnimation("enable");
-                SuspendLayout();
+                #region display loading screen
                 Form loadingScreen = null;
                 bool wasOnTop = false;
                 if (!fullScreenLoadingScreenVisible)
                 {
-                    #region display loading screen
-
                     if (this.TopMost == true)
                     {
                         wasOnTop = true;
@@ -29507,9 +29589,28 @@ namespace SATSuma
 
                     loadingScreen.Show(this);
                     await BriefPauseAsync(100).ConfigureAwait(true);
-                    #endregion
                 }
+                #endregion
                 await HideAllScreens();
+                CloseCurrencyMenu();
+                CloseThemeMenu();
+                lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
+                {
+                    lblMenuHighlightedButtonText.Visible = true;
+                    lblMenuHighlightedButtonText.Text = "₿ dashboard";
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuBitcoinDashboard.Location.Y);
+                });
+                lblMenuArrow.Invoke((MethodInvoker)delegate
+                {
+                    lblMenuArrow.Height = (int)(18 * UIScale);
+                    lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuBitcoinDashboard.Location.Y);
+                    lblMenuArrow.Visible = true;
+                });
+                EnableAllMenuButtons();
+                btnMenuBitcoinDashboard.Enabled = false;
+                ToggleLoadingAnimation("enable");
+                SuspendLayout();
+
                 panelBitcoinDashboard.Invoke((MethodInvoker)delegate
                 {
                     panelBitcoinDashboard.Visible = true;
@@ -29529,7 +29630,7 @@ namespace SATSuma
                     #endregion
                 }
 
-                ResumeLayout();
+                ResumeLayout(false);
                 ToggleLoadingAnimation("disable");
                 CheckNetworkStatusAsync();
             }
@@ -29543,30 +29644,11 @@ namespace SATSuma
         {
             try
             {
-                CloseCurrencyMenu();
-                CloseThemeMenu();
-                lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
-                {
-                    lblMenuHighlightedButtonText.Visible = true;
-                    lblMenuHighlightedButtonText.Text = "⚡dashboard";
-                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuLightningDashboard.Location.Y);
-                });
-                lblMenuArrow.Invoke((MethodInvoker)delegate
-                {
-                    lblMenuArrow.Height = (int)(18 * UIScale);
-                    lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuLightningDashboard.Location.Y);
-                    lblMenuArrow.Visible = true;
-                });
-                EnableAllMenuButtons();
-                btnMenuLightningDashboard.Enabled = false;
-                ToggleLoadingAnimation("enable");
-                SuspendLayout();
+                #region display loading screen
                 bool wasOnTop = false;
                 Form loadingScreen = null;
                 if (!fullScreenLoadingScreenVisible)
                 {
-                    #region display loading screen
-
                     if (this.TopMost == true)
                     {
                         wasOnTop = true;
@@ -29589,9 +29671,28 @@ namespace SATSuma
                     };
                     loadingScreen.Show(this);
                     await BriefPauseAsync(100).ConfigureAwait(true);
-                    #endregion
                 }
+                #endregion
                 await HideAllScreens();
+
+                CloseCurrencyMenu();
+                CloseThemeMenu();
+                lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
+                {
+                    lblMenuHighlightedButtonText.Visible = true;
+                    lblMenuHighlightedButtonText.Text = "⚡dashboard";
+                    lblMenuHighlightedButtonText.Location = new Point(lblMenuHighlightedButtonText.Location.X, btnMenuLightningDashboard.Location.Y);
+                });
+                lblMenuArrow.Invoke((MethodInvoker)delegate
+                {
+                    lblMenuArrow.Height = (int)(18 * UIScale);
+                    lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuLightningDashboard.Location.Y);
+                    lblMenuArrow.Visible = true;
+                });
+                EnableAllMenuButtons();
+                btnMenuLightningDashboard.Enabled = false;
+                ToggleLoadingAnimation("enable");
+                SuspendLayout();
                 panelLightningDashboard.Invoke((MethodInvoker)delegate
                 {
                     panelLightningDashboard.Visible = true;
@@ -29611,7 +29712,7 @@ namespace SATSuma
                     }
                     #endregion
                 }
-                ResumeLayout();
+                ResumeLayout(false);
                 ToggleLoadingAnimation("disable");
                 CheckNetworkStatusAsync();
             }
@@ -29625,6 +29726,36 @@ namespace SATSuma
         {
             try
             {
+                #region display loading screen
+                bool wasOnTop = false;
+                Form loadingScreen = null;
+                if (!fullScreenLoadingScreenVisible)
+                {
+                    if (this.TopMost == true)
+                    {
+                        wasOnTop = true;
+                        this.TopMost = false;
+                    }
+
+                    // work out the position to place the loading form
+                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                    panelScreenLocation.Y -= (int)(160 * UIScale);
+                    panelScreenLocation.X -= (int)(13 * UIScale);
+
+                    loadingScreen = new LoadingScreen(UIScale)
+                    {
+                        Owner = this,
+                        StartPosition = FormStartPosition.Manual, // Set the start position manually
+                        FormBorderStyle = FormBorderStyle.None,
+                        BackColor = panel84.BackColor, // Set the background color to match panel colours
+                        Opacity = 1, // Set the opacity to 100%
+                        Location = panelScreenLocation // Set the location of the loadingScreen form
+                    };
+                    loadingScreen.Show(this);
+                    await BriefPauseAsync(100).ConfigureAwait(true);
+                }
+                #endregion
+                await HideAllScreens();
                 CloseCurrencyMenu();
                 CloseThemeMenu();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -29643,37 +29774,6 @@ namespace SATSuma
                 btnMenuCharts.Enabled = false;
                 ToggleLoadingAnimation("enable");
                 SuspendLayout();
-                Form loadingScreen = null;
-                bool wasOnTop = false;
-                if (!fullScreenLoadingScreenVisible)
-                {
-                    #region display loading screen
-                    // work out the position to place the loading form
-
-                    if (this.TopMost == true)
-                    {
-                        wasOnTop = true;
-                        this.TopMost = false;
-                    }
-
-                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                    panelScreenLocation.Y -= (int)(160 * UIScale);
-                    panelScreenLocation.X -= (int)(13 * UIScale);
-
-                    loadingScreen = new LoadingScreen(UIScale)
-                    {
-                        Owner = this,
-                        StartPosition = FormStartPosition.Manual, // Set the start position manually
-                        FormBorderStyle = FormBorderStyle.None,
-                        BackColor = panel84.BackColor, // Set the background color to match panel colours
-                        Opacity = 1, // Set the opacity to 100%
-                        Location = panelScreenLocation // Set the location of the loadingScreen form
-                    };
-                    loadingScreen.Show(this);
-                    await BriefPauseAsync(500).ConfigureAwait(true);
-                    #endregion
-                }
-                await HideAllScreens();
                 panelCharts.Invoke((MethodInvoker)delegate
                 {
                     panelCharts.Visible = true;
@@ -29692,7 +29792,7 @@ namespace SATSuma
                     }
                     #endregion
                 }
-                ResumeLayout();
+                ResumeLayout(false);
                 ToggleLoadingAnimation("disable");
                 CheckNetworkStatusAsync();
             }
@@ -29706,6 +29806,36 @@ namespace SATSuma
         {
             try
             {
+                #region display loading screen
+                bool wasOnTop = false;
+                Form loadingScreen = null;
+                if (!fullScreenLoadingScreenVisible)
+                {
+                    if (this.TopMost == true)
+                    {
+                        wasOnTop = true;
+                        this.TopMost = false;
+                    }
+
+                    // work out the position to place the loading form
+                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                    panelScreenLocation.Y -= (int)(160 * UIScale);
+                    panelScreenLocation.X -= (int)(13 * UIScale);
+
+                    loadingScreen = new LoadingScreen(UIScale)
+                    {
+                        Owner = this,
+                        StartPosition = FormStartPosition.Manual, // Set the start position manually
+                        FormBorderStyle = FormBorderStyle.None,
+                        BackColor = panel84.BackColor, // Set the background color to match panel colours
+                        Opacity = 1, // Set the opacity to 100%
+                        Location = panelScreenLocation // Set the location of the loadingScreen form
+                    };
+                    loadingScreen.Show(this);
+                    await BriefPauseAsync(100).ConfigureAwait(true);
+                }
+                #endregion
+                await HideAllScreens();
                 CloseCurrencyMenu();
                 CloseThemeMenu();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -29724,36 +29854,6 @@ namespace SATSuma
                 btnMenuAddress.Enabled = false;
                 ToggleLoadingAnimation("enable");
                 SuspendLayout();
-                Form loadingScreen = null;
-                bool wasOnTop = false;
-                if (!fullScreenLoadingScreenVisible)
-                {
-                    #region display loading screen
-
-                    if (this.TopMost == true)
-                    {
-                        wasOnTop = true;
-                        this.TopMost = false;
-                    }
-                    // work out the position to place the loading form
-                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                    panelScreenLocation.Y -= (int)(160 * UIScale);
-                    panelScreenLocation.X -= (int)(13 * UIScale);
-
-                    loadingScreen = new LoadingScreen(UIScale)
-                    {
-                        Owner = this,
-                        StartPosition = FormStartPosition.Manual, // Set the start position manually
-                        FormBorderStyle = FormBorderStyle.None,
-                        BackColor = panel84.BackColor, // Set the background color to match panel colours
-                        Opacity = 1, // Set the opacity to 100%
-                        Location = panelScreenLocation // Set the location of the loadingScreen form
-                    };
-                    loadingScreen.Show(this);
-                    await BriefPauseAsync(100).ConfigureAwait(true);
-                    #endregion
-                }
-                await HideAllScreens();
                 panelAddress.Invoke((MethodInvoker)delegate
                 {
                     panelAddress.Visible = true;
@@ -29801,7 +29901,7 @@ namespace SATSuma
                     }
                     #endregion
                 }
-                ResumeLayout();
+                ResumeLayout(false);
                 ToggleLoadingAnimation("disable");
                 CheckNetworkStatusAsync();
             }
@@ -29815,6 +29915,36 @@ namespace SATSuma
         {
             try
             {
+                #region display loading screen
+                bool wasOnTop = false;
+                Form loadingScreen = null;
+                if (!fullScreenLoadingScreenVisible)
+                {
+                    if (this.TopMost == true)
+                    {
+                        wasOnTop = true;
+                        this.TopMost = false;
+                    }
+
+                    // work out the position to place the loading form
+                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                    panelScreenLocation.Y -= (int)(160 * UIScale);
+                    panelScreenLocation.X -= (int)(13 * UIScale);
+
+                    loadingScreen = new LoadingScreen(UIScale)
+                    {
+                        Owner = this,
+                        StartPosition = FormStartPosition.Manual, // Set the start position manually
+                        FormBorderStyle = FormBorderStyle.None,
+                        BackColor = panel84.BackColor, // Set the background color to match panel colours
+                        Opacity = 1, // Set the opacity to 100%
+                        Location = panelScreenLocation // Set the location of the loadingScreen form
+                    };
+                    loadingScreen.Show(this);
+                    await BriefPauseAsync(100).ConfigureAwait(true);
+                }
+                #endregion
+                await HideAllScreens();
                 CloseCurrencyMenu();
                 CloseThemeMenu();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -29833,36 +29963,6 @@ namespace SATSuma
                 btnMenuAddressUTXO.Enabled = false;
                 ToggleLoadingAnimation("enable");
                 SuspendLayout();
-                Form loadingScreen = null;
-                bool wasOnTop = false;
-                if (!fullScreenLoadingScreenVisible)
-                {
-                    #region display loading screen
-
-                    if (this.TopMost == true)
-                    {
-                        wasOnTop = true;
-                        this.TopMost = false;
-                    }
-                    // work out the position to place the loading form
-                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                    panelScreenLocation.Y -= (int)(160 * UIScale);
-                    panelScreenLocation.X -= (int)(13 * UIScale);
-
-                    loadingScreen = new LoadingScreen(UIScale)
-                    {
-                        Owner = this,
-                        StartPosition = FormStartPosition.Manual, // Set the start position manually
-                        FormBorderStyle = FormBorderStyle.None,
-                        BackColor = panel84.BackColor, // Set the background color to match panel colours
-                        Opacity = 1, // Set the opacity to 100%
-                        Location = panelScreenLocation // Set the location of the loadingScreen form
-                    };
-                    loadingScreen.Show(this);
-                    await BriefPauseAsync(100).ConfigureAwait(true);
-                    #endregion
-                }
-                await HideAllScreens();
                 panelAddressUTXO.Invoke((MethodInvoker)delegate
                 {
                     panelAddressUTXO.Visible = true;
@@ -29902,7 +30002,7 @@ namespace SATSuma
                     }
                     #endregion
                 }
-                ResumeLayout();
+                ResumeLayout(false);
 
                 ToggleLoadingAnimation("disable");
                 CheckNetworkStatusAsync();
@@ -29917,6 +30017,36 @@ namespace SATSuma
         {
             try
             {
+                #region display loading screen
+                bool wasOnTop = false;
+                Form loadingScreen = null;
+                if (!fullScreenLoadingScreenVisible)
+                {
+                    if (this.TopMost == true)
+                    {
+                        wasOnTop = true;
+                        this.TopMost = false;
+                    }
+
+                    // work out the position to place the loading form
+                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                    panelScreenLocation.Y -= (int)(160 * UIScale);
+                    panelScreenLocation.X -= (int)(13 * UIScale);
+
+                    loadingScreen = new LoadingScreen(UIScale)
+                    {
+                        Owner = this,
+                        StartPosition = FormStartPosition.Manual, // Set the start position manually
+                        FormBorderStyle = FormBorderStyle.None,
+                        BackColor = panel84.BackColor, // Set the background color to match panel colours
+                        Opacity = 1, // Set the opacity to 100%
+                        Location = panelScreenLocation // Set the location of the loadingScreen form
+                    };
+                    loadingScreen.Show(this);
+                    await BriefPauseAsync(100).ConfigureAwait(true);
+                }
+                #endregion
+                await HideAllScreens();
                 CloseCurrencyMenu();
                 CloseThemeMenu();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -29935,36 +30065,6 @@ namespace SATSuma
                 btnMenuBlock.Enabled = false;
                 ToggleLoadingAnimation("enable");
                 SuspendLayout();
-                Form loadingScreen = null;
-                bool wasOnTop = false;
-                if (!fullScreenLoadingScreenVisible)
-                {
-                    #region display loading screen
-
-                    if (this.TopMost == true)
-                    {
-                        wasOnTop = true;
-                        this.TopMost = false;
-                    }
-                    // work out the position to place the loading form
-                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                    panelScreenLocation.Y -= (int)(160 * UIScale);
-                    panelScreenLocation.X -= (int)(13 * UIScale);
-
-                    loadingScreen = new LoadingScreen(UIScale)
-                    {
-                        Owner = this,
-                        StartPosition = FormStartPosition.Manual, // Set the start position manually
-                        FormBorderStyle = FormBorderStyle.None,
-                        BackColor = panel84.BackColor, // Set the background color to match panel colours
-                        Opacity = 1, // Set the opacity to 100%
-                        Location = panelScreenLocation // Set the location of the loadingScreen form
-                    };
-                    loadingScreen.Show(this);
-                    await BriefPauseAsync(100).ConfigureAwait(true);
-                    #endregion
-                }
-                await HideAllScreens();
                 if (String.Compare(numericUpDownSubmittedBlockNumber.Text, "673298") == 0)
                 {
                     numericUpDownSubmittedBlockNumber.Invoke((MethodInvoker)delegate
@@ -30004,7 +30104,7 @@ namespace SATSuma
                     rowsReturnedByBlockTransactionsAPI = 10;
                     panelOwnNodeBlockTXInfo.Visible = true;
                 }
-                ResumeLayout();
+                ResumeLayout(false);
                 CheckNetworkStatusAsync();
                 if (!fullScreenLoadingScreenVisible && loadingScreen != null)
                 {
@@ -30031,6 +30131,36 @@ namespace SATSuma
         {
             try
             {
+                #region display loading screen
+                bool wasOnTop = false;
+                Form loadingScreen = null;
+                if (!fullScreenLoadingScreenVisible)
+                {
+                    if (this.TopMost == true)
+                    {
+                        wasOnTop = true;
+                        this.TopMost = false;
+                    }
+
+                    // work out the position to place the loading form
+                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                    panelScreenLocation.Y -= (int)(160 * UIScale);
+                    panelScreenLocation.X -= (int)(13 * UIScale);
+
+                    loadingScreen = new LoadingScreen(UIScale)
+                    {
+                        Owner = this,
+                        StartPosition = FormStartPosition.Manual, // Set the start position manually
+                        FormBorderStyle = FormBorderStyle.None,
+                        BackColor = panel84.BackColor, // Set the background color to match panel colours
+                        Opacity = 1, // Set the opacity to 100%
+                        Location = panelScreenLocation // Set the location of the loadingScreen form
+                    };
+                    loadingScreen.Show(this);
+                    await BriefPauseAsync(100).ConfigureAwait(true);
+                }
+                #endregion
+                await HideAllScreens();
                 CloseCurrencyMenu();
                 CloseThemeMenu();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -30049,42 +30179,12 @@ namespace SATSuma
                 btnMenuXpub.Enabled = false;
                 ToggleLoadingAnimation("enable");
                 SuspendLayout();
-                Form loadingScreen = null;
-                bool wasOnTop = false;
-                if (!fullScreenLoadingScreenVisible)
-                {
-                    #region display loading screen
-                    // work out the position to place the loading form
-
-                    if (this.TopMost == true)
-                    {
-                        wasOnTop = true;
-                        this.TopMost = false;
-                    }
-                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                    panelScreenLocation.Y -= (int)(160 * UIScale);
-                    panelScreenLocation.X -= (int)(13 * UIScale);
-
-                    loadingScreen = new LoadingScreen(UIScale)
-                    {
-                        Owner = this,
-                        StartPosition = FormStartPosition.Manual, // Set the start position manually
-                        FormBorderStyle = FormBorderStyle.None,
-                        BackColor = panel84.BackColor, // Set the background color to match panel colours
-                        Opacity = 1, // Set the opacity to 100%
-                        Location = panelScreenLocation // Set the location of the loadingScreen form
-                    };
-                    loadingScreen.Show(this);
-                    await BriefPauseAsync(100).ConfigureAwait(true);
-                    #endregion
-                }
-                await HideAllScreens();
                 panelXpub.Invoke((MethodInvoker)delegate
                 {
                     panelXpub.Visible = true;
                 });
 
-                Control[] controlsToRefresh = { panelXpub, panel99, panel101, panelXpubContainer, panelXpubScrollbarInner, panelXpubResults, panelXpubScrollContainer };
+                Control[] controlsToRefresh = { panelXpub, panel99, panel101, panelXpubContainer, panelXpubScrollbarInner, panelXpubResults, panelXpubScrollContainer, panelXpubAllResults };
                 foreach (Control control in controlsToRefresh)
                 {
                     if (control.InvokeRequired)
@@ -30113,7 +30213,7 @@ namespace SATSuma
                     }
                     #endregion
                 }
-                ResumeLayout();
+                ResumeLayout(false);
                 ToggleLoadingAnimation("disable");
                 CheckNetworkStatusAsync();
             }
@@ -30127,6 +30227,36 @@ namespace SATSuma
         {
             try
             {
+                #region display loading screen
+                bool wasOnTop = false;
+                Form loadingScreen = null;
+                if (!fullScreenLoadingScreenVisible)
+                {
+                    if (this.TopMost == true)
+                    {
+                        wasOnTop = true;
+                        this.TopMost = false;
+                    }
+
+                    // work out the position to place the loading form
+                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                    panelScreenLocation.Y -= (int)(160 * UIScale);
+                    panelScreenLocation.X -= (int)(13 * UIScale);
+
+                    loadingScreen = new LoadingScreen(UIScale)
+                    {
+                        Owner = this,
+                        StartPosition = FormStartPosition.Manual, // Set the start position manually
+                        FormBorderStyle = FormBorderStyle.None,
+                        BackColor = panel84.BackColor, // Set the background color to match panel colours
+                        Opacity = 1, // Set the opacity to 100%
+                        Location = panelScreenLocation // Set the location of the loadingScreen form
+                    };
+                    loadingScreen.Show(this);
+                    await BriefPauseAsync(100).ConfigureAwait(true);
+                }
+                #endregion
+                await HideAllScreens();
                 CloseCurrencyMenu();
                 CloseThemeMenu();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -30146,36 +30276,6 @@ namespace SATSuma
                 btnMenuBlockList.Enabled = false;
                 ToggleLoadingAnimation("enable");
                 SuspendLayout();
-                Form loadingScreen = null;
-                bool wasOnTop = false;
-                if (!fullScreenLoadingScreenVisible)
-                {
-                    #region display loading screen
-
-                    if (this.TopMost == true)
-                    {
-                        wasOnTop = true;
-                        this.TopMost = false;
-                    }
-                    // work out the position to place the loading form
-                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                    panelScreenLocation.Y -= (int)(160 * UIScale);
-                    panelScreenLocation.X -= (int)(13 * UIScale);
-
-                    loadingScreen = new LoadingScreen(UIScale)
-                    {
-                        Owner = this,
-                        StartPosition = FormStartPosition.Manual, // Set the start position manually
-                        FormBorderStyle = FormBorderStyle.None,
-                        BackColor = panel84.BackColor, // Set the background color to match panel colours
-                        Opacity = 1, // Set the opacity to 100%
-                        Location = panelScreenLocation // Set the location of the loadingScreen form
-                    };
-                    loadingScreen.Show(this);
-                    await BriefPauseAsync(100).ConfigureAwait(true);
-                    #endregion
-                }
-                await HideAllScreens();
                 if (String.Compare(numericUpDownBlockHeightToStartListFrom.Text, "673298") == 0)
                 {
                     numericUpDownBlockHeightToStartListFrom.Invoke((MethodInvoker)delegate
@@ -30219,7 +30319,7 @@ namespace SATSuma
                     }
                     #endregion
                 }
-                ResumeLayout();
+                ResumeLayout(false);
                 ToggleLoadingAnimation("disable");
             }
             catch (Exception ex)
@@ -30232,6 +30332,36 @@ namespace SATSuma
         {
             try
             {
+                #region display loading screen
+                bool wasOnTop = false;
+                Form loadingScreen = null;
+                if (!fullScreenLoadingScreenVisible)
+                {
+                    if (this.TopMost == true)
+                    {
+                        wasOnTop = true;
+                        this.TopMost = false;
+                    }
+
+                    // work out the position to place the loading form
+                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                    panelScreenLocation.Y -= (int)(160 * UIScale);
+                    panelScreenLocation.X -= (int)(13 * UIScale);
+
+                    loadingScreen = new LoadingScreen(UIScale)
+                    {
+                        Owner = this,
+                        StartPosition = FormStartPosition.Manual, // Set the start position manually
+                        FormBorderStyle = FormBorderStyle.None,
+                        BackColor = panel84.BackColor, // Set the background color to match panel colours
+                        Opacity = 1, // Set the opacity to 100%
+                        Location = panelScreenLocation // Set the location of the loadingScreen form
+                    };
+                    loadingScreen.Show(this);
+                    await BriefPauseAsync(100).ConfigureAwait(true);
+                }
+                #endregion
+                await HideAllScreens();
                 CloseCurrencyMenu();
                 CloseThemeMenu();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -30251,36 +30381,6 @@ namespace SATSuma
                 ToggleLoadingAnimation("enable");
                 SuspendLayout();
 
-                Form loadingScreen = null;
-                bool wasOnTop = false;
-                if (!fullScreenLoadingScreenVisible)
-                {
-                    #region display loading screen
-
-                    if (this.TopMost == true)
-                    {
-                        wasOnTop = true;
-                        this.TopMost = false;
-                    }
-                    // work out the position to place the loading form
-                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                    panelScreenLocation.Y -= (int)(160 * UIScale);
-                    panelScreenLocation.X -= (int)(13 * UIScale);
-
-                    loadingScreen = new LoadingScreen(UIScale)
-                    {
-                        Owner = this,
-                        StartPosition = FormStartPosition.Manual, // Set the start position manually
-                        FormBorderStyle = FormBorderStyle.None,
-                        BackColor = panel84.BackColor, // Set the background color to match panel colours
-                        Opacity = 1, // Set the opacity to 100%
-                        Location = panelScreenLocation // Set the location of the loadingScreen form
-                    };
-                    loadingScreen.Show(this);
-                    await BriefPauseAsync(100).ConfigureAwait(true);
-                    #endregion
-                }
-                await HideAllScreens();
                 SetupPoolsByBlocksScreen();
 
                 panelMiningBlocks.Invoke((MethodInvoker)delegate
@@ -30323,7 +30423,7 @@ namespace SATSuma
                     }
                     #endregion
                 }
-                ResumeLayout();
+                ResumeLayout(false);
                 ToggleLoadingAnimation("disable");
             }
             catch (Exception ex)
@@ -30336,6 +30436,36 @@ namespace SATSuma
         {
             try
             {
+                #region display loading screen
+                bool wasOnTop = false;
+                Form loadingScreen = null;
+                if (!fullScreenLoadingScreenVisible)
+                {
+                    if (this.TopMost == true)
+                    {
+                        wasOnTop = true;
+                        this.TopMost = false;
+                    }
+
+                    // work out the position to place the loading form
+                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                    panelScreenLocation.Y -= (int)(160 * UIScale);
+                    panelScreenLocation.X -= (int)(13 * UIScale);
+
+                    loadingScreen = new LoadingScreen(UIScale)
+                    {
+                        Owner = this,
+                        StartPosition = FormStartPosition.Manual, // Set the start position manually
+                        FormBorderStyle = FormBorderStyle.None,
+                        BackColor = panel84.BackColor, // Set the background color to match panel colours
+                        Opacity = 1, // Set the opacity to 100%
+                        Location = panelScreenLocation // Set the location of the loadingScreen form
+                    };
+                    loadingScreen.Show(this);
+                    await BriefPauseAsync(100).ConfigureAwait(true);
+                }
+                #endregion
+                await HideAllScreens();
                 CloseCurrencyMenu();
                 CloseThemeMenu();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -30354,36 +30484,6 @@ namespace SATSuma
                 btnMenuPoolsByBlocks.Enabled = false;
                 ToggleLoadingAnimation("enable");
                 SuspendLayout();
-                Form loadingScreen = null;
-                bool wasOnTop = false;
-                if (!fullScreenLoadingScreenVisible)
-                {
-                    #region display loading screen
-
-                    if (this.TopMost == true)
-                    {
-                        wasOnTop = true;
-                        this.TopMost = false;
-                    }
-                    // work out the position to place the loading form
-                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                    panelScreenLocation.Y -= (int)(160 * UIScale);
-                    panelScreenLocation.X -= (int)(13 * UIScale);
-
-                    loadingScreen = new LoadingScreen(UIScale)
-                    {
-                        Owner = this,
-                        StartPosition = FormStartPosition.Manual, // Set the start position manually
-                        FormBorderStyle = FormBorderStyle.None,
-                        BackColor = panel84.BackColor, // Set the background color to match panel colours
-                        Opacity = 1, // Set the opacity to 100%
-                        Location = panelScreenLocation // Set the location of the loadingScreen form
-                    };
-                    loadingScreen.Show(this);
-                    await BriefPauseAsync(100).ConfigureAwait(true);
-                    #endregion
-                }
-                await HideAllScreens();
                 SetupPoolsByHashrateScreen();
                 panelMiningHashrate.Invoke((MethodInvoker)delegate
                 {
@@ -30425,7 +30525,7 @@ namespace SATSuma
                     }
                     #endregion
                 }
-                ResumeLayout();
+                ResumeLayout(false);
                 ToggleLoadingAnimation("disable");
             }
             catch (Exception ex)
@@ -30438,6 +30538,36 @@ namespace SATSuma
         {
             try
             {
+                #region display loading screen
+                bool wasOnTop = false;
+                Form loadingScreen = null;
+                if (!fullScreenLoadingScreenVisible)
+                {
+                    if (this.TopMost == true)
+                    {
+                        wasOnTop = true;
+                        this.TopMost = false;
+                    }
+
+                    // work out the position to place the loading form
+                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                    panelScreenLocation.Y -= (int)(160 * UIScale);
+                    panelScreenLocation.X -= (int)(13 * UIScale);
+
+                    loadingScreen = new LoadingScreen(UIScale)
+                    {
+                        Owner = this,
+                        StartPosition = FormStartPosition.Manual, // Set the start position manually
+                        FormBorderStyle = FormBorderStyle.None,
+                        BackColor = panel84.BackColor, // Set the background color to match panel colours
+                        Opacity = 1, // Set the opacity to 100%
+                        Location = panelScreenLocation // Set the location of the loadingScreen form
+                    };
+                    loadingScreen.Show(this);
+                    await BriefPauseAsync(100).ConfigureAwait(true);
+                }
+                #endregion
+                await HideAllScreens();
                 CloseCurrencyMenu();
                 CloseThemeMenu();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -30456,36 +30586,6 @@ namespace SATSuma
                 btnMenuMiningPools.Enabled = false;
                 ToggleLoadingAnimation("enable");
                 SuspendLayout();
-                Form loadingScreen = null;
-                bool wasOnTop = false;
-                if (!fullScreenLoadingScreenVisible)
-                {
-                    #region display loading screen
-
-                    if (this.TopMost == true)
-                    {
-                        wasOnTop = true;
-                        this.TopMost = false;
-                    }
-                    // work out the position to place the loading form
-                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                    panelScreenLocation.Y -= (int)(160 * UIScale);
-                    panelScreenLocation.X -= (int)(13 * UIScale);
-
-                    loadingScreen = new LoadingScreen(UIScale)
-                    {
-                        Owner = this,
-                        StartPosition = FormStartPosition.Manual, // Set the start position manually
-                        FormBorderStyle = FormBorderStyle.None,
-                        BackColor = panel84.BackColor, // Set the background color to match panel colours
-                        Opacity = 1, // Set the opacity to 100%
-                        Location = panelScreenLocation // Set the location of the loadingScreen form
-                    };
-                    loadingScreen.Show(this);
-                    await BriefPauseAsync(100).ConfigureAwait(true);
-                    #endregion
-                }
-                await HideAllScreens();
                 panelMiningPools.Invoke((MethodInvoker)delegate
                 {
                     panelMiningPools.Visible = true;
@@ -30511,7 +30611,7 @@ namespace SATSuma
                     }
                     #endregion
                 }
-                ResumeLayout();
+                ResumeLayout(false);
                 ToggleLoadingAnimation("disable");
             }
             catch (Exception ex)
@@ -30524,6 +30624,36 @@ namespace SATSuma
         {
             try
             {
+                #region display loading screen
+                bool wasOnTop = false;
+                Form loadingScreen = null;
+                if (!fullScreenLoadingScreenVisible)
+                {
+                    if (this.TopMost == true)
+                    {
+                        wasOnTop = true;
+                        this.TopMost = false;
+                    }
+
+                    // work out the position to place the loading form
+                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                    panelScreenLocation.Y -= (int)(160 * UIScale);
+                    panelScreenLocation.X -= (int)(13 * UIScale);
+
+                    loadingScreen = new LoadingScreen(UIScale)
+                    {
+                        Owner = this,
+                        StartPosition = FormStartPosition.Manual, // Set the start position manually
+                        FormBorderStyle = FormBorderStyle.None,
+                        BackColor = panel84.BackColor, // Set the background color to match panel colours
+                        Opacity = 1, // Set the opacity to 100%
+                        Location = panelScreenLocation // Set the location of the loadingScreen form
+                    };
+                    loadingScreen.Show(this);
+                    await BriefPauseAsync(100).ConfigureAwait(true);
+                }
+                #endregion
+                await HideAllScreens();
                 CloseCurrencyMenu();
                 CloseThemeMenu();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -30542,43 +30672,13 @@ namespace SATSuma
                 btnMenuTransaction.Enabled = false;
                 ToggleLoadingAnimation("enable");
                 SuspendLayout();
-                Form loadingScreen = null;
-                bool wasOnTop = false;
-                if (!fullScreenLoadingScreenVisible)
-                {
-                    #region display loading screen
-                    // work out the position to place the loading form
-
-                    if (this.TopMost == true)
-                    {
-                        wasOnTop = true;
-                        this.TopMost = false;
-                    }
-                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                    panelScreenLocation.Y -= (int)(160 * UIScale);
-                    panelScreenLocation.X -= (int)(13 * UIScale);
-
-                    loadingScreen = new LoadingScreen(UIScale)
-                    {
-                        Owner = this,
-                        StartPosition = FormStartPosition.Manual, // Set the start position manually
-                        FormBorderStyle = FormBorderStyle.None,
-                        BackColor = panel84.BackColor, // Set the background color to match panel colours
-                        Opacity = 1, // Set the opacity to 100%
-                        Location = panelScreenLocation // Set the location of the loadingScreen form
-                    };
-                    loadingScreen.Show(this);
-                    await BriefPauseAsync(100).ConfigureAwait(true);
-                    #endregion
-                }
-                await HideAllScreens();
                 
                 panelTransaction.Invoke((MethodInvoker)delegate
                 {
                     panelTransaction.Visible = true;
                 });
 
-                Control[] controlsToRefresh = { panelTransaction, panelTransactionIDContainer, panelTXInScrollContainer, panelTXOutScrollContainer, panelTransactionMiddle, panelTransactionInputs, panelTransactionOutputs };
+                Control[] controlsToRefresh = { panelTransaction, panelTransactionIDContainer, panelTXInScrollContainer, panelTXOutScrollContainer, panelTransactionMiddle, panelTransactionInputs, panelTransactionOutputs, panelTransactionResults };
                 foreach (Control control in controlsToRefresh)
                 {
                     if (control.InvokeRequired)
@@ -30609,7 +30709,7 @@ namespace SATSuma
                 }
                 
                 
-                ResumeLayout();
+                ResumeLayout(false);
                 ToggleLoadingAnimation("disable");
                 CheckNetworkStatusAsync();
             }
@@ -30623,6 +30723,36 @@ namespace SATSuma
         {
             try
             {
+                #region display loading screen
+                bool wasOnTop = false;
+                Form loadingScreen = null;
+                if (!fullScreenLoadingScreenVisible)
+                {
+                    if (this.TopMost == true)
+                    {
+                        wasOnTop = true;
+                        this.TopMost = false;
+                    }
+
+                    // work out the position to place the loading form
+                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                    panelScreenLocation.Y -= (int)(160 * UIScale);
+                    panelScreenLocation.X -= (int)(13 * UIScale);
+
+                    loadingScreen = new LoadingScreen(UIScale)
+                    {
+                        Owner = this,
+                        StartPosition = FormStartPosition.Manual, // Set the start position manually
+                        FormBorderStyle = FormBorderStyle.None,
+                        BackColor = panel84.BackColor, // Set the background color to match panel colours
+                        Opacity = 1, // Set the opacity to 100%
+                        Location = panelScreenLocation // Set the location of the loadingScreen form
+                    };
+                    loadingScreen.Show(this);
+                    await BriefPauseAsync(100).ConfigureAwait(true);
+                }
+                #endregion
+                await HideAllScreens();
                 CloseCurrencyMenu();
                 CloseThemeMenu();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -30641,36 +30771,6 @@ namespace SATSuma
                 btnMenuBookmarks.Enabled = false;
                 ToggleLoadingAnimation("enable");
                 SuspendLayout();
-                Form loadingScreen = null;
-                bool wasOnTop = false;
-                if (!fullScreenLoadingScreenVisible)
-                {
-                    #region display loading screen
-                    // work out the position to place the loading form
-
-                    if (this.TopMost == true)
-                    {
-                        wasOnTop = true;
-                        this.TopMost = false;
-                    }
-                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                    panelScreenLocation.Y -= (int)(160 * UIScale);
-                    panelScreenLocation.X -= (int)(13 * UIScale);
-
-                    loadingScreen = new LoadingScreen(UIScale)
-                    {
-                        Owner = this,
-                        StartPosition = FormStartPosition.Manual, // Set the start position manually
-                        FormBorderStyle = FormBorderStyle.None,
-                        BackColor = panel84.BackColor, // Set the background color to match panel colours
-                        Opacity = 1, // Set the opacity to 100%
-                        Location = panelScreenLocation // Set the location of the loadingScreen form
-                    };
-                    loadingScreen.Show(this);
-                    await BriefPauseAsync(100).ConfigureAwait(true);
-                    #endregion
-                }
-                await HideAllScreens();
                 CheckNetworkStatusAsync();
                 SetupBookmarksScreen();
                 panelBookmarks.Invoke((MethodInvoker)delegate
@@ -30707,7 +30807,7 @@ namespace SATSuma
                     }
                     #endregion
                 }
-                ResumeLayout();
+                ResumeLayout(false);
                 ToggleLoadingAnimation("disable");
             }
             catch (Exception ex)
@@ -30720,6 +30820,36 @@ namespace SATSuma
         {
             try
             {
+                #region display loading screen
+                bool wasOnTop = false;
+                Form loadingScreen = null;
+                if (!fullScreenLoadingScreenVisible)
+                {
+                    if (this.TopMost == true)
+                    {
+                        wasOnTop = true;
+                        this.TopMost = false;
+                    }
+
+                    // work out the position to place the loading form
+                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                    panelScreenLocation.Y -= (int)(160 * UIScale);
+                    panelScreenLocation.X -= (int)(13 * UIScale);
+
+                    loadingScreen = new LoadingScreen(UIScale)
+                    {
+                        Owner = this,
+                        StartPosition = FormStartPosition.Manual, // Set the start position manually
+                        FormBorderStyle = FormBorderStyle.None,
+                        BackColor = panel84.BackColor, // Set the background color to match panel colours
+                        Opacity = 1, // Set the opacity to 100%
+                        Location = panelScreenLocation // Set the location of the loadingScreen form
+                    };
+                    loadingScreen.Show(this);
+                    await BriefPauseAsync(100).ConfigureAwait(true);
+                }
+                #endregion
+                await HideAllScreens();
                 CloseCurrencyMenu();
                 CloseThemeMenu();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -30738,36 +30868,6 @@ namespace SATSuma
                 btnMenuPriceConverter.Enabled = false;
                 ToggleLoadingAnimation("enable");
                 SuspendLayout();
-                Form loadingScreen = null;
-                bool wasOnTop = false;
-                if (!fullScreenLoadingScreenVisible)
-                {
-                    #region display loading screen
-
-                    if (this.TopMost == true)
-                    {
-                        wasOnTop = true;
-                        this.TopMost = false;
-                    }
-                    // work out the position to place the loading form
-                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                    panelScreenLocation.Y -= (int)(160 * UIScale);
-                    panelScreenLocation.X -= (int)(13 * UIScale);
-
-                    loadingScreen = new LoadingScreen(UIScale)
-                    {
-                        Owner = this,
-                        StartPosition = FormStartPosition.Manual, // Set the start position manually
-                        FormBorderStyle = FormBorderStyle.None,
-                        BackColor = panel84.BackColor, // Set the background color to match panel colours
-                        Opacity = 1, // Set the opacity to 100%
-                        Location = panelScreenLocation // Set the location of the loadingScreen form
-                    };
-                    loadingScreen.Show(this);
-                    await BriefPauseAsync(100).ConfigureAwait(true);
-                    #endregion
-                }
-                await HideAllScreens();
                 CheckNetworkStatusAsync();
                 PopulateConverterScreen();
                 panelPriceConverter.Invoke((MethodInvoker)delegate
@@ -30804,7 +30904,7 @@ namespace SATSuma
                     }
                     #endregion
                 }
-                ResumeLayout();
+                ResumeLayout(false);
                 ToggleLoadingAnimation("disable");
             }
             catch (Exception ex)
@@ -30817,6 +30917,36 @@ namespace SATSuma
         {
             try
             {
+                #region display loading screen
+                bool wasOnTop = false;
+                Form loadingScreen = null;
+                if (!fullScreenLoadingScreenVisible)
+                {
+                    if (this.TopMost == true)
+                    {
+                        wasOnTop = true;
+                        this.TopMost = false;
+                    }
+
+                    // work out the position to place the loading form
+                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                    panelScreenLocation.Y -= (int)(160 * UIScale);
+                    panelScreenLocation.X -= (int)(13 * UIScale);
+
+                    loadingScreen = new LoadingScreen(UIScale)
+                    {
+                        Owner = this,
+                        StartPosition = FormStartPosition.Manual, // Set the start position manually
+                        FormBorderStyle = FormBorderStyle.None,
+                        BackColor = panel84.BackColor, // Set the background color to match panel colours
+                        Opacity = 1, // Set the opacity to 100%
+                        Location = panelScreenLocation // Set the location of the loadingScreen form
+                    };
+                    loadingScreen.Show(this);
+                    await BriefPauseAsync(100).ConfigureAwait(true);
+                }
+                #endregion
+                await HideAllScreens();
                 CloseCurrencyMenu();
                 CloseThemeMenu();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -30835,36 +30965,6 @@ namespace SATSuma
                 btnMenuDCACalculator.Enabled = false;
                 ToggleLoadingAnimation("enable");
                 SuspendLayout();
-                Form loadingScreen = null;
-                bool wasOnTop = false;
-                if (!fullScreenLoadingScreenVisible)
-                {
-                    #region display loading screen
-
-                    if (this.TopMost == true)
-                    {
-                        wasOnTop = true;
-                        this.TopMost = false;
-                    }
-                    // work out the position to place the loading form
-                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                    panelScreenLocation.Y -= (int)(160 * UIScale);
-                    panelScreenLocation.X -= (int)(13 * UIScale);
-
-                    loadingScreen = new LoadingScreen(UIScale)
-                    {
-                        Owner = this,
-                        StartPosition = FormStartPosition.Manual, // Set the start position manually
-                        FormBorderStyle = FormBorderStyle.None,
-                        BackColor = panel84.BackColor, // Set the background color to match panel colours
-                        Opacity = 1, // Set the opacity to 100%
-                        Location = panelScreenLocation // Set the location of the loadingScreen form
-                    };
-                    loadingScreen.Show(this);
-                    await BriefPauseAsync(500).ConfigureAwait(true);
-                    #endregion
-                }
-                await HideAllScreens();
                 panelDCACalculator.Invoke((MethodInvoker)delegate
                 {
                     panelDCACalculator.Visible = true;
@@ -30899,7 +30999,7 @@ namespace SATSuma
                     }
                     #endregion
                 }
-                ResumeLayout();
+                ResumeLayout(false);
                 ToggleLoadingAnimation("disable");
                 CheckNetworkStatusAsync();
             }
@@ -30913,6 +31013,36 @@ namespace SATSuma
         {
             try
             {
+                #region display loading screen
+                bool wasOnTop = false;
+                Form loadingScreen = null;
+                if (!fullScreenLoadingScreenVisible)
+                {
+                    if (this.TopMost == true)
+                    {
+                        wasOnTop = true;
+                        this.TopMost = false;
+                    }
+
+                    // work out the position to place the loading form
+                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                    panelScreenLocation.Y -= (int)(160 * UIScale);
+                    panelScreenLocation.X -= (int)(13 * UIScale);
+
+                    loadingScreen = new LoadingScreen(UIScale)
+                    {
+                        Owner = this,
+                        StartPosition = FormStartPosition.Manual, // Set the start position manually
+                        FormBorderStyle = FormBorderStyle.None,
+                        BackColor = panel84.BackColor, // Set the background color to match panel colours
+                        Opacity = 1, // Set the opacity to 100%
+                        Location = panelScreenLocation // Set the location of the loadingScreen form
+                    };
+                    loadingScreen.Show(this);
+                    await BriefPauseAsync(100).ConfigureAwait(true);
+                }
+                #endregion
+                await HideAllScreens();
                 CloseCurrencyMenu();
                 CloseThemeMenu();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -30932,36 +31062,6 @@ namespace SATSuma
                 btnMenuDirectory.Enabled = false;
                 ToggleLoadingAnimation("enable");
                 SuspendLayout();
-                Form loadingScreen = null;
-                bool wasOnTop = false;
-                if (!fullScreenLoadingScreenVisible)
-                {
-                    #region display loading screen
-
-                    if (this.TopMost == true)
-                    {
-                        wasOnTop = true;
-                        this.TopMost = false;
-                    }
-                    // work out the position to place the loading form
-                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                    panelScreenLocation.Y -= (int)(160 * UIScale);
-                    panelScreenLocation.X -= (int)(13 * UIScale);
-
-                    loadingScreen = new LoadingScreen(UIScale)
-                    {
-                        Owner = this,
-                        StartPosition = FormStartPosition.Manual, // Set the start position manually
-                        FormBorderStyle = FormBorderStyle.None,
-                        BackColor = panel84.BackColor, // Set the background color to match panel colours
-                        Opacity = 1, // Set the opacity to 100%
-                        Location = panelScreenLocation // Set the location of the loadingScreen form
-                    };
-                    loadingScreen.Show(this);
-                    await BriefPauseAsync(100).ConfigureAwait(true);
-                    #endregion
-                }
-                await HideAllScreens();
                 panelDirectory.Invoke((MethodInvoker)delegate
                 {
                     panelDirectory.Visible = true;
@@ -30997,7 +31097,7 @@ namespace SATSuma
                     }
                     #endregion
                 }
-                ResumeLayout();
+                ResumeLayout(false);
                 ToggleLoadingAnimation("disable");
                 CheckNetworkStatusAsync();
             }
@@ -31011,6 +31111,36 @@ namespace SATSuma
         {
             try
             {
+                #region display loading screen
+                bool wasOnTop = false;
+                Form loadingScreen = null;
+                if (!fullScreenLoadingScreenVisible)
+                {
+                    if (this.TopMost == true)
+                    {
+                        wasOnTop = true;
+                        this.TopMost = false;
+                    }
+
+                    // work out the position to place the loading form
+                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
+                    panelScreenLocation.Y -= (int)(160 * UIScale);
+                    panelScreenLocation.X -= (int)(13 * UIScale);
+
+                    loadingScreen = new LoadingScreen(UIScale)
+                    {
+                        Owner = this,
+                        StartPosition = FormStartPosition.Manual, // Set the start position manually
+                        FormBorderStyle = FormBorderStyle.None,
+                        BackColor = panel84.BackColor, // Set the background color to match panel colours
+                        Opacity = 1, // Set the opacity to 100%
+                        Location = panelScreenLocation // Set the location of the loadingScreen form
+                    };
+                    loadingScreen.Show(this);
+                    await BriefPauseAsync(100).ConfigureAwait(true);
+                }
+                #endregion
+                await HideAllScreens();
                 CloseCurrencyMenu();
                 CloseThemeMenu();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -31029,36 +31159,6 @@ namespace SATSuma
                 btnMenuSettings.Enabled = false;
                 ToggleLoadingAnimation("enable");
                 SuspendLayout();
-                Form loadingScreen = null;
-                bool wasOnTop = false;
-                if (!fullScreenLoadingScreenVisible)
-                {
-                    #region display loading screen
-
-                    if (this.TopMost == true)
-                    {
-                        wasOnTop = true;
-                        this.TopMost = false;
-                    }
-                    // work out the position to place the loading form
-                    Point panelScreenLocation = lblNowViewing.PointToScreen(Point.Empty);
-                    panelScreenLocation.Y -= (int)(160 * UIScale);
-                    panelScreenLocation.X -= (int)(13 * UIScale);
-
-                    loadingScreen = new LoadingScreen(UIScale)
-                    {
-                        Owner = this,
-                        StartPosition = FormStartPosition.Manual, // Set the start position manually
-                        FormBorderStyle = FormBorderStyle.None,
-                        BackColor = panel84.BackColor, // Set the background color to match panel colours
-                        Opacity = 1, // Set the opacity to 100%
-                        Location = panelScreenLocation // Set the location of the loadingScreen form
-                    };
-                    loadingScreen.Show(this);
-                    await BriefPauseAsync(100).ConfigureAwait(true);
-                    #endregion
-                }
-                await HideAllScreens();
                 panelSettings.Invoke((MethodInvoker)delegate
                 {
                     panelSettings.Visible = true;
@@ -31093,7 +31193,7 @@ namespace SATSuma
                     }
                     #endregion
                 }
-                ResumeLayout();
+                ResumeLayout(false);
                 ToggleLoadingAnimation("disable");
                 CheckNetworkStatusAsync();
             }

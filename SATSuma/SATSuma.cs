@@ -25,9 +25,8 @@
 . testing, particularly new pools screens on own node
 . check tooltips everywhere
 . test all UIScales, particularly small
-. xpub scrollbar size/scroll amount not correct
 . dca didn't recalculate - try to recreate and fix (maybe start date was before a market price existed?)
-. some listviews don't scroll up to the title bar when holding 'up'. Instead they then require a click on up. Tick events likely the issue
+. see if main menu button indicators, highlights etc can be more instant/clean
 ..........................................................................................................................................
 */
 
@@ -581,7 +580,7 @@ namespace SATSuma
                 LookupBlockListAsync(); // fetch the first 15 blocks automatically for the block list initial view.
                 SetupPoolScreen(); 
                 this.Visible = true;
-                AddressInvalidHideControls(); // Address screen - initially address textbox is empty so hide the controls
+                _ = AddressInvalidHideControlsAsync(); // Address screen - initially address textbox is empty so hide the controls
                 // prepopulate chart with fee rates (only if user hasn't selected one of the charts for their startup screen)
                 if (!comboBoxStartupScreen.Texts.StartsWith("chart - "))
                 {
@@ -2531,6 +2530,10 @@ namespace SATSuma
         {
             try
             {
+                panelAddressResults.Invoke((MethodInvoker)delegate
+                {
+                    panelAddressResults.Visible = false;
+                });
                 SuspendLayout();
                 BtnViewBlockFromAddress.Visible = false;
                 BtnViewTransactionFromAddress.Visible = false;
@@ -2591,7 +2594,12 @@ namespace SATSuma
                     }
                     DisableEnableAddressButtons("enable"); // enable the buttons that were previously enabled again
                     AddressValidShowControls();
-                    
+                    panelAddressResults.Invoke((MethodInvoker)delegate
+                    {
+                        panelAddressResults.Refresh();
+                        panelAddressResults.Visible = true;
+                    });
+
                     Control[] controlsToRefresh = { panelAddress, panelAddressTxContainer, panel132, panelSubmittedAddressContainer, panelAddressResults };
                     foreach (Control control in controlsToRefresh)
                     {
@@ -2645,7 +2653,7 @@ namespace SATSuma
                         });
                     }
                     ResumeLayout(false);
-                    AddressInvalidHideControls();
+                    await AddressInvalidHideControlsAsync();
                 }
             }
             catch (Exception ex)
@@ -3679,6 +3687,42 @@ namespace SATSuma
         }
 
         //------------------------ HIDE ALL THE ADDRESS CONTROLS ------------------------------------------------------
+
+        private async Task AddressInvalidHideControlsAsync()
+        {
+            // TaskCompletionSource to wait for Invoke completion
+            var tcs = new TaskCompletionSource<bool>();
+
+            panelAddressResults.Invoke((MethodInvoker)delegate
+            {
+                panelAddressResults.Visible = false;
+                tcs.SetResult(true); // Set the result indicating completion
+            });
+
+            // Await the completion of the first action
+            await tcs.Task;
+
+            // Now, proceed to hide other controls
+            if (lblAddressType.Visible)
+            {
+                Control[] controlsToHide = {
+            btnNextAddressTransactions, btnFirstAddressTransaction, lblAddressTXPositionInList, label59, label61, label67, label63, listViewAddressTransactions,
+            lblAddressConfirmedUnspent, lblAddressConfirmedUnspentOutputs, lblAddressConfirmedTransactionCount, lblAddressConfirmedReceived, lblAddressConfirmedReceivedOutputs,
+            panelAddressTxContainer, lblAddressConfirmedSpent, lblAddressConfirmedSpentOutputs, lblAddressConfirmedReceivedFiat, lblAddressConfirmedSpentFiat, lblAddressConfirmedUnspentFiat,
+            btnShowAllTX, btnShowConfirmedTX, btnShowUnconfirmedTX, lblAddressType, panel41, panel42, panel43, panel44, panel132, listViewAddressTransactions,
+            panelOwnNodeAddressTXInfo, btnViewUTXOsFromAddressTX, btnFirstAddressTransaction, btnNextAddressTransactions
+        };
+
+                foreach (Control control in controlsToHide)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.Visible = false;
+                    });
+                }
+            }
+        }
+
         private void AddressInvalidHideControls() // hide all address related controls
         {
             try
@@ -3759,6 +3803,10 @@ namespace SATSuma
         {
             try
             {
+                panelAddressUTXOResults.Invoke((MethodInvoker)delegate
+                {
+                    panelAddressUTXOResults.Visible = false;
+                });
                 Control[] controlsToSetEmpty2 = { lblAddressConfirmedSpentUTXO, lblAddressConfirmedSpentOutputsUTXO, lblAddressConfirmedUnspentUTXO, lblAddressConfirmedUnspentOutputsUTXO, lblAddressConfirmedSpentUTXOFiat, lblLargestUTXO, lblSmallestUTXO, lblAddressTypeUTXO };
                 foreach (Control control in controlsToSetEmpty2)
                 {
@@ -4072,16 +4120,6 @@ namespace SATSuma
 
                         }
 
-                        #region scrollbar
-                        //int rowHeight = listViewAddressUTXOs.Margin.Vertical + listViewAddressUTXOs.Padding.Vertical + listViewAddressUTXOs.GetItemRect(0).Height;
-                        decimal displayRatio = Convert.ToDecimal(panelAddressUTXOScrollbarOuter.Height) / Convert.ToDecimal(listViewAddressUTXOs.Height);
-                        panelAddressUTXOScrollbarInner.Height = (int)(panelAddressUTXOScrollbarOuter.Height * displayRatio);
-                        int distanceToBeScrolled = panelAddressUTXOScrollbarOuter.Height - panelAddressUTXOScrollbarInner.Height;
-                        int numberOfRowsLeftToShow = listViewAddressUTXOs.Items.Count - 28;
-                        addressUTXOScrollbarIncrement = Convert.ToInt32(distanceToBeScrolled / numberOfRowsLeftToShow);
-                        panelAddressUTXOScrollbarInner.Refresh();
-                        #endregion
-
                         if (listViewAddressUTXOs.Items.Count > 29)
                         {
                             btnAddressUTXOScrollUp.Enabled = true;
@@ -4120,6 +4158,18 @@ namespace SATSuma
                                 lblAddressConfirmedUnspentOutputsUTXO.Text = "0";
                             });
                         }
+                        #region scrollbar
+                        decimal displayRatio = Convert.ToDecimal(panelAddressUTXOScrollbarOuter.Height) / Convert.ToDecimal(listViewAddressUTXOs.Height);
+                        panelAddressUTXOScrollbarInner.Invoke((MethodInvoker)delegate
+                        {
+                            panelAddressUTXOScrollbarInner.Height = (int)(panelAddressUTXOScrollbarOuter.Height * displayRatio);
+                            panelAddressUTXOScrollbarInner.Refresh();
+                        });
+                        int distanceToBeScrolled = panelAddressUTXOScrollbarOuter.Height - panelAddressUTXOScrollbarInner.Height;
+                        int numberOfRowsLeftToShow = listViewAddressUTXOs.Items.Count - 28;
+                        addressUTXOScrollbarIncrement = Convert.ToInt32(distanceToBeScrolled / numberOfRowsLeftToShow);
+                        panelAddressUTXOScrollbarInner.Refresh();
+                        #endregion
                     }
                 }
                 else
@@ -4627,7 +4677,7 @@ namespace SATSuma
                     else if (UTXOsUpButtonPressed)
                     {
                         int rowHeight = listViewAddressUTXOs.Margin.Vertical + listViewAddressUTXOs.Padding.Vertical + listViewAddressUTXOs.GetItemRect(0).Height;
-                        if (addressUTXOsScrollPosition > panelUTXOsContainer.VerticalScroll.Minimum + rowHeight)
+                        if (addressUTXOsScrollPosition > panelUTXOsContainer.VerticalScroll.Minimum)
                         {
                             addressUTXOsScrollPosition -= rowHeight;
                             panelUTXOsContainer.VerticalScroll.Value = addressUTXOsScrollPosition;
@@ -5539,6 +5589,10 @@ namespace SATSuma
         {
             try
             {
+                panelTransactionResults.Invoke((MethodInvoker)delegate
+                {
+                    panelTransactionResults.Visible = false;
+                });
                 string transactionIdToValidate = textBoxTransactionID.Text;
 
                 if (ValidateTransactionId(transactionIdToValidate)) // check if the entered string is valid
@@ -5817,7 +5871,7 @@ namespace SATSuma
                             lblTransactionOutputCount.Text = $"{transaction.Vout.Count()} outputs";
                         });
                     }
-                    // ----------------- central bit of diagram
+                    #region central bit of diagram
                     long totalValueIn = 0;
                     foreach (TransactionVin vin in transaction.Vin)
                     {
@@ -5909,7 +5963,8 @@ namespace SATSuma
                     Point endPoint2 = new Point(panelTransactionDiagram.Size.Width / 2, panelTransactionDiagram.Size.Height / 2 - (int)(100 * UIScale));
                     linePoints.Add(startPoint2);
                     linePoints.Add(endPoint2);
-                    // ------------- inputs on diagram
+                    #endregion
+                    #region inputs on diagram
                     int NumberOfInputLines = Convert.ToInt32(transaction.Vin.Count());
                     decimal YInputsStep = 0;
                     decimal YInputsPos = 0;
@@ -5951,7 +6006,8 @@ namespace SATSuma
                         linePoints.Add(endPoint4);
                         YInputsPos += YInputsStep;
                     }
-                    // --------------- outputs on diagram
+                    #endregion
+                    #region outputs on diagram
                     int NumberOfOutputLines = Convert.ToInt32(transaction.Vout.Count());
                     decimal YOutputsStep = 0;
                     decimal YOutputsPos = 0;
@@ -5995,8 +6051,8 @@ namespace SATSuma
                     }
 
                     panelTransactionDiagram.ResumeLayout(false);
-
-                    // Inputs listview
+                    #endregion
+                    #region Inputs listview
                     listViewTransactionInputs.Invoke((MethodInvoker)delegate
                     {
                         listViewTransactionInputs.Items.Clear(); // remove any data that may be there already
@@ -6055,15 +6111,6 @@ namespace SATSuma
                         }
                     }
 
-                    #region scrollbar
-                    int rowHeight2 = listViewTransactionInputs.Margin.Vertical + listViewTransactionInputs.Padding.Vertical + listViewTransactionInputs.GetItemRect(0).Height;
-                    decimal displayRatio = Convert.ToDecimal(panelTXInScrollbarOuter.Height) / Convert.ToDecimal(listViewTransactionInputs.Height);
-                    panelTXInScrollbarInner.Height = (int)(panelTXInScrollbarOuter.Height * displayRatio);
-                    int distanceToBeScrolled = panelTXInScrollbarOuter.Height - panelTXInScrollbarInner.Height;
-                    int numberOfRowsLeftToShow = listViewTransactionInputs.Items.Count - 7;
-                    txInScrollbarIncrement = Convert.ToInt32(distanceToBeScrolled / numberOfRowsLeftToShow);
-                    #endregion
-
                     if (listViewTransactionInputs.Items.Count > 6)
                     {
                         btnTransactionInputsUp.Enabled = true;
@@ -6088,7 +6135,21 @@ namespace SATSuma
                         listViewTransactionInputs.Items[0].Selected = true;
                     }
 
-                    // Outputs listview
+                    #region scrollbar
+                    decimal displayRatioInputs = Convert.ToDecimal(panelTXInScrollbarOuter.Height) / Convert.ToDecimal(listViewTransactionInputs.Height);
+                    panelTXInScrollbarInner.Invoke((MethodInvoker)delegate
+                    {
+                        panelTXInScrollbarInner.Height = (int)(panelTXInScrollbarOuter.Height * displayRatioInputs);
+                        panelTXInScrollbarInner.Refresh();
+                    });
+                    int distanceToBeScrolledInputs = panelTXInScrollbarOuter.Height - panelTXInScrollbarInner.Height;
+                    int numberOfRowsLeftToShowInputs = listViewTransactionInputs.Items.Count - 7;
+                    txInScrollbarIncrement = Convert.ToInt32(distanceToBeScrolledInputs / numberOfRowsLeftToShowInputs);
+                    #endregion
+
+                    #endregion
+
+                    #region Outputs listview
                     listViewTransactionOutputs.Invoke((MethodInvoker)delegate
                     {
                         listViewTransactionOutputs.Items.Clear(); // remove any data that may be there already
@@ -6148,14 +6209,7 @@ namespace SATSuma
                             listViewTransactionOutputs.Items.Add(item); // add row
                         });
                     }
-                    #region scrollbar
-                    int rowHeight3 = listViewTransactionOutputs.Margin.Vertical + listViewTransactionOutputs.Padding.Vertical + listViewTransactionOutputs.GetItemRect(0).Height;
-                    decimal displayRatio2 = Convert.ToDecimal(panelTXOutScrollbarOuter.Height) / Convert.ToDecimal(listViewTransactionOutputs.Height);
-                    panelTXOutScrollbarInner.Height = (int)(panelTXOutScrollbarOuter.Height * displayRatio2);
-                    int distanceToBeScrolled2 = panelTXOutScrollbarOuter.Height - panelTXOutScrollbarInner.Height;
-                    int numberOfRowsLeftToShow2 = listViewTransactionOutputs.Items.Count - 7;
-                    txOutScrollbarIncrement = Convert.ToInt32(distanceToBeScrolled2 / numberOfRowsLeftToShow2);
-                    #endregion
+
 
                     if (listViewTransactionOutputs.Items.Count > 6)
                     {
@@ -6180,9 +6234,21 @@ namespace SATSuma
                     {
                         listViewTransactionOutputs.Items[0].Selected = true;
                     }
+                    #endregion
 
-                    
+                    #region scrollbar
+                    decimal displayRatioOutputs = Convert.ToDecimal(panelTXOutScrollbarOuter.Height) / Convert.ToDecimal(listViewTransactionOutputs.Height);
+                    panelTXOutScrollbarInner.Invoke((MethodInvoker)delegate
+                    {
+                        panelTXOutScrollbarInner.Height = (int)(panelTXOutScrollbarOuter.Height * displayRatioOutputs);
+                        panelTXOutScrollbarInner.Refresh();
+                    });
+                    int distanceToBeScrolledOutputs = panelTXOutScrollbarOuter.Height - panelTXOutScrollbarInner.Height;
+                    int numberOfRowsLeftToShowOutputs = listViewTransactionOutputs.Items.Count - 7;
+                    txOutScrollbarIncrement = Convert.ToInt32(distanceToBeScrolledOutputs / numberOfRowsLeftToShowOutputs);
+                    #endregion
 
+                    #region show controls
                     Control[] controlsToShow = { panelTransactionHeadline, panelTransactionDiagram, panelTXInScrollContainer, panelTXOutScrollContainer, panelTransactionOutputs, panelTransactionInputs, btnTransactionInputsUp, btnTransactionInputDown, btnTransactionOutputsUp, btnTransactionOutputsDown, listViewTransactionInputs, listViewTransactionOutputs, btnViewAddressFromTXOutput, label107, label102, panelTXInScrollContainer, panelTXOutScrollContainer, panelTXInScrollbarInner, panelTXOutScrollbarInner };
                     foreach (Control control in controlsToShow)
                     {
@@ -6211,6 +6277,7 @@ namespace SATSuma
                             control.Refresh();
                         }
                     }
+                    #endregion
                 }
                 else
                 {
@@ -7980,6 +8047,10 @@ namespace SATSuma
         {
             try
             {
+                panelXpubAllResults.Invoke((MethodInvoker)delegate
+                {
+                    panelXpubAllResults.Visible = false;
+                });
                 xpubScanComplete = false;
                 xpubValid = false;
                 SuspendLayout();
@@ -8006,6 +8077,10 @@ namespace SATSuma
                 btnViewAddressFromXpub.Invoke((MethodInvoker)delegate
                 {
                     btnViewAddressFromXpub.Visible = false;
+                });
+                panelXpubScrollbarInner.Invoke((MethodInvoker)delegate
+                {
+                    panelXpubScrollbarInner.Visible = false;
                 });
                 progressBarCheckAllAddressTypes.Value = 0;
                 progressBarCheckEachAddressType.Value = 0;
@@ -9675,14 +9750,6 @@ namespace SATSuma
                     listViewXpubAddresses.Items[0].Selected = true;
                 }
 
-                #region scrollbar
-                decimal displayRatio = Convert.ToDecimal(panelXpubScrollContainer.Height) / Convert.ToDecimal(listViewXpubAddresses.Height);
-                panelXpubScrollbarInner.Height = (int)(panelXpubScrollbarOuter.Height * displayRatio);
-                int distanceToBeScrolled = panelXpubScrollbarOuter.Height - panelXpubScrollbarInner.Height;
-                int numberOfRowsLeftToShow = listViewXpubAddresses.Items.Count - 23;
-                xpubScrollbarIncrement = Convert.ToInt32(distanceToBeScrolled / numberOfRowsLeftToShow);
-                #endregion
-
                 DerivationPath = 0;
                 #endregion
                 #region totals after processing, hide progress bars, re-enable textboxes
@@ -9717,6 +9784,18 @@ namespace SATSuma
                 textBoxSubmittedXpub.Enabled = true;
                 textBoxXpubScreenOwnNodeURL.Enabled = true;
                 intTimeUntilXpubProgressBarsHidden = 0;
+                #region scrollbar
+                decimal displayRatio = Convert.ToDecimal(panelXpubScrollContainer.Height) / Convert.ToDecimal(listViewXpubAddresses.Height);
+                panelXpubScrollbarInner.Invoke((MethodInvoker)delegate
+                {
+                    panelXpubScrollbarInner.Height = (int)(panelXpubScrollbarOuter.Height * displayRatio);
+                    panelXpubScrollbarInner.Visible = true;
+                    panelXpubScrollbarInner.Refresh();
+                });
+                int distanceToBeScrolled = panelXpubScrollbarOuter.Height - panelXpubScrollbarInner.Height;
+                int numberOfRowsLeftToShow = listViewXpubAddresses.Items.Count - 28;
+                xpubScrollbarIncrement = Convert.ToInt32(distanceToBeScrolled / numberOfRowsLeftToShow);
+                #endregion
                 xpubScanComplete = true;
                 #endregion
             }
@@ -10207,18 +10286,22 @@ namespace SATSuma
 
                     }
 
-                    #region scrollbar
-                    decimal displayRatio = Convert.ToDecimal(panelPoolsBlocksScrollbarOuter.Height) / Convert.ToDecimal(listViewPoolsByBlock.Height);
-                    panelPoolsBlocksScrollbarInner.Height = (int)(panelPoolsBlocksScrollbarOuter.Height * displayRatio);
-                    int distanceToBeScrolled = panelPoolsBlocksScrollbarOuter.Height - panelPoolsBlocksScrollbarInner.Height;
-                    int numberOfRowsLeftToShow = listViewPoolsByBlock.Items.Count - 33;
-                    poolsBlocksScrollbarIncrement = Convert.ToInt32(distanceToBeScrolled / numberOfRowsLeftToShow);
-                    #endregion
-
                     if (listViewPoolsByBlock.Items.Count > 0)
                     {
                         listViewPoolsByBlock.Items[0].Selected = true;
                     }
+
+                    #region scrollbar
+                    decimal displayRatio = Convert.ToDecimal(panelPoolsBlocksScrollContainer.Height) / Convert.ToDecimal(listViewPoolsByBlock.Height);
+                    panelPoolsBlocksScrollbarInner.Invoke((MethodInvoker)delegate
+                    {
+                        panelPoolsBlocksScrollbarInner.Height = (int)(panelPoolsBlocksScrollContainer.Height * displayRatio);
+                        panelPoolsBlocksScrollbarInner.Refresh();
+                    });
+                    int distanceToBeScrolled = panelPoolsBlocksScrollbarOuter.Height - panelPoolsBlocksScrollbarInner.Height;
+                    int numberOfRowsLeftToShow = listViewPoolsByBlock.Items.Count - 32;
+                    poolsBlocksScrollbarIncrement = Convert.ToInt32(distanceToBeScrolled / numberOfRowsLeftToShow);
+                    #endregion
 
                     ChartPoolsRankingForPoolsScreen(poolsBlocksTimePeriod);
                     ChartsHashrateForPoolsScreen(poolsBlocksTimePeriod);
@@ -11346,10 +11429,12 @@ namespace SATSuma
 
                         }
                         #region scrollbar
-                        int rowHeight2 = listViewPoolsList.Margin.Vertical + listViewPoolsList.Padding.Vertical + listViewPoolsList.GetItemRect(0).Height;
                         decimal displayRatio = Convert.ToDecimal(panelPoolsListScrollContainer.Height) / Convert.ToDecimal(listViewPoolsList.Height);
-                        panelPoolsListScrollbarInner.Height = (int)(panelPoolsListScrollbarOuter.Height * displayRatio);
-                        panelPoolsListScrollbarInner.Height = Convert.ToInt32(panelPoolsListScrollbarInner.Height * 1.45);
+                        panelXpubScrollbarInner.Invoke((MethodInvoker)delegate
+                        {
+                            panelPoolsListScrollbarInner.Height = (int)(panelPoolsListScrollbarOuter.Height * displayRatio);
+                            panelPoolsListScrollbarInner.Refresh();
+                        });
                         int distanceToBeScrolled = panelPoolsListScrollbarOuter.Height - panelPoolsListScrollbarInner.Height;
                         int numberOfRowsLeftToShow = listViewPoolsList.Items.Count - 32;
                         poolsListScrollbarIncrement = Convert.ToInt32(distanceToBeScrolled / numberOfRowsLeftToShow);
@@ -16019,7 +16104,11 @@ namespace SATSuma
 
                 #region scrollbar
                 decimal displayRatio = Convert.ToDecimal(panelBookmarksScrollContainer.Height) / Convert.ToDecimal(listViewBookmarks.Height);
-                panelBookmarksScrollbarInner.Height = (int)(panelBookmarksScrollbarOuter.Height * displayRatio);
+                panelBookmarksScrollbarInner.Invoke((MethodInvoker)delegate
+                {
+                    panelBookmarksScrollbarInner.Height = (int)(panelBookmarksScrollbarOuter.Height * displayRatio);
+                    panelBookmarksScrollbarInner.Refresh();
+                });
                 int distanceToBeScrolled = panelBookmarksScrollbarOuter.Height - panelBookmarksScrollbarInner.Height;
                 int numberOfRowsLeftToShow = listViewBookmarks.Items.Count - 23;
                 bookmarksScrollbarIncrement = Convert.ToInt32(distanceToBeScrolled / numberOfRowsLeftToShow);

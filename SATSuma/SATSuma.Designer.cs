@@ -1252,8 +1252,6 @@
             this.label309 = new System.Windows.Forms.Label();
             this.panel135 = new System.Windows.Forms.Panel();
             this.AddressQRCodePictureboxUTXO = new System.Windows.Forms.PictureBox();
-            this.panelUTXOError = new System.Windows.Forms.Panel();
-            this.label317 = new System.Windows.Forms.Label();
             this.label315 = new System.Windows.Forms.Label();
             this.lblAddressUTXOPositionInList = new System.Windows.Forms.Label();
             this.label313 = new System.Windows.Forms.Label();
@@ -1269,6 +1267,8 @@
             this.panelUTXOsContainer = new System.Windows.Forms.Panel();
             this.listViewAddressUTXOs = new System.Windows.Forms.ListView();
             this.panel137 = new System.Windows.Forms.Panel();
+            this.panelUTXOError = new System.Windows.Forms.Panel();
+            this.label317 = new System.Windows.Forms.Label();
             this.panel143 = new System.Windows.Forms.Panel();
             this.btnViewAddressTXFromUTXO = new CustomControls.RJControls.RJButton();
             this.label230 = new System.Windows.Forms.Label();
@@ -1584,11 +1584,11 @@
             this.panel136.SuspendLayout();
             this.panel135.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AddressQRCodePictureboxUTXO)).BeginInit();
-            this.panelUTXOError.SuspendLayout();
             this.panel141.SuspendLayout();
             this.panelAddressUTXOScrollContainer.SuspendLayout();
             this.panelAddressUTXOScrollbarOuter.SuspendLayout();
             this.panelUTXOsContainer.SuspendLayout();
+            this.panelUTXOError.SuspendLayout();
             this.panel142.SuspendLayout();
             this.panelSubmittedAddressContainerUTXO.SuspendLayout();
             this.panelMiningBlocks.SuspendLayout();
@@ -6833,12 +6833,12 @@
             this.btnFirstAddressTransaction.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnFirstAddressTransaction.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnFirstAddressTransaction.ForeColor = System.Drawing.Color.White;
-            this.btnFirstAddressTransaction.Location = new System.Drawing.Point(612, 494);
+            this.btnFirstAddressTransaction.Location = new System.Drawing.Point(572, 494);
             this.btnFirstAddressTransaction.Margin = new System.Windows.Forms.Padding(1);
             this.btnFirstAddressTransaction.Name = "btnFirstAddressTransaction";
-            this.btnFirstAddressTransaction.Size = new System.Drawing.Size(68, 22);
+            this.btnFirstAddressTransaction.Size = new System.Drawing.Size(88, 22);
             this.btnFirstAddressTransaction.TabIndex = 141;
-            this.btnFirstAddressTransaction.Text = "◀ newest";
+            this.btnFirstAddressTransaction.Text = "⎹◀◀ newest";
             this.btnFirstAddressTransaction.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnFirstAddressTransaction, "view most recent transactions");
             this.btnFirstAddressTransaction.UseVisualStyleBackColor = false;
@@ -6881,12 +6881,12 @@
             this.btnNextAddressTransactions.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnNextAddressTransactions.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnNextAddressTransactions.ForeColor = System.Drawing.Color.White;
-            this.btnNextAddressTransactions.Location = new System.Drawing.Point(687, 494);
+            this.btnNextAddressTransactions.Location = new System.Drawing.Point(667, 494);
             this.btnNextAddressTransactions.Margin = new System.Windows.Forms.Padding(1);
             this.btnNextAddressTransactions.Name = "btnNextAddressTransactions";
-            this.btnNextAddressTransactions.Size = new System.Drawing.Size(68, 22);
+            this.btnNextAddressTransactions.Size = new System.Drawing.Size(88, 22);
             this.btnNextAddressTransactions.TabIndex = 140;
-            this.btnNextAddressTransactions.Text = "▷ older";
+            this.btnNextAddressTransactions.Text = "▶ older";
             this.btnNextAddressTransactions.TextColor = System.Drawing.Color.White;
             this.toolTipGeneralUse.SetToolTip(this.btnNextAddressTransactions, "view next set of transactions");
             this.btnNextAddressTransactions.UseVisualStyleBackColor = false;
@@ -10827,7 +10827,7 @@
             this.panel148.BackColor = System.Drawing.Color.DimGray;
             this.panel148.Location = new System.Drawing.Point(0, 450);
             this.panel148.Name = "panel148";
-            this.panel148.Size = new System.Drawing.Size(60, 22);
+            this.panel148.Size = new System.Drawing.Size(60, 100);
             this.panel148.TabIndex = 290;
             // 
             // BookmarksScrollTimer
@@ -19683,10 +19683,10 @@
             // 
             // panelAddressUTXOResults
             // 
+            this.panelAddressUTXOResults.Controls.Add(this.panelUTXOError);
             this.panelAddressUTXOResults.Controls.Add(this.panel136);
             this.panelAddressUTXOResults.Controls.Add(this.panel135);
             this.panelAddressUTXOResults.Controls.Add(this.lblAddressConfirmedSpentUTXO);
-            this.panelAddressUTXOResults.Controls.Add(this.panelUTXOError);
             this.panelAddressUTXOResults.Controls.Add(this.lblAddressConfirmedUnspentUTXO);
             this.panelAddressUTXOResults.Controls.Add(this.lblAddressConfirmedSpentOutputsUTXO);
             this.panelAddressUTXOResults.Controls.Add(this.label315);
@@ -19757,27 +19757,6 @@
             this.AddressQRCodePictureboxUTXO.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.AddressQRCodePictureboxUTXO.TabIndex = 131;
             this.AddressQRCodePictureboxUTXO.TabStop = false;
-            // 
-            // panelUTXOError
-            // 
-            this.panelUTXOError.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
-            this.panelUTXOError.Controls.Add(this.label317);
-            this.panelUTXOError.Location = new System.Drawing.Point(264, 227);
-            this.panelUTXOError.Name = "panelUTXOError";
-            this.panelUTXOError.Size = new System.Drawing.Size(403, 41);
-            this.panelUTXOError.TabIndex = 296;
-            this.panelUTXOError.Visible = false;
-            // 
-            // label317
-            // 
-            this.label317.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label317.ForeColor = System.Drawing.Color.Gray;
-            this.label317.Location = new System.Drawing.Point(9, 3);
-            this.label317.Name = "label317";
-            this.label317.Size = new System.Drawing.Size(388, 30);
-            this.label317.TabIndex = 144;
-            this.label317.Text = "There are too many UTXO\'s to display (maximum of 500)";
-            this.label317.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label315
             // 
@@ -20006,6 +19985,27 @@
             this.panel137.Name = "panel137";
             this.panel137.Size = new System.Drawing.Size(444, 480);
             this.panel137.TabIndex = 165;
+            // 
+            // panelUTXOError
+            // 
+            this.panelUTXOError.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
+            this.panelUTXOError.Controls.Add(this.label317);
+            this.panelUTXOError.Location = new System.Drawing.Point(254, 189);
+            this.panelUTXOError.Name = "panelUTXOError";
+            this.panelUTXOError.Size = new System.Drawing.Size(416, 105);
+            this.panelUTXOError.TabIndex = 296;
+            this.panelUTXOError.Visible = false;
+            // 
+            // label317
+            // 
+            this.label317.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label317.ForeColor = System.Drawing.Color.Gray;
+            this.label317.Location = new System.Drawing.Point(12, 36);
+            this.label317.Name = "label317";
+            this.label317.Size = new System.Drawing.Size(388, 30);
+            this.label317.TabIndex = 144;
+            this.label317.Text = "There are too many UTXO\'s to display (maximum of 500)";
+            this.label317.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // panel143
             // 
@@ -21213,10 +21213,12 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
-            this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelAddressUTXO);
             this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelLightningDashboard);
+            this.Controls.Add(this.panelMiningPools);
+            this.Controls.Add(this.panelBookmarks);
+            this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelMiningBlocks);
@@ -21228,10 +21230,8 @@
             this.Controls.Add(this.panelDirectory);
             this.Controls.Add(this.panelDCACalculator);
             this.Controls.Add(this.panelPriceConverter);
-            this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelMiningHashrate);
             this.Controls.Add(this.panelChartsForPoolsScreen);
-            this.Controls.Add(this.panelMiningPools);
             this.Controls.Add(this.panelPriceSourceIndicatorsOuter);
             this.Controls.Add(this.progressBarRefreshData);
             this.Controls.Add(this.lblHeaderPriceChange);
@@ -21636,13 +21636,13 @@
             this.panel135.ResumeLayout(false);
             this.panel135.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AddressQRCodePictureboxUTXO)).EndInit();
-            this.panelUTXOError.ResumeLayout(false);
             this.panel141.ResumeLayout(false);
             this.panel141.PerformLayout();
             this.panelAddressUTXOScrollContainer.ResumeLayout(false);
             this.panelAddressUTXOScrollbarOuter.ResumeLayout(false);
             this.panelUTXOsContainer.ResumeLayout(false);
             this.panelUTXOsContainer.PerformLayout();
+            this.panelUTXOError.ResumeLayout(false);
             this.panel142.ResumeLayout(false);
             this.panel142.PerformLayout();
             this.panelSubmittedAddressContainerUTXO.ResumeLayout(false);

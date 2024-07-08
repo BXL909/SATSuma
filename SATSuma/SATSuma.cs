@@ -24,11 +24,8 @@
 . documentation for new pools screens (code done, just do online help)
 . testing, particularly new pools screens on own node
 . check tooltips everywhere
-. test all UIScales, particularly small (or drop small altogether - already dropped smallest)
+. test all UIScales
 . dca didn't recalculate? - try to recreate and fix (maybe start date was before a market price existed?)
-. Web exception - BlockchairComHalvingJSONRefresh: The remote server returned an error: (500) Internal Server Error.
-. Web exception - BlockchainInfoEndpointsRefresh: The remote server returned an error: (404) Not Found.
-. Text colour on new tabs isn't currently uniformly set.
 ..........................................................................................................................................
 */
 
@@ -530,17 +527,17 @@ namespace SATSuma
 
                 Dictionary<string, string> scaleTextMap = new Dictionary<string, string> // Transalte saved UIScale value (1-5) to strings to display on the settings screen
                 {
-                    { "1", "smallest" },
-                    { "2", "small" },
+                    //{ "1", "smallest" },
+                    //{ "2", "small" },
                     { "3", "normal" },
                     { "4", "big" },
                     { "5", "biggest" }
                 };
-                if (String.Compare(UIScaleInFile, "1") == 0)
+                if (String.Compare(UIScaleInFile, "3") == 0)
                 {
                     lblScaleAmount.Invoke((MethodInvoker)delegate
                     {
-                        lblScaleAmount.Text = scaleTextMap["1"];
+                        lblScaleAmount.Text = scaleTextMap["3"];
                     });
                     btnSmallerScale.Invoke((MethodInvoker)delegate
                     {
@@ -556,6 +553,10 @@ namespace SATSuma
 
                     if (String.Compare(UIScaleInFile, "5") == 0)
                     {
+                        lblScaleAmount.Invoke((MethodInvoker)delegate
+                        {
+                            lblScaleAmount.Text = scaleTextMap["5"];
+                        });
                         btnBiggerScale.Invoke((MethodInvoker)delegate
                         {
                             btnBiggerScale.Enabled = false;
@@ -1568,68 +1569,7 @@ namespace SATSuma
                     }
                 });
                 #endregion
-                #region task 2 - blockchain.info api
-                Task task2 = Task.Run(() => // blockchain.info endpoints 
-                {
-                    if (!offlineMode)
-                    {
-                        try
-                        {
-                            if (!testNet)
-                            {
-                                if (RunBlockchainInfoAPI)
-                                {
-                                    var (avgNoTransactions, _, _, _, hashesToSolve, twentyFourHourTransCount, twentyFourHourBTCSent) = BlockchainInfoDataRefresh();
-                                    UpdateLabelValueAsync(lblAvgNoTransactions, avgNoTransactions);
-                                    BigInteger hashesToSolveFormatted = BigInteger.Parse(hashesToSolve);
-                                    UpdateLabelValueAsync(lblHashesToSolve, $"{hashesToSolveFormatted:n0}");
-                                    UpdateLabelValueAsync(lblBlockListAttemptsToSolveBlock, $"{hashesToSolveFormatted:n0}");
-                                    UpdateLabelValueAsync(lbl24HourTransCount, twentyFourHourTransCount);
-                                    if (decimal.TryParse(twentyFourHourBTCSent, out decimal twentyFourHourBTCSentDec))
-                                    {
-                                        UpdateLabelValueAsync(lbl24HourBTCSent, twentyFourHourBTCSentDec.ToString("F2"));
-                                        UpdateLabelValueAsync(lbl24HourBTCSentFiat, $"{lblHeaderPrice.Text[0]}{(twentyFourHourBTCSentDec * OneBTCinSelectedCurrency):N2}");
-                                        lbl24HourBTCSentFiat.Invoke((MethodInvoker)delegate
-                                        {
-                                            lbl24HourBTCSentFiat.Location = new Point(lbl24HourBTCSent.Location.X + lbl24HourBTCSent.Width, lbl24HourBTCSentFiat.Location.Y);
-                                        });
-                                    }
-                                }
-                                else
-                                {
-                                    Control[] controlsToShowAsDisabled = { lblAvgNoTransactions, lblHashesToSolve, lblBlockListAttemptsToSolveBlock, lbl24HourTransCount, lbl24HourBTCSent };
-                                    foreach (Control control in controlsToShowAsDisabled)
-                                    {
-                                        control.Invoke((MethodInvoker)delegate
-                                        {
-                                            control.Text = "disabled";
-                                        });
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                Control[] controlsToShowAsTestnet = { lblAvgNoTransactions, lblHashesToSolve, lblBlockListAttemptsToSolveBlock, lbl24HourTransCount, lbl24HourBTCSent };
-                                foreach (Control control in controlsToShowAsTestnet)
-                                {
-                                    control.Invoke((MethodInvoker)delegate
-                                    {
-                                        control.Text = "unavailable on TestNet";
-                                    });
-                                }
-                            }
-
-                            SetLightsMessagesAndResetTimers();
-                        }
-                        catch (Exception ex)
-                        {
-                            errorOccurred = true;
-                            HandleException(ex, "UpdateBitcoinAndLightningDashboards(Task2)");
-                        }
-                    }
-                });
-                #endregion
-                #region task 4 and 5 - blockchair.com api
+                #region task 4 - blockchair.com api
                 Task task4 = Task.Run(() =>  // blockchair.com for chain stats
                 {
                     try
@@ -1664,10 +1604,28 @@ namespace SATSuma
                                     blockchainSizeGB = 0;
                                 }
                                 UpdateLabelValueAsync(lblBlockchainSize, blockchainSizeGB.ToString());
+                                UpdateLabelValueAsync(lbl24HourTransCount, result7.transactions_24h);
+
+
+
+
+                                
+                                decimal volume24hBTC = ConvertSatsToBitcoin(result7.volume_24h);
+                                    UpdateLabelValueAsync(lbl24HourBTCSent, volume24hBTC.ToString("F2"));
+                                    UpdateLabelValueAsync(lbl24HourBTCSentFiat, $"{lblHeaderPrice.Text[0]}{(volume24hBTC * OneBTCinSelectedCurrency):N2}");
+                                    lbl24HourBTCSentFiat.Invoke((MethodInvoker)delegate
+                                    {
+                                        lbl24HourBTCSentFiat.Location = new Point(lbl24HourBTCSent.Location.X + lbl24HourBTCSent.Width, lbl24HourBTCSentFiat.Location.Y);
+                                    });
+
+
+                                UpdateLabelValueAsync(lblTotalNoTransactions, result7.transactions);
+
+
                             }
                             else
                             {
-                                Control[] controlsToShowAsDisabled = { lblHodlingAddresses, lblBlocksIn24Hours, lblNodes, lblBlockchainSize };
+                                Control[] controlsToShowAsDisabled = { lblHodlingAddresses, lblBlocksIn24Hours, lblNodes, lblBlockchainSize, lbl24HourBTCSent, lbl24HourTransCount, lblTotalNoTransactions };
                                 foreach (Control control in controlsToShowAsDisabled)
                                 {
                                     control.Invoke((MethodInvoker)delegate
@@ -1679,7 +1637,7 @@ namespace SATSuma
                         }
                         else
                         {
-                            Control[] controlsToShowAsTestnet = { lblHodlingAddresses, lblBlocksIn24Hours, lblNodes, lblBlockchainSize };
+                            Control[] controlsToShowAsTestnet = { lblHodlingAddresses, lblBlocksIn24Hours, lblNodes, lblBlockchainSize, lbl24HourBTCSent, lbl24HourTransCount, lblTotalNoTransactions };
                             foreach (Control control in controlsToShowAsTestnet)
                             {
                                 control.Invoke((MethodInvoker)delegate
@@ -1706,72 +1664,67 @@ namespace SATSuma
                         HandleException(ex, "UpdateBitcoinAndLightningDashboards(Task5)");
                     }
                 });
-                Task task5 = Task.Run(() =>  // blockchair.com for halving stats
+                #endregion
+                #region task 5 - derive halving date etc
+                Task task5 = Task.Run(() =>  // derive/estimate halving block/date
                 {
                     try
                     {
                         if (!testNet)
                         {
-                            if (RunBlockchairComAPI)
+                            int currentBlock = Convert.ToInt32(lblBlockNumber.Text);
+                            int halvingInterval = 210000;
+                            int numberOfHalvings = currentBlock / halvingInterval;
+                            int halveningBlock = (numberOfHalvings + 1) * halvingInterval;
+                            int blocksLeft = halveningBlock - currentBlock;
+                            int minutesRemaining = blocksLeft * 10; //assume 10 mins to mine each block on avg
+                            int seconds_left = minutesRemaining * 60;
+                            DateTime currentDateTime = DateTime.UtcNow;
+                            DateTime estimatedHalvingDateTime = currentDateTime.AddMinutes(minutesRemaining);
+                            string halveningTime = estimatedHalvingDateTime.ToString("yyyy-MM-dd HH:mm:ss");
+
+                            UpdateLabelValueAsync(lblProgressToHalving, $"{halveningBlock} / {blocksLeft}");
+                            int progressBarValue = 0;
+                            try
                             {
-                                var (halveningBlock, _, halveningTime, blocksLeft, seconds_left) = BlockchairComHalvingJSONRefresh();
-                                UpdateLabelValueAsync(lblProgressToHalving, $"{halveningBlock} / {blocksLeft}");
-                                int progressBarValue = 0;
-                                try
-                                {
-                                    progressBarValue = 210000 - Convert.ToInt32(blocksLeft);
-                                    if (progressBarValue > 210000 || progressBarValue < 0)
-                                    {
-                                        progressBarValue = 0;
-                                    }
-                                }
-                                catch (Exception)
+                                progressBarValue = 210000 - Convert.ToInt32(blocksLeft);
+                                if (progressBarValue > 210000 || progressBarValue < 0)
                                 {
                                     progressBarValue = 0;
                                 }
-                                progressBarProgressToHalving.Value = progressBarValue;
-                                progressBarBlockListHalvingProgress.Value = progressBarValue;
-                                UpdateLabelValueAsync(lblBlockListHalvingBlockAndRemaining, $"{halveningBlock} / {blocksLeft}");
-                                string halvening_time = halveningTime;
-                                string halveningDate = "";
-                                try
-                                {
-                                    DateTime halveningDateTime = DateTime.ParseExact(halvening_time, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                                    halveningDate = halveningDateTime.Date.ToString("yyyy-MM-dd");
-                                }
-                                catch (Exception)
-                                {
-                                    halveningDate = "9999-12-31";
-                                }
-
-                                lblEstimatedHalvingDate.Invoke((MethodInvoker)delegate
-                                {
-                                    lblEstimatedHalvingDate.Text = $"{halveningDate} / ";
-                                });
-                                lblHalvingSecondsRemaining.Invoke((MethodInvoker)delegate
-                                {
-                                    lblHalvingSecondsRemaining.Location = new Point(lblEstimatedHalvingDate.Location.X + lblEstimatedHalvingDate.Width - (int)(8 * UIScale), lblEstimatedHalvingDate.Location.Y);
-                                    if (seconds_left != null)
-                                    {
-                                        lblHalvingSecondsRemaining.Text = seconds_left;
-                                        ObtainedHalvingSecondsRemainingYet = true; // signifies that we can now start deducting from this
-                                    }
-                                });
                             }
-                            else
+                            catch (Exception)
                             {
-                                progressBarProgressToHalving.Value = 0;
-                                progressBarBlockListHalvingProgress.Value = 0;
-
-                                Control[] controlsToShowAsDisabled = { lblProgressToHalving, lblBlockListHalvingBlockAndRemaining, lblEstimatedHalvingDate, lblHalvingSecondsRemaining };
-                                foreach (Control control in controlsToShowAsDisabled)
-                                {
-                                    control.Invoke((MethodInvoker)delegate
-                                    {
-                                        control.Text = "disabled";
-                                    });
-                                }
+                                progressBarValue = 0;
                             }
+                            progressBarProgressToHalving.Value = progressBarValue;
+                            progressBarBlockListHalvingProgress.Value = progressBarValue;
+                            UpdateLabelValueAsync(lblBlockListHalvingBlockAndRemaining, $"{halveningBlock} / {blocksLeft}");
+                            string halvening_time = halveningTime;
+                            string halveningDate = "";
+                            try
+                            {
+                                DateTime halveningDateTime = DateTime.ParseExact(halvening_time, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                                halveningDate = halveningDateTime.Date.ToString("yyyy-MM-dd");
+                            }
+                            catch (Exception)
+                            {
+                                halveningDate = "9999-12-31";
+                            }
+
+                            lblEstimatedHalvingDate.Invoke((MethodInvoker)delegate
+                            {
+                                lblEstimatedHalvingDate.Text = $"{halveningDate} / ";
+                            });
+                            lblHalvingSecondsRemaining.Invoke((MethodInvoker)delegate
+                            {
+                                lblHalvingSecondsRemaining.Location = new Point(lblEstimatedHalvingDate.Location.X + lblEstimatedHalvingDate.Width - (int)(8 * UIScale), lblEstimatedHalvingDate.Location.Y);
+                                if (seconds_left > 0)
+                                {
+                                    lblHalvingSecondsRemaining.Text = Convert.ToString(seconds_left);
+                                    ObtainedHalvingSecondsRemainingYet = true; // signifies that we can now start deducting from this
+                                }
+                            });
                         }
                         else
                         {
@@ -1800,12 +1753,12 @@ namespace SATSuma
                     catch (Exception ex)
                     {
                         errorOccurred = true;
-                        HandleException(ex, "UpdateBitcoinAndLightningDashboards(Task6)");
+                        HandleException(ex, "UpdateBitcoinAndLightningDashboards(Task5)");
                     }
                 });
                 #endregion
                 await Task.WhenAll(task0, task1).ConfigureAwait(true);
-                await Task.WhenAll(task3, task2, task4, task5).ConfigureAwait(true);
+                await Task.WhenAll(task3, task4, task5).ConfigureAwait(true);
 
                 if (errorOccurred)
                 {
@@ -2354,104 +2307,35 @@ namespace SATSuma
             return ("0", "0", "0", "0");
         }
         #endregion
-        #region blockchain.info api
-        private (string avgNoTransactions, string blockNumber, string estHashrate, string avgTimeBetweenBlocks, string hashesToSolve, string twentyFourHourTransCount, string twentyFourHourBTCSent) BlockchainInfoDataRefresh()
-        {
-            try
-            {
-                using WebClient client = new WebClient();
-                string avgNoTransactions = client.DownloadString("https://blockchain.info/q/avgtxnumber"); // average number of transactions in last 100 blocks (to about 6 decimal places!)
-                string avgNoTransactionsText = "";
-                if (double.TryParse(avgNoTransactions, out double dblAvgNoTransactions))
-                {
-                    dblAvgNoTransactions = Math.Round(dblAvgNoTransactions);
-                    avgNoTransactionsText = dblAvgNoTransactions.ToString();
-                }
-                else
-                {
-                    dblAvgNoTransactions = 0;
-                    avgNoTransactionsText = "0";
-                }
-                string blockNumber = client.DownloadString("https://blockchain.info/q/getblockcount"); // most recent block number
-                string estHashrate = client.DownloadString("https://blockchain.info/q/hashrate"); // hashrate estimate
-                string secondsBetweenBlocks = client.DownloadString("https://blockchain.info/q/interval"); // average time between blocks in seconds
-                if (double.TryParse(secondsBetweenBlocks, out double dblSecondsBetweenBlocks))
-                {
-                    dblSecondsBetweenBlocks = Convert.ToDouble(secondsBetweenBlocks);
-                }
-                else
-                {
-                    dblSecondsBetweenBlocks = 0;
-                }
-                TimeSpan time = TimeSpan.FromSeconds(dblSecondsBetweenBlocks);
-                string timeString = $"{time:mm}m {time:ss}s";
-                string avgTimeBetweenBlocks = timeString;
-                string hashesToSolve = client.DownloadString("https://blockchain.info/q/hashestowin"); // avg number of hashes to win a block
-                string twentyFourHourTransCount = client.DownloadString("https://blockchain.info/q/24hrtransactioncount"); // number of transactions in last 24 hours
-                string twentyFourHourBTCSent = client.DownloadString("https://blockchain.info/q/24hrbtcsent"); // number of sats sent in 24 hours
-                twentyFourHourBTCSent = ConvertSatsToBitcoin(twentyFourHourBTCSent).ToString();
-                return (avgNoTransactionsText, blockNumber, estHashrate, avgTimeBetweenBlocks, hashesToSolve, twentyFourHourTransCount, twentyFourHourBTCSent);
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "BlockchainInfoEndpointsRefresh");
-            }
-            return ("0", "0", "0", "0", "0", "0", "0");
-        }
-        #endregion
         #region blockchair.com api
-        private (string halveningBlock, string halveningReward, string halveningTime, string blocksLeft, string seconds_left) BlockchairComHalvingJSONRefresh()
-        {
-            try
-            {
-                using WebClient client = new WebClient();
-                var response = client.DownloadString("https://api.blockchair.com/tools/halvening");
-                var data = JObject.Parse(response);
-                if (data["data"]["bitcoin"]["halvening_block"] != null && data["data"]["bitcoin"]["halvening_reward"] != null && data["data"]["bitcoin"]["halvening_time"] != null && data["data"]["bitcoin"]["blocks_left"] != null && data["data"]["bitcoin"]["seconds_left"] != null)
-                {
-                    var halveningBlock = (string)data["data"]["bitcoin"]["halvening_block"];
-                    var halveningReward = (string)data["data"]["bitcoin"]["halvening_reward"];
-                    var halveningTime = (string)data["data"]["bitcoin"]["halvening_time"];
-                    var blocksLeft = (string)data["data"]["bitcoin"]["blocks_left"];
-                    var seconds_left = (string)data["data"]["bitcoin"]["seconds_left"];
-                    return (halveningBlock, halveningReward, halveningTime, blocksLeft, seconds_left);
-                }
-                else
-                {
-                    return ("0", "0", "0", "0", "0");
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "BlockchairComHalvingJSONRefresh");
-            }
-            return ("0", "0", "0", "0", "0");
-        }
-        private (string hodling_addresses, string blocks_24h, string nodes, string blockchain_size) BlockchairComChainStatsRefresh()
+        private (string hodling_addresses, string blocks_24h, string nodes, string blockchain_size, string transactions_24h, string volume_24h, string transactions ) BlockchairComChainStatsRefresh()
         {
             try
             {
                 using WebClient client = new WebClient();
                 var response = client.DownloadString("https://api.blockchair.com/bitcoin/stats");
                 var data = JObject.Parse(response);
-                if (data["data"]["hodling_addresses"] != null && data["data"]["blocks_24h"] != null && data["data"]["nodes"] != null && data["data"]["blockchain_size"] != null)
+                if (data["data"]["hodling_addresses"] != null && data["data"]["blocks_24h"] != null && data["data"]["nodes"] != null && data["data"]["blockchain_size"] != null && data["data"]["transactions_24h"] != null && data["data"]["volume_24h"] != null && data["data"]["transactions"] != null)
                 {
                     var hodling_addresses = (string)data["data"]["hodling_addresses"];
                     var blocks_24h = (string)data["data"]["blocks_24h"];
                     var nodes = (string)data["data"]["nodes"];
                     var blockchain_size = (string)data["data"]["blockchain_size"];
-                    return (hodling_addresses, blocks_24h, nodes, blockchain_size);
+                    var transactions_24h = (string)data["data"]["transactions_24h"];
+                    var volume_24h = (string)data["data"]["volume_24h"];
+                    var transactions = (string)data["data"]["transactions"];
+                    return (hodling_addresses, blocks_24h, nodes, blockchain_size, transactions_24h, volume_24h, transactions );
                 }
                 else
                 {
-                    return ("0", "0", "0", "0");
+                    return ("0", "0", "0", "0", "0", "0", "0");
                 }
             }
             catch (Exception ex)
             {
                 HandleException(ex, "BlockchairComJSONRefresh");
             }
-            return ("0", "0", "0", "0");
+            return ("0", "0", "0", "0", "0", "0", "0");
         }
         #endregion
 
@@ -5829,48 +5713,9 @@ namespace SATSuma
             try
             {
                 panelLeftPanel.SuspendLayout();
-                /*
-                #region display loading screen
-                bool wasOnTop = false;
-                if (this.TopMost == true)
-                {
-                    wasOnTop = true;
-                    this.TopMost = false;
-                }
-                // display semi-transparent overlay form
-                Form loadingTheme = new LoadingTheme(UIScale)
-                {
-                    Owner = this,
-                    StartPosition = FormStartPosition.CenterParent,
-                    FormBorderStyle = FormBorderStyle.None,
-                    BackColor = panel84.BackColor, // Set the background color to match panel colours
-                    Opacity = 1,
-                };
-                loadingTheme.StartPosition = FormStartPosition.CenterParent;
-
-                // Calculate the overlay form's location to place it in the center of the parent form
-                loadingTheme.StartPosition = FormStartPosition.Manual;
-                int parentCenterX = this.Location.X + this.Width / 2;
-                int parentCenterY = this.Location.Y + this.Height / 2;
-                int overlayX = parentCenterX - loadingTheme.Width / 2;
-                int overlayY = parentCenterY - loadingTheme.Height / 2;
-                loadingTheme.Location = new Point(overlayX, overlayY);
-                loadingTheme.Show(this);
-                #endregion
-                */
                 string submittedTransactionID = textBoxTransactionID.Text;
                 await GetTransactionAsync(submittedTransactionID).ConfigureAwait(true);
 
-                //wait 2 secs 
-                //await Wait2SecsAsync().ConfigureAwait(true);
-                /*
-                //close the loading screen
-                loadingTheme.Close();
-                if (wasOnTop)
-                {
-                    this.TopMost = true;
-                }
-                */
                 this.BringToFront();
                 this.Focus();
                 panelLeftPanel.ResumeLayout(false);
@@ -20539,6 +20384,10 @@ namespace SATSuma
                             {
                                 lblScaleAmount.Text = "big";
                             });
+                            btnSmallerScale.Invoke((MethodInvoker)delegate
+                            {
+                                btnSmallerScale.Enabled = true;
+                            });
                             UIScaleToBeSavedToSettings = 4;
                             SaveSettings();
                         }
@@ -20551,7 +20400,10 @@ namespace SATSuma
                                     lblScaleAmount.Text = "biggest";
                                 });
                                 UIScaleToBeSavedToSettings = 5;
-
+                                btnSmallerScale.Invoke((MethodInvoker)delegate
+                                {
+                                    btnSmallerScale.Enabled = true;
+                                });
                                 // disable the enlarge button
                                 btnBiggerScale.Invoke((MethodInvoker)delegate
                                 {
@@ -20601,29 +20453,16 @@ namespace SATSuma
                             lblScaleAmount.Text = "normal";
                         });
                         UIScaleToBeSavedToSettings = 3;
+                        // disable the shrink button
+                        btnSmallerScale.Invoke((MethodInvoker)delegate
+                        {
+                            btnSmallerScale.Enabled = false;
+                        });
                         SaveSettings();
                     }
                     else
                     {
-                        if (String.Compare(lblScaleAmount.Text, "normal") == 0)
-                        {
-                            lblScaleAmount.Invoke((MethodInvoker)delegate
-                            {
-                                lblScaleAmount.Text = "small";
-                            });
-                            UIScaleToBeSavedToSettings = 2;
-                            // disable the shrink button
-                            btnSmallerScale.Invoke((MethodInvoker)delegate
-                            {
-                                btnSmallerScale.Enabled = false;
-                            });
-
-                            SaveSettings();
-                        }
-                        else
-                        {
-                            return;
-                        }
+                        return;
                     }
                 }
             }
@@ -24564,7 +24403,7 @@ namespace SATSuma
                     });
                 }
                 //bitcoindashboard
-                Control[] listBitcoinDashboardDataFieldsToColor = { lblPrice, lblMoscowTime, lblMarketCapUSD, lblBTCInCirc, lblHodlingAddresses, lblAvgNoTransactions, lblBlocksIn24Hours, lbl24HourTransCount, lbl24HourBTCSent, lblTXInMempool, lblNextBlockMinMaxFee, lblNextBlockTotalFees, lblTransInNextBlock, lblHashesToSolve, lblAvgTimeBetweenBlocks, lblEstHashrate, lblNextDiffAdjBlock, lblDifficultyAdjEst, lblBlockSubsidy, lblProgressNextDiffAdjPercentage, lblBlocksUntilDiffAdj, lblEstDiffAdjDate, lblNodes, lblBlockchainSize, lblProgressToHalving, lblEstimatedHalvingDate, lblHalvingSecondsRemaining, lblBlockSubsidyAfterHalving, lblBTCToBeIssued, lblPercentIssued, lblDifficultyEpoch, lblNetworkAge, lblSubsidyEpoch, lblPrevDiffAdjustment };
+                Control[] listBitcoinDashboardDataFieldsToColor = { lblPrice, lblMoscowTime, lblMarketCapUSD, lblBTCInCirc, lblHodlingAddresses, lblTotalNoTransactions, lblBlocksIn24Hours, lbl24HourTransCount, lbl24HourBTCSent, lblTXInMempool, lblNextBlockMinMaxFee, lblNextBlockTotalFees, lblTransInNextBlock, lblAvgTimeBetweenBlocks, lblEstHashrate, lblNextDiffAdjBlock, lblDifficultyAdjEst, lblBlockSubsidy, lblProgressNextDiffAdjPercentage, lblBlocksUntilDiffAdj, lblEstDiffAdjDate, lblNodes, lblBlockchainSize, lblProgressToHalving, lblEstimatedHalvingDate, lblHalvingSecondsRemaining, lblBlockSubsidyAfterHalving, lblBTCToBeIssued, lblPercentIssued, lblDifficultyEpoch, lblNetworkAge, lblSubsidyEpoch, lblPrevDiffAdjustment };
                 foreach (Control control in listBitcoinDashboardDataFieldsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24609,7 +24448,7 @@ namespace SATSuma
                     });
                 }
                 //blocklist
-                Control[] listBlocklistDataFieldsToColor = { btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, lblBlockListTXInMempool, lblBlockListTXInNextBlock, lblBlockListMinMaxInFeeNextBlock, lblBlockListTotalFeesInNextBlock, lblBlockListAttemptsToSolveBlock, lblBlockListNextDiffAdjBlock, lblBlockListAvgTimeBetweenBlocks, lblBlockListNextDifficultyAdjustment, lblBlockListProgressNextDiffAdjPercentage, lblBlockListEstHashRate, lblBlockListBlockSubsidy, lblBlockListHalvingBlockAndRemaining, lblBlockListBlockHash, lblBlockListBlockTime, lblBlockListBlockSize, lblBlockListBlockWeight, lblBlockListNonce, lblBlockListMiner, lblBlockListTransactionCount, lblBlockListVersion, lblBlockListTotalFees, lblBlockListReward, lblBlockListBlockFeeRangeAndMedianFee, lblBlockListAverageFee, lblBlockListTotalInputs, lblBlockListTotalOutputs, lblBlockListAverageTransactionSize };
+                Control[] listBlocklistDataFieldsToColor = { btnNumericUpDownBlockHeightToStartListFromUp, btnNumericUpDownBlockHeightToStartListFromDown, lblBlockListTXInMempool, lblBlockListTXInNextBlock, lblBlockListMinMaxInFeeNextBlock, lblBlockListTotalFeesInNextBlock, lblBlockListNextDiffAdjBlock, lblBlockListAvgTimeBetweenBlocks, lblBlockListNextDifficultyAdjustment, lblBlockListProgressNextDiffAdjPercentage, lblBlockListEstHashRate, lblBlockListBlockSubsidy, lblBlockListHalvingBlockAndRemaining, lblBlockListBlockHash, lblBlockListBlockTime, lblBlockListBlockSize, lblBlockListBlockWeight, lblBlockListNonce, lblBlockListMiner, lblBlockListTransactionCount, lblBlockListVersion, lblBlockListTotalFees, lblBlockListReward, lblBlockListBlockFeeRangeAndMedianFee, lblBlockListAverageFee, lblBlockListTotalInputs, lblBlockListTotalOutputs, lblBlockListAverageTransactionSize };
                 foreach (Control control in listBlocklistDataFieldsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24708,7 +24547,7 @@ namespace SATSuma
                     });
                 }
                 //settings and appearance
-                Control[] listSettingsLabelsToColor = { label225, btnPreviewAnimations, label221, label222, label219, label302, label171, label291, label199, label298, label204, label289, lblThemeImage, label287, label290, label282, label243, label246, label242, label239, label240, label201, label198, lblSettingsOwnNodeStatus, lblSettingsSelectedNodeStatus, label193, label194, label196, label73, label161, label168, label157, label172, label174, label4, lblWhatever, label152, label171, label167, label178, label177, label179, label180, label188, label187, label191, label197, lblScaleAmount };
+                Control[] listSettingsLabelsToColor = { label225, btnPreviewAnimations, label198, label223, label224, label220, label235, label221, label222, label219, label302, label171, label291, label199, label298, label204, label289, lblThemeImage, label287, label290, label282, label243, label246, label242, label239, label240, label201, lblSettingsOwnNodeStatus, lblSettingsSelectedNodeStatus, label193, label194, label196, label73, label161, label168, label157, label172, label174, label4, lblWhatever, label152, label171, label167, label178, label177, label179, label180, label188, label187, label191, label197, lblScaleAmount };
                 foreach (Control control in listSettingsLabelsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24717,7 +24556,7 @@ namespace SATSuma
                     });
                 }
                 //bitcoindashboard
-                Control[] listBitcoinDashboardLabelsToColor = { label229, lblPoolRankingChart, lblDifficultyChart, lblHashrateChart, lblFeeRangeChart, lblBlockFeesChart, lblUniqueAddressesChart, lblChartCirculation, lblMarketCapChart, lblConverterChart, label296, label297, label301, label292, label294, lblPriceLabel, lblMoscowTimeLabel, lblMarketCapLabel, label7, label30, label14, label31, label10, label12, label11, label21, label20, label17, label8, label27, label13, label9, label3, label2, label23, label134, label137, label32, label33, label57, label19, label85, lblPriceChart };
+                Control[] listBitcoinDashboardLabelsToColor = { label229, lblPoolRankingChart, lblDifficultyChart, lblHashrateChart, lblFeeRangeChart, lblBlockFeesChart, lblUniqueAddressesChart, lblChartCirculation, lblMarketCapChart, lblConverterChart, label296, label297, label301, label292, label294, lblPriceLabel, lblMoscowTimeLabel, lblMarketCapLabel, label7, label30, label14, label31, label10, label12, label11, label21, label20, label17, label27, label13, label9, label3, label2, label23, label134, label137, label32, label33, label57, label19, label85, lblPriceChart };
                 foreach (Control control in listBitcoinDashboardLabelsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24735,7 +24574,7 @@ namespace SATSuma
                     });
                 }
                 //address
-                Control[] listAddressLabelsToColor = { label58, lblAddressTXPositionInList };
+                Control[] listAddressLabelsToColor = { label58 };
                 foreach (Control control in listAddressLabelsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24762,7 +24601,7 @@ namespace SATSuma
                     });
                 }
                 //transaction
-                Control[] listTransactionLabelsToColor = { label136, label113, label126, label125, label128, label98, label104, label130, label132, lblTransasctionInCount, lblTransasctionOutCount };
+                Control[] listTransactionLabelsToColor = { label136, label113, label126, label125, label128, label98, label104, label130, label132 };
                 foreach (Control control in listTransactionLabelsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24771,7 +24610,7 @@ namespace SATSuma
                     });
                 }
                 //blocklist
-                Control[] listBlockListLabelsToColor = { label87, label100, label106, label108, label110, label112, label115, label116, label16, label118, label120, label122, label90, label91, label105, label103, label24, label95, label99, label96, label88, label101, label93, label97, label89, label94, label92, lblBlockListFeeRangeChart, lblBlockListRewardChart, lblBlockListFeeChart, lblBlockListBlockSizeChart, lblBlockListHashrateChart, lblBlockListFeeRangeChart2, lblBlockListFeeChart2, lblBlockListDifficultyChart };
+                Control[] listBlockListLabelsToColor = { label87, label100, label106, label108, label112, label115, label116, label16, label118, label120, label122, label90, label91, label105, label103, label24, label95, label99, label96, label88, label101, label93, label97, label89, label94, label92, lblBlockListFeeRangeChart, lblBlockListRewardChart, lblBlockListFeeChart, lblBlockListBlockSizeChart, lblBlockListHashrateChart, lblBlockListFeeRangeChart2, lblBlockListFeeChart2, lblBlockListDifficultyChart };
                 foreach (Control control in listBlockListLabelsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -25092,7 +24931,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listOtherTextToColor = { lblBlockTXPositionInList, lblBlockListPositionInList, label317, label226, label223, label224, comboBoxTitlesBackgroundImage, comboBoxStartupScreen, comboBoxChartSelect, comboBoxCustomizeScreenThemeList, label220, label185, numericUpDownOpacity, label235, label160, label159, label158, label165, label173, label167, textBoxXpubScreenOwnNodeURL, textBoxSubmittedXpub, numberUpDownDerivationPathsToCheck, textboxSubmittedAddress, textBoxTransactionID, textBoxBookmarkEncryptionKey, textBoxBookmarkKey, textBoxBookmarkProposedNote, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBoxThemeName, textBox1, lblCurrentVersion, textBoxUniversalSearch, textBoxDCAAmountInput, comboBoxDCAFrequency, label227, lblUTXOCount };
+                Control[] listOtherTextToColor = { lblTransasctionInCount, lblTransasctionOutCount, lblAddressTXPositionInList, lblBlockTXPositionInList, lblBlockListPositionInList, label317, label226, comboBoxTitlesBackgroundImage, comboBoxStartupScreen, comboBoxChartSelect, comboBoxCustomizeScreenThemeList, label185, numericUpDownOpacity, label160, label159, label158, label165, label173, label167, textBoxXpubScreenOwnNodeURL, textBoxSubmittedXpub, numberUpDownDerivationPathsToCheck, textboxSubmittedAddress, textBoxTransactionID, textBoxBookmarkEncryptionKey, textBoxBookmarkKey, textBoxBookmarkProposedNote, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBoxThemeName, textBox1, lblCurrentVersion, textBoxUniversalSearch, textBoxDCAAmountInput, comboBoxDCAFrequency, label227, lblUTXOCount };
                 foreach (Control control in listOtherTextToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -25351,7 +25190,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listLinesToColor = { panel14, panel17, panel19, panel61, panel169, panel170, panel171, panel127 };
+                Control[] listLinesToColor = { panel14, panel17, panel19, panel61, panel169, panel170, panel171, panel127, panel128, panel25, panel33, panel105 };
                 foreach (Control control in listLinesToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -31681,10 +31520,6 @@ namespace SATSuma
                 {
                     lblOpenHelpAboutMenu.Text = "HELP, UPDATE ▲";
                 });
-                lblUpdateFlasher.Invoke((MethodInvoker)delegate
-                {
-                    lblUpdateFlasher.Text = "▲";
-                });
                 //expand the panel
                 currentHeightExpandingPanel = panelHelpAboutMenu.Height;
                 StartExpandingPanelVert(panelHelpAboutMenu);
@@ -32872,10 +32707,6 @@ namespace SATSuma
                 lblOpenHelpAboutMenu.Invoke((MethodInvoker)delegate
                 {
                     lblOpenHelpAboutMenu.Text = "HELP, UPDATE ▼";
-                });
-                lblUpdateFlasher.Invoke((MethodInvoker)delegate
-                {
-                    lblUpdateFlasher.Text = "▼";
                 });
             }
             catch (Exception ex)

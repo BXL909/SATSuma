@@ -18,7 +18,7 @@ using System.Windows.Forms;
  
 namespace SATSuma
 {
-    public partial class splash : Form
+    public partial class Splash : Form
     {
         #region rounded form
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
@@ -45,7 +45,7 @@ namespace SATSuma
         public Color ButtonBorderColor { get; set; }
         #endregion
         #region initialize
-        public splash(double UIScale)
+        public Splash(double UIScale)
         {
             InitializeComponent();
 
@@ -56,8 +56,8 @@ namespace SATSuma
 
             void btnScaleApply(Control parentControl)
             {
-                this.Width = (int)(378 * UIScale);
-                this.Height = (int)(206 * UIScale);
+                this.Width = (int)(303 * UIScale);
+                this.Height = (int)(152 * UIScale);
 
                 try
                 {
@@ -70,7 +70,6 @@ namespace SATSuma
                         if (control.GetType() == typeof(RJButton))
                         {
                             RJButton rjButton = (RJButton)control;
-                            // Set the borderRadius to a different value for each RJButton
                             rjButton.BorderRadius = (int)(11 * UIScale);
                         }
 
@@ -147,11 +146,10 @@ namespace SATSuma
             lblErrorMessage.ForeColor = LabelColor;
             linkLabelDownloadUpdate.ForeColor = LinksColor;
             linkLabelSupportProject.ForeColor = LinksColor;
-            linkLabelSourceCode.ForeColor = LinksColor;
             btnExit.BackColor = ButtonBackColor;
             btnExit.ForeColor = ButtonTextColor;
-            lblVersion.Text = $"SATSuma v{CurrentVersion}";
-            btnExit.BorderRadius = ButtonRadius;
+            lblVersion.Text = $"v{CurrentVersion}";
+            btnExit.BorderRadius = 10;
             btnExit.BorderSize = ButtonBorderSize;
             btnExit.BorderColor = ButtonBorderColor;
             CheckForUpdates();
@@ -172,20 +170,28 @@ namespace SATSuma
                         lblUpToDate.Visible = false;
                         lblVersionAvailable.Invoke((MethodInvoker)delegate
                         {
-                            lblVersionAvailable.Text = $"v{LatestVersion} available";
+                            lblVersionAvailable.Text = $"v{LatestVersion} AVAILABLE";
                             lblVersionAvailable.Visible = true;
                         });
                         linkLabelDownloadUpdate.Invoke((MethodInvoker)delegate
                         {
-                            linkLabelDownloadUpdate.Text = "download update";
+                            linkLabelDownloadUpdate.Text = "DOWNLOAD UPDATE";
                             linkLabelDownloadUpdate.Visible = true;
                         });
 
                     }
                     else
                     {
-                        lblUpToDate.Visible = true;
-                        linkLabelDownloadUpdate.Visible = false;
+                        lblUpToDate.Invoke((MethodInvoker)delegate
+                        {
+                            lblUpToDate.Text = $"v{LatestVersion} (UP TO DATE)";
+                            lblUpToDate.Visible = true;
+                        });
+                        linkLabelDownloadUpdate.Invoke((MethodInvoker)delegate
+                        {
+                            linkLabelDownloadUpdate.Text = "SATSuma WEBSITE";
+                            linkLabelDownloadUpdate.Visible = true;
+                        });
                     }
                 }
                 else
@@ -194,7 +200,7 @@ namespace SATSuma
                     lblUpToDate.Visible = false;
                     linkLabelDownloadUpdate.Invoke((MethodInvoker)delegate
                     {
-                        linkLabelDownloadUpdate.Text = "check for update";
+                        linkLabelDownloadUpdate.Text = "CHECK FOR UPDATE";
                         linkLabelDownloadUpdate.Visible = true;
                     });
                 }
@@ -239,7 +245,14 @@ namespace SATSuma
         #region handle links
         private void LinkLabelDownloadUpdate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://satsuma.btcdir.org/download/");
+            if (linkLabelDownloadUpdate.Text == "SATSuma WEBSITE")
+            {
+                System.Diagnostics.Process.Start("https://satsuma.btcdir.org");
+            }
+            else
+            {
+                System.Diagnostics.Process.Start("https://satsuma.btcdir.org/download/");
+            }
         }
 
         private void LinkLabelSupportProject_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -264,15 +277,15 @@ namespace SATSuma
             string errorMessage;
             if (ex is WebException)
             {
-                errorMessage = "Web exception occurred";
+                errorMessage = "ERROR: WEB EXCEPTION";
             }
             else if (ex is HttpRequestException)
             {
-                errorMessage = "HTTP Request error";
+                errorMessage = "HTTP REQUEST ERROR";
             }
             else
             {
-                errorMessage = "Error occurred";
+                errorMessage = "ERROR OCCURED";
             }
 
             lblErrorMessage.Invoke((MethodInvoker)delegate

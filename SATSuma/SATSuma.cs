@@ -1,51 +1,47 @@
-﻿/*  
-..........................................................................................................................................
-.
-. ⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣴⣶⣾⣿⣿⣿⣿⣷⣶⣦⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀  ⠀  _____      _______ _____                       
-. ⠀⠀⠀⠀⠀⣠⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⣄⠀⠀⠀⠀⠀  ⠀ / ____|  /\|__   __/ ____|                 v2.2    
-. ⠀⠀⠀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⠀⠀ ⠀ ⠀| (___   /  \  | | | (___  _   _ _ __ ___   __ _ 
-. ⠀⠀⣴⣿⣿⣿⣿⣿⣿⣿⠟⠿⠿⡿⠀⢰⣿⠁⢈⣿⣿⣿⣿⣿⣿⣿⣿⣦⠀   ⠀ \___ \ / /\ \ | |  \___ \| | | | '_ ` _ \ / _` |
-. ⠀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣤⣄⠀⠀⠀⠈⠉⠀⠸⠿⣿⣿⣿⣿⣿⣿⣿⣿⣧⠀  ⠀ ____) / ____ \| |  ____) | |_| | | | | | | (_| |
-. ⢰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠀⠀⢠⣶⣶⣤⡀⠀⠈⢻⣿⣿⣿⣿⣿⣿⣿⡆  ⠀|_____/_/    \_\_| |_____/ \__,_|_| |_| |_|\__,_| 
-. ⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃⠀⠀⠼⣿⣿⡿⠃⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣷   A block explorer, Xpub viewer, bitcoin & lightning dashboard, DCA calculator, multiple onchain & market
-. ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⠀⠀⢀⣀⣀⠀⠀⠀⠀⢴⣿⣿⣿⣿⣿⣿⣿⣿⣿   charts, directory, fiat converter and loads more, with the ability to create encryted bookmarks and 
-. ⢿⣿⣿⣿⣿⣿⣿⣿⢿⣿⠁⠀⠀⣼⣿⣿⣿⣦⠀⠀⠈⢻⣿⣿⣿⣿⣿⣿⣿⡿   notes, select from multiple preset themes or create your own. Xpub queries will only work on the users's
-. ⠸⣿⣿⣿⣿⣿⣿⣏⠀⠀⠀⠀⠀⠛⠛⠿⠟⠋⠀⠀⠀⣾⣿⣿⣿⣿⣿⣿⣿⠇   own node. Keys to unlock encrypted bookmarks are not stored anywhere and are uncrecoverable. Data and
-. ⠀⢻⣿⣿⣿⣿⣿⣿⣿⣿⠇⠀⣤⡄⠀⣀⣀⣀⣀⣠⣾⣿⣿⣿⣿⣿⣿⣿⡟⠀   config files (bookmarks, themes and settings) are all saved to the user's application data directory.
-. ⠀⠀⠻⣿⣿⣿⣿⣿⣿⣿⣄⣰⣿⠁⢀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠀⠀   
-. ⠀⠀⠀⠙⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠋⠀⠀⠀   🍊 Homepage.......... https://satsuma.btcdir.org/
-. ⠀⠀⠀⠀⠀⠙⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠋⠀⠀⠀⠀⠀   🍊 Version history... https://satsuma.btcdir.org/version-history/
-. ⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠻⠿⢿⣿⣿⣿⣿⡿⠿⠟⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀   🍊 Download.......... https://satsuma.btcdir.org/download/
-.
-..........................................................................................................................................
-.
-. Stuff to do:
-. Taproot support on xpub screen 
-. documentation for new pools screens (code done, just do online help)
-. testing, particularly new pools screens on own node
-. check tooltips everywhere
-. test all UIScales
-. dca didn't recalculate? - try to recreate and fix (maybe start date was before a market price existed?)
-..........................................................................................................................................
-*/
-
+﻿//!_______________________________________________________________________________________________________
+//![](resources\SatsumaButton-4.png)v2.2
+//!A block explorer, Xpub viewer, bitcoin & lightning dashboard, DCA calculator, multiple onchain & market
+//!charts, directory, fiat converter and loads more, with the ability to create encryted bookmarks and 
+//!notes, select from multiple preset themes or create your own. Xpub queries will only work on the users's
+//!own node. Keys to unlock encrypted bookmarks are not stored anywhere and are uncrecoverable. Data and
+//!config files (bookmarks, themes and settings) are all saved to the user's application data directory.
+//
+//!🍊 Homepage.......... https://satsuma.btcdir.org/
+//!🍊 Version history... https://satsuma.btcdir.org/version-history/
+//!🍊 Download.......... https://satsuma.btcdir.org/download/
+//
+//TODO___________________________________________________________________________________________________
+//TODO Taproot support on xpub screen 
+//TODO documentation for new pools screens (code done, pages created, just do text)
+//TODO testing, particularly new pools screens on own node
+//TODO check tooltips everywhere
+//TODO test all UIScales
+//TODO differentiate loadingtheme and loadingscreen 
+//BUG____________________________________________________________________________________________________
+//!_______________________________________________________________________________________________________
 #region Using
+using CustomControls.RJControls;
 using NBitcoin;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using QRCoder;
+using SATSuma.Properties;
 using ScottPlot;
+using ScottPlot.Renderable;
 using System;
-using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.NetworkInformation;
+using System.Numerics;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
@@ -56,15 +52,6 @@ using System.Windows.Forms;
 using Control = System.Windows.Forms.Control;
 using ListViewItem = System.Windows.Forms.ListViewItem;
 using Panel = System.Windows.Forms.Panel;
-using System.Drawing.Drawing2D;
-using CustomControls.RJControls;
-using System.Diagnostics;
-using SATSuma.Properties;
-using ScottPlot.Renderable;
-using System.Numerics;
-using static SATSuma.SATSuma;
-using System.Runtime.Remoting.Channels;
-using ScottPlot.Plottable;
 #endregion
 
 namespace SATSuma
@@ -85,7 +72,7 @@ namespace SATSuma
            int nHeightEllipse // width of ellipse
          );
         #endregion
-
+        //![](resources\tinylogo1.png;;;0.04706,0.04877) 
         #region ⚡⚡⚡ VARIABLE DECLARATION
         #region timers
         private int intDisplayCountdownToRefresh; // countdown in seconds to next refresh, for display only
@@ -255,7 +242,6 @@ namespace SATSuma
         bool btnShowConfirmedAddressTXWasEnabled; // Address screen - store button state during queries to return to that state afterwards
         bool btnShowUnconfirmedAddressTXWasEnabled = true; // Address screen - store button state during queries to return to that state afterwards
         bool BtnViewTransactionFromAddressWasEnabled; // Address screen - store button state during queries to return to that state afterwards
-        bool BtnViewBlockFromAddressWasEnabled; // Address screen - store button state during queries to return to that state afterwards
         bool textBoxSubmittedAddressWasEnabled = true; // Address screen - store button state during queries to return to that state afterwards
         bool btnPreviousBlockTransactionsWasEnabled; // Block screen - store button state during queries to return to that state afterwards
         bool btnNextBlockTransactionsWasEnabled; // Block screen - store button state during queries to return to that state afterwards
@@ -381,7 +367,7 @@ namespace SATSuma
 
         #endregion
         #endregion
-
+        //![](resources\tinylogo1.png;;;0.04706,0.04877)
         #region ⚡⚡⚡ INITIALISE
 
         #region custom move form button
@@ -468,13 +454,13 @@ namespace SATSuma
             this.Height = (int)(754 * UIScale);
 
             #endregion
-
+            
             #region rounded panels and form
             #region rounded panels
             Control[] panelsToRound = { panelXpubContainer, panelXpubScrollContainer, panel32, panel74, panel76, panel77, panel99, panel84, panel88, panel89, panel90, panel86, panel87, panel103, panel46, panel51, panel91, panel70, panel71, panel16, panel21, panel85, panel53, panel96, panel106, panel107, panel92, panelAddToBookmarks, panelAddToBookmarksBorder,
                 panelLeftPanel, panelOwnNodeAddressTXInfo, panelOwnNodeBlockTXInfo, panelTransactionMiddle, panelErrorMessage, panelSettingsUIScale, panelSettingsUIScaleContainer, panelDCAMessages, panelDCASummary, panelDCAInputs, panel119, panelPriceConvert, panelDCAChartContainer, panel117, panel121,
-                panel122, panel101, panel27, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panelAddressUTXOScrollContainer, panelBookmarksContainer, panelBookmarksScrollContainer, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panelPoolsBlocksScrollContainer, panel147, panel80, panel153, panel158,
-                panelTransactionInputs, panelTransactionOutputs, panelTXInScrollContainer, panelTXOutScrollContainer, panelAddressTxContainer, panel120, panel123, panel124, panelPriceSourceIndicatorsOuter, panelBookmarksScrollbarInner, panelTXInScrollbarInner, panelTXOutScrollbarInner, panelAddressUTXOScrollbarInner, panelPoolsBlocksScrollbarInner, panelXpubScrollbarInner, panelUTXOError };
+                panel122, panel101, panel27, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panelAddressUTXOScrollContainer, panelBookmarksContainer, panelBookmarksScrollContainer, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panelPoolsBlocksScrollContainer, panel147, panel80, panel153, panel158, panelPoolsListScrollContainer,
+                panelTransactionInputs, panelTransactionOutputs, panelTXInScrollContainer, panelTXOutScrollContainer, panelAddressTxContainer, panel120, panel123, panel124, panelPriceSourceIndicatorsOuter, panelBookmarksScrollbarInner, panelTXInScrollbarInner, panelTXOutScrollbarInner, panelAddressUTXOScrollbarInner, panelPoolsBlocksScrollbarInner, panelXpubScrollbarInner, panelUTXOError, panel133, panel134 };
             foreach (Control control in panelsToRound)
             {
                 control.Paint += Panel_Paint;
@@ -491,10 +477,17 @@ namespace SATSuma
             #endregion
             #region panels (heading containers)
             Control[] panelHeadingContainersToRound = { panel1, panel2, panel3, panel4, panel5, panel6, panel7, panel8, panel9, panel10, panel11, panel12, panel20, panel23, panel26, panel29, panel31, panel38, panel39, panel40, panel41, panel42, panel43, panel44, panel45, panel57, panel78,
-                panel94, panel109, panelLoadingAnimationContainer, panel141, panel136, panel139, panel138, panel145, panel81, panel146 };
+                panel94, panel109, panelLoadingAnimationContainer, panel141, panel136, panel139, panel138, panel145, panel81, panel146, panel24 };
             foreach (Control control in panelHeadingContainersToRound)
             {
                 control.Paint += Panel_Paint;
+            }
+            #endregion
+            #region rounded panels ('tabs' beneath listviews)
+            Control[] panelsToTab = { panelBlockTransactionsTab, panelBlockListTab, panelAddressTXTab, panelAddressUTXOTab, panelTransactionInTab, panelTransactionOutTab };
+            foreach (Control control in panelsToTab)
+            {
+                control.Paint += PanelTab_Paint;
             }
             #endregion
             #region rounded form
@@ -504,15 +497,9 @@ namespace SATSuma
             Padding = new Padding(1);
             #endregion
             #endregion
-
-            Control[] panelsToTab = { panelBlockTransactionsTab, panelBlockListTab, panelAddressTXTab, panelAddressUTXOTab, panelTransactionInTab, panelTransactionOutTab };
-            foreach (Control control in panelsToTab)
-            {
-                control.Paint += PanelTab_Paint;
-            }
         }
 
-        private void SATSuma_Load(object sender, EventArgs e)
+        private async void SATSuma_Load(object sender, EventArgs e)
         {
             try
             {
@@ -566,11 +553,45 @@ namespace SATSuma
                 #endregion
 
                 #endregion
+
+                #region display loading screen
+                bool wasOnTop = false;
+                Form loadingTheme1 = new LoadingTheme(UIScale)
+                {
+                    Owner = this,
+                    StartPosition = FormStartPosition.CenterParent,
+                    FormBorderStyle = FormBorderStyle.None,
+                    BackColor = panel84.BackColor, // Set the background color to match panel colours
+                    Opacity = 1,
+                };
+
+                if (this.TopMost == true)
+                {
+                    wasOnTop = true;
+                    this.TopMost = false;
+                }
+                if (!fullScreenLoadingScreenVisible)
+                {
+                    fullScreenLoadingScreenVisible = true;
+
+                    loadingTheme1.StartPosition = FormStartPosition.CenterParent;
+
+                    // Calculate the overlay form's location to place it in the center of the parent form
+                    loadingTheme1.StartPosition = FormStartPosition.Manual;
+                    int parentCenterX = this.Location.X + this.Width / 2;
+                    int parentCenterY = this.Location.Y + this.Height / 2;
+                    int overlayX = parentCenterX - loadingTheme1.Width / 2;
+                    int overlayY = parentCenterY - loadingTheme1.Height / 2;
+                    loadingTheme1.Location = new Point(overlayX, overlayY);
+                    loadingTheme1.Show(this);
+                }
+                #endregion 
+
                 #region restore saved settings
                 RestoreSavedSettings(); // api choices, node, xpub node, theme
                 #endregion
                 #region check network
-                CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync();
                 #endregion
                 #region set/get some initial values (e.g block height, price)
                 panelErrorMessage.Invoke((MethodInvoker)delegate
@@ -582,7 +603,9 @@ namespace SATSuma
                     lblCurrentVersion.Text = $"v{CurrentVersion}";
                     lblCurrentVersion.Location = new Point(lblSatsumaTitle.Location.X + lblSatsumaTitle.Width, lblCurrentVersion.Location.Y);
                 });
-                GetBlockTipAndCirculation();
+                ToggleLoadingAnimation("enable");
+                await GetBlockTipAndCirculationAsync();
+                ToggleLoadingAnimation("disable");
                 GetMarketData();
                 #endregion
                 #region populate all the screens that can be populated and start the timers ticking
@@ -683,6 +706,17 @@ namespace SATSuma
                 }
 
                 #endregion
+
+                //close the loading screen
+                await Wait2SecsAsync();
+                loadingTheme1.Close();
+                fullScreenLoadingScreenVisible = false;
+               
+                if (wasOnTop)
+                {
+                    this.TopMost = true;
+                }
+
             }
             catch (WebException ex)
             {
@@ -691,7 +725,7 @@ namespace SATSuma
         }
 
         #endregion
-
+        //![](resources\tinylogo1.png;;;0.04706,0.04877)
         #region ⚡⚡⚡ CLOCK TICK EVENTS
         private void StartTheClocksTicking()
         {
@@ -800,7 +834,7 @@ namespace SATSuma
         #endregion
 
         #endregion
-
+        //![](resources\tinylogo1.png;;;0.04706,0.04877)
         #region ⚡⚡⚡ BITCOIN AND LIGHTNING DASHBOARD SCREENS
 
         #region update dashboards
@@ -2449,8 +2483,8 @@ namespace SATSuma
         #endregion
 
         #endregion
-
-        #region ⚡⚡⚡ ADDRESS SCREEN
+        //![](resources\tinylogo1.png;;;0.04706,0.04877)
+        #region ⚡⚡⚡ ADDRESS (TX's) SCREEN
 
         #region setup address screen
         private async void TboxSubmittedAddress_TextChangedAsync(object sender, EventArgs e)
@@ -3343,11 +3377,11 @@ namespace SATSuma
         #endregion
         #region navigate from tx row to other screen
         //------------------------ VIEW THE BLOCK CONTAINING THIS TRANSACTION ------------------------------------------
-        private void BtnViewBlockFromAddress_Click(object sender, EventArgs e)
+        private async void BtnViewBlockFromAddress_Click(object sender, EventArgs e)
         {
             try
             {
-                CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync();
                 // Get the selected item
                 ListViewItem selectedItem = listViewAddressTransactions.SelectedItems[0];
                 // Get the second subitem in the selected item 
@@ -3375,11 +3409,11 @@ namespace SATSuma
         }
 
         //------------------------ VIEW THIS TRANSACTION ------------------------------------------------------
-        private void BtnViewTransactionFromAddress_Click(object sender, EventArgs e)
+        private async void BtnViewTransactionFromAddress_Click(object sender, EventArgs e)
         {
             try
             {
-                CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync();
                 // Get the selected item
                 ListViewItem selectedItem = listViewAddressTransactions.SelectedItems[0];
                 // Get the first subitem in the selected item 
@@ -3741,7 +3775,7 @@ namespace SATSuma
         #endregion
 
         #endregion
-
+        //![](resources\tinylogo1.png;;;0.04706,0.04877)
         #region ⚡⚡⚡ ADDRESS (UTXO's) SCREEN
         #region setup address utxo screen
         private async void TextboxSubmittedAddressUTXO_TextChanged(object sender, EventArgs e)
@@ -4185,11 +4219,11 @@ namespace SATSuma
         }
         #endregion
         #region navigate from utxo row to other screen
-        private void BtnViewTransactionFromAddressUTXO_Click(object sender, EventArgs e)
+        private async void BtnViewTransactionFromAddressUTXO_Click(object sender, EventArgs e)
         {
             try
             {
-                CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync();
                 // Get the selected item
                 ListViewItem selectedItem = listViewAddressUTXOs.SelectedItems[0];
                 // Get the first subitem in the selected item 
@@ -4208,11 +4242,11 @@ namespace SATSuma
             }
         }
 
-        private void BtnViewBlockFromAddressUTXO_Click(object sender, EventArgs e)
+        private async void BtnViewBlockFromAddressUTXO_Click(object sender, EventArgs e)
         {
             try
             {
-                CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync();
                 // Get the selected item
                 ListViewItem selectedItem = listViewAddressUTXOs.SelectedItems[0];
                 // Get the second subitem in the selected item 
@@ -4705,7 +4739,7 @@ namespace SATSuma
         #endregion
 
         #endregion
-
+        //![](resources\tinylogo1.png;;;0.04706,0.04877)
         #region ⚡⚡⚡ BLOCK SCREEN
         #region user input
         private void NumericUpDownSubmittedBlockNumberUp_Click(object sender, EventArgs e)
@@ -5408,11 +5442,11 @@ namespace SATSuma
         }
         #endregion
         #region navigate from listview to tx screen
-        private void BtnViewTransactionFromBlock_Click(object sender, EventArgs e)
+        private async void BtnViewTransactionFromBlock_Click(object sender, EventArgs e)
         {
             try
             {
-                CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync();
                 // Get the selected item
                 ListViewItem selectedItem = listViewBlockTransactions.SelectedItems[0];
                 // Get the first subitem in the selected item 
@@ -5568,7 +5602,7 @@ namespace SATSuma
         }
         #endregion
         #endregion
-
+        //![](resources\tinylogo1.png;;;0.04706,0.04877)
         #region ⚡⚡⚡ TRANSACTION SCREEN
         #region user input
         private void TextBoxTransactionID_KeyPress(object sender, KeyPressEventArgs e)
@@ -6947,11 +6981,11 @@ namespace SATSuma
         #endregion
         #region navigate from listview to address screen
         //-------------------- VIEW ADDRESS ------------------------------------------------------------
-        private void BtnViewAddressFromTXInput_Click(object sender, EventArgs e)
+        private async void BtnViewAddressFromTXInput_Click(object sender, EventArgs e)
         {
             try
             {
-                CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync();
                 // Get the selected item
                 ListViewItem selectedItem = listViewTransactionInputs.SelectedItems[0];
                 // Get the first subitem in the selected item 
@@ -6969,11 +7003,11 @@ namespace SATSuma
             }
         }
 
-        private void BtnViewAddressFromTXOutput_Click(object sender, EventArgs e)
+        private async void BtnViewAddressFromTXOutput_Click(object sender, EventArgs e)
         {
             try
             {
-                CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync();
                 // Get the selected item
                 ListViewItem selectedItem = listViewTransactionOutputs.SelectedItems[0];
                 // Get the first subitem in the selected item 
@@ -7065,7 +7099,7 @@ namespace SATSuma
         }
         #endregion
         #endregion
-
+        //![](resources\tinylogo1.png;;;0.04706,0.04877)
         #region ⚡⚡⚡ BLOCK LIST SCREEN
         #region user input
         private void BtnNumericUpDownBlockHeightToStartListFromUp_Click(object sender, EventArgs e)
@@ -7564,11 +7598,11 @@ namespace SATSuma
         #endregion
         #region navigate from listview to block screen
         //-------------------- VIEW INDIVIDUAL BLOCK ------------------------------------------------------------------------
-        private void BtnViewBlockFromBlockList_Click(object sender, EventArgs e)
+        private async void BtnViewBlockFromBlockList_Click(object sender, EventArgs e)
         {
             try
             {
-                CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync();
                 // Get the selected item
                 ListViewItem selectedItem = listViewBlockList.SelectedItems[0];
                 if (selectedItem != null)
@@ -7595,8 +7629,6 @@ namespace SATSuma
         {
             try
             {
-                bool anySelected = false;
-
                 foreach (ListViewItem item in listViewBlockList.Items)
                 {
                     if (item != null)
@@ -7609,7 +7641,6 @@ namespace SATSuma
                             {
                                 subItem.ForeColor = MakeColorLighter(tableTextColor, 20);
                             }
-                            anySelected = true;
                             // display block hash
                             using (WebClient client = new WebClient())
                             {
@@ -7627,13 +7658,11 @@ namespace SATSuma
                             }
                             string blockNumber = item.SubItems[0].Text;
                             ToggleLoadingAnimation("enable"); // start the loading animation
-                            //DisableEnableBlockListButtons("disable"); // disable buttons during operation
                             LightUpNodeLight();
                             var blocksJson = await _blockService.GetBlockDataAsync(blockNumber).ConfigureAwait(true);
                             if (!string.IsNullOrEmpty(blocksJson))
                             {
                                 ToggleLoadingAnimation("disable"); // stop the loading animation
-                                //DisableEnableBlockListButtons("enable"); // enable buttons after operation is complete
 
                                 var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
                                 lblBlockListBlockTime.Invoke((MethodInvoker)delegate
@@ -7772,7 +7801,6 @@ namespace SATSuma
                             else
                             {
                                 ToggleLoadingAnimation("disable"); // stop the loading animation
-                                DisableEnableBlockListButtons("enable"); // enable buttons after operation is complete
                             }
                         }
                         else
@@ -7784,7 +7812,6 @@ namespace SATSuma
                         }
                     }
                 }
-                //btnViewBlockFromBlockList.Visible = anySelected;
             }
             catch (Exception ex)
             {
@@ -8004,7 +8031,7 @@ namespace SATSuma
         }
         #endregion
         #endregion
-
+        //![](resources\tinylogo1.png;;;0.04706,0.04877)
         #region ⚡⚡⚡ XPUB SCREEN
         #region user input & validation
 
@@ -10174,11 +10201,11 @@ namespace SATSuma
         #endregion
         #region navigate from listview to address screen
         //-------------------- VIEW ADDRESS --------------------------------------------------------------
-        private void BtnViewAddressFromXpub_Click(object sender, EventArgs e)
+        private async void BtnViewAddressFromXpub_Click(object sender, EventArgs e)
         {
             try
             {
-                CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync();
                 // Get the selected item
                 ListViewItem selectedItem = listViewXpubAddresses.SelectedItems[0];
                 // Get the first subitem in the selected item 
@@ -10213,7 +10240,7 @@ namespace SATSuma
         }
         #endregion
         #endregion
-
+        //![](resources\tinylogo1.png;;;0.04706,0.04877)
         #region ⚡⚡ POOLS RANKINGS SCREENS AND CHARTS
 
         #region ⚡⚡MINING POOLS BY BLOCKS SCREEN⚡
@@ -10222,6 +10249,7 @@ namespace SATSuma
         {
             try
             {
+                ToggleLoadingAnimation("enable");
                 LightUpNodeLight();
                 var PoolsByBlockJson = await _PoolsByBlockService.GetPoolsByBlockAsync(poolsBlocksTimePeriod).ConfigureAwait(true);
                 var poolsBlocks = JsonConvert.DeserializeObject<PoolsBlocks>(PoolsByBlockJson);
@@ -10298,6 +10326,7 @@ namespace SATSuma
 
                     ChartPoolsRankingForPoolsScreen(poolsBlocksTimePeriod);
                     ChartsHashrateForPoolsScreen(poolsBlocksTimePeriod);
+                    ToggleLoadingAnimation("disable");
                 }
             }
             catch (Exception ex)
@@ -10701,6 +10730,7 @@ namespace SATSuma
         {
             try
             {
+                ToggleLoadingAnimation("enable");
                 LightUpNodeLight();
                 var PoolsByHashrateJson = await _PoolsByHashrateService.GetPoolsByHashrateAsync(poolsHashrateTimePeriod).ConfigureAwait(true);
                 var pools = JsonConvert.DeserializeObject<List<PoolHashrate>>(PoolsByHashrateJson);
@@ -10728,7 +10758,7 @@ namespace SATSuma
                             listViewPoolsHashrate.Columns.Add("Pool name", (int)(90 * UIScale));
                             listViewPoolsHashrate.Columns.Add("Rank", (int)(35 * UIScale));
                             listViewPoolsHashrate.Columns.Add("Share", (int)(70 * UIScale));
-                            listViewPoolsHashrate.Columns.Add("Average hashrate", (int)(153 * UIScale));
+                            listViewPoolsHashrate.Columns.Add("Average hashrate", (int)(150 * UIScale));
                             listViewPoolsHashrate.GetType().InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, listViewPoolsHashrate, new object[] { true });
 
                         });
@@ -10764,6 +10794,7 @@ namespace SATSuma
 
                     ChartPoolsRankingForPoolsScreen(poolsHashrateTimePeriod);
                     ChartsHashrateForPoolsScreen(poolsHashrateTimePeriod);
+                    ToggleLoadingAnimation("disable");
                 }
             }
             catch (Exception ex)
@@ -11365,12 +11396,13 @@ namespace SATSuma
         #endregion
 
         #endregion
-
+        //![](resources\tinylogo1.png;;;0.04706,0.04877)
         #region ⚡⚡ POOL SCREEN
         private async void SetupPoolScreen()
         {
             try
             {
+                ToggleLoadingAnimation("enable");
                 #region get pools list data and create listview
                 // if we haven't already got the pools list, get it now
                 if (listViewPoolsList.Items.Count == 0)
@@ -11378,12 +11410,14 @@ namespace SATSuma
                     #region get the pools list data
                     LightUpNodeLight();
                     var PoolsListJson = await _miningPoolsListService.GetMiningPoolsListAsync().ConfigureAwait(true);
-                    var poolsList = JsonConvert.DeserializeObject<List<PoolForList>>(PoolsListJson); // Deserialize into a list
+                    //var poolsList = JsonConvert.DeserializeObject<List<PoolForList>>(PoolsListJson); // Deserialize into a list
+                    var poolsList = JsonConvert.DeserializeObject<PoolsWrapper>(PoolsListJson);
                     #endregion
                     #region ListView
                     if (poolsList != null)
                     {
-                        poolsList = poolsList.OrderBy(pool => pool.Name).ToList();
+                       // poolsList = poolsList.OrderBy(pool => pool.Name).ToList();
+                        
 
                         listViewPoolsList.Invoke((MethodInvoker)delegate
                         {
@@ -11402,7 +11436,8 @@ namespace SATSuma
                         });
                         // Add the items to the ListView
                         int counter = 0; 
-                        foreach (var pool in poolsList)
+                        //foreach (var pool in poolsList)
+                        foreach (var pool in poolsList.Pools)
                         {
 
                             ListViewItem item = new ListViewItem(Convert.ToString(pool.Name)); // create new row
@@ -11474,6 +11509,7 @@ namespace SATSuma
                     }
                 }
                 #endregion
+                ToggleLoadingAnimation("disable");
             }
             catch (Exception ex)
             {
@@ -11734,9 +11770,11 @@ namespace SATSuma
                 {
                     label320.Text = pool.ToUpper();
                 });
+                ToggleLoadingAnimation("enable");
                 GetPoolStats(slug);
                 GetTenRecentBlocksFromPool(slug);
                 ChartsHashrateForPoolScreen(slug);
+                ToggleLoadingAnimation("disable");
                 panelPoolsListScrollContainer.Invalidate();
                 panel160.Invalidate();
                 panelPoolsListContainer.Invalidate();
@@ -11854,7 +11892,7 @@ namespace SATSuma
 
         #endregion
 
-        #region show 10 most recent blocks by selected pool
+        #region get 10 most recent blocks by selected pool
 
         private async void GetTenRecentBlocksFromPool(string slug)
         {
@@ -12037,11 +12075,11 @@ namespace SATSuma
             }
         }
 
-        private void BtnViewBlockFromBlocksByPool_Click(object sender, EventArgs e)
+        private async void BtnViewBlockFromBlocksByPool_Click(object sender, EventArgs e)
         {
             try
             {
-                CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync();
                 // Get the selected item
                 ListViewItem selectedItem = listViewBlocksByPool.SelectedItems[0];
                 if (selectedItem != null)
@@ -12135,7 +12173,7 @@ namespace SATSuma
         #endregion
 
         #endregion
-
+        //![](resources\tinylogo1.png;;;0.04706,0.04877)
         #region ⚡⚡⚡ CHARTS SCREEN⚡
         #region select chart
         private void ComboBoxChartSelect_OnSelectedIndexChanged(object sender, EventArgs e)
@@ -15519,7 +15557,7 @@ namespace SATSuma
         }
         #endregion
         #endregion
-
+        //![](resources\tinylogo1.png;;;0.04706,0.04877)
         #region ⚡⚡⚡ ADD TO BOOKMARKS TAB⚡
         #region show, populate or hide the add bookmark tab
         private void BtnAddToBookmarks_Click(object sender, EventArgs e)
@@ -15911,7 +15949,7 @@ namespace SATSuma
         }
         #endregion
         #endregion
-
+        //![](resources\tinylogo1.png;;;0.04706,0.04877)
         #region ⚡⚡⚡ BOOKMARKS SCREEN
         #region set up bookmarks screen
         private void SetupBookmarksScreen()
@@ -16303,7 +16341,6 @@ namespace SATSuma
         {
             try
             {
-                CheckNetworkStatusAsync();
                 if (String.Compare(lblSelectedBookmarkType.Text, "block") == 0)
                 {
                     numericUpDownSubmittedBlockNumber.Invoke((MethodInvoker)delegate
@@ -16978,7 +17015,7 @@ namespace SATSuma
         }
         #endregion
         #endregion
-
+        //![](resources\tinylogo1.png;;;0.04706,0.04877)
         #region ⚡⚡ DCA CALCULATOR
 
         private async void PopulateDCACalculatorAsync()
@@ -17557,7 +17594,7 @@ namespace SATSuma
         }
         #endregion
         #endregion
-
+        //![](resources\tinylogo1.png;;;0.04706,0.04877)
         #region ⚡⚡⚡ BTC/FIAT CONVERTER
         #region populate data
         private void PopulateConverterScreen()
@@ -18063,7 +18100,7 @@ namespace SATSuma
         }
         #endregion
         #endregion
-
+        //![](resources\tinylogo1.png;;;0.04706,0.04877)
         #region ⚡⚡⚡ DIRECTORY SCREEN
         #region load the directory page
         private void LoadAndStyleDirectoryBrowser()
@@ -18358,7 +18395,7 @@ namespace SATSuma
 
         #endregion
         #endregion
-
+        //![](resources\tinylogo1.png;;;0.04706,0.04877)
         #region ⚡⚡ SETTINGS SCREEN
         #region user input own node url
         private void TextBoxSettingsOwnNodeURL_Enter(object sender, EventArgs e)
@@ -18508,7 +18545,7 @@ namespace SATSuma
         }
         #endregion
         #region node selection
-        private void LblSettingsNodeMainnet_Click(object sender, EventArgs e)
+        private async void LblSettingsNodeMainnet_Click(object sender, EventArgs e)
         {
             try
             {
@@ -18532,14 +18569,14 @@ namespace SATSuma
                     });
                     NodeURL = "https://mempool.space/api/";
                     RunMempoolSpaceLightningAPI = true;
-                    CheckNetworkStatusAsync();
+                    await CheckNetworkStatusAsync();
                     CreateDataServices();
                     SaveSettings();
                     if (RunBlockchainInfoAPI)
                     {
                         EnableChartsThatUseBlockchainInfoAPI();
                     }
-                    GetBlockTipAndCirculation();
+                    await GetBlockTipAndCirculationAsync();
                     LookupBlockListAsync();
                     EnableFunctionalityForMainNet();
                     _ = UpdateBitcoinAndLightningDashboardsAsync();
@@ -18552,7 +18589,7 @@ namespace SATSuma
             }
         }
 
-        private void LblSettingsNodeTestnet_Click(object sender, EventArgs e)
+        private async void LblSettingsNodeTestnet_Click(object sender, EventArgs e)
         {
             try
             {
@@ -18576,11 +18613,11 @@ namespace SATSuma
                     });
                     NodeURL = "https://mempool.space/testnet/api/";
                     RunMempoolSpaceLightningAPI = true;
-                    CheckNetworkStatusAsync();
+                    await CheckNetworkStatusAsync();
                     CreateDataServices();
                     SaveSettings();
                     DisableFunctionalityForTestNet();
-                    GetBlockTipAndCirculation();
+                    await GetBlockTipAndCirculationAsync();
                     LookupBlockListAsync();
                     _ = UpdateBitcoinAndLightningDashboardsAsync();
                     btnMenuAddressUTXO.Enabled = true;
@@ -18592,7 +18629,7 @@ namespace SATSuma
             }
         }
 
-        private void LblSettingsNodeCustom_Click(object sender, EventArgs e)
+        private async void LblSettingsNodeCustom_Click(object sender, EventArgs e)
         {
             try
             {
@@ -18628,13 +18665,13 @@ namespace SATSuma
                     RunMempoolSpaceLightningAPI = false;
                     CheckOwnNodeIsOnlineAsync();
                     NodeURL = textBoxSettingsOwnNodeURL.Text;
-                    CheckNetworkStatusAsync();
+                    await CheckNetworkStatusAsync();
 
                     if (lblSettingsOwnNodeStatusLight.ForeColor == Color.OliveDrab)
                     {
                         CreateDataServices();
                         SaveSettings();
-                        GetBlockTipAndCirculation();
+                        await GetBlockTipAndCirculationAsync();
                         LookupBlockListAsync();
                         _ = UpdateBitcoinAndLightningDashboardsAsync();
 
@@ -19116,7 +19153,7 @@ namespace SATSuma
             }
         }
 
-        private void EnableOfflineMode()
+        private async void EnableOfflineMode()
         {
             try
             {
@@ -19227,7 +19264,7 @@ namespace SATSuma
 
                 CheckOwnNodeIsOnlineAsync();
                 NodeURL = textBoxSettingsOwnNodeURL.Text;
-                CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync();
 
                 lblSettingsNodeTestnetSelected.Invoke((MethodInvoker)delegate
                 {
@@ -20544,7 +20581,7 @@ namespace SATSuma
         }
         #endregion
         #endregion
-
+        //![](resources\tinylogo1.png;;;0.04706,0.04877)
         #region ⚡⚡ CREATE THEME SCREEN
         #region main menu theme switching buttons
         private void BtnThemeMenu_Click(object sender, EventArgs e)
@@ -21026,7 +21063,6 @@ namespace SATSuma
                 }
                 ResumeLayout(false);
                 ToggleLoadingAnimation("disable");
-                CheckNetworkStatusAsync();
             }
             catch (Exception ex)
             {
@@ -23143,7 +23179,6 @@ namespace SATSuma
         {
             try
             {
-
                 #region display loading screen
                 bool wasOnTop = false;
                 Form loadingTheme = new LoadingTheme(UIScale)
@@ -23804,7 +23839,7 @@ namespace SATSuma
             if (firstTimeLoadingScreen)
             {
                 firstTimeLoadingScreen = false;
-                await Task.Delay(6000).ConfigureAwait(true);
+                await Task.Delay(9000).ConfigureAwait(true);
                 preventSavingSettings = false;
                 SaveSettings();
             }
@@ -24026,9 +24061,9 @@ namespace SATSuma
             {
                 #region rounded panels
                 Control[] panelsToInvalidate = { panelXpubContainer, panelXpubScrollContainer, panel92, panel32, panel74, panel76, panel77, panel99, panel84, panel88, panel89, panel90, panel86, panel87, panel103, panel46, panel51, panel91, panel70, panel71, panel16, panel21, panel85, panel53, panel96, panel106, panel107, panelAddToBookmarks,
-                    panelAddToBookmarksBorder, panelOwnNodeAddressTXInfo, panelOwnNodeBlockTXInfo, panelTransactionMiddle, panelErrorMessage, panelDCAMessages, panelDCASummary, panelDCAInputs, panel119, panelPriceConvert, panelDCAChartContainer, panel117, panel121, panel122, panel120, 
+                    panelAddToBookmarksBorder, panelOwnNodeAddressTXInfo, panelOwnNodeBlockTXInfo, panelTransactionMiddle, panelErrorMessage, panelDCAMessages, panelDCASummary, panelDCAInputs, panel119, panelPriceConvert, panelDCAChartContainer, panel117, panel121, panel122, panel120, panelPoolsListScrollContainer, 
                     panel101, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panelAddressUTXOScrollContainer, panelBookmarksContainer, panelBookmarksScrollContainer, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panelPoolsBlocksScrollContainer, panel147, panel80, panel153, panel158, panel160, panelUTXOError,
-                panelTransactionInputs, panelTransactionOutputs, panelTXInScrollContainer, panelTXOutScrollContainer, panelAddressTxContainer, panel123, panel124, panelPriceSourceIndicatorsOuter, panelPoolsListScrollbarInner, panelBookmarksScrollbarInner, panelTXInScrollbarInner, panelTXOutScrollbarInner, panelAddressUTXOScrollbarInner, panelPoolsBlocksScrollbarInner, panelXpubScrollbarInner };
+                panelTransactionInputs, panelTransactionOutputs, panelTXInScrollContainer, panelTXOutScrollContainer, panelAddressTxContainer, panel123, panel124, panelPriceSourceIndicatorsOuter, panelPoolsListScrollbarInner, panelBookmarksScrollbarInner, panelTXInScrollbarInner, panelTXOutScrollbarInner, panelAddressUTXOScrollbarInner, panelPoolsBlocksScrollbarInner, panelXpubScrollbarInner, panel133, panel134 };
                 foreach (Control control in panelsToInvalidate)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24051,7 +24086,7 @@ namespace SATSuma
                 #endregion
                 #region panels (heading containers)
                 Control[] headingPanelsToInvalidate = { panel1, panel2, panel3, panel4, panel5, panel6, panel7, panel8, panel9, panel10, panel11, panel12, panel20, panel23, panel26, panel29, panel31, panel38, panel39, panel40, panel41, panel42, panel43, panel44, panel45, panel54, panel57, panel78, panel139,
-                    panel82, panel83, panel94, panel22, panel34, panel37, panel97, panel98, panel108, panel109, panel141, panel136, panel138, panel145, panel81, panel146 };
+                    panel82, panel83, panel94, panel22, panel34, panel37, panel97, panel98, panel108, panel109, panel141, panel136, panel138, panel145, panel81, panel146, panel24 };
                 foreach (Control control in headingPanelsToInvalidate)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24547,7 +24582,7 @@ namespace SATSuma
                     });
                 }
                 //settings and appearance
-                Control[] listSettingsLabelsToColor = { label225, btnPreviewAnimations, label198, label223, label224, label220, label235, label221, label222, label219, label302, label171, label291, label199, label298, label204, label289, lblThemeImage, label287, label290, label282, label243, label246, label242, label239, label240, label201, lblSettingsOwnNodeStatus, lblSettingsSelectedNodeStatus, label193, label194, label196, label73, label161, label168, label157, label172, label174, label4, lblWhatever, label152, label171, label167, label178, label177, label179, label180, label188, label187, label191, label197, lblScaleAmount };
+                Control[] listSettingsLabelsToColor = { label236, label225, btnPreviewAnimations, label198, label223, label224, label220, label235, label221, label222, label219, label302, label171, label291, label199, label298, label204, label289, lblThemeImage, label287, label290, label282, label243, label246, label242, label239, label240, label201, lblSettingsOwnNodeStatus, lblSettingsSelectedNodeStatus, label193, label194, label196, label73, label161, label168, label157, label172, label174, label4, lblWhatever, label152, label171, label167, label178, label177, label179, label180, label188, label187, label191, label197, lblScaleAmount };
                 foreach (Control control in listSettingsLabelsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24583,7 +24618,7 @@ namespace SATSuma
                     });
                 }
                 //address utxo
-                Control[] listAddressUTXOLabelsToColor = { label316, lblAddressUTXOPositionInList, label303, label308, label230 };
+                Control[] listAddressUTXOLabelsToColor = { label316, lblAddressUTXOPositionInList, label303, label308, label230, label313, label315 };
                 foreach (Control control in listAddressUTXOLabelsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24931,7 +24966,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listOtherTextToColor = { lblTransasctionInCount, lblTransasctionOutCount, lblAddressTXPositionInList, lblBlockTXPositionInList, lblBlockListPositionInList, label317, label226, comboBoxTitlesBackgroundImage, comboBoxStartupScreen, comboBoxChartSelect, comboBoxCustomizeScreenThemeList, label185, numericUpDownOpacity, label160, label159, label158, label165, label173, label167, textBoxXpubScreenOwnNodeURL, textBoxSubmittedXpub, numberUpDownDerivationPathsToCheck, textboxSubmittedAddress, textBoxTransactionID, textBoxBookmarkEncryptionKey, textBoxBookmarkKey, textBoxBookmarkProposedNote, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBoxThemeName, textBox1, lblCurrentVersion, textBoxUniversalSearch, textBoxDCAAmountInput, comboBoxDCAFrequency, label227, lblUTXOCount };
+                Control[] listOtherTextToColor = { lblTransasctionInCount, lblTransasctionOutCount, lblAddressTXPositionInList, lblBlockTXPositionInList, lblBlockListPositionInList, label317, label226, label102, comboBoxTitlesBackgroundImage, comboBoxStartupScreen, comboBoxChartSelect, comboBoxCustomizeScreenThemeList, label185, numericUpDownOpacity, label160, label159, label158, label165, label173, label167, textBoxXpubScreenOwnNodeURL, textBoxSubmittedXpub, numberUpDownDerivationPathsToCheck, textboxSubmittedAddress, textBoxTransactionID, textBoxBookmarkEncryptionKey, textBoxBookmarkKey, textBoxBookmarkProposedNote, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBoxThemeName, textBox1, lblCurrentVersion, textBoxUniversalSearch, textBoxDCAAmountInput, comboBoxDCAFrequency, label227, lblUTXOCount };
                 foreach (Control control in listOtherTextToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24980,6 +25015,56 @@ namespace SATSuma
                 {
                     comboBoxChartSelect.ListBackColor = chartsBackgroundColor;
                 });
+
+                comboBoxDCAFrequency.Invoke((MethodInvoker)delegate
+                {
+                    comboBoxDCAFrequency.ListTextColor = thiscolor;
+                });
+                comboBoxDCAFrequency.Invoke((MethodInvoker)delegate
+                {
+                    comboBoxDCAFrequency.ListBackColor = chartsBackgroundColor;
+                });
+                comboBoxPoolsBlocksSelectSorting.Invoke((MethodInvoker)delegate
+                {
+                    comboBoxPoolsBlocksSelectSorting.ListTextColor = thiscolor;
+                });
+                comboBoxPoolsBlocksSelectSorting.Invoke((MethodInvoker)delegate
+                {
+                    comboBoxPoolsBlocksSelectSorting.ListBackColor = chartsBackgroundColor;
+                });
+                comboBoxPoolsBlocksTimePeriod.Invoke((MethodInvoker)delegate
+                {
+                    comboBoxPoolsBlocksTimePeriod.ListTextColor = thiscolor;
+                });
+                comboBoxPoolsBlocksTimePeriod.Invoke((MethodInvoker)delegate
+                {
+                    comboBoxPoolsBlocksTimePeriod.ListBackColor = chartsBackgroundColor;
+                });
+                comboBoxPoolsHashrateSortingSelect.Invoke((MethodInvoker)delegate
+                {
+                    comboBoxPoolsHashrateSortingSelect.ListTextColor = thiscolor;
+                });
+                comboBoxPoolsHashrateSortingSelect.Invoke((MethodInvoker)delegate
+                {
+                    comboBoxPoolsHashrateSortingSelect.ListBackColor = chartsBackgroundColor;
+                });
+                comboBoxPoolsHashrateTimePeriod.Invoke((MethodInvoker)delegate
+                {
+                    comboBoxPoolsHashrateTimePeriod.ListTextColor = thiscolor;
+                });
+                comboBoxPoolsHashrateTimePeriod.Invoke((MethodInvoker)delegate
+                {
+                    comboBoxPoolsHashrateTimePeriod.ListBackColor = chartsBackgroundColor;
+                });
+                comboBoxChartsTimePeriod.Invoke((MethodInvoker)delegate
+                {
+                    comboBoxChartsTimePeriod.ListTextColor = thiscolor;
+                });
+                comboBoxChartsTimePeriod.Invoke((MethodInvoker)delegate
+                {
+                    comboBoxChartsTimePeriod.ListBackColor = chartsBackgroundColor;
+                });
+                
             }
             catch (Exception ex)
             {
@@ -25834,7 +25919,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listPanelsToColor = { panel123, panel120, panel30, panel125, panel132, panel92, panelAddToBookmarks, panelBookmarksContainer, panel46, panel103, panelOwnNodeBlockTXInfo, panel119, panelPriceConvert, panel106, panel107, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21, panelSettingsUIScale, panelDCAMessages, panelDCASummary, panelDCAInputs, panelRefreshChart, panelPriceSourceIndicators, panel80, panel153, panel158, panel124, label334 };
+                Control[] listPanelsToColor = { panel123, panel120, panel30, panel125, panel132, panel92, panelAddToBookmarks, panelBookmarksContainer, panel46, panel103, panelOwnNodeBlockTXInfo, panel119, panelPriceConvert, panel106, panel107, panel53, panel96, panel70, panel71, panel73, panel20, panel32, panel74, panel76, panel77, panel88, panel89, panel90, panel86, panel87, panel91, panel84, panel85, panel99, panel94, panelTransactionMiddle, panelOwnNodeAddressTXInfo, panel51, panel16, panel21, panelSettingsUIScale, panelDCAMessages, panelDCASummary, panelDCAInputs, panelRefreshChart, panelPriceSourceIndicators, panel80, panel153, panel158, panel124, label334, panel134 };
                 foreach (Control control in listPanelsToColor)
                 {
                     {
@@ -25859,6 +25944,10 @@ namespace SATSuma
                 panelPriceSourceIndicatorsOuter.Width = panelPriceSourceIndicators.Width + 2;
                 panelPriceSourceIndicatorsOuter.Height = panelPriceSourceIndicators.Height + 2;
                 panelPriceSourceIndicators.Location = new Point(1, 1);
+                panel133.BackColor = MakeColorLighter(thiscolor, 40);
+                panel133.Width = panel134.Width + 2;
+                panel133.Height = panel134.Height + 2;
+                panel134.Location = new Point(1, 1);
             }
             catch (Exception ex)
             {
@@ -26195,7 +26284,7 @@ namespace SATSuma
         }
         #endregion region
         #endregion
-
+        //![](resources\tinylogo1.png;;;0.04706,0.04877)
         #region ⚡⚡⚡ COMMON CODE
 
         #region get market data
@@ -27307,7 +27396,7 @@ namespace SATSuma
                     else
                     {
                         // Remove non-numeric characters except decimal point
-                        string cleanedText = Regex.Replace(label.Text, @"[^0-9.]", "0");
+                        string cleanedText = Regex.Replace(label.Text, @"[^0-9.]", "");
 
                         // Parse the cleaned text to double
                         currentValueDouble = double.Parse(cleanedText);
@@ -27331,7 +27420,7 @@ namespace SATSuma
                     {
                         label.ForeColor = Color.OliveDrab;
                     }
-                    else if (newValueDouble < currentValueDouble)
+                    if (newValueDouble < currentValueDouble)
                     {
                         label.ForeColor = Color.IndianRed;
                     }
@@ -28230,6 +28319,23 @@ namespace SATSuma
                 {
                     cornerRadius = (int)(6 * UIScale);
                 }
+
+                if (String.Compare(panel.Name, "panelPriceSourceIndicatorsOuter") == 0)
+                {
+                    cornerRadius = (int)(6 * UIScale);
+                }
+                if (String.Compare(panel.Name, "panelPriceSourceIndicators") == 0)
+                {
+                    cornerRadius = (int)(6 * UIScale);
+                }
+                if (String.Compare(panel.Name, "panel134") == 0)
+                {
+                    cornerRadius = (int)(6 * UIScale);
+                }
+                if (String.Compare(panel.Name, "panel133") == 0)
+                {
+                    cornerRadius = (int)(6 * UIScale);
+                }
                 
                 cornerRadius *= 2;
                 path.AddArc(0, 0, cornerRadius, cornerRadius, 180, 90);
@@ -28457,7 +28563,7 @@ namespace SATSuma
             try
             {
                 ClearAlertAndErrorMessage(); // wipe anything that may be showing in the error area (it should be empty anyway)
-                CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync();
                 using (WebClient client = new WebClient())
                 {
                     try
@@ -28716,6 +28822,7 @@ namespace SATSuma
         }
         #endregion
         #region get block tip
+        /*
         private void GetBlockTipAndCirculation()
         {
             try
@@ -28773,7 +28880,73 @@ namespace SATSuma
                 HandleException(ex, "GetBlockTip");
             }
         }
+        */
 
+        private async Task GetBlockTipAndCirculationAsync()
+        {
+            try
+            {
+                using HttpClient client = new HttpClient();
+                string BlockTipURL = $"{NodeURL}blocks/tip/height";
+                string BlockTip = await client.GetStringAsync(BlockTipURL).ConfigureAwait(false);
+
+                // Ensure that UI updates are performed on the UI thread
+                lblBlockNumber.Invoke((MethodInvoker)delegate
+                {
+                    lblBlockNumber.Text = BlockTip;
+                });
+                numericUpDownBlockHeightToStartListFrom.Invoke((MethodInvoker)delegate
+                {
+                    numericUpDownBlockHeightToStartListFrom.Text = BlockTip;
+                });
+                lblHeaderBlockAge.Invoke((MethodInvoker)delegate
+                {
+                    lblHeaderBlockAge.Location = new Point(lblBlockNumber.Location.X + lblBlockNumber.Width, lblHeaderBlockAge.Location.Y);
+                });
+
+                numericUpDownSubmittedBlockNumber.Invoke((MethodInvoker)delegate
+                {
+                    numericUpDownSubmittedBlockNumber.Maximum = Convert.ToDecimal(BlockTip);
+                });
+                numericUpDownBlockHeightToStartListFrom.Invoke((MethodInvoker)delegate
+                {
+                    numericUpDownBlockHeightToStartListFrom.Maximum = Convert.ToDecimal(BlockTip);
+                });
+
+                // calculate amount of btc issued
+                int blockHeight = Convert.ToInt32(BlockTip);
+                decimal totalBitcoinsIssued = CirculationCalculator.CalculateTotalBitcoinsIssued(blockHeight);
+                calculatedBTCInCirculation = totalBitcoinsIssued;
+
+                UpdateLabelValueAsync(lblBTCInCirc, $"{calculatedBTCInCirculation:N2} / 21,000,000");
+                if (calculatedBTCInCirculation > 0)
+                {
+                    UpdateLabelValueAsync(lblBTCToBeIssued, Convert.ToString(21000000 - calculatedBTCInCirculation));
+                }
+                else
+                {
+                    lblBTCToBeIssued.Invoke((MethodInvoker)delegate
+                    {
+                        lblBTCToBeIssued.Text = "0";
+                    });
+                }
+                lblChartCirculation.Invoke((MethodInvoker)delegate
+                {
+                    lblChartCirculation.Location = new Point(lblBTCInCirc.Location.X + lblBTCInCirc.Width, lblChartCirculation.Location.Y);
+                });
+                decimal percentIssued = Math.Round((100m / 21000000) * calculatedBTCInCirculation, 2);
+                UpdateLabelValueAsync(lblPercentIssued, $"{percentIssued}%");
+
+                progressBarPercentIssued.Invoke((MethodInvoker)delegate
+                {
+                    progressBarPercentIssued.Value = Convert.ToInt16(percentIssued);
+                });
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "GetBlockTipAndCirculation");
+            }
+        }
         #endregion
         #region is string numeric
         static bool IsNumeric(string input)
@@ -28876,10 +29049,11 @@ namespace SATSuma
         }
         #endregion
         #region check network status
-        private async void CheckNetworkStatusAsync()
+        private async Task CheckNetworkStatusAsync()
         {
             try
             {
+                ToggleLoadingAnimation("enable");
                 string hostnameForDisplay = "";
                 #region if we're looking at the xpub screen
                 if (panelXpub.Visible)
@@ -29189,6 +29363,7 @@ namespace SATSuma
                     }
                 }
                 #endregion
+                ToggleLoadingAnimation("disable");
             }
             catch (Exception ex)
             {
@@ -29416,13 +29591,13 @@ namespace SATSuma
             }
         }
 
-        private void DoTimerBasedStuff()
+        private async void DoTimerBasedStuff()
         {
             if (panelSettings.Visible && String.Compare(lblSettingsOwnNodeSelected.Text, "✔️") == 0)
             {
                 if (intDisplayCountdownToRefresh % 5 == 0)
                 {
-                    CheckNetworkStatusAsync();
+                    await CheckNetworkStatusAsync();
                 }
             }
 
@@ -29685,7 +29860,7 @@ namespace SATSuma
         #endregion
 
         #endregion
-
+        //![](resources\tinylogo1.png;;;0.04706,0.04877)
         #region ⚡⚡⚡ GENERAL FORM NAVIGATION AND CONTROLS
         #region main menu
 
@@ -29850,7 +30025,7 @@ namespace SATSuma
 
                 ResumeLayout(false);
                 ToggleLoadingAnimation("disable");
-                CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync();
             }
             catch (Exception ex)
             {
@@ -29935,7 +30110,7 @@ namespace SATSuma
                 }
                 ResumeLayout(false);
                 ToggleLoadingAnimation("disable");
-                CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync();
             }
             catch (Exception ex)
             {
@@ -30020,7 +30195,7 @@ namespace SATSuma
                 }
                 ResumeLayout(false);
                 ToggleLoadingAnimation("disable");
-                CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync();
             }
             catch (Exception ex)
             {
@@ -30133,7 +30308,7 @@ namespace SATSuma
                 }
                 ResumeLayout(false);
                 ToggleLoadingAnimation("disable");
-                CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync();
             }
             catch (Exception ex)
             {
@@ -30239,7 +30414,7 @@ namespace SATSuma
                 ResumeLayout(false);
 
                 ToggleLoadingAnimation("disable");
-                CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync();
             }
             catch (Exception ex)
             {
@@ -30343,7 +30518,7 @@ namespace SATSuma
                     panelOwnNodeBlockTXInfo.Visible = true;
                 }
                 ResumeLayout(false);
-                CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync();
                 if (!fullScreenLoadingScreenVisible && loadingScreen != null)
                 {
                     #region close loading screen
@@ -30457,7 +30632,7 @@ namespace SATSuma
                 }
                 ResumeLayout(false);
                 ToggleLoadingAnimation("disable");
-                CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync();
             }
             catch (Exception ex)
             {
@@ -30551,7 +30726,7 @@ namespace SATSuma
                     }
                 }
 
-                CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync();
                 if (!fullScreenLoadingScreenVisible && loadingScreen != null)
                 {
                     #region close loading screen
@@ -30657,7 +30832,7 @@ namespace SATSuma
                     }
                 }
 
-                CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync();
                 if (!fullScreenLoadingScreenVisible && loadingScreen != null)
                 {
                     #region close loading screen
@@ -30761,7 +30936,7 @@ namespace SATSuma
                     }
                 }
 
-                CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync();
                 if (!fullScreenLoadingScreenVisible && loadingScreen != null)
                 {
                     #region close loading screen
@@ -30847,9 +31022,7 @@ namespace SATSuma
 
                 SetupPoolScreen();
                 
-                
-                //panelMiningPools.Invalidate();
-                CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync();
                 if (!fullScreenLoadingScreenVisible && loadingScreen != null)
                 {
                     #region close loading screen
@@ -30967,7 +31140,7 @@ namespace SATSuma
                 
                 ResumeLayout(false);
                 ToggleLoadingAnimation("disable");
-                CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync();
             }
             catch (Exception ex)
             {
@@ -31031,7 +31204,6 @@ namespace SATSuma
                 ResumeLayout(false);
                 ToggleLoadingAnimation("enable");
                 SuspendLayout();
-                CheckNetworkStatusAsync();
                 SetupBookmarksScreen();
                 panelBookmarks.Invoke((MethodInvoker)delegate
                 {
@@ -31132,7 +31304,7 @@ namespace SATSuma
                 ResumeLayout(false);
                 ToggleLoadingAnimation("enable");
                 SuspendLayout();
-                CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync();
                 PopulateConverterScreen();
                 panelPriceConverter.Invoke((MethodInvoker)delegate
                 {
@@ -31269,7 +31441,7 @@ namespace SATSuma
                 }
                 ResumeLayout(false);
                 ToggleLoadingAnimation("disable");
-                CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync();
             }
             catch (Exception ex)
             {
@@ -31371,7 +31543,6 @@ namespace SATSuma
                 }
                 ResumeLayout(false);
                 ToggleLoadingAnimation("disable");
-                CheckNetworkStatusAsync();
             }
             catch (Exception ex)
             {
@@ -31471,7 +31642,6 @@ namespace SATSuma
                 }
                 ResumeLayout(false);
                 ToggleLoadingAnimation("disable");
-                CheckNetworkStatusAsync();
             }
             catch (Exception ex)
             {
@@ -31634,7 +31804,7 @@ namespace SATSuma
                 overlay.Show(this);
 
                 // display about screen on top of the overlay
-                Form frm = new splash(UIScale)
+                Form frm = new Splash(UIScale)
                 {
                     Owner = this,
                     StartPosition = FormStartPosition.CenterParent,
@@ -32740,7 +32910,7 @@ namespace SATSuma
         }
         #endregion
         #endregion
-
+        //![](resources\tinylogo1.png;;;0.04706,0.04877)
         #region ⚡⚡⚡ CLASSES
 
         #region read settings from file
@@ -33062,7 +33232,7 @@ namespace SATSuma
                     {
                         client.BaseAddress = new Uri(_nodeUrl);
 
-                        var response = await client.GetAsync($"v1/mining/pools").ConfigureAwait(true);
+                        var response = await client.GetAsync($"v1/mining/pools/all").ConfigureAwait(true);
                         if (response.IsSuccessStatusCode)
                         {
                             return await response.Content.ReadAsStringAsync().ConfigureAwait(true);
@@ -33079,6 +33249,11 @@ namespace SATSuma
                 }
                 return string.Empty;
             }
+        }
+
+        public class PoolsWrapper
+        {
+            public List<PoolForList> Pools { get; set; }
         }
 
         public class PoolForList

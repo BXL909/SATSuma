@@ -708,6 +708,10 @@
             this.label171 = new System.Windows.Forms.Label();
             this.lblAlwaysOnTop = new System.Windows.Forms.Label();
             this.panel76 = new System.Windows.Forms.Panel();
+            this.panel133 = new System.Windows.Forms.Panel();
+            this.panel134 = new System.Windows.Forms.Panel();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label102 = new System.Windows.Forms.Label();
             this.panelSettingsOwnNodeURLContainer = new System.Windows.Forms.Panel();
             this.textBoxSettingsOwnNodeURL = new System.Windows.Forms.TextBox();
             this.label201 = new System.Windows.Forms.Label();
@@ -738,6 +742,10 @@
             this.label240 = new System.Windows.Forms.Label();
             this.lblOfflineMode = new System.Windows.Forms.Label();
             this.panel77 = new System.Windows.Forms.Panel();
+            this.panel128 = new System.Windows.Forms.Panel();
+            this.panel105 = new System.Windows.Forms.Panel();
+            this.panel33 = new System.Windows.Forms.Panel();
+            this.panel25 = new System.Windows.Forms.Panel();
             this.label225 = new System.Windows.Forms.Label();
             this.lblMempoolSpacePriceAPI = new System.Windows.Forms.Label();
             this.label224 = new System.Windows.Forms.Label();
@@ -1354,10 +1362,6 @@
             this.label319 = new System.Windows.Forms.Label();
             this.PoolsListScrollTimer = new System.Windows.Forms.Timer(this.components);
             this.panelPriceSourceIndicatorsOuter = new System.Windows.Forms.Panel();
-            this.panel25 = new System.Windows.Forms.Panel();
-            this.panel33 = new System.Windows.Forms.Panel();
-            this.panel105 = new System.Windows.Forms.Panel();
-            this.panel128 = new System.Windows.Forms.Panel();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel109.SuspendLayout();
             this.panel12.SuspendLayout();
@@ -1469,6 +1473,8 @@
             this.panel106.SuspendLayout();
             this.panel108.SuspendLayout();
             this.panel76.SuspendLayout();
+            this.panel133.SuspendLayout();
+            this.panel134.SuspendLayout();
             this.panelSettingsOwnNodeURLContainer.SuspendLayout();
             this.panel22.SuspendLayout();
             this.panel21.SuspendLayout();
@@ -3442,7 +3448,7 @@
             // panel6
             // 
             this.panel6.BackColor = System.Drawing.Color.Transparent;
-            this.panel6.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel6.BackgroundImage")));
+            this.panel6.BackgroundImage = global::SATSuma.Properties.Resources.OrangeFade;
             this.panel6.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel6.Controls.Add(this.label79);
             this.panel6.Location = new System.Drawing.Point(0, 0);
@@ -3907,6 +3913,7 @@
             this.panelBlockList.Name = "panelBlockList";
             this.panelBlockList.Size = new System.Drawing.Size(773, 556);
             this.panelBlockList.TabIndex = 172;
+            this.panelBlockList.Visible = false;
             this.panelBlockList.VisibleChanged += new System.EventHandler(this.HideBookmarksShowFees);
             // 
             // panel94
@@ -4965,9 +4972,9 @@
             // 
             this.panelBlockListTab.BackColor = System.Drawing.Color.White;
             this.panelBlockListTab.Controls.Add(this.lblBlockListPositionInList);
-            this.panelBlockListTab.Location = new System.Drawing.Point(30, 336);
+            this.panelBlockListTab.Location = new System.Drawing.Point(30, 333);
             this.panelBlockListTab.Name = "panelBlockListTab";
-            this.panelBlockListTab.Size = new System.Drawing.Size(146, 27);
+            this.panelBlockListTab.Size = new System.Drawing.Size(146, 30);
             this.panelBlockListTab.TabIndex = 284;
             // 
             // lblBlockListPositionInList
@@ -4977,7 +4984,7 @@
             this.lblBlockListPositionInList.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlockListPositionInList.ForeColor = System.Drawing.Color.Silver;
             this.lblBlockListPositionInList.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.lblBlockListPositionInList.Location = new System.Drawing.Point(4, 11);
+            this.lblBlockListPositionInList.Location = new System.Drawing.Point(4, 14);
             this.lblBlockListPositionInList.Name = "lblBlockListPositionInList";
             this.lblBlockListPositionInList.Size = new System.Drawing.Size(91, 17);
             this.lblBlockListPositionInList.TabIndex = 157;
@@ -5105,6 +5112,7 @@
             this.panelLightningDashboard.Name = "panelLightningDashboard";
             this.panelLightningDashboard.Size = new System.Drawing.Size(773, 556);
             this.panelLightningDashboard.TabIndex = 88;
+            this.panelLightningDashboard.Visible = false;
             this.panelLightningDashboard.VisibleChanged += new System.EventHandler(this.HideBookmarksShowFees);
             this.panelLightningDashboard.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelLightningDashboard_Paint);
             // 
@@ -7319,7 +7327,7 @@
             this.panel121.Controls.Add(this.panel125);
             this.panel121.Location = new System.Drawing.Point(0, 70);
             this.panel121.Name = "panel121";
-            this.panel121.Size = new System.Drawing.Size(528, 57);
+            this.panel121.Size = new System.Drawing.Size(529, 57);
             this.panel121.TabIndex = 277;
             // 
             // panel125
@@ -7342,7 +7350,7 @@
             this.panel102.Location = new System.Drawing.Point(0, 0);
             this.panel102.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel102.Name = "panel102";
-            this.panel102.Size = new System.Drawing.Size(528, 23);
+            this.panel102.Size = new System.Drawing.Size(532, 23);
             this.panel102.TabIndex = 210;
             // 
             // label330
@@ -7613,7 +7621,7 @@
             this.panel122.BackColor = System.Drawing.Color.White;
             this.panel122.Location = new System.Drawing.Point(0, 500);
             this.panel122.Name = "panel122";
-            this.panel122.Size = new System.Drawing.Size(528, 20);
+            this.panel122.Size = new System.Drawing.Size(529, 20);
             this.panel122.TabIndex = 278;
             // 
             // label145
@@ -7894,9 +7902,9 @@
             // 
             this.panelBlockTransactionsTab.BackColor = System.Drawing.Color.White;
             this.panelBlockTransactionsTab.Controls.Add(this.lblBlockTXPositionInList);
-            this.panelBlockTransactionsTab.Location = new System.Drawing.Point(0, 513);
+            this.panelBlockTransactionsTab.Location = new System.Drawing.Point(0, 510);
             this.panelBlockTransactionsTab.Name = "panelBlockTransactionsTab";
-            this.panelBlockTransactionsTab.Size = new System.Drawing.Size(146, 22);
+            this.panelBlockTransactionsTab.Size = new System.Drawing.Size(146, 25);
             this.panelBlockTransactionsTab.TabIndex = 283;
             // 
             // lblBlockTXPositionInList
@@ -7906,7 +7914,7 @@
             this.lblBlockTXPositionInList.Font = new System.Drawing.Font("Century Gothic", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlockTXPositionInList.ForeColor = System.Drawing.Color.Silver;
             this.lblBlockTXPositionInList.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.lblBlockTXPositionInList.Location = new System.Drawing.Point(4, 6);
+            this.lblBlockTXPositionInList.Location = new System.Drawing.Point(4, 9);
             this.lblBlockTXPositionInList.Name = "lblBlockTXPositionInList";
             this.lblBlockTXPositionInList.Size = new System.Drawing.Size(117, 16);
             this.lblBlockTXPositionInList.TabIndex = 157;
@@ -8716,9 +8724,9 @@
             // 
             this.panelTransactionInTab.BackColor = System.Drawing.Color.White;
             this.panelTransactionInTab.Controls.Add(this.lblTransasctionInCount);
-            this.panelTransactionInTab.Location = new System.Drawing.Point(8, 493);
+            this.panelTransactionInTab.Location = new System.Drawing.Point(8, 479);
             this.panelTransactionInTab.Name = "panelTransactionInTab";
-            this.panelTransactionInTab.Size = new System.Drawing.Size(146, 22);
+            this.panelTransactionInTab.Size = new System.Drawing.Size(162, 33);
             this.panelTransactionInTab.TabIndex = 297;
             // 
             // lblTransasctionInCount
@@ -8728,7 +8736,7 @@
             this.lblTransasctionInCount.Font = new System.Drawing.Font("Century Gothic", 8F);
             this.lblTransasctionInCount.ForeColor = System.Drawing.Color.Gray;
             this.lblTransasctionInCount.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.lblTransasctionInCount.Location = new System.Drawing.Point(4, 6);
+            this.lblTransasctionInCount.Location = new System.Drawing.Point(4, 19);
             this.lblTransasctionInCount.Name = "lblTransasctionInCount";
             this.lblTransasctionInCount.Size = new System.Drawing.Size(122, 16);
             this.lblTransasctionInCount.TabIndex = 153;
@@ -8740,9 +8748,9 @@
             // 
             this.panelTransactionOutTab.BackColor = System.Drawing.Color.White;
             this.panelTransactionOutTab.Controls.Add(this.lblTransasctionOutCount);
-            this.panelTransactionOutTab.Location = new System.Drawing.Point(387, 493);
+            this.panelTransactionOutTab.Location = new System.Drawing.Point(387, 479);
             this.panelTransactionOutTab.Name = "panelTransactionOutTab";
-            this.panelTransactionOutTab.Size = new System.Drawing.Size(146, 22);
+            this.panelTransactionOutTab.Size = new System.Drawing.Size(162, 33);
             this.panelTransactionOutTab.TabIndex = 298;
             // 
             // lblTransasctionOutCount
@@ -8752,7 +8760,7 @@
             this.lblTransasctionOutCount.Font = new System.Drawing.Font("Century Gothic", 8F);
             this.lblTransasctionOutCount.ForeColor = System.Drawing.Color.Gray;
             this.lblTransasctionOutCount.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.lblTransasctionOutCount.Location = new System.Drawing.Point(4, 6);
+            this.lblTransasctionOutCount.Location = new System.Drawing.Point(4, 19);
             this.lblTransasctionOutCount.Name = "lblTransasctionOutCount";
             this.lblTransasctionOutCount.Size = new System.Drawing.Size(134, 16);
             this.lblTransasctionOutCount.TabIndex = 153;
@@ -11458,6 +11466,7 @@
             // panel76
             // 
             this.panel76.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(44)))));
+            this.panel76.Controls.Add(this.panel133);
             this.panel76.Controls.Add(this.panelSettingsOwnNodeURLContainer);
             this.panel76.Controls.Add(this.label201);
             this.panel76.Controls.Add(this.panel22);
@@ -11466,6 +11475,48 @@
             this.panel76.Name = "panel76";
             this.panel76.Size = new System.Drawing.Size(755, 93);
             this.panel76.TabIndex = 243;
+            // 
+            // panel133
+            // 
+            this.panel133.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.panel133.Controls.Add(this.panel134);
+            this.panel133.Location = new System.Drawing.Point(519, 68);
+            this.panel133.Name = "panel133";
+            this.panel133.Size = new System.Drawing.Size(112, 13);
+            this.panel133.TabIndex = 293;
+            // 
+            // panel134
+            // 
+            this.panel134.Controls.Add(this.label8);
+            this.panel134.Controls.Add(this.label102);
+            this.panel134.Location = new System.Drawing.Point(1, 1);
+            this.panel134.Name = "panel134";
+            this.panel134.Size = new System.Drawing.Size(110, 11);
+            this.panel134.TabIndex = 284;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Century Gothic", 6.75F);
+            this.label8.ForeColor = System.Drawing.Color.Gold;
+            this.label8.Location = new System.Drawing.Point(3, -2);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(19, 13);
+            this.label8.TabIndex = 255;
+            this.label8.Text = "⚠️";
+            this.toolTipGeneralUse.SetToolTip(this.label8, resources.GetString("label8.ToolTip"));
+            // 
+            // label102
+            // 
+            this.label102.AutoSize = true;
+            this.label102.Font = new System.Drawing.Font("Century Gothic", 6.75F);
+            this.label102.ForeColor = System.Drawing.Color.Silver;
+            this.label102.Location = new System.Drawing.Point(19, -1);
+            this.label102.Name = "label102";
+            this.label102.Size = new System.Drawing.Size(90, 13);
+            this.label102.TabIndex = 256;
+            this.label102.Text = "node performance";
+            this.toolTipGeneralUse.SetToolTip(this.label102, resources.GetString("label102.ToolTip"));
             // 
             // panelSettingsOwnNodeURLContainer
             // 
@@ -11497,7 +11548,7 @@
             // 
             this.label201.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label201.ForeColor = System.Drawing.Color.Gray;
-            this.label201.Location = new System.Drawing.Point(5, 65);
+            this.label201.Location = new System.Drawing.Point(5, 66);
             this.label201.Name = "label201";
             this.label201.Size = new System.Drawing.Size(254, 17);
             this.label201.TabIndex = 241;
@@ -11932,6 +11983,42 @@
             this.panel77.Name = "panel77";
             this.panel77.Size = new System.Drawing.Size(755, 130);
             this.panel77.TabIndex = 244;
+            // 
+            // panel128
+            // 
+            this.panel128.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.panel128.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.panel128.Location = new System.Drawing.Point(8, 62);
+            this.panel128.Name = "panel128";
+            this.panel128.Size = new System.Drawing.Size(716, 1);
+            this.panel128.TabIndex = 242;
+            // 
+            // panel105
+            // 
+            this.panel105.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.panel105.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.panel105.Location = new System.Drawing.Point(8, 125);
+            this.panel105.Name = "panel105";
+            this.panel105.Size = new System.Drawing.Size(716, 1);
+            this.panel105.TabIndex = 241;
+            // 
+            // panel33
+            // 
+            this.panel33.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.panel33.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.panel33.Location = new System.Drawing.Point(8, 104);
+            this.panel33.Name = "panel33";
+            this.panel33.Size = new System.Drawing.Size(716, 1);
+            this.panel33.TabIndex = 240;
+            // 
+            // panel25
+            // 
+            this.panel25.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.panel25.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
+            this.panel25.Location = new System.Drawing.Point(8, 83);
+            this.panel25.Name = "panel25";
+            this.panel25.Size = new System.Drawing.Size(716, 1);
+            this.panel25.TabIndex = 239;
             // 
             // label225
             // 
@@ -17900,11 +17987,11 @@
             // 
             this.lblUpdateFlasher.AutoSize = true;
             this.lblUpdateFlasher.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblUpdateFlasher.Font = new System.Drawing.Font("Century Gothic", 8F);
+            this.lblUpdateFlasher.Font = new System.Drawing.Font("Century Gothic", 6F);
             this.lblUpdateFlasher.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.lblUpdateFlasher.Location = new System.Drawing.Point(98, 4);
+            this.lblUpdateFlasher.Location = new System.Drawing.Point(80, 8);
             this.lblUpdateFlasher.Name = "lblUpdateFlasher";
-            this.lblUpdateFlasher.Size = new System.Drawing.Size(14, 16);
+            this.lblUpdateFlasher.Size = new System.Drawing.Size(10, 12);
             this.lblUpdateFlasher.TabIndex = 154;
             this.lblUpdateFlasher.Text = "●";
             this.lblUpdateFlasher.Visible = false;
@@ -19160,13 +19247,13 @@
             // 
             // lblMiningPoolLink
             // 
-            this.lblMiningPoolLink.AutoSize = true;
+            this.lblMiningPoolLink.AutoEllipsis = true;
             this.lblMiningPoolLink.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMiningPoolLink.LinkBehavior = System.Windows.Forms.LinkBehavior.AlwaysUnderline;
             this.lblMiningPoolLink.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
             this.lblMiningPoolLink.Location = new System.Drawing.Point(35, 46);
             this.lblMiningPoolLink.Name = "lblMiningPoolLink";
-            this.lblMiningPoolLink.Size = new System.Drawing.Size(67, 17);
+            this.lblMiningPoolLink.Size = new System.Drawing.Size(170, 17);
             this.lblMiningPoolLink.TabIndex = 344;
             this.lblMiningPoolLink.TabStop = true;
             this.lblMiningPoolLink.Text = "linkLabel1";
@@ -20657,7 +20744,7 @@
             this.listViewPoolsHashrate.OwnerDraw = true;
             this.listViewPoolsHashrate.Scrollable = false;
             this.listViewPoolsHashrate.ShowGroups = false;
-            this.listViewPoolsHashrate.Size = new System.Drawing.Size(347, 485);
+            this.listViewPoolsHashrate.Size = new System.Drawing.Size(345, 485);
             this.listViewPoolsHashrate.TabIndex = 164;
             this.listViewPoolsHashrate.TabStop = false;
             this.listViewPoolsHashrate.UseCompatibleStateImageBehavior = false;
@@ -20675,7 +20762,7 @@
             this.panel150.BackColor = System.Drawing.Color.White;
             this.panel150.Location = new System.Drawing.Point(0, 0);
             this.panel150.Name = "panel150";
-            this.panel150.Size = new System.Drawing.Size(397, 16);
+            this.panel150.Size = new System.Drawing.Size(395, 16);
             this.panel150.TabIndex = 285;
             // 
             // panel151
@@ -21129,7 +21216,7 @@
             this.panel160.BackColor = System.Drawing.Color.White;
             this.panel160.Location = new System.Drawing.Point(0, 0);
             this.panel160.Name = "panel160";
-            this.panel160.Size = new System.Drawing.Size(140, 16);
+            this.panel160.Size = new System.Drawing.Size(133, 16);
             this.panel160.TabIndex = 285;
             // 
             // panel161
@@ -21199,42 +21286,6 @@
             this.panelPriceSourceIndicatorsOuter.Size = new System.Drawing.Size(66, 13);
             this.panelPriceSourceIndicatorsOuter.TabIndex = 292;
             // 
-            // panel25
-            // 
-            this.panel25.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panel25.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panel25.Location = new System.Drawing.Point(8, 83);
-            this.panel25.Name = "panel25";
-            this.panel25.Size = new System.Drawing.Size(716, 1);
-            this.panel25.TabIndex = 239;
-            // 
-            // panel33
-            // 
-            this.panel33.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panel33.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panel33.Location = new System.Drawing.Point(8, 104);
-            this.panel33.Name = "panel33";
-            this.panel33.Size = new System.Drawing.Size(716, 1);
-            this.panel33.TabIndex = 240;
-            // 
-            // panel105
-            // 
-            this.panel105.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panel105.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panel105.Location = new System.Drawing.Point(8, 125);
-            this.panel105.Name = "panel105";
-            this.panel105.Size = new System.Drawing.Size(716, 1);
-            this.panel105.TabIndex = 241;
-            // 
-            // panel128
-            // 
-            this.panel128.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panel128.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(106)))), ((int)(((byte)(72)))), ((int)(((byte)(9)))));
-            this.panel128.Location = new System.Drawing.Point(8, 62);
-            this.panel128.Name = "panel128";
-            this.panel128.Size = new System.Drawing.Size(716, 1);
-            this.panel128.TabIndex = 242;
-            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(5F, 12F);
@@ -21244,23 +21295,23 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
+            this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelBlockList);
+            this.Controls.Add(this.panelBlock);
+            this.Controls.Add(this.panelTransaction);
+            this.Controls.Add(this.panelSettings);
+            this.Controls.Add(this.panelMiningHashrate);
+            this.Controls.Add(this.panelMiningBlocks);
+            this.Controls.Add(this.panelDCACalculator);
+            this.Controls.Add(this.panelAppearance);
+            this.Controls.Add(this.panelMiningPools);
+            this.Controls.Add(this.panelAddressUTXO);
             this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelBookmarks);
-            this.Controls.Add(this.panelMiningBlocks);
-            this.Controls.Add(this.panelMiningHashrate);
-            this.Controls.Add(this.panelMiningPools);
             this.Controls.Add(this.panelXpub);
-            this.Controls.Add(this.panelTransaction);
-            this.Controls.Add(this.panelAddressUTXO);
             this.Controls.Add(this.panelAddress);
-            this.Controls.Add(this.panelBlock);
-            this.Controls.Add(this.panelSettings);
-            this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelLightningDashboard);
-            this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelDirectory);
-            this.Controls.Add(this.panelDCACalculator);
             this.Controls.Add(this.panelPriceConverter);
             this.Controls.Add(this.panelChartsForPoolsScreen);
             this.Controls.Add(this.panelPriceSourceIndicatorsOuter);
@@ -21494,6 +21545,9 @@
             this.panel108.ResumeLayout(false);
             this.panel108.PerformLayout();
             this.panel76.ResumeLayout(false);
+            this.panel133.ResumeLayout(false);
+            this.panel134.ResumeLayout(false);
+            this.panel134.PerformLayout();
             this.panelSettingsOwnNodeURLContainer.ResumeLayout(false);
             this.panelSettingsOwnNodeURLContainer.PerformLayout();
             this.panel22.ResumeLayout(false);
@@ -23070,6 +23124,10 @@
         private System.Windows.Forms.Panel panel25;
         private System.Windows.Forms.Panel panel128;
         private System.Windows.Forms.Panel panel105;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label102;
+        private System.Windows.Forms.Panel panel133;
+        private System.Windows.Forms.Panel panel134;
     }
 }
 

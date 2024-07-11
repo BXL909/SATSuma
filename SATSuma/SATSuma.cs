@@ -16,7 +16,6 @@
 //TODO testing, particularly new pools screens on own node
 //TODO check tooltips everywhere
 //TODO test all UIScales
-//TODO differentiate loadingtheme and loadingscreen 
 //BUG____________________________________________________________________________________________________
 //!_______________________________________________________________________________________________________
 #region Using
@@ -601,7 +600,7 @@ namespace SATSuma
                 lblCurrentVersion.Invoke((MethodInvoker)delegate
                 {
                     lblCurrentVersion.Text = $"v{CurrentVersion}";
-                    lblCurrentVersion.Location = new Point(lblSatsumaTitle.Location.X + lblSatsumaTitle.Width, lblCurrentVersion.Location.Y);
+                    lblCurrentVersion.Location = new Point((lblSatsumaTitle.Location.X + lblSatsumaTitle.Width) - (int)(8 * UIScale), lblCurrentVersion.Location.Y);
                 });
                 ToggleLoadingAnimation("enable");
                 await GetBlockTipAndCirculationAsync();
@@ -661,6 +660,7 @@ namespace SATSuma
                 LoadAndStyleDirectoryBrowser();
                 TextBoxSettingsOwnNodeURL_Leave(sender, e); // sets an intial value for path to node to an example url 
                 lblHeaderPriceChange.Text = $"+{lblHeaderPrice.Text[0]}0"; // sets an initial value for pricechange. This value will only be seen if the price doesn't change after the first time it's been retrieved.
+                lblUpdateFlasher.Location = new Point((lblOpenHelpAboutMenu.Location.X + lblOpenHelpAboutMenu.Width) - (int)(3 * UIScale), lblUpdateFlasher.Location.Y);
                 #endregion
                 #region navigate to the saved startup screen
 
@@ -24966,7 +24966,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listOtherTextToColor = { lblTransasctionInCount, lblTransasctionOutCount, lblAddressTXPositionInList, lblBlockTXPositionInList, lblBlockListPositionInList, label317, label226, label102, comboBoxTitlesBackgroundImage, comboBoxStartupScreen, comboBoxChartSelect, comboBoxCustomizeScreenThemeList, label185, numericUpDownOpacity, label160, label159, label158, label165, label173, label167, textBoxXpubScreenOwnNodeURL, textBoxSubmittedXpub, numberUpDownDerivationPathsToCheck, textboxSubmittedAddress, textBoxTransactionID, textBoxBookmarkEncryptionKey, textBoxBookmarkKey, textBoxBookmarkProposedNote, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBoxThemeName, textBox1, lblCurrentVersion, textBoxUniversalSearch, textBoxDCAAmountInput, comboBoxDCAFrequency, label227, lblUTXOCount };
+                Control[] listOtherTextToColor = { lblTransasctionInCount, lblTransasctionOutCount, lblAddressTXPositionInList, lblBlockTXPositionInList, lblBlockListPositionInList, label317, label226, label102, comboBoxTitlesBackgroundImage, comboBoxStartupScreen, comboBoxChartSelect, comboBoxCustomizeScreenThemeList, label185, numericUpDownOpacity, label160, label159, label158, label165, label173, label167, textBoxXpubScreenOwnNodeURL, textBoxSubmittedXpub, numberUpDownDerivationPathsToCheck, textboxSubmittedAddress, textboxSubmittedAddressUTXO, textBoxTransactionID, textBoxBookmarkEncryptionKey, textBoxBookmarkKey, textBoxBookmarkProposedNote, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBoxThemeName, textBox1, lblCurrentVersion, textBoxUniversalSearch, textBoxDCAAmountInput, comboBoxDCAFrequency, label227, lblUTXOCount };
                 foreach (Control control in listOtherTextToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -34533,10 +34533,6 @@ namespace SATSuma
                 return InitialBlockReward / (decimal)Math.Pow(2, halvings);
             }
         }
-
-
-
-
         #endregion
 
         #endregion

@@ -16,8 +16,6 @@ namespace SATSuma
 {
     public partial class LoadingTheme : Form
     {
-
-
         #region rounded form
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
         private static extern IntPtr CreateRoundRectRgn
@@ -41,9 +39,7 @@ namespace SATSuma
             this.Padding = new Padding(1);
             // Retrieve the current DPI scale factor
             float scale = this.CreateGraphics().DpiX / 96.0f;
-
-            //UIScaleForOverlay = UIScale;
-
+            
             this.Width = (int)(940 * scale * UIScale);
             this.Height = (int)(754 * scale * UIScale);
 

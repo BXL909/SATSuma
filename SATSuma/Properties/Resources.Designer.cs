@@ -73,6 +73,16 @@ namespace SATSuma.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ApplyingTheme1 {
+            get {
+                object obj = ResourceManager.GetObject("ApplyingTheme1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap BlackFade {
             get {
                 object obj = ResourceManager.GetObject("BlackFade", resourceCulture);
@@ -566,16 +576,6 @@ namespace SATSuma.Properties {
         internal static System.Drawing.Bitmap WhiteFade {
             get {
                 object obj = ResourceManager.GetObject("WhiteFade", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap WobblySatsuma {
-            get {
-                object obj = ResourceManager.GetObject("WobblySatsuma", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

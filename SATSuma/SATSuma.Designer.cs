@@ -17538,11 +17538,13 @@
             this.lblCurrentVersion.BackColor = System.Drawing.Color.Transparent;
             this.lblCurrentVersion.Font = new System.Drawing.Font("Century Gothic", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCurrentVersion.ForeColor = System.Drawing.Color.Gray;
-            this.lblCurrentVersion.Location = new System.Drawing.Point(94, 12);
+            this.lblCurrentVersion.Location = new System.Drawing.Point(91, 12);
+            this.lblCurrentVersion.Margin = new System.Windows.Forms.Padding(0);
             this.lblCurrentVersion.Name = "lblCurrentVersion";
             this.lblCurrentVersion.Size = new System.Drawing.Size(31, 13);
             this.lblCurrentVersion.TabIndex = 85;
             this.lblCurrentVersion.Text = "vn.nn";
+            this.lblCurrentVersion.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             this.lblCurrentVersion.Click += new System.EventHandler(this.BtnMenuSplash_Click);
             // 
             // btnExit
@@ -17908,6 +17910,7 @@
             // panelLeftPanel
             // 
             this.panelLeftPanel.BackColor = System.Drawing.Color.Transparent;
+            this.panelLeftPanel.Controls.Add(this.lblCurrentVersion);
             this.panelLeftPanel.Controls.Add(this.lblMenuArrow);
             this.panelLeftPanel.Controls.Add(this.btnCurrency);
             this.panelLeftPanel.Controls.Add(this.panelCurrency);
@@ -17949,7 +17952,6 @@
             this.panelLeftPanel.Controls.Add(this.lblStatusLight);
             this.panelLeftPanel.Controls.Add(this.panelLoadingAnimationContainer);
             this.panelLeftPanel.Controls.Add(this.lblSatsumaTitle);
-            this.panelLeftPanel.Controls.Add(this.lblCurrentVersion);
             this.panelLeftPanel.Controls.Add(this.btnAnimation);
             this.panelLeftPanel.Controls.Add(this.lblOfflineModeActive);
             this.panelLeftPanel.Location = new System.Drawing.Point(2, 2);
@@ -17989,7 +17991,7 @@
             this.lblUpdateFlasher.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblUpdateFlasher.Font = new System.Drawing.Font("Century Gothic", 6F);
             this.lblUpdateFlasher.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.lblUpdateFlasher.Location = new System.Drawing.Point(80, 8);
+            this.lblUpdateFlasher.Location = new System.Drawing.Point(80, 7);
             this.lblUpdateFlasher.Name = "lblUpdateFlasher";
             this.lblUpdateFlasher.Size = new System.Drawing.Size(10, 12);
             this.lblUpdateFlasher.TabIndex = 154;
@@ -21295,6 +21297,7 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
+            this.Controls.Add(this.panelAddressUTXO);
             this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelBlock);
@@ -21305,7 +21308,6 @@
             this.Controls.Add(this.panelDCACalculator);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelMiningPools);
-            this.Controls.Add(this.panelAddressUTXO);
             this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelXpub);

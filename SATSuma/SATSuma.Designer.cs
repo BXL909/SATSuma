@@ -1362,6 +1362,8 @@
             this.label319 = new System.Windows.Forms.Label();
             this.PoolsListScrollTimer = new System.Windows.Forms.Timer(this.components);
             this.panelPriceSourceIndicatorsOuter = new System.Windows.Forms.Panel();
+            this.panelThemeMenuBackdrop = new System.Windows.Forms.Panel();
+            this.panelCurrencyBackdrop = new System.Windows.Forms.Panel();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel109.SuspendLayout();
             this.panel12.SuspendLayout();
@@ -1640,6 +1642,8 @@
             this.panel158.SuspendLayout();
             this.panel164.SuspendLayout();
             this.panelPriceSourceIndicatorsOuter.SuspendLayout();
+            this.panelThemeMenuBackdrop.SuspendLayout();
+            this.panelCurrencyBackdrop.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTime
@@ -1802,7 +1806,7 @@
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(182, 17);
             this.label20.TabIndex = 115;
-            this.label20.Text = "Total fees in next block (BTC)";
+            this.label20.Text = "Total fees in next block";
             this.toolTipGeneralUse.SetToolTip(this.label20, "Estimation. Actual total fees won\'t be \r\nXXknown until the block is mined");
             // 
             // lblNextBlockMinMaxFee
@@ -1968,7 +1972,7 @@
             this.label100.Name = "label100";
             this.label100.Size = new System.Drawing.Size(165, 17);
             this.label100.TabIndex = 205;
-            this.label100.Text = "Transactions in next block*";
+            this.label100.Text = "Transactions in next block";
             this.toolTipGeneralUse.SetToolTip(this.label100, "Estimate. Actual number of transactions \r\nXXwon\'t be known until the block is min" +
         "ed.");
             // 
@@ -2006,9 +2010,9 @@
             this.label106.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.label106.Location = new System.Drawing.Point(543, 108);
             this.label106.Name = "label106";
-            this.label106.Size = new System.Drawing.Size(221, 17);
+            this.label106.Size = new System.Drawing.Size(215, 17);
             this.label106.TabIndex = 207;
-            this.label106.Text = "Min/max fee in next block (sats/vB)*";
+            this.label106.Text = "Min/max fee in next block (sats/vB)";
             this.toolTipGeneralUse.SetToolTip(this.label106, "Estimate. Actual min/max fees won\'t \r\nXXbe known until the block is mined");
             // 
             // lblBlockListTotalFeesInNextBlock
@@ -2033,7 +2037,7 @@
             this.label108.Name = "label108";
             this.label108.Size = new System.Drawing.Size(182, 17);
             this.label108.TabIndex = 209;
-            this.label108.Text = "Total fees in next block (BTC)*";
+            this.label108.Text = "Total fees in next block";
             this.toolTipGeneralUse.SetToolTip(this.label108, "Estimate. Actual total fees won\'t \r\nXXbe known until the block is mined");
             // 
             // label115
@@ -2059,7 +2063,7 @@
             this.label116.Name = "label116";
             this.label116.Size = new System.Drawing.Size(166, 17);
             this.label116.TabIndex = 221;
-            this.label116.Text = "Next difficulty adjustment*";
+            this.label116.Text = "Next difficulty adjustment";
             this.toolTipGeneralUse.SetToolTip(this.label116, "Estimate, increasing in accuracy as \r\nXXthe next adjustment approaches");
             // 
             // lblBlockListNextDifficultyAdjustment
@@ -3727,7 +3731,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(118, 17);
             this.label2.TabIndex = 203;
-            this.label2.Text = "Block subsidy (BTC)";
+            this.label2.Text = "Block subsidy";
             this.toolTipGeneralUse.SetToolTip(this.label2, "The amount of bitcoin issued for each \r\nXXmined block this subsidy epoch");
             // 
             // label31
@@ -4768,7 +4772,7 @@
             this.label120.Name = "label120";
             this.label120.Size = new System.Drawing.Size(118, 17);
             this.label120.TabIndex = 225;
-            this.label120.Text = "Block subsidy (BTC)";
+            this.label120.Text = "Block subsidy";
             this.toolTipGeneralUse.SetToolTip(this.label120, "The amount of bitcoin issued for each \r\nXXmined block this subsidy epoch");
             // 
             // label118
@@ -8004,7 +8008,7 @@
             this.btnMenuCreateTheme.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuCreateTheme.Font = new System.Drawing.Font("Century Gothic", 8F);
             this.btnMenuCreateTheme.ForeColor = System.Drawing.Color.White;
-            this.btnMenuCreateTheme.Location = new System.Drawing.Point(1, 152);
+            this.btnMenuCreateTheme.Location = new System.Drawing.Point(0, 152);
             this.btnMenuCreateTheme.Name = "btnMenuCreateTheme";
             this.btnMenuCreateTheme.Padding = new System.Windows.Forms.Padding(18, 0, 0, 0);
             this.btnMenuCreateTheme.Size = new System.Drawing.Size(120, 18);
@@ -8726,7 +8730,7 @@
             this.panelTransactionInTab.Controls.Add(this.lblTransasctionInCount);
             this.panelTransactionInTab.Location = new System.Drawing.Point(8, 479);
             this.panelTransactionInTab.Name = "panelTransactionInTab";
-            this.panelTransactionInTab.Size = new System.Drawing.Size(162, 33);
+            this.panelTransactionInTab.Size = new System.Drawing.Size(172, 33);
             this.panelTransactionInTab.TabIndex = 297;
             // 
             // lblTransasctionInCount
@@ -8750,7 +8754,7 @@
             this.panelTransactionOutTab.Controls.Add(this.lblTransasctionOutCount);
             this.panelTransactionOutTab.Location = new System.Drawing.Point(387, 479);
             this.panelTransactionOutTab.Name = "panelTransactionOutTab";
-            this.panelTransactionOutTab.Size = new System.Drawing.Size(162, 33);
+            this.panelTransactionOutTab.Size = new System.Drawing.Size(172, 33);
             this.panelTransactionOutTab.TabIndex = 298;
             // 
             // lblTransasctionOutCount
@@ -11032,12 +11036,7 @@
             // panelCurrency
             // 
             this.panelCurrency.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.panelCurrency.Controls.Add(this.panelCurrencyMenuFiller);
-            this.panelCurrency.Controls.Add(this.lblCurrencyMenuHighlightedButtonText);
-            this.panelCurrency.Controls.Add(this.btnXAU);
-            this.panelCurrency.Controls.Add(this.btnUSD);
-            this.panelCurrency.Controls.Add(this.btnEUR);
-            this.panelCurrency.Controls.Add(this.btnGBP);
+            this.panelCurrency.Controls.Add(this.panelCurrencyBackdrop);
             this.panelCurrency.Location = new System.Drawing.Point(8, 476);
             this.panelCurrency.Name = "panelCurrency";
             this.panelCurrency.Size = new System.Drawing.Size(122, 0);
@@ -11046,7 +11045,7 @@
             // panelCurrencyMenuFiller
             // 
             this.panelCurrencyMenuFiller.BackColor = System.Drawing.Color.Black;
-            this.panelCurrencyMenuFiller.Location = new System.Drawing.Point(1, 0);
+            this.panelCurrencyMenuFiller.Location = new System.Drawing.Point(0, 0);
             this.panelCurrencyMenuFiller.Name = "panelCurrencyMenuFiller";
             this.panelCurrencyMenuFiller.Size = new System.Drawing.Size(120, 9);
             this.panelCurrencyMenuFiller.TabIndex = 255;
@@ -11056,7 +11055,7 @@
             this.lblCurrencyMenuHighlightedButtonText.BackColor = System.Drawing.Color.Transparent;
             this.lblCurrencyMenuHighlightedButtonText.Font = new System.Drawing.Font("Century Gothic", 8F);
             this.lblCurrencyMenuHighlightedButtonText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.lblCurrencyMenuHighlightedButtonText.Location = new System.Drawing.Point(5, 17);
+            this.lblCurrencyMenuHighlightedButtonText.Location = new System.Drawing.Point(4, 17);
             this.lblCurrencyMenuHighlightedButtonText.Name = "lblCurrencyMenuHighlightedButtonText";
             this.lblCurrencyMenuHighlightedButtonText.Size = new System.Drawing.Size(45, 18);
             this.lblCurrencyMenuHighlightedButtonText.TabIndex = 165;
@@ -11074,7 +11073,7 @@
             this.btnXAU.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnXAU.Font = new System.Drawing.Font("Century Gothic", 8F);
             this.btnXAU.ForeColor = System.Drawing.Color.White;
-            this.btnXAU.Location = new System.Drawing.Point(1, 63);
+            this.btnXAU.Location = new System.Drawing.Point(0, 63);
             this.btnXAU.Margin = new System.Windows.Forms.Padding(0);
             this.btnXAU.Name = "btnXAU";
             this.btnXAU.Padding = new System.Windows.Forms.Padding(18, 0, 0, 0);
@@ -11099,7 +11098,7 @@
             this.btnUSD.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnUSD.Font = new System.Drawing.Font("Century Gothic", 8F);
             this.btnUSD.ForeColor = System.Drawing.Color.White;
-            this.btnUSD.Location = new System.Drawing.Point(1, 9);
+            this.btnUSD.Location = new System.Drawing.Point(0, 9);
             this.btnUSD.Margin = new System.Windows.Forms.Padding(0);
             this.btnUSD.Name = "btnUSD";
             this.btnUSD.Padding = new System.Windows.Forms.Padding(18, 0, 0, 0);
@@ -11123,7 +11122,7 @@
             this.btnEUR.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnEUR.Font = new System.Drawing.Font("Century Gothic", 8F);
             this.btnEUR.ForeColor = System.Drawing.Color.White;
-            this.btnEUR.Location = new System.Drawing.Point(1, 27);
+            this.btnEUR.Location = new System.Drawing.Point(0, 27);
             this.btnEUR.Margin = new System.Windows.Forms.Padding(0);
             this.btnEUR.Name = "btnEUR";
             this.btnEUR.Padding = new System.Windows.Forms.Padding(18, 0, 0, 0);
@@ -11147,7 +11146,7 @@
             this.btnGBP.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnGBP.Font = new System.Drawing.Font("Century Gothic", 8F);
             this.btnGBP.ForeColor = System.Drawing.Color.White;
-            this.btnGBP.Location = new System.Drawing.Point(1, 45);
+            this.btnGBP.Location = new System.Drawing.Point(0, 45);
             this.btnGBP.Margin = new System.Windows.Forms.Padding(0);
             this.btnGBP.Name = "btnGBP";
             this.btnGBP.Padding = new System.Windows.Forms.Padding(18, 0, 0, 0);
@@ -11480,9 +11479,9 @@
             // 
             this.panel133.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.panel133.Controls.Add(this.panel134);
-            this.panel133.Location = new System.Drawing.Point(519, 68);
+            this.panel133.Location = new System.Drawing.Point(654, 74);
             this.panel133.Name = "panel133";
-            this.panel133.Size = new System.Drawing.Size(112, 13);
+            this.panel133.Size = new System.Drawing.Size(96, 13);
             this.panel133.TabIndex = 293;
             // 
             // panel134
@@ -11491,7 +11490,7 @@
             this.panel134.Controls.Add(this.label102);
             this.panel134.Location = new System.Drawing.Point(1, 1);
             this.panel134.Name = "panel134";
-            this.panel134.Size = new System.Drawing.Size(110, 11);
+            this.panel134.Size = new System.Drawing.Size(94, 11);
             this.panel134.TabIndex = 284;
             // 
             // label8
@@ -11499,7 +11498,7 @@
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Century Gothic", 6.75F);
             this.label8.ForeColor = System.Drawing.Color.Gold;
-            this.label8.Location = new System.Drawing.Point(3, -2);
+            this.label8.Location = new System.Drawing.Point(3, -1);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(19, 13);
             this.label8.TabIndex = 255;
@@ -11513,9 +11512,9 @@
             this.label102.ForeColor = System.Drawing.Color.Silver;
             this.label102.Location = new System.Drawing.Point(19, -1);
             this.label102.Name = "label102";
-            this.label102.Size = new System.Drawing.Size(90, 13);
+            this.label102.Size = new System.Drawing.Size(77, 13);
             this.label102.TabIndex = 256;
-            this.label102.Text = "node performance";
+            this.label102.Text = "node hardware";
             this.toolTipGeneralUse.SetToolTip(this.label102, resources.GetString("label102.ToolTip"));
             // 
             // panelSettingsOwnNodeURLContainer
@@ -17241,20 +17240,7 @@
             // panelThemeMenu
             // 
             this.panelThemeMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(66)))), ((int)(((byte)(51)))));
-            this.panelThemeMenu.Controls.Add(this.lblApplyThemeButtonDisabledMask);
-            this.panelThemeMenu.Controls.Add(this.lblThemeMenuHighlightedButtonText);
-            this.panelThemeMenu.Controls.Add(this.panelPresetThemeMenuTitleBG);
-            this.panelThemeMenu.Controls.Add(this.btnMenuThemeSymbol);
-            this.panelThemeMenu.Controls.Add(this.btnMenuThemeStackSats);
-            this.panelThemeMenu.Controls.Add(this.btnMenuThemeHoneyBadger);
-            this.panelThemeMenu.Controls.Add(this.panelThemeMenuFiller);
-            this.panelThemeMenu.Controls.Add(this.panelCustomThemeMenuTitleBG);
-            this.panelThemeMenu.Controls.Add(this.btnMenuApplyCustomTheme);
-            this.panelThemeMenu.Controls.Add(this.btnMenuCreateTheme);
-            this.panelThemeMenu.Controls.Add(this.comboBoxHeaderCustomThemes);
-            this.panelThemeMenu.Controls.Add(this.BtnMenuThemeGenesis);
-            this.panelThemeMenu.Controls.Add(this.btnMenuThemeFranklin);
-            this.panelThemeMenu.Controls.Add(this.btnMenuThemeSatsuma);
+            this.panelThemeMenu.Controls.Add(this.panelThemeMenuBackdrop);
             this.panelThemeMenu.ForeColor = System.Drawing.Color.Transparent;
             this.panelThemeMenu.Location = new System.Drawing.Point(8, 458);
             this.panelThemeMenu.Name = "panelThemeMenu";
@@ -17267,7 +17253,7 @@
             this.lblApplyThemeButtonDisabledMask.BackColor = System.Drawing.Color.Transparent;
             this.lblApplyThemeButtonDisabledMask.Font = new System.Drawing.Font("Century Gothic", 8F);
             this.lblApplyThemeButtonDisabledMask.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.lblApplyThemeButtonDisabledMask.Location = new System.Drawing.Point(14, 190);
+            this.lblApplyThemeButtonDisabledMask.Location = new System.Drawing.Point(13, 190);
             this.lblApplyThemeButtonDisabledMask.Name = "lblApplyThemeButtonDisabledMask";
             this.lblApplyThemeButtonDisabledMask.Size = new System.Drawing.Size(77, 16);
             this.lblApplyThemeButtonDisabledMask.TabIndex = 260;
@@ -17279,7 +17265,7 @@
             this.lblThemeMenuHighlightedButtonText.BackColor = System.Drawing.Color.Transparent;
             this.lblThemeMenuHighlightedButtonText.Font = new System.Drawing.Font("Century Gothic", 8F);
             this.lblThemeMenuHighlightedButtonText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.lblThemeMenuHighlightedButtonText.Location = new System.Drawing.Point(25, 41);
+            this.lblThemeMenuHighlightedButtonText.Location = new System.Drawing.Point(24, 41);
             this.lblThemeMenuHighlightedButtonText.Name = "lblThemeMenuHighlightedButtonText";
             this.lblThemeMenuHighlightedButtonText.Size = new System.Drawing.Size(106, 18);
             this.lblThemeMenuHighlightedButtonText.TabIndex = 165;
@@ -17291,7 +17277,7 @@
             this.panelPresetThemeMenuTitleBG.BackColor = System.Drawing.Color.Black;
             this.panelPresetThemeMenuTitleBG.Controls.Add(this.label60);
             this.panelPresetThemeMenuTitleBG.Font = new System.Drawing.Font("Consolas", 8F);
-            this.panelPresetThemeMenuTitleBG.Location = new System.Drawing.Point(1, 9);
+            this.panelPresetThemeMenuTitleBG.Location = new System.Drawing.Point(0, 9);
             this.panelPresetThemeMenuTitleBG.Name = "panelPresetThemeMenuTitleBG";
             this.panelPresetThemeMenuTitleBG.Size = new System.Drawing.Size(120, 18);
             this.panelPresetThemeMenuTitleBG.TabIndex = 254;
@@ -17319,7 +17305,7 @@
             this.btnMenuThemeSymbol.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuThemeSymbol.Font = new System.Drawing.Font("Century Gothic", 8F);
             this.btnMenuThemeSymbol.ForeColor = System.Drawing.Color.White;
-            this.btnMenuThemeSymbol.Location = new System.Drawing.Point(1, 116);
+            this.btnMenuThemeSymbol.Location = new System.Drawing.Point(0, 116);
             this.btnMenuThemeSymbol.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenuThemeSymbol.Name = "btnMenuThemeSymbol";
             this.btnMenuThemeSymbol.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
@@ -17343,7 +17329,7 @@
             this.btnMenuThemeStackSats.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuThemeStackSats.Font = new System.Drawing.Font("Century Gothic", 8F);
             this.btnMenuThemeStackSats.ForeColor = System.Drawing.Color.White;
-            this.btnMenuThemeStackSats.Location = new System.Drawing.Point(1, 98);
+            this.btnMenuThemeStackSats.Location = new System.Drawing.Point(0, 98);
             this.btnMenuThemeStackSats.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenuThemeStackSats.Name = "btnMenuThemeStackSats";
             this.btnMenuThemeStackSats.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
@@ -17367,7 +17353,7 @@
             this.btnMenuThemeHoneyBadger.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuThemeHoneyBadger.Font = new System.Drawing.Font("Century Gothic", 8F);
             this.btnMenuThemeHoneyBadger.ForeColor = System.Drawing.Color.White;
-            this.btnMenuThemeHoneyBadger.Location = new System.Drawing.Point(1, 80);
+            this.btnMenuThemeHoneyBadger.Location = new System.Drawing.Point(0, 80);
             this.btnMenuThemeHoneyBadger.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenuThemeHoneyBadger.Name = "btnMenuThemeHoneyBadger";
             this.btnMenuThemeHoneyBadger.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
@@ -17384,7 +17370,7 @@
             // panelThemeMenuFiller
             // 
             this.panelThemeMenuFiller.BackColor = System.Drawing.Color.Black;
-            this.panelThemeMenuFiller.Location = new System.Drawing.Point(1, 0);
+            this.panelThemeMenuFiller.Location = new System.Drawing.Point(0, 0);
             this.panelThemeMenuFiller.Name = "panelThemeMenuFiller";
             this.panelThemeMenuFiller.Size = new System.Drawing.Size(120, 9);
             this.panelThemeMenuFiller.TabIndex = 256;
@@ -17393,7 +17379,7 @@
             // 
             this.panelCustomThemeMenuTitleBG.BackColor = System.Drawing.Color.Black;
             this.panelCustomThemeMenuTitleBG.Controls.Add(this.label281);
-            this.panelCustomThemeMenuTitleBG.Location = new System.Drawing.Point(1, 134);
+            this.panelCustomThemeMenuTitleBG.Location = new System.Drawing.Point(0, 134);
             this.panelCustomThemeMenuTitleBG.Name = "panelCustomThemeMenuTitleBG";
             this.panelCustomThemeMenuTitleBG.Size = new System.Drawing.Size(120, 18);
             this.panelCustomThemeMenuTitleBG.TabIndex = 253;
@@ -17422,7 +17408,7 @@
             this.btnMenuApplyCustomTheme.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuApplyCustomTheme.Font = new System.Drawing.Font("Century Gothic", 8F);
             this.btnMenuApplyCustomTheme.ForeColor = System.Drawing.Color.White;
-            this.btnMenuApplyCustomTheme.Location = new System.Drawing.Point(1, 188);
+            this.btnMenuApplyCustomTheme.Location = new System.Drawing.Point(0, 188);
             this.btnMenuApplyCustomTheme.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenuApplyCustomTheme.Name = "btnMenuApplyCustomTheme";
             this.btnMenuApplyCustomTheme.Padding = new System.Windows.Forms.Padding(18, 0, 0, 0);
@@ -17448,7 +17434,7 @@
             this.comboBoxHeaderCustomThemes.IconColor = System.Drawing.Color.White;
             this.comboBoxHeaderCustomThemes.ListBackColor = System.Drawing.Color.Black;
             this.comboBoxHeaderCustomThemes.ListTextColor = System.Drawing.Color.DimGray;
-            this.comboBoxHeaderCustomThemes.Location = new System.Drawing.Point(1, 170);
+            this.comboBoxHeaderCustomThemes.Location = new System.Drawing.Point(0, 170);
             this.comboBoxHeaderCustomThemes.Margin = new System.Windows.Forms.Padding(0);
             this.comboBoxHeaderCustomThemes.MinimumSize = new System.Drawing.Size(96, 18);
             this.comboBoxHeaderCustomThemes.Name = "comboBoxHeaderCustomThemes";
@@ -17470,7 +17456,7 @@
             this.BtnMenuThemeGenesis.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BtnMenuThemeGenesis.Font = new System.Drawing.Font("Century Gothic", 8F);
             this.BtnMenuThemeGenesis.ForeColor = System.Drawing.Color.White;
-            this.BtnMenuThemeGenesis.Location = new System.Drawing.Point(1, 26);
+            this.BtnMenuThemeGenesis.Location = new System.Drawing.Point(0, 26);
             this.BtnMenuThemeGenesis.Margin = new System.Windows.Forms.Padding(0);
             this.BtnMenuThemeGenesis.Name = "BtnMenuThemeGenesis";
             this.BtnMenuThemeGenesis.Padding = new System.Windows.Forms.Padding(18, 0, 0, 0);
@@ -17494,7 +17480,7 @@
             this.btnMenuThemeFranklin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuThemeFranklin.Font = new System.Drawing.Font("Century Gothic", 8F);
             this.btnMenuThemeFranklin.ForeColor = System.Drawing.Color.White;
-            this.btnMenuThemeFranklin.Location = new System.Drawing.Point(1, 44);
+            this.btnMenuThemeFranklin.Location = new System.Drawing.Point(0, 44);
             this.btnMenuThemeFranklin.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenuThemeFranklin.Name = "btnMenuThemeFranklin";
             this.btnMenuThemeFranklin.Padding = new System.Windows.Forms.Padding(18, 0, 0, 0);
@@ -17518,7 +17504,7 @@
             this.btnMenuThemeSatsuma.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuThemeSatsuma.Font = new System.Drawing.Font("Century Gothic", 8F);
             this.btnMenuThemeSatsuma.ForeColor = System.Drawing.Color.White;
-            this.btnMenuThemeSatsuma.Location = new System.Drawing.Point(1, 62);
+            this.btnMenuThemeSatsuma.Location = new System.Drawing.Point(0, 62);
             this.btnMenuThemeSatsuma.Margin = new System.Windows.Forms.Padding(0);
             this.btnMenuThemeSatsuma.Name = "btnMenuThemeSatsuma";
             this.btnMenuThemeSatsuma.Padding = new System.Windows.Forms.Padding(18, 0, 0, 0);
@@ -21288,6 +21274,42 @@
             this.panelPriceSourceIndicatorsOuter.Size = new System.Drawing.Size(66, 13);
             this.panelPriceSourceIndicatorsOuter.TabIndex = 292;
             // 
+            // panelThemeMenuBackdrop
+            // 
+            this.panelThemeMenuBackdrop.BackColor = System.Drawing.Color.White;
+            this.panelThemeMenuBackdrop.Controls.Add(this.panelThemeMenuFiller);
+            this.panelThemeMenuBackdrop.Controls.Add(this.lblApplyThemeButtonDisabledMask);
+            this.panelThemeMenuBackdrop.Controls.Add(this.comboBoxHeaderCustomThemes);
+            this.panelThemeMenuBackdrop.Controls.Add(this.btnMenuThemeSymbol);
+            this.panelThemeMenuBackdrop.Controls.Add(this.btnMenuThemeSatsuma);
+            this.panelThemeMenuBackdrop.Controls.Add(this.btnMenuThemeStackSats);
+            this.panelThemeMenuBackdrop.Controls.Add(this.panelCustomThemeMenuTitleBG);
+            this.panelThemeMenuBackdrop.Controls.Add(this.BtnMenuThemeGenesis);
+            this.panelThemeMenuBackdrop.Controls.Add(this.lblThemeMenuHighlightedButtonText);
+            this.panelThemeMenuBackdrop.Controls.Add(this.btnMenuCreateTheme);
+            this.panelThemeMenuBackdrop.Controls.Add(this.btnMenuApplyCustomTheme);
+            this.panelThemeMenuBackdrop.Controls.Add(this.panelPresetThemeMenuTitleBG);
+            this.panelThemeMenuBackdrop.Controls.Add(this.btnMenuThemeFranklin);
+            this.panelThemeMenuBackdrop.Controls.Add(this.btnMenuThemeHoneyBadger);
+            this.panelThemeMenuBackdrop.Location = new System.Drawing.Point(1, 0);
+            this.panelThemeMenuBackdrop.Name = "panelThemeMenuBackdrop";
+            this.panelThemeMenuBackdrop.Size = new System.Drawing.Size(120, 275);
+            this.panelThemeMenuBackdrop.TabIndex = 261;
+            // 
+            // panelCurrencyBackdrop
+            // 
+            this.panelCurrencyBackdrop.BackColor = System.Drawing.Color.White;
+            this.panelCurrencyBackdrop.Controls.Add(this.panelCurrencyMenuFiller);
+            this.panelCurrencyBackdrop.Controls.Add(this.btnGBP);
+            this.panelCurrencyBackdrop.Controls.Add(this.lblCurrencyMenuHighlightedButtonText);
+            this.panelCurrencyBackdrop.Controls.Add(this.btnEUR);
+            this.panelCurrencyBackdrop.Controls.Add(this.btnXAU);
+            this.panelCurrencyBackdrop.Controls.Add(this.btnUSD);
+            this.panelCurrencyBackdrop.Location = new System.Drawing.Point(1, 0);
+            this.panelCurrencyBackdrop.Name = "panelCurrencyBackdrop";
+            this.panelCurrencyBackdrop.Size = new System.Drawing.Size(120, 89);
+            this.panelCurrencyBackdrop.TabIndex = 256;
+            // 
             // SATSuma
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(5F, 12F);
@@ -21297,18 +21319,18 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
+            this.Controls.Add(this.panelBlock);
+            this.Controls.Add(this.panelBitcoinDashboard);
+            this.Controls.Add(this.panelBlockList);
+            this.Controls.Add(this.panelSettings);
+            this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelAddressUTXO);
             this.Controls.Add(this.panelCharts);
-            this.Controls.Add(this.panelBlockList);
-            this.Controls.Add(this.panelBlock);
-            this.Controls.Add(this.panelTransaction);
-            this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelMiningHashrate);
             this.Controls.Add(this.panelMiningBlocks);
             this.Controls.Add(this.panelDCACalculator);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelMiningPools);
-            this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelBookmarks);
             this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelAddress);
@@ -21678,7 +21700,6 @@
             this.panelConvertBTCToFiatContainer.PerformLayout();
             this.panel50.ResumeLayout(false);
             this.panelThemeMenu.ResumeLayout(false);
-            this.panelThemeMenu.PerformLayout();
             this.panelPresetThemeMenuTitleBG.ResumeLayout(false);
             this.panelPresetThemeMenuTitleBG.PerformLayout();
             this.panelCustomThemeMenuTitleBG.ResumeLayout(false);
@@ -21791,6 +21812,9 @@
             this.panel164.ResumeLayout(false);
             this.panel164.PerformLayout();
             this.panelPriceSourceIndicatorsOuter.ResumeLayout(false);
+            this.panelThemeMenuBackdrop.ResumeLayout(false);
+            this.panelThemeMenuBackdrop.PerformLayout();
+            this.panelCurrencyBackdrop.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -23130,6 +23154,8 @@
         private System.Windows.Forms.Label label102;
         private System.Windows.Forms.Panel panel133;
         private System.Windows.Forms.Panel panel134;
+        private System.Windows.Forms.Panel panelThemeMenuBackdrop;
+        private System.Windows.Forms.Panel panelCurrencyBackdrop;
     }
 }
 

@@ -15,7 +15,6 @@
 //TODO documentation for new pools screens (code done, pages created, just do text)
 //TODO testing, particularly new pools screens on own node
 //TODO check tooltips everywhere
-//TODO test all UIScales
 //BUG____________________________________________________________________________________________________
 //!_______________________________________________________________________________________________________
 #region Using
@@ -3399,6 +3398,10 @@ namespace SATSuma
                 {
                     HandleException(ex, "BtnViewBlockFromAddress_Click");
                 }
+                panelAddress.Invoke((MethodInvoker)delegate
+                {
+                    panelAddress.Visible = false;
+                });
                 //show the block screen
                 BtnMenuBlock_ClickAsync(sender, e);
             }
@@ -3423,6 +3426,10 @@ namespace SATSuma
                 {
                     textBoxTransactionID.Text = TransactionIDFromRow;
                 });
+                panelAddress.Invoke((MethodInvoker)delegate
+                {
+                    panelAddress.Visible = false;
+                });
                 //show the transaction screen
                 BtnMenuTransaction_ClickAsync(sender, e);
             }
@@ -3435,6 +3442,10 @@ namespace SATSuma
         private void BtnViewUTXOsFromAddressTX_Click(object sender, EventArgs e)
         {
             textboxSubmittedAddressUTXO.Text = textboxSubmittedAddress.Text;
+            panelAddress.Invoke((MethodInvoker)delegate
+            {
+                panelAddress.Visible = false;
+            });
             BtnMenuAddressUTXO_ClickAsync(sender, e);
         }
         #endregion
@@ -4160,7 +4171,20 @@ namespace SATSuma
                         });
                         int distanceToBeScrolled = panelAddressUTXOScrollbarOuter.Height - panelAddressUTXOScrollbarInner.Height;
                         int numberOfRowsLeftToShow = listViewAddressUTXOs.Items.Count - 28;
-                        addressUTXOScrollbarIncrement = Convert.ToInt32(distanceToBeScrolled / numberOfRowsLeftToShow);
+                        if (numberOfRowsLeftToShow > 0)
+                        {
+                            addressUTXOScrollbarIncrement = Convert.ToInt32(distanceToBeScrolled / numberOfRowsLeftToShow);
+                        }
+                        else
+                        {
+                            panelAddressUTXOScrollbarInner.Invoke((MethodInvoker)delegate
+                            {
+                                panelAddressUTXOScrollbarInner.Height = panelAddressUTXOScrollbarOuter.Height;
+                            });
+                            addressUTXOScrollbarIncrement = 0;
+                            btnAddressUTXOScrollUp.Enabled = false;
+                            btnAddressUTXOScrollDown.Enabled = false;
+                        }
                         panelAddressUTXOScrollbarInner.Refresh();
                         #endregion
                     }
@@ -4233,6 +4257,10 @@ namespace SATSuma
                 {
                     textBoxTransactionID.Text = TransactionIDFromRow;
                 });
+                panelAddressUTXO.Invoke((MethodInvoker)delegate
+                {
+                    panelAddressUTXO.Visible = false;
+                });
                 //show the transaction screen
                 BtnMenuTransaction_ClickAsync(sender, e);
             }
@@ -4264,6 +4292,10 @@ namespace SATSuma
                 {
                     HandleException(ex, "BtnViewBlockFromAddressUTXO_Click");
                 }
+                panelAddressUTXO.Invoke((MethodInvoker)delegate
+                {
+                    panelAddressUTXO.Visible = false;
+                });
                 //show the block screen
                 BtnMenuBlock_ClickAsync(sender, e);
             }
@@ -4276,6 +4308,10 @@ namespace SATSuma
         private void BtnViewAddressTXFromUTXO_Click(object sender, EventArgs e)
         {
             textboxSubmittedAddress.Text = textboxSubmittedAddressUTXO.Text;
+            panelAddressUTXO.Invoke((MethodInvoker)delegate
+            {
+                panelAddressUTXO.Visible = false;
+            });
             BtnMenuAddress_ClickAsync(sender, e);
         }
         #endregion
@@ -5456,6 +5492,10 @@ namespace SATSuma
                 {
                     textBoxTransactionID.Text = TransactionIDFromRow;
                 });
+                panelBlock.Invoke((MethodInvoker)delegate
+                {
+                    panelBlock.Visible = false;
+                });
                 //show the transaction screen
                 BtnMenuTransaction_ClickAsync(sender, e);
             }
@@ -6112,23 +6152,31 @@ namespace SATSuma
                         }
                     }
 
+                    if (listViewTransactionInputs.Items.Count == 1)
+                    {
+                        lblTransasctionInCount.Invoke((MethodInvoker)delegate
+                        {
+                            lblTransasctionInCount.Text = Convert.ToString(listViewTransactionInputs.Items.Count) + " TRANSACTION INPUT";
+                        });
+                    }
+                    else
+                    {
+                        lblTransasctionInCount.Invoke((MethodInvoker)delegate
+                        {
+                            lblTransasctionInCount.Text = Convert.ToString(listViewTransactionInputs.Items.Count) + " TRANSACTION INPUTS";
+                        });
+                    }
+
+
                     if (listViewTransactionInputs.Items.Count > 6)
                     {
                         btnTransactionInputsUp.Enabled = true;
                         btnTransactionInputDown.Enabled = true;
-                        lblTransasctionInCount.Invoke((MethodInvoker)delegate
-                        {
-                            lblTransasctionInCount.Text = Convert.ToString(listViewTransactionInputs.Items.Count) + " transaction inputs";
-                        });
                     }
                     else
                     {
                         btnTransactionInputsUp.Enabled = false;
                         btnTransactionInputDown.Enabled = false;
-                        lblTransasctionInCount.Invoke((MethodInvoker)delegate
-                        {
-                            lblTransasctionInCount.Text = "transaction inputs";
-                        });
                     }
 
                     panelTransactionInTab.Invoke((MethodInvoker)delegate
@@ -6158,7 +6206,20 @@ namespace SATSuma
                     });
                     int distanceToBeScrolledInputs = panelTXInScrollbarOuter.Height - panelTXInScrollbarInner.Height;
                     int numberOfRowsLeftToShowInputs = listViewTransactionInputs.Items.Count - 7;
-                    txInScrollbarIncrement = Convert.ToInt32(distanceToBeScrolledInputs / numberOfRowsLeftToShowInputs);
+                    if (numberOfRowsLeftToShowInputs > 0)
+                    {
+                        txInScrollbarIncrement = Convert.ToInt32(distanceToBeScrolledInputs / numberOfRowsLeftToShowInputs);
+                    }
+                    else
+                    {
+                        panelTXInScrollbarInner.Invoke((MethodInvoker)delegate
+                        {
+                            panelTXInScrollbarInner.Height = panelTXInScrollbarOuter.Height;
+                        });
+                        txInScrollbarIncrement = 0;
+                        btnTransactionInputDown.Enabled = false;
+                        btnTransactionInputsUp.Enabled = false;
+                    }
                     #endregion
 
                     #endregion
@@ -6224,24 +6285,31 @@ namespace SATSuma
                         });
                     }
 
+                    if (listViewTransactionOutputs.Items.Count == 1)
+                    {
+                        lblTransasctionOutCount.Invoke((MethodInvoker)delegate
+                        {
+                            lblTransasctionOutCount.Text = Convert.ToString(listViewTransactionOutputs.Items.Count) + " TRANSACTION OUTPUT";
+                        });
+                    }
+                    else
+                    {
+                        lblTransasctionOutCount.Invoke((MethodInvoker)delegate
+                        {
+                            lblTransasctionOutCount.Text = Convert.ToString(listViewTransactionOutputs.Items.Count) + " TRANSACTION OUTPUTS";
+                        });
+                    }
+
 
                     if (listViewTransactionOutputs.Items.Count > 6)
                     {
                         btnTransactionOutputsDown.Enabled = true;
                         btnTransactionOutputsUp.Enabled = true;
-                        lblTransasctionOutCount.Invoke((MethodInvoker)delegate
-                        {
-                            lblTransasctionOutCount.Text = Convert.ToString(listViewTransactionOutputs.Items.Count) + " transaction outputs";
-                        });
                     }
                     else
                     {
                         btnTransactionOutputsDown.Enabled = false;
                         btnTransactionOutputsUp.Enabled = false;
-                        lblTransasctionOutCount.Invoke((MethodInvoker)delegate
-                        {
-                            lblTransasctionOutCount.Text = "transaction outputs";
-                        });
                     }
 
                     panelTransactionOutTab.Invoke((MethodInvoker)delegate
@@ -6272,7 +6340,20 @@ namespace SATSuma
                     });
                     int distanceToBeScrolledOutputs = panelTXOutScrollbarOuter.Height - panelTXOutScrollbarInner.Height;
                     int numberOfRowsLeftToShowOutputs = listViewTransactionOutputs.Items.Count - 7;
-                    txOutScrollbarIncrement = Convert.ToInt32(distanceToBeScrolledOutputs / numberOfRowsLeftToShowOutputs);
+                    if (numberOfRowsLeftToShowOutputs > 0)
+                    {
+                        txOutScrollbarIncrement = Convert.ToInt32(distanceToBeScrolledOutputs / numberOfRowsLeftToShowOutputs);
+                    }
+                    else
+                    {
+                        panelTXOutScrollbarInner.Invoke((MethodInvoker)delegate
+                        {
+                            panelTXOutScrollbarInner.Height = panelTXOutScrollbarOuter.Height; 
+                        });
+                        txOutScrollbarIncrement = 0;
+                        btnTransactionOutputsDown.Enabled = false;
+                        btnTransactionOutputsUp.Enabled = false;
+                    }
                     #endregion
 
                     #region show controls
@@ -6304,6 +6385,8 @@ namespace SATSuma
                             control.Refresh();
                         }
                     }
+
+                    this.Invalidate();
                     #endregion
                 }
                 else
@@ -6994,6 +7077,10 @@ namespace SATSuma
                 {
                     textboxSubmittedAddress.Text = SelectedAddress; // copy address to address screen
                 });
+                panelTransaction.Invoke((MethodInvoker)delegate
+                {
+                    panelTransaction.Visible = false;
+                });
                 //show the address screen
                 BtnMenuAddress_ClickAsync(sender, e);
             }
@@ -7015,6 +7102,10 @@ namespace SATSuma
                 textboxSubmittedAddress.Invoke((MethodInvoker)delegate
                 {
                     textboxSubmittedAddress.Text = SelectedAddress; // copy address to address screen
+                });
+                panelTransaction.Invoke((MethodInvoker)delegate
+                {
+                    panelTransaction.Visible = false;
                 });
                 //show the address screen
                 BtnMenuAddress_ClickAsync(sender, e);
@@ -7301,7 +7392,7 @@ namespace SATSuma
                         listViewBlockList.Invoke((MethodInvoker)delegate
                         {
                             // If not, add the column header
-                            listViewBlockList.Columns.Add("Reward (BTC)", (int)(91 * UIScale));
+                            listViewBlockList.Columns.Add("Reward", (int)(91 * UIScale));
                         });
                     }
                     // Add the items to the ListView
@@ -7613,6 +7704,10 @@ namespace SATSuma
                         numericUpDownSubmittedBlockNumber.Text = submittedBlockNumber; // copy block number to block screen
                     });
                     LookupBlockAsync();
+                    panelBlockList.Invoke((MethodInvoker)delegate
+                    {
+                        panelBlockList.Visible = false;
+                    });
                     //show the block screen
                     BtnMenuBlock_ClickAsync(sender, e);
                 }
@@ -9812,7 +9907,20 @@ namespace SATSuma
                 });
                 int distanceToBeScrolled = panelXpubScrollbarOuter.Height - panelXpubScrollbarInner.Height;
                 int numberOfRowsLeftToShow = listViewXpubAddresses.Items.Count - 28;
-                xpubScrollbarIncrement = Convert.ToInt32(distanceToBeScrolled / numberOfRowsLeftToShow);
+                if (numberOfRowsLeftToShow > 0)
+                {
+                    xpubScrollbarIncrement = Convert.ToInt32(distanceToBeScrolled / numberOfRowsLeftToShow);
+                }
+                else
+                {
+                    panelXpubScrollbarInner.Invoke((MethodInvoker)delegate
+                    {
+                        panelXpubScrollbarInner.Height = panelXpubScrollbarOuter.Height;
+                    });
+                    xpubScrollbarIncrement = 0;
+                    btnXpubAddressesUp.Enabled = false;
+                    btnXpubAddressesDown.Enabled = false;
+                }
                 #endregion
                 xpubScanComplete = true;
                 #endregion
@@ -10214,6 +10322,10 @@ namespace SATSuma
                 {
                     textboxSubmittedAddress.Text = SelectedAddress; // copy address to address screen
                 });
+                panelXpub.Invoke((MethodInvoker)delegate
+                {
+                    panelXpub.Visible = false; 
+                });
                 //show the address screen
                 BtnMenuAddress_ClickAsync(sender, e);
             }
@@ -10321,7 +10433,20 @@ namespace SATSuma
                     });
                     int distanceToBeScrolled = panelPoolsBlocksScrollbarOuter.Height - panelPoolsBlocksScrollbarInner.Height;
                     int numberOfRowsLeftToShow = listViewPoolsByBlock.Items.Count - 32;
-                    poolsBlocksScrollbarIncrement = Convert.ToInt32(distanceToBeScrolled / numberOfRowsLeftToShow);
+                    if (numberOfRowsLeftToShow > 0)
+                    {
+                        poolsBlocksScrollbarIncrement = Convert.ToInt32(distanceToBeScrolled / numberOfRowsLeftToShow);
+                    }
+                    else
+                    {
+                        panelPoolsBlocksScrollbarInner.Invoke((MethodInvoker)delegate
+                        {
+                            panelPoolsBlocksScrollbarInner.Height = panelPoolsBlocksScrollbarOuter.Height;
+                        });
+                        poolsBlocksScrollbarIncrement = 0;
+                        btnPoolsBlocksScrollDown.Enabled = false;
+                        btnPoolsBlocksScrollUp.Enabled = false;
+                    }
                     #endregion
 
                     ChartPoolsRankingForPoolsScreen(poolsBlocksTimePeriod);
@@ -10701,7 +10826,6 @@ namespace SATSuma
                     }
                 }
             }
-            
             BtnMenuMiningPools_ClickAsync(sender, e);
         }
 
@@ -11469,7 +11593,20 @@ namespace SATSuma
                         });
                         int distanceToBeScrolled = panelPoolsListScrollbarOuter.Height - panelPoolsListScrollbarInner.Height;
                         int numberOfRowsLeftToShow = listViewPoolsList.Items.Count - 32;
-                        poolsListScrollbarIncrement = Convert.ToInt32((distanceToBeScrolled / numberOfRowsLeftToShow)+1);
+                        if (numberOfRowsLeftToShow > 0)
+                        {
+                            poolsListScrollbarIncrement = Convert.ToInt32((distanceToBeScrolled / numberOfRowsLeftToShow) + 1);
+                        }
+                        else
+                        {
+                            panelPoolsListScrollbarInner.Invoke((MethodInvoker)delegate
+                            {
+                                panelPoolsListScrollbarInner.Height = panelPoolsListScrollbarOuter.Height;
+                            });
+                            poolsListScrollbarIncrement = 0;
+                            btnPoolsListScrollDown.Enabled = false;
+                            btnPoolsListScrollUp.Enabled = false;
+                        }
                         #endregion
                     }
                     #endregion
@@ -16151,7 +16288,20 @@ namespace SATSuma
                 });
                 int distanceToBeScrolled = panelBookmarksScrollbarOuter.Height - panelBookmarksScrollbarInner.Height;
                 int numberOfRowsLeftToShow = listViewBookmarks.Items.Count - 23;
-                bookmarksScrollbarIncrement = Convert.ToInt32(distanceToBeScrolled / numberOfRowsLeftToShow);
+                if (numberOfRowsLeftToShow > 0)
+                {
+                    bookmarksScrollbarIncrement = Convert.ToInt32(distanceToBeScrolled / numberOfRowsLeftToShow);
+                }
+                else
+                {
+                    panelBookmarksScrollbarInner.Invoke((MethodInvoker)delegate
+                    {
+                        panelBookmarksScrollbarInner.Height = panelBookmarksScrollbarOuter.Height;
+                    });
+                    bookmarksScrollbarIncrement = 0;
+                    btnBookmarksListDown.Enabled = false;
+                    btnBookmarksListUp.Enabled = false;
+                }
                 #endregion
 
                 if (listViewBookmarks.Items.Count > 23)
@@ -16341,6 +16491,10 @@ namespace SATSuma
         {
             try
             {
+                panelBookmarks.Invoke((MethodInvoker)delegate
+                {
+                    panelBookmarks.Visible = false;
+                });
                 if (String.Compare(lblSelectedBookmarkType.Text, "block") == 0)
                 {
                     numericUpDownSubmittedBlockNumber.Invoke((MethodInvoker)delegate
@@ -25125,7 +25279,7 @@ namespace SATSuma
                 }
 
                 //header
-                Control[] listHeaderButtonsToColor = { btnUniversalSearch, btnMenuApplyCustomTheme, comboBoxHeaderCustomThemes, lblApplyThemeButtonDisabledMask, lblThemeMenuHighlightedButtonText, lblCurrencyMenuHighlightedButtonText, btnAnimation, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnMenuCreateTheme, btnMenuThemeFranklin, btnMenuThemeSatsuma, btnMenuThemeHoneyBadger, btnMenuThemeStackSats, btnMenuThemeSymbol, BtnMenuThemeGenesis, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage, btnCopyErrorMessage };
+                Control[] listHeaderButtonsToColor = { btnUniversalSearch, btnMenuApplyCustomTheme, comboBoxHeaderCustomThemes, lblApplyThemeButtonDisabledMask, lblThemeMenuHighlightedButtonText, lblCurrencyMenuHighlightedButtonText, btnAnimation, btnAddToBookmarks, btnHelp, btnMinimise, btnShowGlobalSearch, btnMoveWindow, btnExit, btnMenuCreateTheme, btnMenuThemeFranklin, btnMenuThemeSatsuma, btnMenuThemeHoneyBadger, btnMenuThemeStackSats, btnMenuThemeSymbol, BtnMenuThemeGenesis, btnUSD, btnEUR, btnGBP, btnXAU, btnHideErrorMessage, btnCopyErrorMessage, panelThemeMenuBackdrop, panelCurrencyBackdrop };
                 foreach (Control control in listHeaderButtonsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -25144,6 +25298,14 @@ namespace SATSuma
                 btnMenuHelp.Invoke((MethodInvoker)delegate
                 {
                     btnMenuHelp.FlatAppearance.BorderColor = menuAndHeaderButtonsColour;
+                });
+                panelThemeMenuBackdrop.Invoke((MethodInvoker)delegate
+                {
+                    panelThemeMenuBackdrop.Width = panelThemeMenu.Width - 2;
+                });
+                panelCurrencyBackdrop.Invoke((MethodInvoker)delegate
+                {
+                    panelCurrencyBackdrop.Width = panelCurrency.Width - 2;
                 });
 
                 //settings & appearance
@@ -27549,6 +27711,14 @@ namespace SATSuma
                 {
                     panelToExpandVert.Height = panelMaxHeight;
                 });
+                panelThemeMenuBackdrop.Invoke((MethodInvoker)delegate
+                {
+                    panelThemeMenuBackdrop.Height = panelThemeMenu.Height - 1;
+                });
+                panelCurrencyBackdrop.Invoke((MethodInvoker)delegate
+                {
+                    panelCurrencyBackdrop.Height = panelCurrency.Height - 1;
+                });
                 ExpandPanelTimerVert.Stop();
             }
             else // expand further
@@ -27557,6 +27727,14 @@ namespace SATSuma
                 {
                     panelToExpandVert.Height = currentHeightExpandingPanel;
                     panelToExpandVert.Invalidate();
+                });
+                panelThemeMenuBackdrop.Invoke((MethodInvoker)delegate
+                {
+                    panelThemeMenuBackdrop.Height = panelThemeMenu.Height - 1;
+                });
+                panelCurrencyBackdrop.Invoke((MethodInvoker)delegate
+                {
+                    panelCurrencyBackdrop.Height = panelCurrency.Height - 1;
                 });
             }
         }
@@ -29899,8 +30077,6 @@ namespace SATSuma
         private async Task HideAllScreens()
         {
             await HideScreens().ConfigureAwait(true);
-            
-
         }
 
         private async Task HideScreens()
@@ -31107,7 +31283,13 @@ namespace SATSuma
                     panelTransaction.Visible = true;
                 });
 
-                Control[] controlsToRefresh = { panelTransaction, panelTransactionIDContainer, panelTXInScrollContainer, panelTXOutScrollContainer, panelTransactionMiddle, panelTransactionInputs, panelTransactionOutputs, panelTransactionResults, panelTransactionInTab, panelTransactionOutTab };
+                ResumeLayout(false);
+
+
+
+
+
+                Control[] controlsToRefresh = { panelTransactionMiddle, panelTransactionInputs, panelTransactionOutputs, panelTransactionInTab, panelTransactionOutTab, panelTXOutScrollContainer, panelTransactionIDContainer, panelTXInScrollContainer, panelTransactionResults, panelTransaction };
                 foreach (Control control in controlsToRefresh)
                 {
                     if (control.InvokeRequired)
@@ -31122,6 +31304,7 @@ namespace SATSuma
                         control.Refresh();
                     }
                 }
+                panelTransaction.Refresh();
 
                 if (!fullScreenLoadingScreenVisible && loadingScreen != null)
                 {
@@ -31136,9 +31319,8 @@ namespace SATSuma
                     }
                     #endregion
                 }
-                
-                
-                ResumeLayout(false);
+
+                //ResumeLayout(false);
                 ToggleLoadingAnimation("disable");
                 await CheckNetworkStatusAsync();
             }
@@ -32843,6 +33025,10 @@ namespace SATSuma
                     panelThemeMenu.Height = 0;
                     btnThemeMenu.BackColor = Color.Transparent;
                 });
+                panelThemeMenuBackdrop.Invoke((MethodInvoker)delegate
+                {
+                    panelThemeMenuBackdrop.Height = 0;
+                });
             }
             catch (Exception ex)
             {
@@ -32858,6 +33044,10 @@ namespace SATSuma
                 {
                     panelCurrency.Height = 0;
                     btnCurrency.BackColor = Color.Transparent;
+                });
+                panelCurrencyBackdrop.Invoke((MethodInvoker)delegate
+                {
+                    panelCurrencyBackdrop.Height = 0;
                 });
             }
             catch (Exception ex)

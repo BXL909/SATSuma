@@ -14,7 +14,6 @@
 //TODO Taproot support on xpub screen 
 //TODO documentation for new pools screens (code done, pages created, just do text)
 //TODO testing, particularly new pools screens on own node
-//TODO check tooltips everywhere
 //BUG____________________________________________________________________________________________________
 //!_______________________________________________________________________________________________________
 #region Using
@@ -584,7 +583,6 @@ namespace SATSuma
                     loadingTheme1.Show(this);
                 }
                 #endregion 
-
                 #region restore saved settings
                 RestoreSavedSettings(); // api choices, node, xpub node, theme
                 #endregion
@@ -933,8 +931,17 @@ namespace SATSuma
 
                                     lblHeaderBlockAge.Invoke((MethodInvoker)delegate
                                     {
-                                        lblHeaderBlockAge.Location = new Point(lblBlockNumber.Location.X + lblBlockNumber.Width, lblHeaderBlockAge.Location.Y);
+                                        lblHeaderBlockAge.Location = new Point(lblBlockNumber.Location.X + lblBlockNumber.Width - (int)(6 * UIScale), lblHeaderBlockAge.Location.Y);
                                     });
+                                    lblHeaderTimestamp.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblHeaderTimestamp.Location = new Point(lblBlockNumber.Location.X + lblBlockNumber.Width - (int)(6 * UIScale), lblHeaderTimestamp.Location.Y);
+                                    });
+                                    label107.Invoke((MethodInvoker)delegate
+                                    {
+                                        label107.Location = new Point(lblHeaderTimestamp.Location.X + lblHeaderTimestamp.Width - (int)(4 * UIScale), label107.Location.Y);
+                                    });
+
                                     firstTimeGettingBlockTip = false;
                                 }
 
@@ -976,12 +983,40 @@ namespace SATSuma
                     {
                         var (fastestFee, halfHourFee, hourFee, economyFee) = MemSpGetFees();
                         UpdateLabelValueAsync(lblHeaderfeesHighPriority, fastestFee);
+                        label15.Invoke((MethodInvoker)delegate
+                        {
+                            label15.Location = new Point(lblHeaderfeesHighPriority.Location.X + lblHeaderfeesHighPriority.Width - 21, label15.Location.Y);
+                        });
+                        lblHeaderFeesMediumPriority.Invoke((MethodInvoker)delegate
+                        {
+                            lblHeaderFeesMediumPriority.Location = new Point(label15.Location.X + label15.Width - 10, lblHeaderFeesMediumPriority.Location.Y);
+                        });
                         UpdateLabelValueAsync(lblHeaderFeesMediumPriority, halfHourFee);
+                        label25.Invoke((MethodInvoker)delegate
+                        {
+                            label25.Location = new Point(lblHeaderFeesMediumPriority.Location.X + lblHeaderFeesMediumPriority.Width - 21, label25.Location.Y);
+                        });
+                        lblHeaderFeesLowPriority.Invoke((MethodInvoker)delegate
+                        {
+                            lblHeaderFeesLowPriority.Location = new Point(label25.Location.X + label25.Width - 10, lblHeaderFeesLowPriority.Location.Y);
+                        });
                         UpdateLabelValueAsync(lblHeaderFeesLowPriority, hourFee);
+                        label28.Invoke((MethodInvoker)delegate
+                        {
+                            label28.Location = new Point(lblHeaderFeesLowPriority.Location.X + lblHeaderFeesLowPriority.Width - 21, label28.Location.Y);
+                        });
+                        lblHeaderFeesNoPriority.Invoke((MethodInvoker)delegate
+                        {
+                            lblHeaderFeesNoPriority.Location = new Point(label28.Location.X + label28.Width - 10, lblHeaderFeesNoPriority.Location.Y);
+                        });
                         UpdateLabelValueAsync(lblHeaderFeesNoPriority, economyFee);
+                        label29.Invoke((MethodInvoker)delegate
+                        {
+                            label29.Location = new Point(lblHeaderFeesNoPriority.Location.X + lblHeaderFeesNoPriority.Width - 21, label29.Location.Y);
+                        });
                         lblHeaderFeeRatesChart.Invoke((MethodInvoker)delegate
                         {
-                            lblHeaderFeeRatesChart.Location = new Point(lblHeaderFeesNoPriority.Location.X + lblHeaderFeesNoPriority.Width, lblHeaderFeeRatesChart.Location.Y);
+                            lblHeaderFeeRatesChart.Location = new Point(lblHeaderFeesNoPriority.Location.X + lblHeaderFeesNoPriority.Width - 4, lblHeaderFeeRatesChart.Location.Y);
                         });
                     }
                     catch (Exception ex)
@@ -5055,6 +5090,10 @@ namespace SATSuma
                     lblBlockTime.Invoke((MethodInvoker)delegate
                     {
                         lblBlockTime.Text = DateTimeOffset.FromUnixTimeSeconds(long.Parse(blocks[0].Timestamp)).ToString("yyyy-MM-dd HH:mm");
+                    });
+                    lblHeaderTimestamp.Invoke((MethodInvoker)delegate
+                    {
+                        lblHeaderTimestamp.Text = DateTimeOffset.FromUnixTimeSeconds(long.Parse(blocks[0].Timestamp)).ToString("yyyy-MM-dd HH:mm");
                     });
                 }
                 else
@@ -24583,7 +24622,7 @@ namespace SATSuma
             try
             {
                 //header
-                Control[] listHeaderDataFieldsToColor = { lblHeaderMarketCap, lblHeaderMoscowTime, lblHeaderTransactions, lblHeaderBlockSize, lblHeaderfeesHighPriority, lblHeaderFeesMediumPriority, lblHeaderFeesLowPriority, lblHeaderFeesNoPriority, lblHeaderHashrate, lblHeaderPriceChange };
+                Control[] listHeaderDataFieldsToColor = { lblHeaderMarketCap, lblHeaderMoscowTime, lblHeaderTransactions, lblHeaderBlockSize, lblHeaderfeesHighPriority, lblHeaderFeesMediumPriority, lblHeaderFeesLowPriority, lblHeaderFeesNoPriority, lblHeaderHashrate, lblHeaderPriceChange, lblHeaderTimestamp };
                 foreach (Control control in listHeaderDataFieldsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24727,7 +24766,7 @@ namespace SATSuma
             try
             {
                 //header
-                Control[] listHeaderLabelsToColor = { label77, lblHeaderMoscowTimeLabel, label148, label149, label15, label25, label28, label29, lblSatsumaTitle, lblHeaderBlockAge, lblHeaderPriceChart, lblHeaderMarketCapChart, lblHeaderConverterChart, lblHeaderBlockSizeChart, lblHeaderHashRateChart, lblHeaderFeeRatesChart };
+                Control[] listHeaderLabelsToColor = { label77, lblHeaderMoscowTimeLabel, label148, label149, label15, label25, label28, label29, lblSatsumaTitle, lblHeaderBlockAge, lblHeaderPriceChart, lblHeaderMarketCapChart, lblHeaderConverterChart, lblHeaderBlockSizeChart, lblHeaderHashRateChart, lblHeaderFeeRatesChart, label107 };
                 foreach (Control control in listHeaderLabelsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -25230,7 +25269,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] PriceBlockItemsToColor = { lblHeaderPrice, lblBlockNumber, label175 };
+                Control[] PriceBlockItemsToColor = { lblHeaderPrice, lblBlockNumber, label175, lblHeaderfeesHighPriority, lblHeaderFeesMediumPriority, lblHeaderFeesLowPriority, lblHeaderFeesNoPriority };
                 foreach (Control control in PriceBlockItemsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -28194,7 +28233,7 @@ namespace SATSuma
                         btnAddToBookmarks.Invoke((MethodInvoker)delegate
                         {
                             btnAddToBookmarks.Enabled = false;
-                            btnAddToBookmarks.Text = "🤍";
+                            //btnAddToBookmarks.Text = "🤍";
                         });
                         lblNowViewing.Invoke((MethodInvoker)delegate
                         {
@@ -28218,7 +28257,7 @@ namespace SATSuma
                         btnAddToBookmarks.Invoke((MethodInvoker)delegate
                         {
                             btnAddToBookmarks.Enabled = false;
-                            btnAddToBookmarks.Text = "🤍";
+                            //btnAddToBookmarks.Text = "🤍";
                         });
                         lblNowViewing.Invoke((MethodInvoker)delegate
                         {
@@ -28244,7 +28283,7 @@ namespace SATSuma
                         btnAddToBookmarks.Invoke((MethodInvoker)delegate
                         {
                             btnAddToBookmarks.Enabled = false;
-                            btnAddToBookmarks.Text = "🤍";
+                            //btnAddToBookmarks.Text = "🤍";
                         });
                         lblNowViewing.Invoke((MethodInvoker)delegate
                         {
@@ -28268,7 +28307,7 @@ namespace SATSuma
                         btnAddToBookmarks.Invoke((MethodInvoker)delegate
                         {
                             btnAddToBookmarks.Enabled = false;
-                            btnAddToBookmarks.Text = "🤍";
+                            //btnAddToBookmarks.Text = "🤍";
                         });
                         lblNowViewing.Invoke((MethodInvoker)delegate
                         {
@@ -28280,7 +28319,7 @@ namespace SATSuma
                         btnAddToBookmarks.Invoke((MethodInvoker)delegate
                         {
                             btnAddToBookmarks.Enabled = false;
-                            btnAddToBookmarks.Text = "🤍";
+                            //btnAddToBookmarks.Text = "🤍";
                         });
                         lblNowViewing.Invoke((MethodInvoker)delegate
                         {
@@ -28396,7 +28435,7 @@ namespace SATSuma
                     btnAddToBookmarks.Invoke((MethodInvoker)delegate
                     {
                         btnAddToBookmarks.Enabled = false;
-                        btnAddToBookmarks.Text = "🤍";
+                        //btnAddToBookmarks.Text = "🤍";
                     });
                 }
                 #endregion
@@ -29000,65 +29039,6 @@ namespace SATSuma
         }
         #endregion
         #region get block tip
-        /*
-        private void GetBlockTipAndCirculation()
-        {
-            try
-            {
-                using WebClient client = new WebClient();
-                string BlockTipURL = $"{NodeURL}blocks/tip/height";
-                string BlockTip = client.DownloadString(BlockTipURL);
-                lblBlockNumber.Invoke((MethodInvoker)delegate
-                {
-                    lblBlockNumber.Text = BlockTip;
-                });
-                numericUpDownBlockHeightToStartListFrom.Invoke((MethodInvoker)delegate
-                {
-                    numericUpDownBlockHeightToStartListFrom.Text = BlockTip;
-                });
-                lblHeaderBlockAge.Invoke((MethodInvoker)delegate
-                {
-                    lblHeaderBlockAge.Location = new Point(lblBlockNumber.Location.X + lblBlockNumber.Width, lblHeaderBlockAge.Location.Y);
-                });
-                numericUpDownSubmittedBlockNumber.Maximum = Convert.ToDecimal(BlockTip);
-                numericUpDownBlockHeightToStartListFrom.Maximum = Convert.ToDecimal(BlockTip);
-
-
-                // calculate amount of btc issued
-                int blockHeight = Convert.ToInt32(BlockTip);
-                decimal totalBitcoinsIssued = CirculationCalculator.CalculateTotalBitcoinsIssued(blockHeight);
-                calculatedBTCInCirculation = totalBitcoinsIssued;
-
-                UpdateLabelValueAsync(lblBTCInCirc, $"{calculatedBTCInCirculation:N2} / 21,000,000");
-                if (calculatedBTCInCirculation > 0)
-                {
-                    UpdateLabelValueAsync(lblBTCToBeIssued, Convert.ToString(21000000 - calculatedBTCInCirculation));
-                }
-                else
-                {
-                    lblBTCToBeIssued.Invoke((MethodInvoker)delegate
-                    {
-                        lblBTCToBeIssued.Text = "0";
-                    });
-                }
-                lblChartCirculation.Invoke((MethodInvoker)delegate
-                {
-                    lblChartCirculation.Location = new Point(lblBTCInCirc.Location.X + lblBTCInCirc.Width, lblChartCirculation.Location.Y);
-                });
-                decimal percentIssued = Math.Round((100m / 21000000) * calculatedBTCInCirculation, 2);
-                UpdateLabelValueAsync(lblPercentIssued, $"{percentIssued}%");
-
-                progressBarPercentIssued.Invoke((MethodInvoker)delegate
-                {
-                    progressBarPercentIssued.Value = Convert.ToInt16(percentIssued);
-                });
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "GetBlockTip");
-            }
-        }
-        */
 
         private async Task GetBlockTipAndCirculationAsync()
         {
@@ -29073,13 +29053,22 @@ namespace SATSuma
                 {
                     lblBlockNumber.Text = BlockTip;
                 });
+
+                lblHeaderBlockAge.Invoke((MethodInvoker)delegate
+                {
+                    lblHeaderBlockAge.Location = new Point(lblBlockNumber.Location.X + lblBlockNumber.Width - (int)(6 * UIScale), lblHeaderBlockAge.Location.Y);
+                });
+                lblHeaderTimestamp.Invoke((MethodInvoker)delegate
+                {
+                    lblHeaderTimestamp.Location = new Point(lblBlockNumber.Location.X + lblBlockNumber.Width - (int)(6 * UIScale), lblHeaderTimestamp.Location.Y);
+                });
+                label107.Invoke((MethodInvoker)delegate
+                {
+                    label107.Location = new Point(lblHeaderTimestamp.Location.X + lblHeaderTimestamp.Width - (int)(4 * UIScale), label107.Location.Y);
+                });
                 numericUpDownBlockHeightToStartListFrom.Invoke((MethodInvoker)delegate
                 {
                     numericUpDownBlockHeightToStartListFrom.Text = BlockTip;
-                });
-                lblHeaderBlockAge.Invoke((MethodInvoker)delegate
-                {
-                    lblHeaderBlockAge.Location = new Point(lblBlockNumber.Location.X + lblBlockNumber.Width, lblHeaderBlockAge.Location.Y);
                 });
 
                 numericUpDownSubmittedBlockNumber.Invoke((MethodInvoker)delegate

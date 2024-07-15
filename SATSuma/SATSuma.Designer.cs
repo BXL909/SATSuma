@@ -32,7 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SATSuma));
             this.lblTime = new System.Windows.Forms.Label();
             this.timer1Sec = new System.Windows.Forms.Timer(this.components);
-            this.lblBlockNumber = new System.Windows.Forms.Label();
+            this.lblHeaderBlockNumber = new System.Windows.Forms.Label();
             this.btnMoveWindow = new CustomControls.RJControls.RJButton();
             this.lblStatusLight = new System.Windows.Forms.Label();
             this.lblErrorMessage = new System.Windows.Forms.Label();
@@ -74,7 +74,6 @@
             this.lblHeaderMarketCapChart = new System.Windows.Forms.Label();
             this.lblHeaderConverterChart = new System.Windows.Forms.Label();
             this.lblHeaderBlockSizeChart = new System.Windows.Forms.Label();
-            this.lblHeaderHashRateChart = new System.Windows.Forms.Label();
             this.lblHeaderFeeRatesChart = new System.Windows.Forms.Label();
             this.lblBlockListFeeRangeChart2 = new System.Windows.Forms.Label();
             this.lblBlockListFeeChart2 = new System.Windows.Forms.Label();
@@ -602,9 +601,6 @@
             this.lblBookmarkProposalData = new System.Windows.Forms.Label();
             this.btnCancelAddToBookmarks = new CustomControls.RJControls.RJButton();
             this.btnCommitToBookmarks = new CustomControls.RJControls.RJButton();
-            this.panel57 = new System.Windows.Forms.Panel();
-            this.label150 = new System.Windows.Forms.Label();
-            this.lblHeaderHashrate = new System.Windows.Forms.Label();
             this.panel40 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.label29 = new System.Windows.Forms.Label();
@@ -1254,6 +1250,12 @@
             this.btnViewPoolFromPoolsHashrate = new CustomControls.RJControls.RJButton();
             this.btnViewBlockFromBlocksByPool = new CustomControls.RJControls.RJButton();
             this.label107 = new System.Windows.Forms.Label();
+            this.label110 = new System.Windows.Forms.Label();
+            this.label150 = new System.Windows.Forms.Label();
+            this.lblHeaderFeeRangeChart = new System.Windows.Forms.Label();
+            this.lblHeaderNextBlockMinMaxFee = new System.Windows.Forms.Label();
+            this.lblHeaderBlockFeesChart = new System.Windows.Forms.Label();
+            this.lblHeaderNextBlockTotalFees = new System.Windows.Forms.Label();
             this.timer50thSec = new System.Windows.Forms.Timer(this.components);
             this.panelAddressUTXO = new System.Windows.Forms.Panel();
             this.panelUTXOError = new System.Windows.Forms.Panel();
@@ -1453,7 +1455,6 @@
             this.panelEncryptionKeyContainer.SuspendLayout();
             this.panelOptionalNotesContainer.SuspendLayout();
             this.panel31.SuspendLayout();
-            this.panel57.SuspendLayout();
             this.panel40.SuspendLayout();
             this.panelBookmarks.SuspendLayout();
             this.panelBookmarksScrollContainer.SuspendLayout();
@@ -1669,20 +1670,20 @@
             this.timer1Sec.Interval = 1000;
             this.timer1Sec.Tick += new System.EventHandler(this.Timer1Sec_Tick);
             // 
-            // lblBlockNumber
+            // lblHeaderBlockNumber
             // 
-            this.lblBlockNumber.AutoSize = true;
-            this.lblBlockNumber.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblBlockNumber.Font = new System.Drawing.Font("Myriad Pro Cond", 28.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBlockNumber.ForeColor = System.Drawing.Color.DimGray;
-            this.lblBlockNumber.Location = new System.Drawing.Point(422, 65);
-            this.lblBlockNumber.Margin = new System.Windows.Forms.Padding(0);
-            this.lblBlockNumber.Name = "lblBlockNumber";
-            this.lblBlockNumber.Size = new System.Drawing.Size(122, 47);
-            this.lblBlockNumber.TabIndex = 5;
-            this.lblBlockNumber.Tag = "";
-            this.lblBlockNumber.Text = "000000";
-            this.toolTipGeneralUse.SetToolTip(this.lblBlockNumber, "The most recently mined block");
+            this.lblHeaderBlockNumber.AutoSize = true;
+            this.lblHeaderBlockNumber.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblHeaderBlockNumber.Font = new System.Drawing.Font("Myriad Pro Cond", 28.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblHeaderBlockNumber.ForeColor = System.Drawing.Color.DimGray;
+            this.lblHeaderBlockNumber.Location = new System.Drawing.Point(422, 65);
+            this.lblHeaderBlockNumber.Margin = new System.Windows.Forms.Padding(0);
+            this.lblHeaderBlockNumber.Name = "lblHeaderBlockNumber";
+            this.lblHeaderBlockNumber.Size = new System.Drawing.Size(122, 47);
+            this.lblHeaderBlockNumber.TabIndex = 5;
+            this.lblHeaderBlockNumber.Tag = "";
+            this.lblHeaderBlockNumber.Text = "000000";
+            this.toolTipGeneralUse.SetToolTip(this.lblHeaderBlockNumber, "The most recently mined block");
             // 
             // btnMoveWindow
             // 
@@ -1825,13 +1826,14 @@
             // 
             // label21
             // 
+            this.label21.AutoSize = true;
             this.label21.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.label21.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label21.ForeColor = System.Drawing.Color.Silver;
             this.label21.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.label21.Location = new System.Drawing.Point(264, 139);
             this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(172, 17);
+            this.label21.Size = new System.Drawing.Size(201, 17);
             this.label21.TabIndex = 113;
             this.label21.Text = "Min / max fee in next block (sats)";
             this.toolTipGeneralUse.SetToolTip(this.label21, "Estimation. Actual min/max fee won\'t be \r\nXXknown until the block is mined");
@@ -2270,28 +2272,13 @@
             this.toolTipGeneralUse.SetToolTip(this.lblHeaderBlockSizeChart, "block size chart");
             this.lblHeaderBlockSizeChart.Click += new System.EventHandler(this.PictureBoxHeaderBlockSizeChart_Click);
             // 
-            // lblHeaderHashRateChart
-            // 
-            this.lblHeaderHashRateChart.AutoSize = true;
-            this.lblHeaderHashRateChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblHeaderHashRateChart.Font = new System.Drawing.Font("Century Gothic", 10F);
-            this.lblHeaderHashRateChart.ForeColor = System.Drawing.Color.Silver;
-            this.lblHeaderHashRateChart.Location = new System.Drawing.Point(753, 129);
-            this.lblHeaderHashRateChart.Margin = new System.Windows.Forms.Padding(0);
-            this.lblHeaderHashRateChart.Name = "lblHeaderHashRateChart";
-            this.lblHeaderHashRateChart.Size = new System.Drawing.Size(28, 19);
-            this.lblHeaderHashRateChart.TabIndex = 270;
-            this.lblHeaderHashRateChart.Text = "📈";
-            this.toolTipGeneralUse.SetToolTip(this.lblHeaderHashRateChart, "hashrate chart");
-            this.lblHeaderHashRateChart.Click += new System.EventHandler(this.PictureBoxHeaderHashrateChart_Click);
-            // 
             // lblHeaderFeeRatesChart
             // 
             this.lblHeaderFeeRatesChart.AutoSize = true;
             this.lblHeaderFeeRatesChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblHeaderFeeRatesChart.Font = new System.Drawing.Font("Century Gothic", 10F);
             this.lblHeaderFeeRatesChart.ForeColor = System.Drawing.Color.Silver;
-            this.lblHeaderFeeRatesChart.Location = new System.Drawing.Point(894, 86);
+            this.lblHeaderFeeRatesChart.Location = new System.Drawing.Point(894, 89);
             this.lblHeaderFeeRatesChart.Margin = new System.Windows.Forms.Padding(0);
             this.lblHeaderFeeRatesChart.Name = "lblHeaderFeeRatesChart";
             this.lblHeaderFeeRatesChart.Size = new System.Drawing.Size(28, 19);
@@ -9778,7 +9765,7 @@
             this.panelAddToBookmarks.Controls.Add(this.panel31);
             this.panelAddToBookmarks.Controls.Add(this.btnCancelAddToBookmarks);
             this.panelAddToBookmarks.Controls.Add(this.btnCommitToBookmarks);
-            this.panelAddToBookmarks.Location = new System.Drawing.Point(658, 39);
+            this.panelAddToBookmarks.Location = new System.Drawing.Point(678, 39);
             this.panelAddToBookmarks.Name = "panelAddToBookmarks";
             this.panelAddToBookmarks.Size = new System.Drawing.Size(261, 114);
             this.panelAddToBookmarks.TabIndex = 201;
@@ -9952,47 +9939,6 @@
             this.btnCommitToBookmarks.TextColor = System.Drawing.Color.White;
             this.btnCommitToBookmarks.UseVisualStyleBackColor = false;
             this.btnCommitToBookmarks.Click += new System.EventHandler(this.BtnCommitToBookmarks_Click);
-            // 
-            // panel57
-            // 
-            this.panel57.BackColor = System.Drawing.Color.Transparent;
-            this.panel57.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel57.BackgroundImage")));
-            this.panel57.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel57.Controls.Add(this.label150);
-            this.panel57.Location = new System.Drawing.Point(684, 105);
-            this.panel57.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel57.Name = "panel57";
-            this.panel57.Size = new System.Drawing.Size(220, 23);
-            this.panel57.TabIndex = 209;
-            // 
-            // label150
-            // 
-            this.label150.AutoSize = true;
-            this.label150.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label150.Font = new System.Drawing.Font("Century Gothic", 8F);
-            this.label150.ForeColor = System.Drawing.Color.Gray;
-            this.label150.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label150.Location = new System.Drawing.Point(3, 4);
-            this.label150.Margin = new System.Windows.Forms.Padding(0);
-            this.label150.Name = "label150";
-            this.label150.Size = new System.Drawing.Size(139, 16);
-            this.label150.TabIndex = 153;
-            this.label150.Text = "HASHRATE (HASHES/SEC)";
-            this.label150.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblHeaderHashrate
-            // 
-            this.lblHeaderHashrate.AutoSize = true;
-            this.lblHeaderHashrate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblHeaderHashrate.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblHeaderHashrate.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
-            this.lblHeaderHashrate.Location = new System.Drawing.Point(686, 130);
-            this.lblHeaderHashrate.Margin = new System.Windows.Forms.Padding(0);
-            this.lblHeaderHashrate.Name = "lblHeaderHashrate";
-            this.lblHeaderHashrate.Size = new System.Drawing.Size(55, 17);
-            this.lblHeaderHashrate.TabIndex = 211;
-            this.lblHeaderHashrate.Text = "no data";
-            this.toolTipGeneralUse.SetToolTip(this.lblHeaderHashrate, "Estimate hashrate (hashes/sec)");
             // 
             // panel40
             // 
@@ -10847,6 +10793,7 @@
             // 
             // label77
             // 
+            this.label77.AutoSize = true;
             this.label77.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.label77.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label77.ForeColor = System.Drawing.Color.Silver;
@@ -10985,6 +10932,7 @@
             // 
             // label148
             // 
+            this.label148.AutoSize = true;
             this.label148.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.label148.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label148.ForeColor = System.Drawing.Color.Silver;
@@ -10998,6 +10946,7 @@
             // 
             // label149
             // 
+            this.label149.AutoSize = true;
             this.label149.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.label149.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label149.ForeColor = System.Drawing.Color.Silver;
@@ -12952,7 +12901,7 @@
             this.label282.Name = "label282";
             this.label282.Size = new System.Drawing.Size(57, 17);
             this.label282.TabIndex = 261;
-            this.label282.Text = "Controls";
+            this.label282.Text = "Corners";
             // 
             // panel52
             // 
@@ -12976,9 +12925,9 @@
             this.label283.Location = new System.Drawing.Point(5, 4);
             this.label283.Margin = new System.Windows.Forms.Padding(0);
             this.label283.Name = "label283";
-            this.label283.Size = new System.Drawing.Size(118, 16);
+            this.label283.Size = new System.Drawing.Size(173, 16);
             this.label283.TabIndex = 153;
-            this.label283.Text = "ROUNDED CORNERS";
+            this.label283.Text = "SQUARE / ROUNDED CORNERS";
             this.label283.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // panel46
@@ -13582,9 +13531,9 @@
             this.label184.Location = new System.Drawing.Point(5, 4);
             this.label184.Margin = new System.Windows.Forms.Padding(0);
             this.label184.Name = "label184";
-            this.label184.Size = new System.Drawing.Size(125, 16);
+            this.label184.Size = new System.Drawing.Size(177, 16);
             this.label184.TabIndex = 153;
-            this.label184.Text = "TABLE BACKGROUNDS";
+            this.label184.Text = "TABLE BACKGROUND COLOURS";
             this.label184.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // btnColorTableBackground
@@ -13774,7 +13723,7 @@
             this.panelAppearanceTextbox1Container.Controls.Add(this.textBox1);
             this.panelAppearanceTextbox1Container.Location = new System.Drawing.Point(44, 81);
             this.panelAppearanceTextbox1Container.Name = "panelAppearanceTextbox1Container";
-            this.panelAppearanceTextbox1Container.Size = new System.Drawing.Size(100, 22);
+            this.panelAppearanceTextbox1Container.Size = new System.Drawing.Size(140, 22);
             this.panelAppearanceTextbox1Container.TabIndex = 253;
             // 
             // textBox1
@@ -13786,9 +13735,9 @@
             this.textBox1.Location = new System.Drawing.Point(6, 4);
             this.textBox1.MaxLength = 165;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(87, 15);
+            this.textBox1.Size = new System.Drawing.Size(127, 15);
             this.textBox1.TabIndex = 218;
-            this.textBox1.Text = "Textboxes";
+            this.textBox1.Text = "Textbox background";
             // 
             // panel60
             // 
@@ -13812,9 +13761,9 @@
             this.label166.Location = new System.Drawing.Point(5, 4);
             this.label166.Margin = new System.Windows.Forms.Padding(0);
             this.label166.Name = "label166";
-            this.label166.Size = new System.Drawing.Size(127, 16);
+            this.label166.Size = new System.Drawing.Size(119, 16);
             this.label166.TabIndex = 153;
-            this.label166.Text = "CONTROLS, LINES, ETC";
+            this.label166.Text = "CONTROL COLOURS";
             this.label166.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // panel73
@@ -13824,7 +13773,7 @@
             this.panel73.Controls.Add(this.label197);
             this.panel73.Location = new System.Drawing.Point(44, 108);
             this.panel73.Name = "panel73";
-            this.panel73.Size = new System.Drawing.Size(100, 20);
+            this.panel73.Size = new System.Drawing.Size(120, 20);
             this.panel73.TabIndex = 295;
             // 
             // label197
@@ -13833,9 +13782,9 @@
             this.label197.ForeColor = System.Drawing.Color.Silver;
             this.label197.Location = new System.Drawing.Point(1, 2);
             this.label197.Name = "label197";
-            this.label197.Size = new System.Drawing.Size(46, 17);
+            this.label197.Size = new System.Drawing.Size(116, 17);
             this.label197.TabIndex = 245;
-            this.label197.Text = "Panels";
+            this.label197.Text = "Panel background";
             // 
             // button1
             // 
@@ -13853,10 +13802,10 @@
             this.button1.Location = new System.Drawing.Point(44, 32);
             this.button1.Margin = new System.Windows.Forms.Padding(0);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(100, 20);
+            this.button1.Size = new System.Drawing.Size(125, 20);
             this.button1.TabIndex = 160;
             this.button1.TabStop = false;
-            this.button1.Text = "Buttons";
+            this.button1.Text = "Button background";
             this.button1.TextColor = System.Drawing.Color.White;
             this.button1.UseVisualStyleBackColor = false;
             // 
@@ -14256,7 +14205,7 @@
             this.button2.Location = new System.Drawing.Point(44, 233);
             this.button2.Margin = new System.Windows.Forms.Padding(0);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(100, 20);
+            this.button2.Size = new System.Drawing.Size(125, 20);
             this.button2.TabIndex = 247;
             this.button2.TabStop = false;
             this.button2.Text = "Button text";
@@ -14589,9 +14538,9 @@
             this.label195.Location = new System.Drawing.Point(5, 4);
             this.label195.Margin = new System.Windows.Forms.Padding(0);
             this.label195.Name = "label195";
-            this.label195.Size = new System.Drawing.Size(187, 16);
+            this.label195.Size = new System.Drawing.Size(256, 16);
             this.label195.TabIndex = 153;
-            this.label195.Text = "LOAD OR DELETE CUSTOM THEME";
+            this.label195.Text = "LOAD OR DELETE AN EXISTING CUSTOM THEME";
             this.label195.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblThemeDeleted
@@ -14740,9 +14689,9 @@
             this.label192.Location = new System.Drawing.Point(5, 4);
             this.label192.Margin = new System.Windows.Forms.Padding(0);
             this.label192.Name = "label192";
-            this.label192.Size = new System.Drawing.Size(168, 16);
+            this.label192.Size = new System.Drawing.Size(178, 16);
             this.label192.TabIndex = 153;
-            this.label192.Text = "SAVE AS NEW CUSTOM THEME";
+            this.label192.Text = "SAVE AS A NEW CUSTOM THEME";
             this.label192.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label193
@@ -18671,7 +18620,7 @@
             // panelAddToBookmarksBorder
             // 
             this.panelAddToBookmarksBorder.BackColor = System.Drawing.Color.Transparent;
-            this.panelAddToBookmarksBorder.Location = new System.Drawing.Point(657, 38);
+            this.panelAddToBookmarksBorder.Location = new System.Drawing.Point(677, 38);
             this.panelAddToBookmarksBorder.Name = "panelAddToBookmarksBorder";
             this.panelAddToBookmarksBorder.Size = new System.Drawing.Size(264, 117);
             this.panelAddToBookmarksBorder.TabIndex = 272;
@@ -19778,6 +19727,92 @@
             this.label107.TabIndex = 294;
             this.label107.Text = "UTC";
             this.toolTipGeneralUse.SetToolTip(this.label107, "Market capitalization, priced in selected currency");
+            // 
+            // label110
+            // 
+            this.label110.AutoSize = true;
+            this.label110.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label110.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label110.ForeColor = System.Drawing.Color.Silver;
+            this.label110.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label110.Location = new System.Drawing.Point(690, 111);
+            this.label110.Name = "label110";
+            this.label110.Size = new System.Drawing.Size(146, 17);
+            this.label110.TabIndex = 295;
+            this.label110.Text = "Fee range in next block";
+            this.toolTipGeneralUse.SetToolTip(this.label110, "Estimation (in sats). Actual min/max fee won\'t be \r\nXXknown until the block is mi" +
+        "ned");
+            // 
+            // label150
+            // 
+            this.label150.AutoSize = true;
+            this.label150.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label150.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label150.ForeColor = System.Drawing.Color.Silver;
+            this.label150.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label150.Location = new System.Drawing.Point(690, 130);
+            this.label150.Name = "label150";
+            this.label150.Size = new System.Drawing.Size(143, 17);
+            this.label150.TabIndex = 296;
+            this.label150.Text = "Total fees in next block";
+            this.toolTipGeneralUse.SetToolTip(this.label150, "Estimation (in BTC). Actual total fees won\'t be \r\nXXknown until the block is mine" +
+        "d");
+            // 
+            // lblHeaderFeeRangeChart
+            // 
+            this.lblHeaderFeeRangeChart.AutoSize = true;
+            this.lblHeaderFeeRangeChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblHeaderFeeRangeChart.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblHeaderFeeRangeChart.ForeColor = System.Drawing.Color.Silver;
+            this.lblHeaderFeeRangeChart.Location = new System.Drawing.Point(900, 112);
+            this.lblHeaderFeeRangeChart.Margin = new System.Windows.Forms.Padding(0);
+            this.lblHeaderFeeRangeChart.Name = "lblHeaderFeeRangeChart";
+            this.lblHeaderFeeRangeChart.Size = new System.Drawing.Size(28, 19);
+            this.lblHeaderFeeRangeChart.TabIndex = 298;
+            this.lblHeaderFeeRangeChart.Text = "📈";
+            this.toolTipGeneralUse.SetToolTip(this.lblHeaderFeeRangeChart, "fee rates chart");
+            this.lblHeaderFeeRangeChart.Click += new System.EventHandler(this.lblHeaderFeeRangeChart_Click);
+            // 
+            // lblHeaderNextBlockMinMaxFee
+            // 
+            this.lblHeaderNextBlockMinMaxFee.AutoSize = true;
+            this.lblHeaderNextBlockMinMaxFee.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblHeaderNextBlockMinMaxFee.Font = new System.Drawing.Font("Century Gothic", 9F);
+            this.lblHeaderNextBlockMinMaxFee.Location = new System.Drawing.Point(836, 112);
+            this.lblHeaderNextBlockMinMaxFee.Name = "lblHeaderNextBlockMinMaxFee";
+            this.lblHeaderNextBlockMinMaxFee.Size = new System.Drawing.Size(55, 17);
+            this.lblHeaderNextBlockMinMaxFee.TabIndex = 297;
+            this.lblHeaderNextBlockMinMaxFee.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblHeaderNextBlockMinMaxFee, "Estimation (in sats). Actual min/max fee won\'t be \r\nXXknown until the block is mi" +
+        "ned");
+            // 
+            // lblHeaderBlockFeesChart
+            // 
+            this.lblHeaderBlockFeesChart.AutoSize = true;
+            this.lblHeaderBlockFeesChart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblHeaderBlockFeesChart.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblHeaderBlockFeesChart.ForeColor = System.Drawing.Color.Silver;
+            this.lblHeaderBlockFeesChart.Location = new System.Drawing.Point(862, 131);
+            this.lblHeaderBlockFeesChart.Margin = new System.Windows.Forms.Padding(0);
+            this.lblHeaderBlockFeesChart.Name = "lblHeaderBlockFeesChart";
+            this.lblHeaderBlockFeesChart.Size = new System.Drawing.Size(28, 19);
+            this.lblHeaderBlockFeesChart.TabIndex = 301;
+            this.lblHeaderBlockFeesChart.Text = "📈";
+            this.toolTipGeneralUse.SetToolTip(this.lblHeaderBlockFeesChart, "fees chart");
+            this.lblHeaderBlockFeesChart.Click += new System.EventHandler(this.lblHeaderBlockFeesChart_Click);
+            // 
+            // lblHeaderNextBlockTotalFees
+            // 
+            this.lblHeaderNextBlockTotalFees.AutoSize = true;
+            this.lblHeaderNextBlockTotalFees.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblHeaderNextBlockTotalFees.Font = new System.Drawing.Font("Century Gothic", 9F);
+            this.lblHeaderNextBlockTotalFees.Location = new System.Drawing.Point(831, 131);
+            this.lblHeaderNextBlockTotalFees.Name = "lblHeaderNextBlockTotalFees";
+            this.lblHeaderNextBlockTotalFees.Size = new System.Drawing.Size(15, 17);
+            this.lblHeaderNextBlockTotalFees.TabIndex = 299;
+            this.lblHeaderNextBlockTotalFees.Text = "0";
+            this.toolTipGeneralUse.SetToolTip(this.lblHeaderNextBlockTotalFees, "Estimation (in BTC). Actual total fees won\'t be \r\nXXknown until the block is mine" +
+        "d");
             // 
             // timer50thSec
             // 
@@ -21350,18 +21385,24 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
+            this.Controls.Add(this.lblHeaderBlockFeesChart);
+            this.Controls.Add(this.lblHeaderNextBlockTotalFees);
+            this.Controls.Add(this.lblHeaderFeeRangeChart);
+            this.Controls.Add(this.lblHeaderNextBlockMinMaxFee);
+            this.Controls.Add(this.label150);
+            this.Controls.Add(this.label110);
+            this.Controls.Add(this.panelBitcoinDashboard);
+            this.Controls.Add(this.panelAppearance);
+            this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.label107);
             this.Controls.Add(this.lblHeaderTimestamp);
             this.Controls.Add(this.panelCharts);
-            this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.label29);
             this.Controls.Add(this.label28);
             this.Controls.Add(this.label25);
             this.Controls.Add(this.label15);
-            this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelBlockList);
-            this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelAddressUTXO);
             this.Controls.Add(this.panelMiningHashrate);
@@ -21379,14 +21420,11 @@
             this.Controls.Add(this.progressBarRefreshData);
             this.Controls.Add(this.lblHeaderPriceChange);
             this.Controls.Add(this.lblHeaderFeeRatesChart);
-            this.Controls.Add(this.lblHeaderHashRateChart);
             this.Controls.Add(this.lblHeaderBlockSizeChart);
             this.Controls.Add(this.lblHeaderConverterChart);
             this.Controls.Add(this.lblHeaderMarketCapChart);
             this.Controls.Add(this.lblHeaderPriceChart);
-            this.Controls.Add(this.panel57);
             this.Controls.Add(this.lblHeaderBlockAge);
-            this.Controls.Add(this.lblHeaderHashrate);
             this.Controls.Add(this.panel40);
             this.Controls.Add(this.lblHeaderTransactions);
             this.Controls.Add(this.label148);
@@ -21396,7 +21434,7 @@
             this.Controls.Add(this.lblHeaderfeesHighPriority);
             this.Controls.Add(this.panel39);
             this.Controls.Add(this.lblHeaderFeesMediumPriority);
-            this.Controls.Add(this.lblBlockNumber);
+            this.Controls.Add(this.lblHeaderBlockNumber);
             this.Controls.Add(this.lblHeaderBlockSize);
             this.Controls.Add(this.lblHeaderMoscowTimeLabel);
             this.Controls.Add(this.lblHeaderMarketCap);
@@ -21562,8 +21600,6 @@
             this.panelOptionalNotesContainer.PerformLayout();
             this.panel31.ResumeLayout(false);
             this.panel31.PerformLayout();
-            this.panel57.ResumeLayout(false);
-            this.panel57.PerformLayout();
             this.panel40.ResumeLayout(false);
             this.panel40.PerformLayout();
             this.panelBookmarks.ResumeLayout(false);
@@ -21858,7 +21894,7 @@
 
         private System.Windows.Forms.Label lblTime;
         private System.Windows.Forms.Timer timer1Sec;
-        private System.Windows.Forms.Label lblBlockNumber;
+        private System.Windows.Forms.Label lblHeaderBlockNumber;
         private System.Windows.Forms.Label lblStatusLight;
         private System.Windows.Forms.Label lblErrorMessage;
         private System.Windows.Forms.Label lblAlert;
@@ -22204,9 +22240,6 @@
         private System.Windows.Forms.Label label77;
         private System.Windows.Forms.Label label148;
         private System.Windows.Forms.Label label149;
-        private System.Windows.Forms.Panel panel57;
-        private System.Windows.Forms.Label label150;
-        private System.Windows.Forms.Label lblHeaderHashrate;
         private System.Windows.Forms.Label lblHeaderMoscowTimeLabel;
         private System.Windows.Forms.Panel panelSettings;
         private System.Windows.Forms.Label lblBlockchairComJSON;
@@ -22775,7 +22808,6 @@
         private System.Windows.Forms.Label lblHeaderMarketCapChart;
         private System.Windows.Forms.Label lblHeaderConverterChart;
         private System.Windows.Forms.Label lblHeaderBlockSizeChart;
-        private System.Windows.Forms.Label lblHeaderHashRateChart;
         private System.Windows.Forms.Label lblHeaderFeeRatesChart;
         private System.Windows.Forms.Label lblBlockListFeeRangeChart2;
         private System.Windows.Forms.Label lblBlockListFeeChart2;
@@ -23192,6 +23224,12 @@
         private System.Windows.Forms.Panel panelCurrencyBackdrop;
         private System.Windows.Forms.Label lblHeaderTimestamp;
         private System.Windows.Forms.Label label107;
+        private System.Windows.Forms.Label label110;
+        private System.Windows.Forms.Label label150;
+        private System.Windows.Forms.Label lblHeaderFeeRangeChart;
+        private System.Windows.Forms.Label lblHeaderNextBlockMinMaxFee;
+        private System.Windows.Forms.Label lblHeaderBlockFeesChart;
+        private System.Windows.Forms.Label lblHeaderNextBlockTotalFees;
     }
 }
 

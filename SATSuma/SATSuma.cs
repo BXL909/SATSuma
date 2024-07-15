@@ -10,11 +10,11 @@
 //!🍊 Version history... https://satsuma.btcdir.org/version-history/
 //!🍊 Download.......... https://satsuma.btcdir.org/download/
 //
-//TODO___________________________________________________________________________________________________
+//TODO LIST______________________________________________________________________________________________
 //TODO Taproot support on xpub screen 
 //TODO documentation for new pools screens (code done, pages created, just do text)
 //TODO testing, particularly new pools screens on own node
-//BUG____________________________________________________________________________________________________
+//BUG LIST_______________________________________________________________________________________________
 //!_______________________________________________________________________________________________________
 #region Using
 using CustomControls.RJControls;
@@ -473,7 +473,7 @@ namespace SATSuma
             }
             #endregion
             #region panels (heading containers)
-            Control[] panelHeadingContainersToRound = { panel1, panel2, panel3, panel4, panel5, panel6, panel7, panel8, panel9, panel10, panel11, panel12, panel20, panel23, panel26, panel29, panel31, panel38, panel39, panel40, panel41, panel42, panel43, panel44, panel45, panel57, panel78,
+            Control[] panelHeadingContainersToRound = { panel1, panel2, panel3, panel4, panel5, panel6, panel7, panel8, panel9, panel10, panel11, panel12, panel20, panel23, panel26, panel29, panel31, panel38, panel39, panel40, panel41, panel42, panel43, panel44, panel45, panel78,
                 panel94, panel109, panelLoadingAnimationContainer, panel141, panel136, panel139, panel138, panel145, panel81, panel146, panel24 };
             foreach (Control control in panelHeadingContainersToRound)
             {
@@ -614,7 +614,7 @@ namespace SATSuma
                 # region block list screen
                 numericUpDownBlockHeightToStartListFrom.Invoke((MethodInvoker)delegate
                 {
-                    numericUpDownBlockHeightToStartListFrom.Text = lblBlockNumber.Text; 
+                    numericUpDownBlockHeightToStartListFrom.Text = lblHeaderBlockNumber.Text; 
                 });
                 LookupBlockListAsync(); // fetch the first 15 blocks automatically for the block list initial view.
                 #endregion
@@ -882,9 +882,13 @@ namespace SATSuma
                         {
                             if (blocks.Count > 0)
                             {
+                                lblHeaderTransactions.Invoke((MethodInvoker)delegate
+                                {
+                                    lblHeaderTransactions.Location = new Point(label148.Location.X + label148.Width, lblHeaderTransactions.Location.Y);
+                                });
                                 UpdateLabelValueAsync(lblHeaderTransactions, Convert.ToString(blocks[0].Tx_count));
                                 string newBlockHeight = blocks[0].Height;
-                                string oldBlockHeight = lblBlockNumber.Text;
+                                string oldBlockHeight = lblHeaderBlockNumber.Text;
                                 if (String.Compare(newBlockHeight, oldBlockHeight) != 0 || firstTimeGettingBlockTip)
                                 {
                                     long timestamp = long.Parse(blocks[0].Timestamp);
@@ -898,7 +902,7 @@ namespace SATSuma
                                     {
                                         lblHeaderBlockAge.Text = formattedTime;
                                     });
-                                    UpdateLabelValueAsync(lblBlockNumber, Convert.ToString(blocks[0].Height));
+                                    UpdateLabelValueAsync(lblHeaderBlockNumber, Convert.ToString(blocks[0].Height));
 
                                     // calculate amount of btc issued
                                     int blockHeight = Convert.ToInt32(blocks[0].Height);
@@ -931,11 +935,11 @@ namespace SATSuma
 
                                     lblHeaderBlockAge.Invoke((MethodInvoker)delegate
                                     {
-                                        lblHeaderBlockAge.Location = new Point(lblBlockNumber.Location.X + lblBlockNumber.Width - (int)(6 * UIScale), lblHeaderBlockAge.Location.Y);
+                                        lblHeaderBlockAge.Location = new Point(lblHeaderBlockNumber.Location.X + lblHeaderBlockNumber.Width - (int)(6 * UIScale), lblHeaderBlockAge.Location.Y);
                                     });
                                     lblHeaderTimestamp.Invoke((MethodInvoker)delegate
                                     {
-                                        lblHeaderTimestamp.Location = new Point(lblBlockNumber.Location.X + lblBlockNumber.Width - (int)(6 * UIScale), lblHeaderTimestamp.Location.Y);
+                                        lblHeaderTimestamp.Location = new Point(lblHeaderBlockNumber.Location.X + lblHeaderBlockNumber.Width - (int)(6 * UIScale), lblHeaderTimestamp.Location.Y);
                                     });
                                     label107.Invoke((MethodInvoker)delegate
                                     {
@@ -961,13 +965,17 @@ namespace SATSuma
                                     double sizeInMB = (double)sizeInBytes / (1000 * 1000);
                                     sizeString = $"{sizeInMB:N2} MB";
                                 }
+                                lblHeaderBlockSize.Invoke((MethodInvoker)delegate
+                                {
+                                    lblHeaderBlockSize.Location = new Point(label149.Location.X + label149.Width, lblHeaderBlockSize.Location.Y);
+                                });
                                 UpdateLabelValueAsync(lblHeaderBlockSize, sizeString);
                                 lblHeaderBlockSizeChart.Invoke((MethodInvoker)delegate
                                 {
                                     lblHeaderBlockSizeChart.Location = new Point(lblHeaderBlockSize.Location.X + lblHeaderBlockSize.Width, lblHeaderBlockSizeChart.Location.Y);
                                 });
                                 // difficulty epoch = block height / 2016 rounded up to an integer
-                                UpdateLabelValueAsync(lblDifficultyEpoch, Convert.ToString((int)Math.Ceiling(Convert.ToDecimal(lblBlockNumber.Text) / 2016)));
+                                UpdateLabelValueAsync(lblDifficultyEpoch, Convert.ToString((int)Math.Ceiling(Convert.ToDecimal(lblHeaderBlockNumber.Text) / 2016)));
                             }
                         }
                     }
@@ -1016,7 +1024,7 @@ namespace SATSuma
                         });
                         lblHeaderFeeRatesChart.Invoke((MethodInvoker)delegate
                         {
-                            lblHeaderFeeRatesChart.Location = new Point(lblHeaderFeesNoPriority.Location.X + lblHeaderFeesNoPriority.Width - 4, lblHeaderFeeRatesChart.Location.Y);
+                            lblHeaderFeeRatesChart.Location = new Point(lblHeaderFeesNoPriority.Location.X + lblHeaderFeesNoPriority.Width - 10, lblHeaderFeeRatesChart.Location.Y);
                         });
                     }
                     catch (Exception ex)
@@ -1032,13 +1040,6 @@ namespace SATSuma
                         var currentHashrate = MemSpGetHashrate();
                         BigInteger currentHashrateFormatted = BigInteger.Parse(currentHashrate);
 
-                        UpdateLabelValueAsync(lblHeaderHashrate, $"{currentHashrateFormatted:n0}");
-
-
-                        lblHeaderHashRateChart.Invoke((MethodInvoker)delegate
-                        {
-                            lblHeaderHashRateChart.Location = new Point(lblHeaderHashrate.Location.X + lblHeaderHashrate.Width, lblHeaderHashRateChart.Location.Y);
-                        });
                         UpdateLabelValueAsync(lblEstHashrate, $"{currentHashrateFormatted:n0}");
 
                         lblHashrateChart.Invoke((MethodInvoker)delegate
@@ -1218,11 +1219,25 @@ namespace SATSuma
                             {
                                 lblNextBlockMinMaxFee.Text = $"{nextBlockMinFee} / {nextBlockMaxFee}";
                             });
+                            lblHeaderNextBlockMinMaxFee.Invoke((MethodInvoker)delegate
+                            {
+                                lblHeaderNextBlockMinMaxFee.Text = $"{nextBlockMinFee} / {nextBlockMaxFee}";
+                                lblHeaderNextBlockMinMaxFee.Location = new Point(label110.Location.X + label110.Width, lblHeaderNextBlockMinMaxFee.Location.Y);
+                            });
                             lblBlockListMinMaxInFeeNextBlock.Invoke((MethodInvoker)delegate // Blocks list
                             {
                                 lblBlockListMinMaxInFeeNextBlock.Text = $"{nextBlockMinFee} / {nextBlockMaxFee}";
                             });
                             UpdateLabelValueAsync(lblNextBlockTotalFees, nextBlockTotalFees);
+                            lblHeaderNextBlockTotalFees.Invoke((MethodInvoker)delegate // Blocks list
+                            {
+                                lblHeaderNextBlockTotalFees.Location = new Point(label150.Location.X + label150.Width, lblHeaderNextBlockTotalFees.Location.Y);
+                            });
+                            UpdateLabelValueAsync(lblHeaderNextBlockTotalFees, nextBlockTotalFees);
+                            lblHeaderBlockFeesChart.Invoke((MethodInvoker)delegate
+                            {
+                                lblHeaderBlockFeesChart.Location = new Point(lblHeaderNextBlockTotalFees.Location.X + lblHeaderNextBlockTotalFees.Width, lblHeaderBlockFeesChart.Location.Y);
+                            });
                             UpdateLabelValueAsync(lblNextBlockTotalFeesFiat, $"{lblHeaderPrice.Text[0]}{(Convert.ToDecimal(nextBlockTotalFees) * OneBTCinSelectedCurrency):N2}");
                             lblNextBlockTotalFeesFiat.Invoke((MethodInvoker)delegate
                             {
@@ -1242,7 +1257,7 @@ namespace SATSuma
                         }
                         else
                         {
-                            Control[] controlsToShowAsTestnet = { lblTransInNextBlock, lblBlockListTXInNextBlock, lblNextBlockMinMaxFee, lblBlockListMinMaxInFeeNextBlock, lblNextBlockTotalFees, lblBlockListTotalFeesInNextBlock };
+                            Control[] controlsToShowAsTestnet = { lblTransInNextBlock, lblBlockListTXInNextBlock, lblNextBlockMinMaxFee, lblBlockListMinMaxInFeeNextBlock, lblNextBlockTotalFees, lblHeaderNextBlockTotalFees, lblBlockListTotalFeesInNextBlock, lblHeaderNextBlockMinMaxFee };
                             foreach (Control control in controlsToShowAsTestnet)
                             {
                                 control.Invoke((MethodInvoker)delegate
@@ -1259,6 +1274,10 @@ namespace SATSuma
                         lblFeeRangeChart.Invoke((MethodInvoker)delegate
                         {
                             lblFeeRangeChart.Location = new Point(lblNextBlockMinMaxFee.Location.X + lblNextBlockMinMaxFee.Width, lblFeeRangeChart.Location.Y);
+                        });
+                        lblHeaderFeeRangeChart.Invoke((MethodInvoker)delegate
+                        {
+                            lblHeaderFeeRangeChart.Location = new Point(lblHeaderNextBlockMinMaxFee.Location.X + lblHeaderNextBlockMinMaxFee.Width, lblHeaderFeeRangeChart.Location.Y);
                         });
                         lblBlockListFeeRangeChart2.Invoke((MethodInvoker)delegate
                         {
@@ -1740,7 +1759,7 @@ namespace SATSuma
                     {
                         if (!testNet)
                         {
-                            int currentBlock = Convert.ToInt32(lblBlockNumber.Text);
+                            int currentBlock = Convert.ToInt32(lblHeaderBlockNumber.Text);
                             int halvingInterval = 210000;
                             int numberOfHalvings = currentBlock / halvingInterval;
                             int halveningBlock = (numberOfHalvings + 1) * halvingInterval;
@@ -4817,7 +4836,7 @@ namespace SATSuma
         {
             try
             {
-                if (long.TryParse(lblBlockNumber.Text, out long blockNumber))
+                if (long.TryParse(lblHeaderBlockNumber.Text, out long blockNumber))
                 {
                     // Check if numericUpDownSubmittedBlockNumber.Value is less than blockNumber
                     if (numericUpDownSubmittedBlockNumber.Value < blockNumber)
@@ -4922,7 +4941,7 @@ namespace SATSuma
                 {
                     btnPreviousBlock.Enabled = true;
                 }
-                if (decimal.TryParse(lblBlockNumber.Text, out decimal labelblockNumber))
+                if (decimal.TryParse(lblHeaderBlockNumber.Text, out decimal labelblockNumber))
                 {
                     if (numericUpDownSubmittedBlockNumber.Value == labelblockNumber)
                     {
@@ -5880,7 +5899,7 @@ namespace SATSuma
                     });
                     lblTransactionConfirmations.Invoke((MethodInvoker)delegate
                     {
-                        lblTransactionConfirmations.Text = Convert.ToString(Convert.ToInt32(lblBlockNumber.Text) - Convert.ToInt32(lblTransactionBlockHeight.Text));
+                        lblTransactionConfirmations.Text = Convert.ToString(Convert.ToInt32(lblHeaderBlockNumber.Text) - Convert.ToInt32(lblTransactionBlockHeight.Text));
                         lblTransactionConfirmations.Location = new Point(label125.Location.X + label125.Width, lblTransactionConfirmations.Location.Y);
                     });
 
@@ -7236,7 +7255,7 @@ namespace SATSuma
         {
             try
             {
-                if (numericUpDownBlockHeightToStartListFrom.Value < Convert.ToDecimal(lblBlockNumber.Text))
+                if (numericUpDownBlockHeightToStartListFrom.Value < Convert.ToDecimal(lblHeaderBlockNumber.Text))
                 {
                     numericUpDownBlockHeightToStartListFrom.Value++;
                 }
@@ -7471,7 +7490,7 @@ namespace SATSuma
                         }
                     }
 
-                    if (String.Compare(blocklist.First(), lblBlockNumber.Text) == 0) // We're looking at the most recent blocks 
+                    if (String.Compare(blocklist.First(), lblHeaderBlockNumber.Text) == 0) // We're looking at the most recent blocks 
                     {
                         btnNewer15Blocks.Enabled = false;
                     }
@@ -7503,7 +7522,7 @@ namespace SATSuma
                         }
                         lblBlockListPositionInList.Invoke((MethodInvoker)delegate
                         {
-                            lblBlockListPositionInList.Text = $"Blocks {blocklist.Last()} - {blocklist.First()} of {lblBlockNumber.Text}";
+                            lblBlockListPositionInList.Text = $"Blocks {blocklist.Last()} - {blocklist.First()} of {lblHeaderBlockNumber.Text}";
                         });
                         panelBlockListTab.Invoke((MethodInvoker)delegate
                         {
@@ -17209,7 +17228,7 @@ namespace SATSuma
         #endregion
         #endregion
         //![](resources\tinylogo1.png;;;0.04706,0.04877)
-        #region ⚡⚡ DCA CALCULATOR
+        #region ⚡⚡⚡ DCA CALCULATOR
 
         private async void PopulateDCACalculatorAsync()
         {
@@ -18589,7 +18608,7 @@ namespace SATSuma
         #endregion
         #endregion
         //![](resources\tinylogo1.png;;;0.04706,0.04877)
-        #region ⚡⚡ SETTINGS SCREEN
+        #region ⚡⚡⚡ SETTINGS SCREEN
         #region user input own node url
         private void TextBoxSettingsOwnNodeURL_Enter(object sender, EventArgs e)
         {
@@ -19590,7 +19609,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] DisableThisStuffForTestnet = { btnMenuLightningDashboard, btnCurrency, btnMenuDCACalculator, btnMenuPriceConverter ,lblLightningChannelsChart, btnMenuCharts, lblBlockListFeeChart2, lblHeaderPriceChart, lblHeaderMarketCapChart, lblHeaderConverterChart, lblHeaderHashRateChart, lblBlockListDifficultyChart, lblHeaderFeeRatesChart, lblBlockListFeeRangeChart2, lblBlockListHashrateChart, lblBlockListBlockSizeChart, lblBlockListFeeChart,
+                Control[] DisableThisStuffForTestnet = { btnMenuLightningDashboard, btnCurrency, btnMenuDCACalculator, btnMenuPriceConverter ,lblLightningChannelsChart, btnMenuCharts, lblBlockListFeeChart2, lblHeaderPriceChart, lblHeaderMarketCapChart, lblHeaderConverterChart, lblBlockListDifficultyChart, lblHeaderFeeRatesChart, lblBlockListFeeRangeChart2, lblBlockListHashrateChart, lblBlockListBlockSizeChart, lblBlockListFeeChart,
                     lblBlockListRewardChart, lblBlockListFeeRangeChart, lblHeaderBlockSizeChart, lblBlockScreenChartBlockSize, lblBlockFeeChart, lblBlockScreenChartReward, lblBlockScreenChartFeeRange, lblPriceChart, lblMarketCapChart, lblChartCirculation, lblUniqueAddressesChart, lblPoolRankingChart, lblBlockFeesChart, lblFeeRangeChart, lblHashrateChart, lblDifficultyChart, lblLightningCapacityChart, lblLightningNodesChart };
                 foreach (Control control in DisableThisStuffForTestnet)
                 {
@@ -19616,7 +19635,7 @@ namespace SATSuma
                 {
                     EnableChartsThatUseBlockchainInfoAPI();
                 }
-                Control[] EnableThisStuffForMainnet = { btnMenuLightningDashboard, btnCurrency, btnMenuDCACalculator, btnMenuPriceConverter, lblLightningChannelsChart, lblBlockListDifficultyChart, lblHeaderHashRateChart, lblHeaderFeeRatesChart, lblBlockListFeeRangeChart2, lblBlockListHashrateChart, lblBlockListFeeChart2, lblBlockListBlockSizeChart, lblBlockListFeeChart, lblBlockListRewardChart, lblBlockListFeeRangeChart, lblHeaderBlockSizeChart, lblBlockScreenChartBlockSize,
+                Control[] EnableThisStuffForMainnet = { btnMenuLightningDashboard, btnCurrency, btnMenuDCACalculator, btnMenuPriceConverter, lblLightningChannelsChart, lblBlockListDifficultyChart, lblHeaderFeeRatesChart, lblBlockListFeeRangeChart2, lblBlockListHashrateChart, lblBlockListFeeChart2, lblBlockListBlockSizeChart, lblBlockListFeeChart, lblBlockListRewardChart, lblBlockListFeeRangeChart, lblHeaderBlockSizeChart, lblBlockScreenChartBlockSize,
                     lblBlockFeeChart, lblBlockScreenChartReward, lblBlockScreenChartFeeRange, lblPoolRankingChart, lblBlockFeesChart, lblFeeRangeChart, lblHashrateChart, lblDifficultyChart, lblLightningCapacityChart, lblLightningNodesChart };
                 foreach (Control control in EnableThisStuffForMainnet)
                 {
@@ -20775,7 +20794,7 @@ namespace SATSuma
         #endregion
         #endregion
         //![](resources\tinylogo1.png;;;0.04706,0.04877)
-        #region ⚡⚡ CREATE THEME SCREEN
+        #region ⚡⚡⚡ CREATE THEME SCREEN
         #region main menu theme switching buttons
         private void BtnThemeMenu_Click(object sender, EventArgs e)
         {
@@ -21205,6 +21224,7 @@ namespace SATSuma
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
+                CloseThemeMenu();
                 await HideAllScreens();
                 SuspendLayout();
                 btnMenuCreateTheme.Invoke((MethodInvoker)delegate
@@ -21216,7 +21236,7 @@ namespace SATSuma
                     panelAppearance.Visible = true;
                 });
                 lblMenuArrow.Visible = false;
-                CloseThemeMenu();
+                
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Visible = false;
@@ -24278,7 +24298,7 @@ namespace SATSuma
                 }
                 #endregion
                 #region panels (heading containers)
-                Control[] headingPanelsToInvalidate = { panel1, panel2, panel3, panel4, panel5, panel6, panel7, panel8, panel9, panel10, panel11, panel12, panel20, panel23, panel26, panel29, panel31, panel38, panel39, panel40, panel41, panel42, panel43, panel44, panel45, panel54, panel57, panel78, panel139,
+                Control[] headingPanelsToInvalidate = { panel1, panel2, panel3, panel4, panel5, panel6, panel7, panel8, panel9, panel10, panel11, panel12, panel20, panel23, panel26, panel29, panel31, panel38, panel39, panel40, panel41, panel42, panel43, panel44, panel45, panel54, panel78, panel139,
                     panel82, panel83, panel94, panel22, panel34, panel37, panel97, panel98, panel108, panel109, panel141, panel136, panel138, panel145, panel81, panel146, panel24 };
                 foreach (Control control in headingPanelsToInvalidate)
                 {
@@ -24622,7 +24642,7 @@ namespace SATSuma
             try
             {
                 //header
-                Control[] listHeaderDataFieldsToColor = { lblHeaderMarketCap, lblHeaderMoscowTime, lblHeaderTransactions, lblHeaderBlockSize, lblHeaderfeesHighPriority, lblHeaderFeesMediumPriority, lblHeaderFeesLowPriority, lblHeaderFeesNoPriority, lblHeaderHashrate, lblHeaderPriceChange, lblHeaderTimestamp };
+                Control[] listHeaderDataFieldsToColor = { lblHeaderMarketCap, lblHeaderMoscowTime, lblHeaderTransactions, lblHeaderBlockSize, lblHeaderPriceChange, lblHeaderTimestamp, lblHeaderNextBlockMinMaxFee, lblHeaderNextBlockTotalFees };
                 foreach (Control control in listHeaderDataFieldsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24766,7 +24786,7 @@ namespace SATSuma
             try
             {
                 //header
-                Control[] listHeaderLabelsToColor = { label77, lblHeaderMoscowTimeLabel, label148, label149, label15, label25, label28, label29, lblSatsumaTitle, lblHeaderBlockAge, lblHeaderPriceChart, lblHeaderMarketCapChart, lblHeaderConverterChart, lblHeaderBlockSizeChart, lblHeaderHashRateChart, lblHeaderFeeRatesChart, label107 };
+                Control[] listHeaderLabelsToColor = { label77, lblHeaderMoscowTimeLabel, label148, label149, label15, label25, label28, label29, lblSatsumaTitle, lblHeaderBlockAge, lblHeaderPriceChart, lblHeaderMarketCapChart, lblHeaderConverterChart, lblHeaderBlockSizeChart, lblHeaderFeeRatesChart, label107, label110, lblHeaderFeeRangeChart, label150, lblHeaderBlockFeesChart };
                 foreach (Control control in listHeaderLabelsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24775,7 +24795,7 @@ namespace SATSuma
                     });
                 }
                 //settings and appearance
-                Control[] listSettingsLabelsToColor = { label236, label225, btnPreviewAnimations, label198, label223, label224, label220, label235, label221, label222, label219, label302, label171, label291, label199, label298, label204, label289, lblThemeImage, label287, label290, label282, label243, label246, label242, label239, label240, label201, lblSettingsOwnNodeStatus, lblSettingsSelectedNodeStatus, label193, label194, label196, label73, label161, label168, label157, label172, label174, label4, lblWhatever, label152, label171, label167, label178, label177, label179, label180, label188, label187, label191, label197, lblScaleAmount };
+                Control[] listSettingsLabelsToColor = { label236, label225, btnPreviewAnimations, label235, label221, label222, label219, label302, label171, label291, label298, label204, label289, lblThemeImage, label287, label290, label282, label243, label246, label242, label239, label240, label201, lblSettingsOwnNodeStatus, lblSettingsSelectedNodeStatus, label193, label194, label196, label73, label161, label168, label157, label172, label174, label4, lblWhatever, label152, label171, label167, label178, label177, label179, label180, label188, label187, label191, label197, lblScaleAmount };
                 foreach (Control control in listSettingsLabelsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -24937,7 +24957,7 @@ namespace SATSuma
             try
             {
                 //header
-                Control[] listHeaderHeadingsToColor = { label26, label22, label1, label150, lblCurrentVersion, lblNowViewing };
+                Control[] listHeaderHeadingsToColor = { label26, label22, label1, lblCurrentVersion, lblNowViewing };
                 foreach (Control control in listHeaderHeadingsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -25159,12 +25179,22 @@ namespace SATSuma
         {
             try
             {
-                Control[] listOtherTextToColor = { lblTransasctionInCount, lblTransasctionOutCount, lblAddressTXPositionInList, lblBlockTXPositionInList, lblBlockListPositionInList, label317, label226, label102, comboBoxTitlesBackgroundImage, comboBoxStartupScreen, comboBoxChartSelect, comboBoxCustomizeScreenThemeList, label185, numericUpDownOpacity, label160, label159, label158, label165, label173, label167, textBoxXpubScreenOwnNodeURL, textBoxSubmittedXpub, numberUpDownDerivationPathsToCheck, textboxSubmittedAddress, textboxSubmittedAddressUTXO, textBoxTransactionID, textBoxBookmarkEncryptionKey, textBoxBookmarkKey, textBoxBookmarkProposedNote, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBoxThemeName, textBox1, lblCurrentVersion, textBoxUniversalSearch, textBoxDCAAmountInput, comboBoxDCAFrequency, label227, lblUTXOCount };
+                Control[] listOtherTextToColor = { label199, label198, label223, label224, label220, lblTransasctionInCount, lblTransasctionOutCount, lblAddressTXPositionInList, lblBlockTXPositionInList, lblBlockListPositionInList, label317, label226, label102, comboBoxTitlesBackgroundImage, comboBoxStartupScreen, comboBoxChartSelect, comboBoxCustomizeScreenThemeList, label185, numericUpDownOpacity, label160, label159, label158, label165, label173, label167, textBoxXpubScreenOwnNodeURL, textBoxSubmittedXpub, numberUpDownDerivationPathsToCheck, textboxSubmittedAddress, textboxSubmittedAddressUTXO, textBoxTransactionID, textBoxBookmarkEncryptionKey, textBoxBookmarkKey, textBoxBookmarkProposedNote, textBoxSettingsOwnNodeURL, numericUpDownDashboardRefresh, numericUpDownMaxNumberOfConsecutiveUnusedAddresses, textBoxThemeName, textBox1, lblCurrentVersion, textBoxUniversalSearch, textBoxDCAAmountInput, comboBoxDCAFrequency, label227, lblUTXOCount };
                 foreach (Control control in listOtherTextToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
                     {
                         control.ForeColor = thiscolor;
+                    });
+                }
+
+                // use this colour for the divider lines on the settings screen too
+                Control[] listOtherTextToColor2 = { panel128, panel25, panel33, panel105 };
+                foreach (Control control in listOtherTextToColor2)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.BackColor = thiscolor;
                     });
                 }
 
@@ -25269,7 +25299,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] PriceBlockItemsToColor = { lblHeaderPrice, lblBlockNumber, label175, lblHeaderfeesHighPriority, lblHeaderFeesMediumPriority, lblHeaderFeesLowPriority, lblHeaderFeesNoPriority };
+                Control[] PriceBlockItemsToColor = { lblHeaderPrice, lblHeaderBlockNumber, label175, lblHeaderfeesHighPriority, lblHeaderFeesMediumPriority, lblHeaderFeesLowPriority, lblHeaderFeesNoPriority };
                 foreach (Control control in PriceBlockItemsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -25476,7 +25506,7 @@ namespace SATSuma
         {
             try
             {
-                Control[] listLinesToColor = { panel14, panel17, panel19, panel61, panel169, panel170, panel171, panel127, panel128, panel25, panel33, panel105 };
+                Control[] listLinesToColor = { panel14, panel17, panel19, panel61, panel169, panel170, panel171, panel127 };
                 foreach (Control control in listLinesToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -25682,7 +25712,7 @@ namespace SATSuma
                     ImageFile = Properties.Resources.squares;
                 }
                 //header
-                Control[] listHeaderHeadingsToColor = { panel38, panel39, panel40, panel57 };
+                Control[] listHeaderHeadingsToColor = { panel38, panel39, panel40 };
                 foreach (Control control in listHeaderHeadingsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -25839,7 +25869,7 @@ namespace SATSuma
                 });
 
                 //header
-                Control[] listHeaderHeadingsToColor = { panel38, panel39, panel40, panel57 };
+                Control[] listHeaderHeadingsToColor = { panel38, panel39, panel40 };
                 foreach (Control control in listHeaderHeadingsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -25980,7 +26010,7 @@ namespace SATSuma
             try
             {
                 //header
-                Control[] listHeaderHeadingsToColor = { panel38, panel39, panel40, panel57 };
+                Control[] listHeaderHeadingsToColor = { panel38, panel39, panel40 };
                 foreach (Control control in listHeaderHeadingsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -27570,7 +27600,7 @@ namespace SATSuma
                     double newValueDouble = 0;
                     // get the normal state colour. Will revert to this after making red or green
                     Color currentColor;
-                    if (label == lblHeaderPrice || label == lblBlockNumber)
+                    if (label == lblHeaderPrice || label == lblHeaderBlockNumber)
                     {
                         currentColor = label175.ForeColor;
                     }
@@ -27631,7 +27661,7 @@ namespace SATSuma
 
                     // Restore original color (set currentColor again in case a theme change has occurred during the red/green value change)
 
-                    if (label == lblHeaderPrice || label == lblBlockNumber)
+                    if (label == lblHeaderPrice || label == lblHeaderBlockNumber)
                     {
                         currentColor = label175.ForeColor;
                     }
@@ -29049,18 +29079,18 @@ namespace SATSuma
                 string BlockTip = await client.GetStringAsync(BlockTipURL).ConfigureAwait(false);
 
                 // Ensure that UI updates are performed on the UI thread
-                lblBlockNumber.Invoke((MethodInvoker)delegate
+                lblHeaderBlockNumber.Invoke((MethodInvoker)delegate
                 {
-                    lblBlockNumber.Text = BlockTip;
+                    lblHeaderBlockNumber.Text = BlockTip;
                 });
 
                 lblHeaderBlockAge.Invoke((MethodInvoker)delegate
                 {
-                    lblHeaderBlockAge.Location = new Point(lblBlockNumber.Location.X + lblBlockNumber.Width - (int)(6 * UIScale), lblHeaderBlockAge.Location.Y);
+                    lblHeaderBlockAge.Location = new Point(lblHeaderBlockNumber.Location.X + lblHeaderBlockNumber.Width - (int)(6 * UIScale), lblHeaderBlockAge.Location.Y);
                 });
                 lblHeaderTimestamp.Invoke((MethodInvoker)delegate
                 {
-                    lblHeaderTimestamp.Location = new Point(lblBlockNumber.Location.X + lblBlockNumber.Width - (int)(6 * UIScale), lblHeaderTimestamp.Location.Y);
+                    lblHeaderTimestamp.Location = new Point(lblHeaderBlockNumber.Location.X + lblHeaderBlockNumber.Width - (int)(6 * UIScale), lblHeaderTimestamp.Location.Y);
                 });
                 label107.Invoke((MethodInvoker)delegate
                 {
@@ -29563,7 +29593,7 @@ namespace SATSuma
                 #region block screen
                 if (isSubmittedBlockNumberUpHeldDown)
                 {
-                    if (numericUpDownSubmittedBlockNumber.Value < Convert.ToInt64(lblBlockNumber.Text))
+                    if (numericUpDownSubmittedBlockNumber.Value < Convert.ToInt64(lblHeaderBlockNumber.Text))
                     {
                         numericUpDownSubmittedBlockNumber.Value++;
                     }
@@ -29579,7 +29609,7 @@ namespace SATSuma
                 #region block list screen
                 if (isBlockHeightToStartFromUpHeldDown)
                 {
-                    if (numericUpDownBlockHeightToStartListFrom.Value < Convert.ToInt64(lblBlockNumber.Text))
+                    if (numericUpDownBlockHeightToStartListFrom.Value < Convert.ToInt64(lblHeaderBlockNumber.Text))
                     {
                         numericUpDownBlockHeightToStartListFrom.Value++;
                     }
@@ -30647,7 +30677,7 @@ namespace SATSuma
                 {
                     numericUpDownSubmittedBlockNumber.Invoke((MethodInvoker)delegate
                     {
-                        numericUpDownSubmittedBlockNumber.Text = lblBlockNumber.Text; // pre-populate the block field on the Block screen)
+                        numericUpDownSubmittedBlockNumber.Text = lblHeaderBlockNumber.Text; // pre-populate the block field on the Block screen)
                     });
                     LookupBlockAsync(); // fetch all the block data automatically for the initial view. 
                 }
@@ -30866,7 +30896,7 @@ namespace SATSuma
                 {
                     numericUpDownBlockHeightToStartListFrom.Invoke((MethodInvoker)delegate
                     {
-                        numericUpDownBlockHeightToStartListFrom.Text = lblBlockNumber.Text; // pre-populate the block field on the Block screen)
+                        numericUpDownBlockHeightToStartListFrom.Text = lblHeaderBlockNumber.Text; // pre-populate the block field on the Block screen)
                     });
                     LookupBlockListAsync(); // fetch the first 15 blocks automatically for the initial view.
                 }
@@ -32703,7 +32733,7 @@ namespace SATSuma
                     // check if it's a block number
                     if (IsNumeric(textBoxUniversalSearch.Text))
                     {
-                        if (Convert.ToInt32(textBoxUniversalSearch.Text) <= Convert.ToInt32(lblBlockNumber.Text))
+                        if (Convert.ToInt32(textBoxUniversalSearch.Text) <= Convert.ToInt32(lblHeaderBlockNumber.Text))
                         {
                             searchTarget = "block";
                             btnUniversalSearch.Enabled = true;
@@ -32823,18 +32853,6 @@ namespace SATSuma
         }
         #endregion
         #region chart icons in header area
-        private void PictureBoxHeaderHashrateChart_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                ChartHashrate();
-                BtnMenuCharts_ClickAsync(sender, e);
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "PictureBoxHeaderHashrateChart_Click");
-            }
-        }
 
         private void PictureBoxHeaderPriceChart_Click(object sender, EventArgs e)
         {
@@ -32910,6 +32928,32 @@ namespace SATSuma
             catch (Exception ex)
             {
                 HandleException(ex, "PictureBoxHeaderMarketCapChart_Click");
+            }
+        }
+
+        private void lblHeaderFeeRangeChart_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ChartFeeRates();
+                BtnMenuCharts_ClickAsync(sender, e);
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "lblHeaderFeeRangeChart_Click");
+            }
+        }
+
+        private void lblHeaderBlockFeesChart_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ChartBlockFees();
+                BtnMenuCharts_ClickAsync(sender, e);
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "lblHeaderBlockFeesChart_Click");
             }
         }
         #endregion
@@ -34715,5 +34759,7 @@ namespace SATSuma
         #endregion
 
         #endregion
+
+
     }
 }

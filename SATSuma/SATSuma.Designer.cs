@@ -118,13 +118,46 @@
             this.lblHeaderBlockSize = new System.Windows.Forms.Label();
             this.lblElapsedSinceUpdate = new System.Windows.Forms.Label();
             this.panelBitcoinDashboard = new System.Windows.Forms.Panel();
+            this.panel7 = new System.Windows.Forms.Panel();
+            this.panel1year = new System.Windows.Forms.Panel();
+            this.panel200days = new System.Windows.Forms.Panel();
+            this.panel60days = new System.Windows.Forms.Panel();
+            this.panel30days = new System.Windows.Forms.Panel();
+            this.panel14days = new System.Windows.Forms.Panel();
+            this.panel7days = new System.Windows.Forms.Panel();
+            this.panel24hours = new System.Windows.Forms.Panel();
+            this.panel57 = new System.Windows.Forms.Panel();
+            this.label355 = new System.Windows.Forms.Label();
+            this.lblPrice1Year = new System.Windows.Forms.Label();
+            this.label357 = new System.Windows.Forms.Label();
+            this.lblPrice200Days = new System.Windows.Forms.Label();
+            this.label359 = new System.Windows.Forms.Label();
+            this.lblPrice60Days = new System.Windows.Forms.Label();
+            this.label349 = new System.Windows.Forms.Label();
+            this.lblPrice30Days = new System.Windows.Forms.Label();
+            this.label351 = new System.Windows.Forms.Label();
+            this.lblPrice14Days = new System.Windows.Forms.Label();
+            this.label347 = new System.Windows.Forms.Label();
+            this.lblPrice7Days = new System.Windows.Forms.Label();
+            this.label354 = new System.Windows.Forms.Label();
+            this.label353 = new System.Windows.Forms.Label();
+            this.lblPrice24Hours = new System.Windows.Forms.Label();
+            this.lbl24HoursLowestPrice = new System.Windows.Forms.Label();
+            this.lbl24HoursHighestPrice = new System.Windows.Forms.Label();
+            this.label345 = new System.Windows.Forms.Label();
+            this.lblATHDaysElapsed = new System.Windows.Forms.Label();
+            this.lblATHDate = new System.Windows.Forms.Label();
+            this.label341 = new System.Windows.Forms.Label();
+            this.lblATHPercentChange = new System.Windows.Forms.Label();
+            this.lblATH = new System.Windows.Forms.Label();
+            this.label338 = new System.Windows.Forms.Label();
             this.label229 = new System.Windows.Forms.Label();
             this.lblPrevDiffAdjustment = new System.Windows.Forms.Label();
             this.panel109 = new System.Windows.Forms.Panel();
             this.label299 = new System.Windows.Forms.Label();
             this.lblNetworkAge = new System.Windows.Forms.Label();
-            this.label297 = new System.Windows.Forms.Label();
             this.label301 = new System.Windows.Forms.Label();
+            this.label297 = new System.Windows.Forms.Label();
             this.lblDifficultyEpoch = new System.Windows.Forms.Label();
             this.lblSubsidyEpoch = new System.Windows.Forms.Label();
             this.label296 = new System.Windows.Forms.Label();
@@ -152,11 +185,11 @@
             this.label79 = new System.Windows.Forms.Label();
             this.lblAvgTimeBetweenBlocks = new System.Windows.Forms.Label();
             this.lblBlockSubsidyAfterHalving = new System.Windows.Forms.Label();
-            this.panel8 = new System.Windows.Forms.Panel();
-            this.label81 = new System.Windows.Forms.Label();
             this.panel9 = new System.Windows.Forms.Panel();
             this.label82 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
+            this.panel8 = new System.Windows.Forms.Panel();
+            this.label81 = new System.Windows.Forms.Label();
             this.lblNextDiffAdjBlock = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.lblBTCInCirc = new System.Windows.Forms.Label();
@@ -176,10 +209,10 @@
             this.lblMoscowTimeLabel = new System.Windows.Forms.Label();
             this.lblMarketCapLabel = new System.Windows.Forms.Label();
             this.lblMoscowTime = new System.Windows.Forms.Label();
-            this.lblPriceLabel = new System.Windows.Forms.Label();
-            this.lblPrice = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
             this.lblTXInMempool = new System.Windows.Forms.Label();
+            this.lblPriceLabel = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.lblPrice = new System.Windows.Forms.Label();
             this.panelBlockList = new System.Windows.Forms.Panel();
             this.panel94 = new System.Windows.Forms.Panel();
             this.panel28 = new System.Windows.Forms.Panel();
@@ -1366,54 +1399,21 @@
             this.label319 = new System.Windows.Forms.Label();
             this.PoolsListScrollTimer = new System.Windows.Forms.Timer(this.components);
             this.panelPriceSourceIndicatorsOuter = new System.Windows.Forms.Panel();
-            this.lblATH = new System.Windows.Forms.Label();
-            this.label338 = new System.Windows.Forms.Label();
-            this.lblATHPercentChange = new System.Windows.Forms.Label();
-            this.lblATHDate = new System.Windows.Forms.Label();
-            this.label341 = new System.Windows.Forms.Label();
-            this.lblATHDaysElapsed = new System.Windows.Forms.Label();
-            this.lbl24HoursLowestPrice = new System.Windows.Forms.Label();
-            this.lbl24HoursHighestPrice = new System.Windows.Forms.Label();
-            this.label345 = new System.Windows.Forms.Label();
-            this.progressBar24HPrice = new ColorProgressBar.ColorProgressBar();
-            this.lblPrice24Hours = new System.Windows.Forms.Label();
-            this.label353 = new System.Windows.Forms.Label();
-            this.label354 = new System.Windows.Forms.Label();
-            this.label347 = new System.Windows.Forms.Label();
-            this.progressBar7DayPrice = new ColorProgressBar.ColorProgressBar();
-            this.lblPrice7Days = new System.Windows.Forms.Label();
-            this.label349 = new System.Windows.Forms.Label();
-            this.progressBar30DayPrice = new ColorProgressBar.ColorProgressBar();
-            this.lblPrice30Days = new System.Windows.Forms.Label();
-            this.label351 = new System.Windows.Forms.Label();
-            this.progressBar14DayPrice = new ColorProgressBar.ColorProgressBar();
-            this.lblPrice14Days = new System.Windows.Forms.Label();
-            this.label355 = new System.Windows.Forms.Label();
-            this.progressBar1YearPrice = new ColorProgressBar.ColorProgressBar();
-            this.lblPrice1Year = new System.Windows.Forms.Label();
-            this.label357 = new System.Windows.Forms.Label();
-            this.progressBar200DayPrice = new ColorProgressBar.ColorProgressBar();
-            this.lblPrice200Days = new System.Windows.Forms.Label();
-            this.label359 = new System.Windows.Forms.Label();
-            this.progressBar60DayPrice = new ColorProgressBar.ColorProgressBar();
-            this.lblPrice60Days = new System.Windows.Forms.Label();
-            this.panel7 = new System.Windows.Forms.Panel();
-            this.panel57 = new System.Windows.Forms.Panel();
-            this.panel24hours = new System.Windows.Forms.Panel();
-            this.panel7days = new System.Windows.Forms.Panel();
-            this.panel14days = new System.Windows.Forms.Panel();
-            this.panel30days = new System.Windows.Forms.Panel();
-            this.panel60days = new System.Windows.Forms.Panel();
-            this.panel200days = new System.Windows.Forms.Panel();
-            this.panel1year = new System.Windows.Forms.Panel();
+            this.panel148 = new System.Windows.Forms.Panel();
+            this.panel157 = new System.Windows.Forms.Panel();
+            this.panel177 = new System.Windows.Forms.Panel();
+            this.panel178 = new System.Windows.Forms.Panel();
+            this.panel179 = new System.Windows.Forms.Panel();
+            this.panel180 = new System.Windows.Forms.Panel();
             this.panelBitcoinDashboard.SuspendLayout();
+            this.panel7.SuspendLayout();
             this.panel109.SuspendLayout();
             this.panel12.SuspendLayout();
             this.panel11.SuspendLayout();
             this.panel10.SuspendLayout();
             this.panel6.SuspendLayout();
-            this.panel8.SuspendLayout();
             this.panel9.SuspendLayout();
+            this.panel8.SuspendLayout();
             this.panelBlockList.SuspendLayout();
             this.panel94.SuspendLayout();
             this.panel28.SuspendLayout();
@@ -1684,7 +1684,6 @@
             this.panel158.SuspendLayout();
             this.panel164.SuspendLayout();
             this.panelPriceSourceIndicatorsOuter.SuspendLayout();
-            this.panel7.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTime
@@ -1694,7 +1693,7 @@
             this.lblTime.BackColor = System.Drawing.Color.Transparent;
             this.lblTime.Font = new System.Drawing.Font("Consolas", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTime.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
-            this.lblTime.Location = new System.Drawing.Point(1848, 44);
+            this.lblTime.Location = new System.Drawing.Point(848, 44);
             this.lblTime.Margin = new System.Windows.Forms.Padding(0);
             this.lblTime.Name = "lblTime";
             this.lblTime.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -3117,6 +3116,403 @@
             this.panelBitcoinDashboard.Visible = false;
             this.panelBitcoinDashboard.VisibleChanged += new System.EventHandler(this.HideBookmarksShowFees);
             // 
+            // panel7
+            // 
+            this.panel7.BackColor = System.Drawing.Color.Silver;
+            this.panel7.Controls.Add(this.panel180);
+            this.panel7.Controls.Add(this.panel179);
+            this.panel7.Controls.Add(this.panel178);
+            this.panel7.Controls.Add(this.panel177);
+            this.panel7.Controls.Add(this.panel157);
+            this.panel7.Controls.Add(this.panel148);
+            this.panel7.Controls.Add(this.panel57);
+            this.panel7.Controls.Add(this.panel1year);
+            this.panel7.Controls.Add(this.panel200days);
+            this.panel7.Controls.Add(this.panel60days);
+            this.panel7.Controls.Add(this.panel30days);
+            this.panel7.Controls.Add(this.panel14days);
+            this.panel7.Controls.Add(this.panel7days);
+            this.panel7.Controls.Add(this.panel24hours);
+            this.panel7.Location = new System.Drawing.Point(63, 261);
+            this.panel7.Name = "panel7";
+            this.panel7.Size = new System.Drawing.Size(122, 88);
+            this.panel7.TabIndex = 326;
+            // 
+            // panel1year
+            // 
+            this.panel1year.BackColor = System.Drawing.Color.OliveDrab;
+            this.panel1year.Location = new System.Drawing.Point(60, 76);
+            this.panel1year.Name = "panel1year";
+            this.panel1year.Size = new System.Drawing.Size(30, 8);
+            this.panel1year.TabIndex = 7;
+            // 
+            // panel200days
+            // 
+            this.panel200days.BackColor = System.Drawing.Color.OliveDrab;
+            this.panel200days.Location = new System.Drawing.Point(60, 64);
+            this.panel200days.Name = "panel200days";
+            this.panel200days.Size = new System.Drawing.Size(40, 8);
+            this.panel200days.TabIndex = 6;
+            // 
+            // panel60days
+            // 
+            this.panel60days.BackColor = System.Drawing.Color.OliveDrab;
+            this.panel60days.Location = new System.Drawing.Point(60, 52);
+            this.panel60days.Name = "panel60days";
+            this.panel60days.Size = new System.Drawing.Size(40, 8);
+            this.panel60days.TabIndex = 5;
+            // 
+            // panel30days
+            // 
+            this.panel30days.BackColor = System.Drawing.Color.OliveDrab;
+            this.panel30days.Location = new System.Drawing.Point(60, 40);
+            this.panel30days.Name = "panel30days";
+            this.panel30days.Size = new System.Drawing.Size(40, 8);
+            this.panel30days.TabIndex = 4;
+            // 
+            // panel14days
+            // 
+            this.panel14days.BackColor = System.Drawing.Color.OliveDrab;
+            this.panel14days.Location = new System.Drawing.Point(60, 28);
+            this.panel14days.Name = "panel14days";
+            this.panel14days.Size = new System.Drawing.Size(40, 8);
+            this.panel14days.TabIndex = 3;
+            // 
+            // panel7days
+            // 
+            this.panel7days.BackColor = System.Drawing.Color.OliveDrab;
+            this.panel7days.Location = new System.Drawing.Point(60, 16);
+            this.panel7days.Name = "panel7days";
+            this.panel7days.Size = new System.Drawing.Size(40, 8);
+            this.panel7days.TabIndex = 2;
+            // 
+            // panel24hours
+            // 
+            this.panel24hours.BackColor = System.Drawing.Color.OliveDrab;
+            this.panel24hours.Location = new System.Drawing.Point(60, 4);
+            this.panel24hours.Name = "panel24hours";
+            this.panel24hours.Size = new System.Drawing.Size(40, 8);
+            this.panel24hours.TabIndex = 1;
+            // 
+            // panel57
+            // 
+            this.panel57.BackColor = System.Drawing.Color.Black;
+            this.panel57.ForeColor = System.Drawing.Color.Black;
+            this.panel57.Location = new System.Drawing.Point(60, 0);
+            this.panel57.Name = "panel57";
+            this.panel57.Size = new System.Drawing.Size(1, 88);
+            this.panel57.TabIndex = 0;
+            // 
+            // label355
+            // 
+            this.label355.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label355.Font = new System.Drawing.Font("Century Gothic", 7F);
+            this.label355.ForeColor = System.Drawing.Color.Silver;
+            this.label355.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label355.Location = new System.Drawing.Point(11, 335);
+            this.label355.Name = "label355";
+            this.label355.Size = new System.Drawing.Size(52, 15);
+            this.label355.TabIndex = 326;
+            this.label355.Text = "1 year";
+            this.label355.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.toolTipGeneralUse.SetToolTip(this.label355, "Market capitalization, priced in selected currency");
+            // 
+            // lblPrice1Year
+            // 
+            this.lblPrice1Year.AutoSize = true;
+            this.lblPrice1Year.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblPrice1Year.Font = new System.Drawing.Font("Century Gothic", 7F);
+            this.lblPrice1Year.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.lblPrice1Year.Location = new System.Drawing.Point(185, 335);
+            this.lblPrice1Year.Name = "lblPrice1Year";
+            this.lblPrice1Year.Size = new System.Drawing.Size(48, 15);
+            this.lblPrice1Year.TabIndex = 324;
+            this.lblPrice1Year.Text = "no data";
+            // 
+            // label357
+            // 
+            this.label357.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label357.Font = new System.Drawing.Font("Century Gothic", 7F);
+            this.label357.ForeColor = System.Drawing.Color.Silver;
+            this.label357.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label357.Location = new System.Drawing.Point(11, 323);
+            this.label357.Name = "label357";
+            this.label357.Size = new System.Drawing.Size(52, 15);
+            this.label357.TabIndex = 323;
+            this.label357.Text = "200 days";
+            this.label357.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.toolTipGeneralUse.SetToolTip(this.label357, "Market capitalization, priced in selected currency");
+            // 
+            // lblPrice200Days
+            // 
+            this.lblPrice200Days.AutoSize = true;
+            this.lblPrice200Days.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblPrice200Days.Font = new System.Drawing.Font("Century Gothic", 7F);
+            this.lblPrice200Days.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.lblPrice200Days.Location = new System.Drawing.Point(185, 323);
+            this.lblPrice200Days.Name = "lblPrice200Days";
+            this.lblPrice200Days.Size = new System.Drawing.Size(48, 15);
+            this.lblPrice200Days.TabIndex = 321;
+            this.lblPrice200Days.Text = "no data";
+            // 
+            // label359
+            // 
+            this.label359.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label359.Font = new System.Drawing.Font("Century Gothic", 7F);
+            this.label359.ForeColor = System.Drawing.Color.Silver;
+            this.label359.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label359.Location = new System.Drawing.Point(11, 311);
+            this.label359.Name = "label359";
+            this.label359.Size = new System.Drawing.Size(52, 15);
+            this.label359.TabIndex = 320;
+            this.label359.Text = "60 days";
+            this.label359.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.toolTipGeneralUse.SetToolTip(this.label359, "Market capitalization, priced in selected currency");
+            // 
+            // lblPrice60Days
+            // 
+            this.lblPrice60Days.AutoSize = true;
+            this.lblPrice60Days.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblPrice60Days.Font = new System.Drawing.Font("Century Gothic", 7F);
+            this.lblPrice60Days.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.lblPrice60Days.Location = new System.Drawing.Point(185, 311);
+            this.lblPrice60Days.Name = "lblPrice60Days";
+            this.lblPrice60Days.Size = new System.Drawing.Size(48, 15);
+            this.lblPrice60Days.TabIndex = 318;
+            this.lblPrice60Days.Text = "no data";
+            // 
+            // label349
+            // 
+            this.label349.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label349.Font = new System.Drawing.Font("Century Gothic", 7F);
+            this.label349.ForeColor = System.Drawing.Color.Silver;
+            this.label349.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label349.Location = new System.Drawing.Point(11, 299);
+            this.label349.Name = "label349";
+            this.label349.Size = new System.Drawing.Size(52, 15);
+            this.label349.TabIndex = 317;
+            this.label349.Text = "30 days";
+            this.label349.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.toolTipGeneralUse.SetToolTip(this.label349, "Market capitalization, priced in selected currency");
+            // 
+            // lblPrice30Days
+            // 
+            this.lblPrice30Days.AutoSize = true;
+            this.lblPrice30Days.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblPrice30Days.Font = new System.Drawing.Font("Century Gothic", 7F);
+            this.lblPrice30Days.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.lblPrice30Days.Location = new System.Drawing.Point(185, 299);
+            this.lblPrice30Days.Name = "lblPrice30Days";
+            this.lblPrice30Days.Size = new System.Drawing.Size(48, 15);
+            this.lblPrice30Days.TabIndex = 315;
+            this.lblPrice30Days.Text = "no data";
+            // 
+            // label351
+            // 
+            this.label351.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label351.Font = new System.Drawing.Font("Century Gothic", 7F);
+            this.label351.ForeColor = System.Drawing.Color.Silver;
+            this.label351.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label351.Location = new System.Drawing.Point(11, 287);
+            this.label351.Name = "label351";
+            this.label351.Size = new System.Drawing.Size(52, 15);
+            this.label351.TabIndex = 314;
+            this.label351.Text = "14 days";
+            this.label351.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.toolTipGeneralUse.SetToolTip(this.label351, "Market capitalization, priced in selected currency");
+            // 
+            // lblPrice14Days
+            // 
+            this.lblPrice14Days.AutoSize = true;
+            this.lblPrice14Days.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblPrice14Days.Font = new System.Drawing.Font("Century Gothic", 7F);
+            this.lblPrice14Days.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.lblPrice14Days.Location = new System.Drawing.Point(185, 287);
+            this.lblPrice14Days.Name = "lblPrice14Days";
+            this.lblPrice14Days.Size = new System.Drawing.Size(48, 15);
+            this.lblPrice14Days.TabIndex = 312;
+            this.lblPrice14Days.Text = "no data";
+            // 
+            // label347
+            // 
+            this.label347.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label347.Font = new System.Drawing.Font("Century Gothic", 7F);
+            this.label347.ForeColor = System.Drawing.Color.Silver;
+            this.label347.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label347.Location = new System.Drawing.Point(11, 275);
+            this.label347.Name = "label347";
+            this.label347.Size = new System.Drawing.Size(52, 15);
+            this.label347.TabIndex = 311;
+            this.label347.Text = "7 days";
+            this.label347.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.toolTipGeneralUse.SetToolTip(this.label347, "Market capitalization, priced in selected currency");
+            // 
+            // lblPrice7Days
+            // 
+            this.lblPrice7Days.AutoSize = true;
+            this.lblPrice7Days.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblPrice7Days.Font = new System.Drawing.Font("Century Gothic", 7F);
+            this.lblPrice7Days.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.lblPrice7Days.Location = new System.Drawing.Point(185, 275);
+            this.lblPrice7Days.Name = "lblPrice7Days";
+            this.lblPrice7Days.Size = new System.Drawing.Size(48, 15);
+            this.lblPrice7Days.TabIndex = 309;
+            this.lblPrice7Days.Text = "no data";
+            // 
+            // label354
+            // 
+            this.label354.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label354.Font = new System.Drawing.Font("Century Gothic", 7F);
+            this.label354.ForeColor = System.Drawing.Color.Silver;
+            this.label354.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label354.Location = new System.Drawing.Point(11, 263);
+            this.label354.Name = "label354";
+            this.label354.Size = new System.Drawing.Size(52, 15);
+            this.label354.TabIndex = 308;
+            this.label354.Text = "24 hours";
+            this.label354.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.toolTipGeneralUse.SetToolTip(this.label354, "Market capitalization, priced in selected currency");
+            // 
+            // label353
+            // 
+            this.label353.AutoSize = true;
+            this.label353.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label353.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label353.ForeColor = System.Drawing.Color.Silver;
+            this.label353.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label353.Location = new System.Drawing.Point(3, 241);
+            this.label353.Name = "label353";
+            this.label353.Size = new System.Drawing.Size(223, 17);
+            this.label353.TabIndex = 307;
+            this.label353.Text = "Price percentage change over time";
+            this.toolTipGeneralUse.SetToolTip(this.label353, "Market capitalization, priced in selected currency");
+            // 
+            // lblPrice24Hours
+            // 
+            this.lblPrice24Hours.AutoSize = true;
+            this.lblPrice24Hours.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblPrice24Hours.Font = new System.Drawing.Font("Century Gothic", 7F);
+            this.lblPrice24Hours.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(0)))));
+            this.lblPrice24Hours.Location = new System.Drawing.Point(185, 263);
+            this.lblPrice24Hours.Name = "lblPrice24Hours";
+            this.lblPrice24Hours.Size = new System.Drawing.Size(48, 15);
+            this.lblPrice24Hours.TabIndex = 293;
+            this.lblPrice24Hours.Text = "no data";
+            // 
+            // lbl24HoursLowestPrice
+            // 
+            this.lbl24HoursLowestPrice.AutoSize = true;
+            this.lbl24HoursLowestPrice.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lbl24HoursLowestPrice.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl24HoursLowestPrice.Location = new System.Drawing.Point(93, 220);
+            this.lbl24HoursLowestPrice.Name = "lbl24HoursLowestPrice";
+            this.lbl24HoursLowestPrice.Size = new System.Drawing.Size(61, 17);
+            this.lbl24HoursLowestPrice.TabIndex = 292;
+            this.lbl24HoursLowestPrice.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lbl24HoursLowestPrice, "Market capitalization, priced in selected currency");
+            // 
+            // lbl24HoursHighestPrice
+            // 
+            this.lbl24HoursHighestPrice.AutoSize = true;
+            this.lbl24HoursHighestPrice.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lbl24HoursHighestPrice.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl24HoursHighestPrice.Location = new System.Drawing.Point(3, 220);
+            this.lbl24HoursHighestPrice.Name = "lbl24HoursHighestPrice";
+            this.lbl24HoursHighestPrice.Size = new System.Drawing.Size(61, 17);
+            this.lbl24HoursHighestPrice.TabIndex = 290;
+            this.lbl24HoursHighestPrice.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lbl24HoursHighestPrice, "Market capitalization, priced in selected currency");
+            // 
+            // label345
+            // 
+            this.label345.AutoSize = true;
+            this.label345.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label345.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label345.ForeColor = System.Drawing.Color.Silver;
+            this.label345.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label345.Location = new System.Drawing.Point(3, 205);
+            this.label345.Name = "label345";
+            this.label345.Size = new System.Drawing.Size(195, 17);
+            this.label345.TabIndex = 291;
+            this.label345.Text = "24h highest / lowest price (USD)";
+            this.toolTipGeneralUse.SetToolTip(this.label345, "Market capitalization, priced in selected currency");
+            // 
+            // lblATHDaysElapsed
+            // 
+            this.lblATHDaysElapsed.AutoSize = true;
+            this.lblATHDaysElapsed.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblATHDaysElapsed.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblATHDaysElapsed.Location = new System.Drawing.Point(95, 184);
+            this.lblATHDaysElapsed.Name = "lblATHDaysElapsed";
+            this.lblATHDaysElapsed.Size = new System.Drawing.Size(61, 17);
+            this.lblATHDaysElapsed.TabIndex = 289;
+            this.lblATHDaysElapsed.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblATHDaysElapsed, "Market capitalization, priced in selected currency");
+            // 
+            // lblATHDate
+            // 
+            this.lblATHDate.AutoSize = true;
+            this.lblATHDate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblATHDate.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblATHDate.Location = new System.Drawing.Point(3, 184);
+            this.lblATHDate.Name = "lblATHDate";
+            this.lblATHDate.Size = new System.Drawing.Size(61, 17);
+            this.lblATHDate.TabIndex = 287;
+            this.lblATHDate.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblATHDate, "Market capitalization, priced in selected currency");
+            // 
+            // label341
+            // 
+            this.label341.AutoSize = true;
+            this.label341.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label341.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label341.ForeColor = System.Drawing.Color.Silver;
+            this.label341.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label341.Location = new System.Drawing.Point(3, 169);
+            this.label341.Name = "label341";
+            this.label341.Size = new System.Drawing.Size(203, 17);
+            this.label341.TabIndex = 288;
+            this.label341.Text = "All-time high date / days elapsed";
+            this.toolTipGeneralUse.SetToolTip(this.label341, "Market capitalization, priced in selected currency");
+            // 
+            // lblATHPercentChange
+            // 
+            this.lblATHPercentChange.AutoSize = true;
+            this.lblATHPercentChange.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblATHPercentChange.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblATHPercentChange.Location = new System.Drawing.Point(100, 148);
+            this.lblATHPercentChange.Name = "lblATHPercentChange";
+            this.lblATHPercentChange.Size = new System.Drawing.Size(61, 17);
+            this.lblATHPercentChange.TabIndex = 286;
+            this.lblATHPercentChange.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblATHPercentChange, "Market capitalization, priced in selected currency");
+            // 
+            // lblATH
+            // 
+            this.lblATH.AutoSize = true;
+            this.lblATH.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblATH.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblATH.Location = new System.Drawing.Point(3, 148);
+            this.lblATH.Name = "lblATH";
+            this.lblATH.Size = new System.Drawing.Size(61, 17);
+            this.lblATH.TabIndex = 284;
+            this.lblATH.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblATH, "Market capitalization, priced in selected currency");
+            // 
+            // label338
+            // 
+            this.label338.AutoSize = true;
+            this.label338.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label338.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label338.ForeColor = System.Drawing.Color.Silver;
+            this.label338.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label338.Location = new System.Drawing.Point(3, 133);
+            this.label338.Name = "label338";
+            this.label338.Size = new System.Drawing.Size(212, 17);
+            this.label338.TabIndex = 285;
+            this.label338.Text = "All-time high (USD) / ATH % change";
+            this.toolTipGeneralUse.SetToolTip(this.label338, "Market capitalization, priced in selected currency");
+            // 
             // label229
             // 
             this.label229.AutoSize = true;
@@ -3179,19 +3575,6 @@
             this.lblNetworkAge.Text = "no data";
             this.toolTipGeneralUse.SetToolTip(this.lblNetworkAge, "The amount of time the Bitcoin \r\nXXnetwork has been running");
             // 
-            // label297
-            // 
-            this.label297.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label297.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label297.ForeColor = System.Drawing.Color.Silver;
-            this.label297.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label297.Location = new System.Drawing.Point(525, 277);
-            this.label297.Name = "label297";
-            this.label297.Size = new System.Drawing.Size(198, 17);
-            this.label297.TabIndex = 256;
-            this.label297.Text = "Difficulty epoch";
-            this.toolTipGeneralUse.SetToolTip(this.label297, "A new epoch begins with each \r\nXXdifficulty adjustment");
-            // 
             // label301
             // 
             this.label301.AutoSize = true;
@@ -3205,6 +3588,19 @@
             this.label301.TabIndex = 241;
             this.label301.Text = "Since January 3rd 2009 18:15";
             this.toolTipGeneralUse.SetToolTip(this.label301, "The amount of time the Bitcoin \r\nXXnetwork has been running");
+            // 
+            // label297
+            // 
+            this.label297.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label297.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label297.ForeColor = System.Drawing.Color.Silver;
+            this.label297.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label297.Location = new System.Drawing.Point(525, 277);
+            this.label297.Name = "label297";
+            this.label297.Size = new System.Drawing.Size(198, 17);
+            this.label297.TabIndex = 256;
+            this.label297.Text = "Difficulty epoch";
+            this.toolTipGeneralUse.SetToolTip(this.label297, "A new epoch begins with each \r\nXXdifficulty adjustment");
             // 
             // lblDifficultyEpoch
             // 
@@ -3550,30 +3946,6 @@
             this.toolTipGeneralUse.SetToolTip(this.lblBlockSubsidyAfterHalving, "The amount of bitcoin that will be issued for each \r\nXXmined block in the next su" +
         "bsidy epoch");
             // 
-            // panel8
-            // 
-            this.panel8.BackColor = System.Drawing.Color.Transparent;
-            this.panel8.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel8.BackgroundImage")));
-            this.panel8.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel8.Controls.Add(this.label81);
-            this.panel8.Location = new System.Drawing.Point(0, 357);
-            this.panel8.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(220, 23);
-            this.panel8.TabIndex = 196;
-            // 
-            // label81
-            // 
-            this.label81.AutoSize = true;
-            this.label81.Font = new System.Drawing.Font("Century Gothic", 8F);
-            this.label81.ForeColor = System.Drawing.Color.Gray;
-            this.label81.Location = new System.Drawing.Point(5, 4);
-            this.label81.Name = "label81";
-            this.label81.Size = new System.Drawing.Size(67, 16);
-            this.label81.TabIndex = 193;
-            this.label81.Text = "MEMPOOL";
-            this.label81.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // panel9
             // 
             this.panel9.BackColor = System.Drawing.Color.Transparent;
@@ -3610,6 +3982,30 @@
             this.label9.TabIndex = 213;
             this.label9.Text = "Block of next difficulty adjustment";
             this.toolTipGeneralUse.SetToolTip(this.label9, "A difficulty adjustment occurs every 2016 blocks");
+            // 
+            // panel8
+            // 
+            this.panel8.BackColor = System.Drawing.Color.Transparent;
+            this.panel8.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel8.BackgroundImage")));
+            this.panel8.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel8.Controls.Add(this.label81);
+            this.panel8.Location = new System.Drawing.Point(0, 357);
+            this.panel8.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.panel8.Name = "panel8";
+            this.panel8.Size = new System.Drawing.Size(220, 23);
+            this.panel8.TabIndex = 196;
+            // 
+            // label81
+            // 
+            this.label81.AutoSize = true;
+            this.label81.Font = new System.Drawing.Font("Century Gothic", 8F);
+            this.label81.ForeColor = System.Drawing.Color.Gray;
+            this.label81.Location = new System.Drawing.Point(5, 4);
+            this.label81.Name = "label81";
+            this.label81.Size = new System.Drawing.Size(67, 16);
+            this.label81.TabIndex = 193;
+            this.label81.Text = "MEMPOOL";
+            this.label81.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblNextDiffAdjBlock
             // 
@@ -3849,6 +4245,18 @@
             this.lblMoscowTime.Text = "no data";
             this.toolTipGeneralUse.SetToolTip(this.lblMoscowTime, "Value of 1 unit of selected currency, priced in sats");
             // 
+            // lblTXInMempool
+            // 
+            this.lblTXInMempool.AutoSize = true;
+            this.lblTXInMempool.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblTXInMempool.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTXInMempool.Location = new System.Drawing.Point(3, 400);
+            this.lblTXInMempool.Name = "lblTXInMempool";
+            this.lblTXInMempool.Size = new System.Drawing.Size(61, 17);
+            this.lblTXInMempool.TabIndex = 93;
+            this.lblTXInMempool.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblTXInMempool, "Number of transactions in the mempool of connected node");
+            // 
             // lblPriceLabel
             // 
             this.lblPriceLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
@@ -3861,18 +4269,6 @@
             this.lblPriceLabel.TabIndex = 86;
             this.lblPriceLabel.Text = "1 BTC / USD";
             this.toolTipGeneralUse.SetToolTip(this.lblPriceLabel, "Value of 1 bitcoin in selected currency");
-            // 
-            // lblPrice
-            // 
-            this.lblPrice.AutoSize = true;
-            this.lblPrice.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblPrice.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPrice.Location = new System.Drawing.Point(3, 40);
-            this.lblPrice.Name = "lblPrice";
-            this.lblPrice.Size = new System.Drawing.Size(61, 17);
-            this.lblPrice.TabIndex = 85;
-            this.lblPrice.Text = "no data";
-            this.toolTipGeneralUse.SetToolTip(this.lblPrice, "Value of 1 bitcoin, priced in selected currency");
             // 
             // label11
             // 
@@ -3887,17 +4283,17 @@
             this.label11.Text = "Transactions in Mempool";
             this.toolTipGeneralUse.SetToolTip(this.label11, "Number of transactions in the mempool of connected node");
             // 
-            // lblTXInMempool
+            // lblPrice
             // 
-            this.lblTXInMempool.AutoSize = true;
-            this.lblTXInMempool.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblTXInMempool.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTXInMempool.Location = new System.Drawing.Point(3, 400);
-            this.lblTXInMempool.Name = "lblTXInMempool";
-            this.lblTXInMempool.Size = new System.Drawing.Size(61, 17);
-            this.lblTXInMempool.TabIndex = 93;
-            this.lblTXInMempool.Text = "no data";
-            this.toolTipGeneralUse.SetToolTip(this.lblTXInMempool, "Number of transactions in the mempool of connected node");
+            this.lblPrice.AutoSize = true;
+            this.lblPrice.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblPrice.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPrice.Location = new System.Drawing.Point(3, 40);
+            this.lblPrice.Name = "lblPrice";
+            this.lblPrice.Size = new System.Drawing.Size(61, 17);
+            this.lblPrice.TabIndex = 85;
+            this.lblPrice.Text = "no data";
+            this.toolTipGeneralUse.SetToolTip(this.lblPrice, "Value of 1 bitcoin, priced in selected currency");
             // 
             // panelBlockList
             // 
@@ -21416,517 +21812,59 @@
             this.panelPriceSourceIndicatorsOuter.Size = new System.Drawing.Size(66, 13);
             this.panelPriceSourceIndicatorsOuter.TabIndex = 292;
             // 
-            // lblATH
-            // 
-            this.lblATH.AutoSize = true;
-            this.lblATH.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblATH.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblATH.Location = new System.Drawing.Point(3, 148);
-            this.lblATH.Name = "lblATH";
-            this.lblATH.Size = new System.Drawing.Size(61, 17);
-            this.lblATH.TabIndex = 284;
-            this.lblATH.Text = "no data";
-            this.toolTipGeneralUse.SetToolTip(this.lblATH, "Market capitalization, priced in selected currency");
-            // 
-            // label338
-            // 
-            this.label338.AutoSize = true;
-            this.label338.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label338.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label338.ForeColor = System.Drawing.Color.Silver;
-            this.label338.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label338.Location = new System.Drawing.Point(3, 133);
-            this.label338.Name = "label338";
-            this.label338.Size = new System.Drawing.Size(212, 17);
-            this.label338.TabIndex = 285;
-            this.label338.Text = "All-time high (USD) / ATH % change";
-            this.toolTipGeneralUse.SetToolTip(this.label338, "Market capitalization, priced in selected currency");
-            // 
-            // lblATHPercentChange
-            // 
-            this.lblATHPercentChange.AutoSize = true;
-            this.lblATHPercentChange.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblATHPercentChange.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblATHPercentChange.Location = new System.Drawing.Point(100, 148);
-            this.lblATHPercentChange.Name = "lblATHPercentChange";
-            this.lblATHPercentChange.Size = new System.Drawing.Size(61, 17);
-            this.lblATHPercentChange.TabIndex = 286;
-            this.lblATHPercentChange.Text = "no data";
-            this.toolTipGeneralUse.SetToolTip(this.lblATHPercentChange, "Market capitalization, priced in selected currency");
-            // 
-            // lblATHDate
-            // 
-            this.lblATHDate.AutoSize = true;
-            this.lblATHDate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblATHDate.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblATHDate.Location = new System.Drawing.Point(3, 184);
-            this.lblATHDate.Name = "lblATHDate";
-            this.lblATHDate.Size = new System.Drawing.Size(61, 17);
-            this.lblATHDate.TabIndex = 287;
-            this.lblATHDate.Text = "no data";
-            this.toolTipGeneralUse.SetToolTip(this.lblATHDate, "Market capitalization, priced in selected currency");
-            // 
-            // label341
-            // 
-            this.label341.AutoSize = true;
-            this.label341.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label341.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label341.ForeColor = System.Drawing.Color.Silver;
-            this.label341.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label341.Location = new System.Drawing.Point(3, 169);
-            this.label341.Name = "label341";
-            this.label341.Size = new System.Drawing.Size(203, 17);
-            this.label341.TabIndex = 288;
-            this.label341.Text = "All-time high date / days elapsed";
-            this.toolTipGeneralUse.SetToolTip(this.label341, "Market capitalization, priced in selected currency");
-            // 
-            // lblATHDaysElapsed
-            // 
-            this.lblATHDaysElapsed.AutoSize = true;
-            this.lblATHDaysElapsed.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblATHDaysElapsed.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblATHDaysElapsed.Location = new System.Drawing.Point(95, 184);
-            this.lblATHDaysElapsed.Name = "lblATHDaysElapsed";
-            this.lblATHDaysElapsed.Size = new System.Drawing.Size(61, 17);
-            this.lblATHDaysElapsed.TabIndex = 289;
-            this.lblATHDaysElapsed.Text = "no data";
-            this.toolTipGeneralUse.SetToolTip(this.lblATHDaysElapsed, "Market capitalization, priced in selected currency");
-            // 
-            // lbl24HoursLowestPrice
-            // 
-            this.lbl24HoursLowestPrice.AutoSize = true;
-            this.lbl24HoursLowestPrice.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lbl24HoursLowestPrice.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl24HoursLowestPrice.Location = new System.Drawing.Point(93, 220);
-            this.lbl24HoursLowestPrice.Name = "lbl24HoursLowestPrice";
-            this.lbl24HoursLowestPrice.Size = new System.Drawing.Size(61, 17);
-            this.lbl24HoursLowestPrice.TabIndex = 292;
-            this.lbl24HoursLowestPrice.Text = "no data";
-            this.toolTipGeneralUse.SetToolTip(this.lbl24HoursLowestPrice, "Market capitalization, priced in selected currency");
-            // 
-            // lbl24HoursHighestPrice
-            // 
-            this.lbl24HoursHighestPrice.AutoSize = true;
-            this.lbl24HoursHighestPrice.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lbl24HoursHighestPrice.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl24HoursHighestPrice.Location = new System.Drawing.Point(3, 220);
-            this.lbl24HoursHighestPrice.Name = "lbl24HoursHighestPrice";
-            this.lbl24HoursHighestPrice.Size = new System.Drawing.Size(61, 17);
-            this.lbl24HoursHighestPrice.TabIndex = 290;
-            this.lbl24HoursHighestPrice.Text = "no data";
-            this.toolTipGeneralUse.SetToolTip(this.lbl24HoursHighestPrice, "Market capitalization, priced in selected currency");
-            // 
-            // label345
-            // 
-            this.label345.AutoSize = true;
-            this.label345.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label345.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label345.ForeColor = System.Drawing.Color.Silver;
-            this.label345.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label345.Location = new System.Drawing.Point(3, 205);
-            this.label345.Name = "label345";
-            this.label345.Size = new System.Drawing.Size(195, 17);
-            this.label345.TabIndex = 291;
-            this.label345.Text = "24h highest / lowest price (USD)";
-            this.toolTipGeneralUse.SetToolTip(this.label345, "Market capitalization, priced in selected currency");
-            // 
-            // progressBar24HPrice
-            // 
-            this.progressBar24HPrice.BarColor = System.Drawing.Color.DimGray;
-            this.progressBar24HPrice.BorderColor = System.Drawing.Color.Transparent;
-            this.progressBar24HPrice.FillStyle = ColorProgressBar.ColorProgressBar.FillStyles.Solid;
-            this.progressBar24HPrice.ForeColor = System.Drawing.Color.Gray;
-            this.progressBar24HPrice.Location = new System.Drawing.Point(996, 439);
-            this.progressBar24HPrice.Maximum = 10000000;
-            this.progressBar24HPrice.Minimum = 0;
-            this.progressBar24HPrice.Name = "progressBar24HPrice";
-            this.progressBar24HPrice.Size = new System.Drawing.Size(100, 8);
-            this.progressBar24HPrice.Step = 10;
-            this.progressBar24HPrice.TabIndex = 294;
-            this.toolTipGeneralUse.SetToolTip(this.progressBar24HPrice, "The block at which the next halving will occur, \r\nXXand number of blocks remainin" +
-        "g");
-            this.progressBar24HPrice.Value = 0;
-            // 
-            // lblPrice24Hours
-            // 
-            this.lblPrice24Hours.AutoSize = true;
-            this.lblPrice24Hours.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblPrice24Hours.Font = new System.Drawing.Font("Century Gothic", 7F);
-            this.lblPrice24Hours.ForeColor = System.Drawing.Color.DimGray;
-            this.lblPrice24Hours.Location = new System.Drawing.Point(176, 258);
-            this.lblPrice24Hours.Name = "lblPrice24Hours";
-            this.lblPrice24Hours.Size = new System.Drawing.Size(48, 15);
-            this.lblPrice24Hours.TabIndex = 293;
-            this.lblPrice24Hours.Text = "no data";
-            // 
-            // label353
-            // 
-            this.label353.AutoSize = true;
-            this.label353.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label353.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label353.ForeColor = System.Drawing.Color.Silver;
-            this.label353.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label353.Location = new System.Drawing.Point(3, 241);
-            this.label353.Name = "label353";
-            this.label353.Size = new System.Drawing.Size(160, 17);
-            this.label353.TabIndex = 307;
-            this.label353.Text = "Price % change over time";
-            this.toolTipGeneralUse.SetToolTip(this.label353, "Market capitalization, priced in selected currency");
-            // 
-            // label354
-            // 
-            this.label354.AutoSize = true;
-            this.label354.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label354.Font = new System.Drawing.Font("Century Gothic", 7F);
-            this.label354.ForeColor = System.Drawing.Color.Silver;
-            this.label354.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label354.Location = new System.Drawing.Point(3, 258);
-            this.label354.Name = "label354";
-            this.label354.Size = new System.Drawing.Size(48, 15);
-            this.label354.TabIndex = 308;
-            this.label354.Text = "24 hours";
-            this.toolTipGeneralUse.SetToolTip(this.label354, "Market capitalization, priced in selected currency");
-            // 
-            // label347
-            // 
-            this.label347.AutoSize = true;
-            this.label347.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label347.Font = new System.Drawing.Font("Century Gothic", 7F);
-            this.label347.ForeColor = System.Drawing.Color.Silver;
-            this.label347.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label347.Location = new System.Drawing.Point(3, 270);
-            this.label347.Name = "label347";
-            this.label347.Size = new System.Drawing.Size(40, 15);
-            this.label347.TabIndex = 311;
-            this.label347.Text = "7 days";
-            this.toolTipGeneralUse.SetToolTip(this.label347, "Market capitalization, priced in selected currency");
-            // 
-            // progressBar7DayPrice
-            // 
-            this.progressBar7DayPrice.BarColor = System.Drawing.Color.DimGray;
-            this.progressBar7DayPrice.BorderColor = System.Drawing.Color.Transparent;
-            this.progressBar7DayPrice.FillStyle = ColorProgressBar.ColorProgressBar.FillStyles.Solid;
-            this.progressBar7DayPrice.ForeColor = System.Drawing.Color.Gray;
-            this.progressBar7DayPrice.Location = new System.Drawing.Point(996, 451);
-            this.progressBar7DayPrice.Maximum = 10000000;
-            this.progressBar7DayPrice.Minimum = 0;
-            this.progressBar7DayPrice.Name = "progressBar7DayPrice";
-            this.progressBar7DayPrice.Size = new System.Drawing.Size(100, 8);
-            this.progressBar7DayPrice.Step = 10;
-            this.progressBar7DayPrice.TabIndex = 310;
-            this.toolTipGeneralUse.SetToolTip(this.progressBar7DayPrice, "The block at which the next halving will occur, \r\nXXand number of blocks remainin" +
-        "g");
-            this.progressBar7DayPrice.Value = 0;
-            // 
-            // lblPrice7Days
-            // 
-            this.lblPrice7Days.AutoSize = true;
-            this.lblPrice7Days.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblPrice7Days.Font = new System.Drawing.Font("Century Gothic", 7F);
-            this.lblPrice7Days.ForeColor = System.Drawing.Color.DimGray;
-            this.lblPrice7Days.Location = new System.Drawing.Point(176, 270);
-            this.lblPrice7Days.Name = "lblPrice7Days";
-            this.lblPrice7Days.Size = new System.Drawing.Size(48, 15);
-            this.lblPrice7Days.TabIndex = 309;
-            this.lblPrice7Days.Text = "no data";
-            // 
-            // label349
-            // 
-            this.label349.AutoSize = true;
-            this.label349.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label349.Font = new System.Drawing.Font("Century Gothic", 7F);
-            this.label349.ForeColor = System.Drawing.Color.Silver;
-            this.label349.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label349.Location = new System.Drawing.Point(3, 294);
-            this.label349.Name = "label349";
-            this.label349.Size = new System.Drawing.Size(46, 15);
-            this.label349.TabIndex = 317;
-            this.label349.Text = "30 days";
-            this.toolTipGeneralUse.SetToolTip(this.label349, "Market capitalization, priced in selected currency");
-            // 
-            // progressBar30DayPrice
-            // 
-            this.progressBar30DayPrice.BarColor = System.Drawing.Color.DimGray;
-            this.progressBar30DayPrice.BorderColor = System.Drawing.Color.Transparent;
-            this.progressBar30DayPrice.FillStyle = ColorProgressBar.ColorProgressBar.FillStyles.Solid;
-            this.progressBar30DayPrice.ForeColor = System.Drawing.Color.Gray;
-            this.progressBar30DayPrice.Location = new System.Drawing.Point(996, 475);
-            this.progressBar30DayPrice.Maximum = 10000000;
-            this.progressBar30DayPrice.Minimum = 0;
-            this.progressBar30DayPrice.Name = "progressBar30DayPrice";
-            this.progressBar30DayPrice.Size = new System.Drawing.Size(100, 8);
-            this.progressBar30DayPrice.Step = 10;
-            this.progressBar30DayPrice.TabIndex = 316;
-            this.toolTipGeneralUse.SetToolTip(this.progressBar30DayPrice, "The block at which the next halving will occur, \r\nXXand number of blocks remainin" +
-        "g");
-            this.progressBar30DayPrice.Value = 0;
-            // 
-            // lblPrice30Days
-            // 
-            this.lblPrice30Days.AutoSize = true;
-            this.lblPrice30Days.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblPrice30Days.Font = new System.Drawing.Font("Century Gothic", 7F);
-            this.lblPrice30Days.ForeColor = System.Drawing.Color.DimGray;
-            this.lblPrice30Days.Location = new System.Drawing.Point(176, 294);
-            this.lblPrice30Days.Name = "lblPrice30Days";
-            this.lblPrice30Days.Size = new System.Drawing.Size(48, 15);
-            this.lblPrice30Days.TabIndex = 315;
-            this.lblPrice30Days.Text = "no data";
-            // 
-            // label351
-            // 
-            this.label351.AutoSize = true;
-            this.label351.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label351.Font = new System.Drawing.Font("Century Gothic", 7F);
-            this.label351.ForeColor = System.Drawing.Color.Silver;
-            this.label351.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label351.Location = new System.Drawing.Point(3, 282);
-            this.label351.Name = "label351";
-            this.label351.Size = new System.Drawing.Size(46, 15);
-            this.label351.TabIndex = 314;
-            this.label351.Text = "14 days";
-            this.toolTipGeneralUse.SetToolTip(this.label351, "Market capitalization, priced in selected currency");
-            // 
-            // progressBar14DayPrice
-            // 
-            this.progressBar14DayPrice.BarColor = System.Drawing.Color.DimGray;
-            this.progressBar14DayPrice.BorderColor = System.Drawing.Color.Transparent;
-            this.progressBar14DayPrice.FillStyle = ColorProgressBar.ColorProgressBar.FillStyles.Solid;
-            this.progressBar14DayPrice.ForeColor = System.Drawing.Color.Gray;
-            this.progressBar14DayPrice.Location = new System.Drawing.Point(996, 463);
-            this.progressBar14DayPrice.Maximum = 10000000;
-            this.progressBar14DayPrice.Minimum = 0;
-            this.progressBar14DayPrice.Name = "progressBar14DayPrice";
-            this.progressBar14DayPrice.Size = new System.Drawing.Size(100, 8);
-            this.progressBar14DayPrice.Step = 10;
-            this.progressBar14DayPrice.TabIndex = 313;
-            this.toolTipGeneralUse.SetToolTip(this.progressBar14DayPrice, "The block at which the next halving will occur, \r\nXXand number of blocks remainin" +
-        "g");
-            this.progressBar14DayPrice.Value = 0;
-            // 
-            // lblPrice14Days
-            // 
-            this.lblPrice14Days.AutoSize = true;
-            this.lblPrice14Days.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblPrice14Days.Font = new System.Drawing.Font("Century Gothic", 7F);
-            this.lblPrice14Days.ForeColor = System.Drawing.Color.DimGray;
-            this.lblPrice14Days.Location = new System.Drawing.Point(176, 282);
-            this.lblPrice14Days.Name = "lblPrice14Days";
-            this.lblPrice14Days.Size = new System.Drawing.Size(48, 15);
-            this.lblPrice14Days.TabIndex = 312;
-            this.lblPrice14Days.Text = "no data";
-            // 
-            // label355
-            // 
-            this.label355.AutoSize = true;
-            this.label355.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label355.Font = new System.Drawing.Font("Century Gothic", 7F);
-            this.label355.ForeColor = System.Drawing.Color.Silver;
-            this.label355.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label355.Location = new System.Drawing.Point(3, 330);
-            this.label355.Name = "label355";
-            this.label355.Size = new System.Drawing.Size(39, 15);
-            this.label355.TabIndex = 326;
-            this.label355.Text = "1 year";
-            this.toolTipGeneralUse.SetToolTip(this.label355, "Market capitalization, priced in selected currency");
-            // 
-            // progressBar1YearPrice
-            // 
-            this.progressBar1YearPrice.BarColor = System.Drawing.Color.DimGray;
-            this.progressBar1YearPrice.BorderColor = System.Drawing.Color.Transparent;
-            this.progressBar1YearPrice.FillStyle = ColorProgressBar.ColorProgressBar.FillStyles.Solid;
-            this.progressBar1YearPrice.ForeColor = System.Drawing.Color.Gray;
-            this.progressBar1YearPrice.Location = new System.Drawing.Point(996, 511);
-            this.progressBar1YearPrice.Maximum = 10000000;
-            this.progressBar1YearPrice.Minimum = 0;
-            this.progressBar1YearPrice.Name = "progressBar1YearPrice";
-            this.progressBar1YearPrice.Size = new System.Drawing.Size(100, 8);
-            this.progressBar1YearPrice.Step = 10;
-            this.progressBar1YearPrice.TabIndex = 325;
-            this.toolTipGeneralUse.SetToolTip(this.progressBar1YearPrice, "The block at which the next halving will occur, \r\nXXand number of blocks remainin" +
-        "g");
-            this.progressBar1YearPrice.Value = 0;
-            // 
-            // lblPrice1Year
-            // 
-            this.lblPrice1Year.AutoSize = true;
-            this.lblPrice1Year.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblPrice1Year.Font = new System.Drawing.Font("Century Gothic", 7F);
-            this.lblPrice1Year.ForeColor = System.Drawing.Color.DimGray;
-            this.lblPrice1Year.Location = new System.Drawing.Point(176, 330);
-            this.lblPrice1Year.Name = "lblPrice1Year";
-            this.lblPrice1Year.Size = new System.Drawing.Size(48, 15);
-            this.lblPrice1Year.TabIndex = 324;
-            this.lblPrice1Year.Text = "no data";
-            // 
-            // label357
-            // 
-            this.label357.AutoSize = true;
-            this.label357.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label357.Font = new System.Drawing.Font("Century Gothic", 7F);
-            this.label357.ForeColor = System.Drawing.Color.Silver;
-            this.label357.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label357.Location = new System.Drawing.Point(3, 318);
-            this.label357.Name = "label357";
-            this.label357.Size = new System.Drawing.Size(52, 15);
-            this.label357.TabIndex = 323;
-            this.label357.Text = "200 days";
-            this.toolTipGeneralUse.SetToolTip(this.label357, "Market capitalization, priced in selected currency");
-            // 
-            // progressBar200DayPrice
-            // 
-            this.progressBar200DayPrice.BackColor = System.Drawing.Color.Black;
-            this.progressBar200DayPrice.BarColor = System.Drawing.Color.DimGray;
-            this.progressBar200DayPrice.BorderColor = System.Drawing.Color.Transparent;
-            this.progressBar200DayPrice.FillStyle = ColorProgressBar.ColorProgressBar.FillStyles.Solid;
-            this.progressBar200DayPrice.ForeColor = System.Drawing.Color.Gray;
-            this.progressBar200DayPrice.Location = new System.Drawing.Point(996, 499);
-            this.progressBar200DayPrice.Maximum = 10000000;
-            this.progressBar200DayPrice.Minimum = 0;
-            this.progressBar200DayPrice.Name = "progressBar200DayPrice";
-            this.progressBar200DayPrice.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.progressBar200DayPrice.Size = new System.Drawing.Size(100, 8);
-            this.progressBar200DayPrice.Step = 10;
-            this.progressBar200DayPrice.TabIndex = 322;
-            this.toolTipGeneralUse.SetToolTip(this.progressBar200DayPrice, "The block at which the next halving will occur, \r\nXXand number of blocks remainin" +
-        "g");
-            this.progressBar200DayPrice.Value = 0;
-            // 
-            // lblPrice200Days
-            // 
-            this.lblPrice200Days.AutoSize = true;
-            this.lblPrice200Days.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblPrice200Days.Font = new System.Drawing.Font("Century Gothic", 7F);
-            this.lblPrice200Days.ForeColor = System.Drawing.Color.DimGray;
-            this.lblPrice200Days.Location = new System.Drawing.Point(176, 318);
-            this.lblPrice200Days.Name = "lblPrice200Days";
-            this.lblPrice200Days.Size = new System.Drawing.Size(48, 15);
-            this.lblPrice200Days.TabIndex = 321;
-            this.lblPrice200Days.Text = "no data";
-            // 
-            // label359
-            // 
-            this.label359.AutoSize = true;
-            this.label359.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label359.Font = new System.Drawing.Font("Century Gothic", 7F);
-            this.label359.ForeColor = System.Drawing.Color.Silver;
-            this.label359.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label359.Location = new System.Drawing.Point(3, 306);
-            this.label359.Name = "label359";
-            this.label359.Size = new System.Drawing.Size(46, 15);
-            this.label359.TabIndex = 320;
-            this.label359.Text = "60 days";
-            this.toolTipGeneralUse.SetToolTip(this.label359, "Market capitalization, priced in selected currency");
-            // 
-            // progressBar60DayPrice
-            // 
-            this.progressBar60DayPrice.BarColor = System.Drawing.Color.DimGray;
-            this.progressBar60DayPrice.BorderColor = System.Drawing.Color.Transparent;
-            this.progressBar60DayPrice.FillStyle = ColorProgressBar.ColorProgressBar.FillStyles.Solid;
-            this.progressBar60DayPrice.ForeColor = System.Drawing.Color.Gray;
-            this.progressBar60DayPrice.Location = new System.Drawing.Point(996, 487);
-            this.progressBar60DayPrice.Maximum = 10000000;
-            this.progressBar60DayPrice.Minimum = 0;
-            this.progressBar60DayPrice.Name = "progressBar60DayPrice";
-            this.progressBar60DayPrice.Size = new System.Drawing.Size(100, 8);
-            this.progressBar60DayPrice.Step = 10;
-            this.progressBar60DayPrice.TabIndex = 319;
-            this.toolTipGeneralUse.SetToolTip(this.progressBar60DayPrice, "The block at which the next halving will occur, \r\nXXand number of blocks remainin" +
-        "g");
-            this.progressBar60DayPrice.Value = 0;
-            // 
-            // lblPrice60Days
-            // 
-            this.lblPrice60Days.AutoSize = true;
-            this.lblPrice60Days.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblPrice60Days.Font = new System.Drawing.Font("Century Gothic", 7F);
-            this.lblPrice60Days.ForeColor = System.Drawing.Color.DimGray;
-            this.lblPrice60Days.Location = new System.Drawing.Point(176, 306);
-            this.lblPrice60Days.Name = "lblPrice60Days";
-            this.lblPrice60Days.Size = new System.Drawing.Size(48, 15);
-            this.lblPrice60Days.TabIndex = 318;
-            this.lblPrice60Days.Text = "no data";
-            // 
-            // panel7
-            // 
-            this.panel7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.panel7.Controls.Add(this.panel1year);
-            this.panel7.Controls.Add(this.panel200days);
-            this.panel7.Controls.Add(this.panel60days);
-            this.panel7.Controls.Add(this.panel30days);
-            this.panel7.Controls.Add(this.panel14days);
-            this.panel7.Controls.Add(this.panel7days);
-            this.panel7.Controls.Add(this.panel24hours);
-            this.panel7.Controls.Add(this.panel57);
-            this.panel7.Location = new System.Drawing.Point(54, 258);
-            this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(122, 88);
-            this.panel7.TabIndex = 326;
-            // 
-            // panel57
-            // 
-            this.panel57.BackColor = System.Drawing.Color.Black;
-            this.panel57.ForeColor = System.Drawing.Color.Black;
-            this.panel57.Location = new System.Drawing.Point(60, 0);
-            this.panel57.Name = "panel57";
-            this.panel57.Size = new System.Drawing.Size(1, 88);
-            this.panel57.TabIndex = 0;
-            // 
-            // panel24hours
-            // 
-            this.panel24hours.BackColor = System.Drawing.Color.OliveDrab;
-            this.panel24hours.Location = new System.Drawing.Point(60, 4);
-            this.panel24hours.Name = "panel24hours";
-            this.panel24hours.Size = new System.Drawing.Size(40, 8);
-            this.panel24hours.TabIndex = 1;
-            // 
-            // panel7days
-            // 
-            this.panel7days.BackColor = System.Drawing.Color.OliveDrab;
-            this.panel7days.Location = new System.Drawing.Point(60, 16);
-            this.panel7days.Name = "panel7days";
-            this.panel7days.Size = new System.Drawing.Size(40, 8);
-            this.panel7days.TabIndex = 2;
-            // 
-            // panel14days
-            // 
-            this.panel14days.BackColor = System.Drawing.Color.OliveDrab;
-            this.panel14days.Location = new System.Drawing.Point(60, 28);
-            this.panel14days.Name = "panel14days";
-            this.panel14days.Size = new System.Drawing.Size(40, 8);
-            this.panel14days.TabIndex = 3;
-            // 
-            // panel30days
-            // 
-            this.panel30days.BackColor = System.Drawing.Color.OliveDrab;
-            this.panel30days.Location = new System.Drawing.Point(60, 40);
-            this.panel30days.Name = "panel30days";
-            this.panel30days.Size = new System.Drawing.Size(40, 8);
-            this.panel30days.TabIndex = 4;
-            // 
-            // panel60days
-            // 
-            this.panel60days.BackColor = System.Drawing.Color.OliveDrab;
-            this.panel60days.Location = new System.Drawing.Point(60, 52);
-            this.panel60days.Name = "panel60days";
-            this.panel60days.Size = new System.Drawing.Size(40, 8);
-            this.panel60days.TabIndex = 5;
-            // 
-            // panel200days
-            // 
-            this.panel200days.BackColor = System.Drawing.Color.OliveDrab;
-            this.panel200days.Location = new System.Drawing.Point(60, 64);
-            this.panel200days.Name = "panel200days";
-            this.panel200days.Size = new System.Drawing.Size(40, 8);
-            this.panel200days.TabIndex = 6;
-            // 
-            // panel1year
-            // 
-            this.panel1year.BackColor = System.Drawing.Color.OliveDrab;
-            this.panel1year.Location = new System.Drawing.Point(60, 76);
-            this.panel1year.Name = "panel1year";
-            this.panel1year.Size = new System.Drawing.Size(30, 8);
-            this.panel1year.TabIndex = 7;
+            // panel148
+            // 
+            this.panel148.BackColor = System.Drawing.Color.White;
+            this.panel148.ForeColor = System.Drawing.Color.Black;
+            this.panel148.Location = new System.Drawing.Point(0, 13);
+            this.panel148.Name = "panel148";
+            this.panel148.Size = new System.Drawing.Size(122, 1);
+            this.panel148.TabIndex = 8;
+            // 
+            // panel157
+            // 
+            this.panel157.BackColor = System.Drawing.Color.Black;
+            this.panel157.ForeColor = System.Drawing.Color.Black;
+            this.panel157.Location = new System.Drawing.Point(0, 25);
+            this.panel157.Name = "panel157";
+            this.panel157.Size = new System.Drawing.Size(122, 1);
+            this.panel157.TabIndex = 9;
+            // 
+            // panel177
+            // 
+            this.panel177.BackColor = System.Drawing.Color.Black;
+            this.panel177.ForeColor = System.Drawing.Color.Black;
+            this.panel177.Location = new System.Drawing.Point(0, 37);
+            this.panel177.Name = "panel177";
+            this.panel177.Size = new System.Drawing.Size(122, 1);
+            this.panel177.TabIndex = 10;
+            // 
+            // panel178
+            // 
+            this.panel178.BackColor = System.Drawing.Color.Black;
+            this.panel178.ForeColor = System.Drawing.Color.Black;
+            this.panel178.Location = new System.Drawing.Point(0, 49);
+            this.panel178.Name = "panel178";
+            this.panel178.Size = new System.Drawing.Size(122, 1);
+            this.panel178.TabIndex = 11;
+            // 
+            // panel179
+            // 
+            this.panel179.BackColor = System.Drawing.Color.Black;
+            this.panel179.ForeColor = System.Drawing.Color.Black;
+            this.panel179.Location = new System.Drawing.Point(0, 61);
+            this.panel179.Name = "panel179";
+            this.panel179.Size = new System.Drawing.Size(122, 1);
+            this.panel179.TabIndex = 12;
+            // 
+            // panel180
+            // 
+            this.panel180.BackColor = System.Drawing.Color.Black;
+            this.panel180.ForeColor = System.Drawing.Color.Black;
+            this.panel180.Location = new System.Drawing.Point(0, 73);
+            this.panel180.Name = "panel180";
+            this.panel180.Size = new System.Drawing.Size(122, 1);
+            this.panel180.TabIndex = 13;
             // 
             // SATSuma
             // 
@@ -21936,34 +21874,27 @@
             this.BackgroundImage = global::SATSuma.Properties.Resources.Genesis;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
-            this.ClientSize = new System.Drawing.Size(1940, 754);
+            this.ClientSize = new System.Drawing.Size(940, 754);
             this.Controls.Add(this.lblHeaderBlockFeesChart);
-            this.Controls.Add(this.progressBar1YearPrice);
             this.Controls.Add(this.lblHeaderNextBlockTotalFees);
             this.Controls.Add(this.lblHeaderFeeRangeChart);
             this.Controls.Add(this.lblHeaderNextBlockMinMaxFee);
-            this.Controls.Add(this.progressBar200DayPrice);
             this.Controls.Add(this.label150);
             this.Controls.Add(this.label110);
             this.Controls.Add(this.panelBitcoinDashboard);
-            this.Controls.Add(this.progressBar60DayPrice);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.label107);
-            this.Controls.Add(this.progressBar30DayPrice);
             this.Controls.Add(this.lblHeaderTimestamp);
             this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.label29);
-            this.Controls.Add(this.progressBar14DayPrice);
             this.Controls.Add(this.label28);
             this.Controls.Add(this.label25);
             this.Controls.Add(this.label15);
-            this.Controls.Add(this.progressBar7DayPrice);
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelAddressUTXO);
-            this.Controls.Add(this.progressBar24HPrice);
             this.Controls.Add(this.panelMiningHashrate);
             this.Controls.Add(this.panelMiningBlocks);
             this.Controls.Add(this.panelDCACalculator);
@@ -22026,6 +21957,7 @@
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.SATSuma_Paint);
             this.panelBitcoinDashboard.ResumeLayout(false);
             this.panelBitcoinDashboard.PerformLayout();
+            this.panel7.ResumeLayout(false);
             this.panel109.ResumeLayout(false);
             this.panel109.PerformLayout();
             this.panel12.ResumeLayout(false);
@@ -22034,10 +21966,10 @@
             this.panel10.ResumeLayout(false);
             this.panel10.PerformLayout();
             this.panel6.ResumeLayout(false);
-            this.panel8.ResumeLayout(false);
-            this.panel8.PerformLayout();
             this.panel9.ResumeLayout(false);
             this.panel9.PerformLayout();
+            this.panel8.ResumeLayout(false);
+            this.panel8.PerformLayout();
             this.panelBlockList.ResumeLayout(false);
             this.panelBlockList.PerformLayout();
             this.panel94.ResumeLayout(false);
@@ -22443,7 +22375,6 @@
             this.panel164.ResumeLayout(false);
             this.panel164.PerformLayout();
             this.panelPriceSourceIndicatorsOuter.ResumeLayout(false);
-            this.panel7.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -23796,27 +23727,20 @@
         private System.Windows.Forms.Label lbl24HoursLowestPrice;
         private System.Windows.Forms.Label lbl24HoursHighestPrice;
         private System.Windows.Forms.Label label345;
-        private ColorProgressBar.ColorProgressBar progressBar24HPrice;
         private System.Windows.Forms.Label lblPrice24Hours;
         private System.Windows.Forms.Label label353;
         private System.Windows.Forms.Label label354;
         private System.Windows.Forms.Label label347;
-        private ColorProgressBar.ColorProgressBar progressBar7DayPrice;
         private System.Windows.Forms.Label lblPrice7Days;
         private System.Windows.Forms.Label label349;
-        private ColorProgressBar.ColorProgressBar progressBar30DayPrice;
         private System.Windows.Forms.Label lblPrice30Days;
         private System.Windows.Forms.Label label351;
-        private ColorProgressBar.ColorProgressBar progressBar14DayPrice;
         private System.Windows.Forms.Label lblPrice14Days;
         private System.Windows.Forms.Label label355;
-        private ColorProgressBar.ColorProgressBar progressBar1YearPrice;
         private System.Windows.Forms.Label lblPrice1Year;
         private System.Windows.Forms.Label label357;
-        private ColorProgressBar.ColorProgressBar progressBar200DayPrice;
         private System.Windows.Forms.Label lblPrice200Days;
         private System.Windows.Forms.Label label359;
-        private ColorProgressBar.ColorProgressBar progressBar60DayPrice;
         private System.Windows.Forms.Label lblPrice60Days;
         private System.Windows.Forms.Panel panel7;
         private System.Windows.Forms.Panel panel57;
@@ -23827,6 +23751,12 @@
         private System.Windows.Forms.Panel panel200days;
         private System.Windows.Forms.Panel panel60days;
         private System.Windows.Forms.Panel panel30days;
+        private System.Windows.Forms.Panel panel148;
+        private System.Windows.Forms.Panel panel180;
+        private System.Windows.Forms.Panel panel179;
+        private System.Windows.Forms.Panel panel178;
+        private System.Windows.Forms.Panel panel177;
+        private System.Windows.Forms.Panel panel157;
     }
 }
 

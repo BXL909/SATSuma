@@ -118,7 +118,17 @@
             this.lblHeaderBlockSize = new System.Windows.Forms.Label();
             this.lblElapsedSinceUpdate = new System.Windows.Forms.Label();
             this.panelBitcoinDashboard = new System.Windows.Forms.Panel();
+            this.label339 = new System.Windows.Forms.Label();
+            this.label333 = new System.Windows.Forms.Label();
+            this.label80 = new System.Windows.Forms.Label();
             this.panel7 = new System.Windows.Forms.Panel();
+            this.panel180 = new System.Windows.Forms.Panel();
+            this.panel179 = new System.Windows.Forms.Panel();
+            this.panel178 = new System.Windows.Forms.Panel();
+            this.panel177 = new System.Windows.Forms.Panel();
+            this.panel157 = new System.Windows.Forms.Panel();
+            this.panel148 = new System.Windows.Forms.Panel();
+            this.panel57 = new System.Windows.Forms.Panel();
             this.panel1year = new System.Windows.Forms.Panel();
             this.panel200days = new System.Windows.Forms.Panel();
             this.panel60days = new System.Windows.Forms.Panel();
@@ -126,7 +136,6 @@
             this.panel14days = new System.Windows.Forms.Panel();
             this.panel7days = new System.Windows.Forms.Panel();
             this.panel24hours = new System.Windows.Forms.Panel();
-            this.panel57 = new System.Windows.Forms.Panel();
             this.label355 = new System.Windows.Forms.Label();
             this.lblPrice1Year = new System.Windows.Forms.Label();
             this.label357 = new System.Windows.Forms.Label();
@@ -1399,12 +1408,6 @@
             this.label319 = new System.Windows.Forms.Label();
             this.PoolsListScrollTimer = new System.Windows.Forms.Timer(this.components);
             this.panelPriceSourceIndicatorsOuter = new System.Windows.Forms.Panel();
-            this.panel148 = new System.Windows.Forms.Panel();
-            this.panel157 = new System.Windows.Forms.Panel();
-            this.panel177 = new System.Windows.Forms.Panel();
-            this.panel178 = new System.Windows.Forms.Panel();
-            this.panel179 = new System.Windows.Forms.Panel();
-            this.panel180 = new System.Windows.Forms.Panel();
             this.panelBitcoinDashboard.SuspendLayout();
             this.panel7.SuspendLayout();
             this.panel109.SuspendLayout();
@@ -2995,6 +2998,9 @@
             // panelBitcoinDashboard
             // 
             this.panelBitcoinDashboard.BackColor = System.Drawing.Color.Transparent;
+            this.panelBitcoinDashboard.Controls.Add(this.label339);
+            this.panelBitcoinDashboard.Controls.Add(this.label333);
+            this.panelBitcoinDashboard.Controls.Add(this.label80);
             this.panelBitcoinDashboard.Controls.Add(this.panel7);
             this.panelBitcoinDashboard.Controls.Add(this.label355);
             this.panelBitcoinDashboard.Controls.Add(this.lblPrice1Year);
@@ -3116,6 +3122,48 @@
             this.panelBitcoinDashboard.Visible = false;
             this.panelBitcoinDashboard.VisibleChanged += new System.EventHandler(this.HideBookmarksShowFees);
             // 
+            // label339
+            // 
+            this.label339.AutoSize = true;
+            this.label339.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label339.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label339.ForeColor = System.Drawing.Color.Silver;
+            this.label339.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label339.Location = new System.Drawing.Point(69, 220);
+            this.label339.Name = "label339";
+            this.label339.Size = new System.Drawing.Size(19, 17);
+            this.label339.TabIndex = 329;
+            this.label339.Text = " / ";
+            this.toolTipGeneralUse.SetToolTip(this.label339, "Value of 1 unit of selected currency, priced in sats");
+            // 
+            // label333
+            // 
+            this.label333.AutoSize = true;
+            this.label333.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label333.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label333.ForeColor = System.Drawing.Color.Silver;
+            this.label333.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label333.Location = new System.Drawing.Point(71, 184);
+            this.label333.Name = "label333";
+            this.label333.Size = new System.Drawing.Size(19, 17);
+            this.label333.TabIndex = 328;
+            this.label333.Text = " / ";
+            this.toolTipGeneralUse.SetToolTip(this.label333, "Value of 1 unit of selected currency, priced in sats");
+            // 
+            // label80
+            // 
+            this.label80.AutoSize = true;
+            this.label80.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label80.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label80.ForeColor = System.Drawing.Color.Silver;
+            this.label80.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.label80.Location = new System.Drawing.Point(72, 148);
+            this.label80.Name = "label80";
+            this.label80.Size = new System.Drawing.Size(19, 17);
+            this.label80.TabIndex = 327;
+            this.label80.Text = " / ";
+            this.toolTipGeneralUse.SetToolTip(this.label80, "Value of 1 unit of selected currency, priced in sats");
+            // 
             // panel7
             // 
             this.panel7.BackColor = System.Drawing.Color.Silver;
@@ -3137,6 +3185,69 @@
             this.panel7.Name = "panel7";
             this.panel7.Size = new System.Drawing.Size(122, 88);
             this.panel7.TabIndex = 326;
+            // 
+            // panel180
+            // 
+            this.panel180.BackColor = System.Drawing.Color.Black;
+            this.panel180.ForeColor = System.Drawing.Color.Black;
+            this.panel180.Location = new System.Drawing.Point(0, 73);
+            this.panel180.Name = "panel180";
+            this.panel180.Size = new System.Drawing.Size(122, 1);
+            this.panel180.TabIndex = 13;
+            // 
+            // panel179
+            // 
+            this.panel179.BackColor = System.Drawing.Color.Black;
+            this.panel179.ForeColor = System.Drawing.Color.Black;
+            this.panel179.Location = new System.Drawing.Point(0, 61);
+            this.panel179.Name = "panel179";
+            this.panel179.Size = new System.Drawing.Size(122, 1);
+            this.panel179.TabIndex = 12;
+            // 
+            // panel178
+            // 
+            this.panel178.BackColor = System.Drawing.Color.Black;
+            this.panel178.ForeColor = System.Drawing.Color.Black;
+            this.panel178.Location = new System.Drawing.Point(0, 49);
+            this.panel178.Name = "panel178";
+            this.panel178.Size = new System.Drawing.Size(122, 1);
+            this.panel178.TabIndex = 11;
+            // 
+            // panel177
+            // 
+            this.panel177.BackColor = System.Drawing.Color.Black;
+            this.panel177.ForeColor = System.Drawing.Color.Black;
+            this.panel177.Location = new System.Drawing.Point(0, 37);
+            this.panel177.Name = "panel177";
+            this.panel177.Size = new System.Drawing.Size(122, 1);
+            this.panel177.TabIndex = 10;
+            // 
+            // panel157
+            // 
+            this.panel157.BackColor = System.Drawing.Color.Black;
+            this.panel157.ForeColor = System.Drawing.Color.Black;
+            this.panel157.Location = new System.Drawing.Point(0, 25);
+            this.panel157.Name = "panel157";
+            this.panel157.Size = new System.Drawing.Size(122, 1);
+            this.panel157.TabIndex = 9;
+            // 
+            // panel148
+            // 
+            this.panel148.BackColor = System.Drawing.Color.Black;
+            this.panel148.ForeColor = System.Drawing.Color.Black;
+            this.panel148.Location = new System.Drawing.Point(0, 13);
+            this.panel148.Name = "panel148";
+            this.panel148.Size = new System.Drawing.Size(122, 1);
+            this.panel148.TabIndex = 8;
+            // 
+            // panel57
+            // 
+            this.panel57.BackColor = System.Drawing.Color.Black;
+            this.panel57.ForeColor = System.Drawing.Color.Black;
+            this.panel57.Location = new System.Drawing.Point(60, 0);
+            this.panel57.Name = "panel57";
+            this.panel57.Size = new System.Drawing.Size(1, 88);
+            this.panel57.TabIndex = 0;
             // 
             // panel1year
             // 
@@ -3193,15 +3304,6 @@
             this.panel24hours.Name = "panel24hours";
             this.panel24hours.Size = new System.Drawing.Size(40, 8);
             this.panel24hours.TabIndex = 1;
-            // 
-            // panel57
-            // 
-            this.panel57.BackColor = System.Drawing.Color.Black;
-            this.panel57.ForeColor = System.Drawing.Color.Black;
-            this.panel57.Location = new System.Drawing.Point(60, 0);
-            this.panel57.Name = "panel57";
-            this.panel57.Size = new System.Drawing.Size(1, 88);
-            this.panel57.TabIndex = 0;
             // 
             // label355
             // 
@@ -3432,9 +3534,9 @@
             this.label345.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.label345.Location = new System.Drawing.Point(3, 205);
             this.label345.Name = "label345";
-            this.label345.Size = new System.Drawing.Size(195, 17);
+            this.label345.Size = new System.Drawing.Size(159, 17);
             this.label345.TabIndex = 291;
-            this.label345.Text = "24h highest / lowest price (USD)";
+            this.label345.Text = "24h highest / lowest price";
             this.toolTipGeneralUse.SetToolTip(this.label345, "Market capitalization, priced in selected currency");
             // 
             // lblATHDaysElapsed
@@ -3508,9 +3610,9 @@
             this.label338.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.label338.Location = new System.Drawing.Point(3, 133);
             this.label338.Name = "label338";
-            this.label338.Size = new System.Drawing.Size(212, 17);
+            this.label338.Size = new System.Drawing.Size(198, 17);
             this.label338.TabIndex = 285;
-            this.label338.Text = "All-time high (USD) / ATH % change";
+            this.label338.Text = "All-time high / change since ATH";
             this.toolTipGeneralUse.SetToolTip(this.label338, "Market capitalization, priced in selected currency");
             // 
             // label229
@@ -4230,7 +4332,7 @@
             this.lblMarketCapLabel.Name = "lblMarketCapLabel";
             this.lblMarketCapLabel.Size = new System.Drawing.Size(113, 17);
             this.lblMarketCapLabel.TabIndex = 90;
-            this.lblMarketCapLabel.Text = "Market cap (USD)";
+            this.lblMarketCapLabel.Text = "Market cap";
             this.toolTipGeneralUse.SetToolTip(this.lblMarketCapLabel, "Market capitalization, priced in selected currency");
             // 
             // lblMoscowTime
@@ -20207,7 +20309,7 @@
             this.lblHeaderFeeRangeChart.TabIndex = 298;
             this.lblHeaderFeeRangeChart.Text = "📈";
             this.toolTipGeneralUse.SetToolTip(this.lblHeaderFeeRangeChart, "fee rates chart");
-            this.lblHeaderFeeRangeChart.Click += new System.EventHandler(this.lblHeaderFeeRangeChart_Click);
+            this.lblHeaderFeeRangeChart.Click += new System.EventHandler(this.LblHeaderFeeRangeChart_Click);
             // 
             // lblHeaderNextBlockMinMaxFee
             // 
@@ -20235,7 +20337,7 @@
             this.lblHeaderBlockFeesChart.TabIndex = 301;
             this.lblHeaderBlockFeesChart.Text = "📈";
             this.toolTipGeneralUse.SetToolTip(this.lblHeaderBlockFeesChart, "fees chart");
-            this.lblHeaderBlockFeesChart.Click += new System.EventHandler(this.lblHeaderBlockFeesChart_Click);
+            this.lblHeaderBlockFeesChart.Click += new System.EventHandler(this.LblHeaderBlockFeesChart_Click);
             // 
             // lblHeaderNextBlockTotalFees
             // 
@@ -21811,60 +21913,6 @@
             this.panelPriceSourceIndicatorsOuter.Name = "panelPriceSourceIndicatorsOuter";
             this.panelPriceSourceIndicatorsOuter.Size = new System.Drawing.Size(66, 13);
             this.panelPriceSourceIndicatorsOuter.TabIndex = 292;
-            // 
-            // panel148
-            // 
-            this.panel148.BackColor = System.Drawing.Color.White;
-            this.panel148.ForeColor = System.Drawing.Color.Black;
-            this.panel148.Location = new System.Drawing.Point(0, 13);
-            this.panel148.Name = "panel148";
-            this.panel148.Size = new System.Drawing.Size(122, 1);
-            this.panel148.TabIndex = 8;
-            // 
-            // panel157
-            // 
-            this.panel157.BackColor = System.Drawing.Color.Black;
-            this.panel157.ForeColor = System.Drawing.Color.Black;
-            this.panel157.Location = new System.Drawing.Point(0, 25);
-            this.panel157.Name = "panel157";
-            this.panel157.Size = new System.Drawing.Size(122, 1);
-            this.panel157.TabIndex = 9;
-            // 
-            // panel177
-            // 
-            this.panel177.BackColor = System.Drawing.Color.Black;
-            this.panel177.ForeColor = System.Drawing.Color.Black;
-            this.panel177.Location = new System.Drawing.Point(0, 37);
-            this.panel177.Name = "panel177";
-            this.panel177.Size = new System.Drawing.Size(122, 1);
-            this.panel177.TabIndex = 10;
-            // 
-            // panel178
-            // 
-            this.panel178.BackColor = System.Drawing.Color.Black;
-            this.panel178.ForeColor = System.Drawing.Color.Black;
-            this.panel178.Location = new System.Drawing.Point(0, 49);
-            this.panel178.Name = "panel178";
-            this.panel178.Size = new System.Drawing.Size(122, 1);
-            this.panel178.TabIndex = 11;
-            // 
-            // panel179
-            // 
-            this.panel179.BackColor = System.Drawing.Color.Black;
-            this.panel179.ForeColor = System.Drawing.Color.Black;
-            this.panel179.Location = new System.Drawing.Point(0, 61);
-            this.panel179.Name = "panel179";
-            this.panel179.Size = new System.Drawing.Size(122, 1);
-            this.panel179.TabIndex = 12;
-            // 
-            // panel180
-            // 
-            this.panel180.BackColor = System.Drawing.Color.Black;
-            this.panel180.ForeColor = System.Drawing.Color.Black;
-            this.panel180.Location = new System.Drawing.Point(0, 73);
-            this.panel180.Name = "panel180";
-            this.panel180.Size = new System.Drawing.Size(122, 1);
-            this.panel180.TabIndex = 13;
             // 
             // SATSuma
             // 
@@ -23757,6 +23805,9 @@
         private System.Windows.Forms.Panel panel178;
         private System.Windows.Forms.Panel panel177;
         private System.Windows.Forms.Panel panel157;
+        private System.Windows.Forms.Label label339;
+        private System.Windows.Forms.Label label333;
+        private System.Windows.Forms.Label label80;
     }
 }
 

@@ -1,5 +1,5 @@
 ﻿//!_______________________________________________________________________________________________________
-//![](resources\SatsumaButton-4.png)v2.2
+//![](resources\SatsumaButton-4.png)v2.5
 //!A block explorer, Xpub viewer, bitcoin & lightning dashboard, DCA calculator, multiple onchain & market
 //!charts, directory, fiat converter and loads more, with the ability to create encryted bookmarks and 
 //!notes, select from multiple preset themes or create your own. Xpub queries will only work on the users's
@@ -13,14 +13,11 @@
 //TODO LIST______________________________________________________________________________________________
 //TODO Taproot support on xpub screen 
 //TODO documentation for new pools screens (code done, pages created, just do text)
-//TODO testing, particularly new pools screens on own node
 //TODO clean up new market json, allow for nulls
-//TODO non-USD currencies on the new fields on btc dashboard
-//TODO non-USD labels on the new fields on btc dashboard
-//TODO apply theme to new fields on btc dashboard
 //TODO replace bitcoinexplorer.org as a price source?
-//TODO header fee labels need a pixel or 2 extra space before them
+//TODO testing
 //BUG LIST_______________________________________________________________________________________________
+//BUG XAU symbol not rendering on fiat conversion fields. Probably too small a font. Replace with circle or just a space? Or a G?
 //!_______________________________________________________________________________________________________
 #region Using
 using CustomControls.RJControls;
@@ -1001,7 +998,7 @@ namespace SATSuma
                         UpdateLabelValueAsync(lblHeaderfeesHighPriority, fastestFee);
                         label15.Invoke((MethodInvoker)delegate
                         {
-                            label15.Location = new Point(lblHeaderfeesHighPriority.Location.X + lblHeaderfeesHighPriority.Width - 21, label15.Location.Y);
+                            label15.Location = new Point(lblHeaderfeesHighPriority.Location.X + lblHeaderfeesHighPriority.Width - (int)(13 * UIScale), label15.Location.Y);
                         });
                         lblHeaderFeesMediumPriority.Invoke((MethodInvoker)delegate
                         {
@@ -1010,7 +1007,7 @@ namespace SATSuma
                         UpdateLabelValueAsync(lblHeaderFeesMediumPriority, halfHourFee);
                         label25.Invoke((MethodInvoker)delegate
                         {
-                            label25.Location = new Point(lblHeaderFeesMediumPriority.Location.X + lblHeaderFeesMediumPriority.Width - 21, label25.Location.Y);
+                            label25.Location = new Point(lblHeaderFeesMediumPriority.Location.X + lblHeaderFeesMediumPriority.Width - (int)(13 * UIScale), label25.Location.Y);
                         });
                         lblHeaderFeesLowPriority.Invoke((MethodInvoker)delegate
                         {
@@ -1019,7 +1016,7 @@ namespace SATSuma
                         UpdateLabelValueAsync(lblHeaderFeesLowPriority, hourFee);
                         label28.Invoke((MethodInvoker)delegate
                         {
-                            label28.Location = new Point(lblHeaderFeesLowPriority.Location.X + lblHeaderFeesLowPriority.Width - 21, label28.Location.Y);
+                            label28.Location = new Point(lblHeaderFeesLowPriority.Location.X + lblHeaderFeesLowPriority.Width - (int)(13 * UIScale), label28.Location.Y);
                         });
                         lblHeaderFeesNoPriority.Invoke((MethodInvoker)delegate
                         {
@@ -1028,7 +1025,7 @@ namespace SATSuma
                         UpdateLabelValueAsync(lblHeaderFeesNoPriority, economyFee);
                         label29.Invoke((MethodInvoker)delegate
                         {
-                            label29.Location = new Point(lblHeaderFeesNoPriority.Location.X + lblHeaderFeesNoPriority.Width - 21, label29.Location.Y);
+                            label29.Location = new Point(lblHeaderFeesNoPriority.Location.X + lblHeaderFeesNoPriority.Width - (int)(13 * UIScale), label29.Location.Y);
                         });
                         lblHeaderFeeRatesChart.Invoke((MethodInvoker)delegate
                         {
@@ -1676,284 +1673,1109 @@ namespace SATSuma
                             {
                                 var CoinGeckoMarketDataJson = await _coinGeckoMarketDataService.GetCoinGeckoMarketDataAsync().ConfigureAwait(true);
                                 var coinGeckoMarketData = JsonConvert.DeserializeObject<Rootobject>(CoinGeckoMarketDataJson);
-                                //USD
-                                if (btnUSD.Enabled == false)
+
+                                if (coinGeckoMarketData != null)
                                 {
-                                    UpdateLabelValueAsync(lblATH, "$" + Convert.ToString(coinGeckoMarketData.market_data.ath.usd));
-                                    lblATHPercentChange.Invoke((MethodInvoker)delegate
+                                    //USD
+                                    if (btnUSD.Enabled == false)
                                     {
-                                        lblATHPercentChange.Text = Convert.ToString(coinGeckoMarketData.market_data.ath_change_percentage.usd);
-                                    });
-                                    UpdateLabelValueAsync(lblATHDate, Convert.ToString(coinGeckoMarketData.market_data.ath_date.usd).Substring(0, 10));
+                                        UpdateLabelValueAsync(lblATH, "$" + Convert.ToString(coinGeckoMarketData.Market_data.Ath.usd));
+                                        lblATHPercentChange.Invoke((MethodInvoker)delegate
+                                        {
+                                            lblATHPercentChange.Text = coinGeckoMarketData.Market_data.Ath_change_percentage.usd.ToString("F2") + "%";
+                                        });
+                                        UpdateLabelValueAsync(lblATHDate, Convert.ToString(coinGeckoMarketData.Market_data.Ath_date.usd).Substring(0, 10));
 
-                                    DateTime parsedDate = DateTime.ParseExact(lblATHDate.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                                    DateTime currentDate = DateTime.Now.Date;
-                                    TimeSpan difference = currentDate - parsedDate;
-                                    lblATHDaysElapsed.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblATHDaysElapsed.Text = Convert.ToString(difference.Days);
-                                    });
+                                        DateTime parsedDate = DateTime.ParseExact(lblATHDate.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                                        DateTime currentDate = DateTime.Now.Date;
+                                        TimeSpan difference = currentDate - parsedDate;
+                                        lblATHDaysElapsed.Invoke((MethodInvoker)delegate
+                                        {
+                                            lblATHDaysElapsed.Text = Convert.ToString(difference.Days) + " days ago";
+                                        });
 
-                                    UpdateLabelValueAsync(lbl24HoursHighestPrice, "$" + Convert.ToString(coinGeckoMarketData.market_data.high_24h.usd));
-                                    UpdateLabelValueAsync(lbl24HoursLowestPrice, "$" + Convert.ToString(coinGeckoMarketData.market_data.low_24h.usd));
+                                        UpdateLabelValueAsync(lbl24HoursHighestPrice, "$" + Convert.ToString(coinGeckoMarketData.Market_data.high_24h.usd));
+                                        UpdateLabelValueAsync(lbl24HoursLowestPrice, "$" + Convert.ToString(coinGeckoMarketData.Market_data.low_24h.usd));
 
-                                    #region numeric values next to mini-chart
-                                    //24 hours
-                                    if (Math.Abs(coinGeckoMarketData.market_data.price_change_percentage_24h_in_currency.usd) > highestAbsValuePriceChange)
-                                    {
-                                        highestAbsValuePriceChange = coinGeckoMarketData.market_data.price_change_percentage_24h_in_currency.usd;
-                                    }
-                                    UpdateLabelValueAsync(lblPrice24Hours, coinGeckoMarketData.market_data.price_change_percentage_24h_in_currency.usd.ToString("F2") + "%");
-                                    //7 days
-                                    if (Math.Abs(coinGeckoMarketData.market_data.price_change_percentage_7d_in_currency.usd) > highestAbsValuePriceChange)
-                                    {
-                                        highestAbsValuePriceChange = coinGeckoMarketData.market_data.price_change_percentage_7d_in_currency.usd;
-                                    }
-                                    UpdateLabelValueAsync(lblPrice7Days, coinGeckoMarketData.market_data.price_change_percentage_7d_in_currency.usd.ToString("F2") + "%");
-                                    //14 days 
-                                    if (Math.Abs(coinGeckoMarketData.market_data.price_change_percentage_14d) > highestAbsValuePriceChange)
-                                    {
-                                        highestAbsValuePriceChange = coinGeckoMarketData.market_data.price_change_percentage_14d_in_currency.usd;
-                                    }
-                                    UpdateLabelValueAsync(lblPrice14Days, coinGeckoMarketData.market_data.price_change_percentage_14d_in_currency.usd.ToString("F2") + "%");
-                                    //30 days
-                                    if (Math.Abs(coinGeckoMarketData.market_data.price_change_percentage_30d_in_currency.usd) > highestAbsValuePriceChange)
-                                    {
-                                        highestAbsValuePriceChange = coinGeckoMarketData.market_data.price_change_percentage_30d_in_currency.usd;
-                                    }
-                                    UpdateLabelValueAsync(lblPrice30Days, coinGeckoMarketData.market_data.price_change_percentage_30d_in_currency.usd.ToString("F2") + "%");
-                                    //60 days
-                                    if (Math.Abs(coinGeckoMarketData.market_data.price_change_percentage_60d_in_currency.usd) > highestAbsValuePriceChange)
-                                    {
-                                        highestAbsValuePriceChange = coinGeckoMarketData.market_data.price_change_percentage_60d_in_currency.usd;
-                                    }
-                                    UpdateLabelValueAsync(lblPrice60Days, coinGeckoMarketData.market_data.price_change_percentage_60d_in_currency.usd.ToString("F2") + "%");
-                                    //200 days
-                                    if (Math.Abs(coinGeckoMarketData.market_data.price_change_percentage_200d_in_currency.usd) > highestAbsValuePriceChange)
-                                    {
-                                        highestAbsValuePriceChange = coinGeckoMarketData.market_data.price_change_percentage_200d_in_currency.usd;
-                                    }
-                                    UpdateLabelValueAsync(lblPrice200Days, coinGeckoMarketData.market_data.price_change_percentage_200d_in_currency.usd.ToString("F2") + "%");
-                                    //1 year
-                                    if (Math.Abs(coinGeckoMarketData.market_data.price_change_percentage_1y_in_currency.usd) > highestAbsValuePriceChange)
-                                    {
-                                        highestAbsValuePriceChange = coinGeckoMarketData.market_data.price_change_percentage_1y_in_currency.usd;
-                                    }
-                                    UpdateLabelValueAsync(lblPrice1Year, coinGeckoMarketData.market_data.price_change_percentage_1y_in_currency.usd.ToString("F2") + "%");
-                                    #endregion
-
-                                    if (highestAbsValuePriceChange > 0)
-                                    {
+                                        #region numeric values next to mini-chart
                                         //24 hours
-                                        panel24hours.Invoke((MethodInvoker)delegate
+                                        if (Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_24h_in_currency.usd) > highestAbsValuePriceChange)
                                         {
-                                            panel24hours.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.market_data.price_change_percentage_24h_in_currency.usd) / highestAbsValuePriceChange) * (60.0 * UIScale));
-                                        });
-                                        if (panel24hours.Width == 0)
-                                        {
-                                            panel24hours.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel24hours.Width = 1;
-                                            });
+                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.price_change_percentage_24h_in_currency.usd;
                                         }
-                                        if (coinGeckoMarketData.market_data.price_change_percentage_24h_in_currency.usd >= 0)
-                                        {
-                                            panel24hours.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel24hours.Location = new Point((int)(61 * UIScale), panel24hours.Location.Y);
-                                                panel24hours.BackColor = Color.OliveDrab;
-                                            });
-                                        }
-                                        else
-                                        {
-                                            panel24hours.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel24hours.Location = new Point((int)(60 * UIScale) - panel24hours.Width, panel24hours.Location.Y);
-                                                panel24hours.BackColor = Color.IndianRed;
-                                            });
-                                        }
-
+                                        UpdateLabelValueAsync(lblPrice24Hours, coinGeckoMarketData.Market_data.price_change_percentage_24h_in_currency.usd.ToString("F2") + "%");
                                         //7 days
-                                        panel7days.Invoke((MethodInvoker)delegate
+                                        if (Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_7d_in_currency.usd) > highestAbsValuePriceChange)
                                         {
-                                            panel7days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.market_data.price_change_percentage_7d_in_currency.usd) / highestAbsValuePriceChange) * (60.0 * UIScale));
-                                        });
-
-                                        if (panel7days.Width == 0)
-                                        {
-                                            panel7days.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel7days.Width = 1;
-                                            });
+                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.price_change_percentage_7d_in_currency.usd;
                                         }
-                                        if (coinGeckoMarketData.market_data.price_change_percentage_7d_in_currency.usd >= 0)
+                                        UpdateLabelValueAsync(lblPrice7Days, coinGeckoMarketData.Market_data.price_change_percentage_7d_in_currency.usd.ToString("F2") + "%");
+                                        //14 days 
+                                        if (Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_14d) > highestAbsValuePriceChange)
                                         {
-                                            panel7days.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel7days.Location = new Point((int)(61 * UIScale), panel7days.Location.Y);
-                                                panel7days.BackColor = Color.OliveDrab;
-                                            });
+                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.price_change_percentage_14d_in_currency.usd;
                                         }
-                                        else
-                                        {
-                                            panel7days.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel7days.Location = new Point((int)(60 * UIScale) - panel7days.Width, panel7days.Location.Y);
-                                                panel7days.BackColor = Color.IndianRed;
-                                            });
-                                        }
-
-                                        //14 days
-                                        panel14days.Invoke((MethodInvoker)delegate
-                                        {
-                                            panel14days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.market_data.price_change_percentage_14d_in_currency.usd) / highestAbsValuePriceChange) * (60.0 * UIScale));
-                                        });
-                                        if (panel14days.Width == 0)
-                                        {
-                                            panel14days.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel14days.Width = 1;
-                                            });
-                                        }
-                                        if (coinGeckoMarketData.market_data.price_change_percentage_14d_in_currency.usd >= 0)
-                                        {
-                                            panel14days.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel14days.Location = new Point((int)(61 * UIScale), panel14days.Location.Y);
-                                                panel14days.BackColor = Color.OliveDrab;
-                                            });
-                                        }
-                                        else
-                                        {
-                                            panel14days.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel14days.Location = new Point((int)(60 * UIScale) - panel14days.Width, panel14days.Location.Y);
-                                                panel14days.BackColor = Color.IndianRed;
-                                            });
-                                        }
-
+                                        UpdateLabelValueAsync(lblPrice14Days, coinGeckoMarketData.Market_data.price_change_percentage_14d_in_currency.usd.ToString("F2") + "%");
                                         //30 days
-                                        panel30days.Invoke((MethodInvoker)delegate
+                                        if (Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_30d_in_currency.usd) > highestAbsValuePriceChange)
                                         {
-                                            panel30days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.market_data.price_change_percentage_30d_in_currency.usd) / highestAbsValuePriceChange) * (60.0 * UIScale));
-                                        });
-
-                                        if (panel30days.Width == 0)
-                                        {
-                                            panel30days.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel30days.Width = 1;
-                                            });
+                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.price_change_percentage_30d_in_currency.usd;
                                         }
-                                        if (coinGeckoMarketData.market_data.price_change_percentage_30d_in_currency.usd >= 0)
-                                        {
-                                            panel30days.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel30days.Location = new Point((int)(61 * UIScale), panel30days.Location.Y);
-                                                panel30days.BackColor = Color.OliveDrab;
-                                            });
-                                        }
-                                        else
-                                        {
-                                            panel30days.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel30days.Location = new Point((int)(60 * UIScale) - panel30days.Width, panel30days.Location.Y);
-                                                panel30days.BackColor = Color.IndianRed;
-                                            });
-                                        }
-
+                                        UpdateLabelValueAsync(lblPrice30Days, coinGeckoMarketData.Market_data.price_change_percentage_30d_in_currency.usd.ToString("F2") + "%");
                                         //60 days
-                                        panel60days.Invoke((MethodInvoker)delegate
+                                        if (Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_60d_in_currency.usd) > highestAbsValuePriceChange)
                                         {
-                                            panel60days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.market_data.price_change_percentage_60d_in_currency.usd) / highestAbsValuePriceChange) * (60.0 * UIScale));
-                                        });
-                                        if (panel60days.Width == 0)
-                                        {
-                                            panel60days.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel60days.Width = 1;
-                                            });
+                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.price_change_percentage_60d_in_currency.usd;
                                         }
-                                        if (coinGeckoMarketData.market_data.price_change_percentage_60d_in_currency.usd >= 0)
-                                        {
-                                            panel60days.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel60days.Location = new Point((int)(61 * UIScale), panel60days.Location.Y);
-                                                panel60days.BackColor = Color.OliveDrab;
-                                            });
-                                        }
-                                        else
-                                        {
-                                            panel60days.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel60days.Location = new Point((int)(60 * UIScale) - panel60days.Width, panel60days.Location.Y);
-                                                panel60days.BackColor = Color.IndianRed;
-                                            });
-                                        }
-
+                                        UpdateLabelValueAsync(lblPrice60Days, coinGeckoMarketData.Market_data.price_change_percentage_60d_in_currency.usd.ToString("F2") + "%");
                                         //200 days
-                                        panel200days.Invoke((MethodInvoker)delegate
+                                        if (Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_200d_in_currency.usd) > highestAbsValuePriceChange)
                                         {
-                                            panel200days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.market_data.price_change_percentage_200d_in_currency.usd) / highestAbsValuePriceChange) * (60.0 * UIScale));
-                                        });
-                                        if (panel200days.Width == 0)
-                                        {
-                                            panel200days.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel200days.Width = 1;
-                                            });
+                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.price_change_percentage_200d_in_currency.usd;
                                         }
-                                        if (coinGeckoMarketData.market_data.price_change_percentage_200d_in_currency.usd >= 0)
-                                        {
-                                            panel200days.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel200days.Location = new Point((int)(61 * UIScale), panel200days.Location.Y);
-                                                panel200days.BackColor = Color.OliveDrab;
-                                            });
-                                        }
-                                        else
-                                        {
-                                            panel200days.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel200days.Location = new Point((int)(60 * UIScale) - panel200days.Width, panel200days.Location.Y);
-                                                panel200days.BackColor = Color.IndianRed;
-                                            });
-                                        }
-
+                                        UpdateLabelValueAsync(lblPrice200Days, coinGeckoMarketData.Market_data.price_change_percentage_200d_in_currency.usd.ToString("F2") + "%");
                                         //1 year
-                                        panel1year.Invoke((MethodInvoker)delegate
+                                        if (Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_1y_in_currency.usd) > highestAbsValuePriceChange)
                                         {
-                                            panel1year.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.market_data.price_change_percentage_1y_in_currency.usd) / highestAbsValuePriceChange) * (60.0 * UIScale));
-                                        });
-                                        if (panel1year.Width == 0)
-                                        {
-                                            panel1year.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel1year.Width = 1;
-                                            });
+                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.price_change_percentage_1y_in_currency.usd;
                                         }
-                                        if (coinGeckoMarketData.market_data.price_change_percentage_1y_in_currency.usd >= 0)
+                                        UpdateLabelValueAsync(lblPrice1Year, coinGeckoMarketData.Market_data.price_change_percentage_1y_in_currency.usd.ToString("F2") + "%");
+                                        #endregion
+
+                                        if (highestAbsValuePriceChange > 0)
                                         {
+                                            //24 hours
+                                            panel24hours.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel24hours.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_24h_in_currency.usd) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                            });
+                                            if (panel24hours.Width == 0)
+                                            {
+                                                panel24hours.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel24hours.Width = 1;
+                                                });
+                                            }
+                                            if (coinGeckoMarketData.Market_data.price_change_percentage_24h_in_currency.usd >= 0)
+                                            {
+                                                panel24hours.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel24hours.Location = new Point((int)(61 * UIScale), panel24hours.Location.Y);
+                                                    panel24hours.BackColor = Color.OliveDrab;
+                                                });
+                                            }
+                                            else
+                                            {
+                                                panel24hours.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel24hours.Location = new Point((int)(60 * UIScale) - panel24hours.Width, panel24hours.Location.Y);
+                                                    panel24hours.BackColor = Color.IndianRed;
+                                                });
+                                            }
+
+                                            //7 days
+                                            panel7days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel7days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_7d_in_currency.usd) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                            });
+
+                                            if (panel7days.Width == 0)
+                                            {
+                                                panel7days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel7days.Width = 1;
+                                                });
+                                            }
+                                            if (coinGeckoMarketData.Market_data.price_change_percentage_7d_in_currency.usd >= 0)
+                                            {
+                                                panel7days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel7days.Location = new Point((int)(61 * UIScale), panel7days.Location.Y);
+                                                    panel7days.BackColor = Color.OliveDrab;
+                                                });
+                                            }
+                                            else
+                                            {
+                                                panel7days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel7days.Location = new Point((int)(60 * UIScale) - panel7days.Width, panel7days.Location.Y);
+                                                    panel7days.BackColor = Color.IndianRed;
+                                                });
+                                            }
+
+                                            //14 days
+                                            panel14days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel14days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_14d_in_currency.usd) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                            });
+                                            if (panel14days.Width == 0)
+                                            {
+                                                panel14days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel14days.Width = 1;
+                                                });
+                                            }
+                                            if (coinGeckoMarketData.Market_data.price_change_percentage_14d_in_currency.usd >= 0)
+                                            {
+                                                panel14days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel14days.Location = new Point((int)(61 * UIScale), panel14days.Location.Y);
+                                                    panel14days.BackColor = Color.OliveDrab;
+                                                });
+                                            }
+                                            else
+                                            {
+                                                panel14days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel14days.Location = new Point((int)(60 * UIScale) - panel14days.Width, panel14days.Location.Y);
+                                                    panel14days.BackColor = Color.IndianRed;
+                                                });
+                                            }
+
+                                            //30 days
+                                            panel30days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel30days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_30d_in_currency.usd) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                            });
+
+                                            if (panel30days.Width == 0)
+                                            {
+                                                panel30days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel30days.Width = 1;
+                                                });
+                                            }
+                                            if (coinGeckoMarketData.Market_data.price_change_percentage_30d_in_currency.usd >= 0)
+                                            {
+                                                panel30days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel30days.Location = new Point((int)(61 * UIScale), panel30days.Location.Y);
+                                                    panel30days.BackColor = Color.OliveDrab;
+                                                });
+                                            }
+                                            else
+                                            {
+                                                panel30days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel30days.Location = new Point((int)(60 * UIScale) - panel30days.Width, panel30days.Location.Y);
+                                                    panel30days.BackColor = Color.IndianRed;
+                                                });
+                                            }
+
+                                            //60 days
+                                            panel60days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel60days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_60d_in_currency.usd) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                            });
+                                            if (panel60days.Width == 0)
+                                            {
+                                                panel60days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel60days.Width = 1;
+                                                });
+                                            }
+                                            if (coinGeckoMarketData.Market_data.price_change_percentage_60d_in_currency.usd >= 0)
+                                            {
+                                                panel60days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel60days.Location = new Point((int)(61 * UIScale), panel60days.Location.Y);
+                                                    panel60days.BackColor = Color.OliveDrab;
+                                                });
+                                            }
+                                            else
+                                            {
+                                                panel60days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel60days.Location = new Point((int)(60 * UIScale) - panel60days.Width, panel60days.Location.Y);
+                                                    panel60days.BackColor = Color.IndianRed;
+                                                });
+                                            }
+
+                                            //200 days
+                                            panel200days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel200days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_200d_in_currency.usd) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                            });
+                                            if (panel200days.Width == 0)
+                                            {
+                                                panel200days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel200days.Width = 1;
+                                                });
+                                            }
+                                            if (coinGeckoMarketData.Market_data.price_change_percentage_200d_in_currency.usd >= 0)
+                                            {
+                                                panel200days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel200days.Location = new Point((int)(61 * UIScale), panel200days.Location.Y);
+                                                    panel200days.BackColor = Color.OliveDrab;
+                                                });
+                                            }
+                                            else
+                                            {
+                                                panel200days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel200days.Location = new Point((int)(60 * UIScale) - panel200days.Width, panel200days.Location.Y);
+                                                    panel200days.BackColor = Color.IndianRed;
+                                                });
+                                            }
+
+                                            //1 year
                                             panel1year.Invoke((MethodInvoker)delegate
                                             {
-                                                panel1year.Location = new Point((int)(61 * UIScale), panel1year.Location.Y);
-                                                panel1year.BackColor = Color.OliveDrab;
+                                                panel1year.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_1y_in_currency.usd) / highestAbsValuePriceChange) * (60.0 * UIScale));
                                             });
-                                        }
-                                        else
-                                        {
-                                            panel1year.Invoke((MethodInvoker)delegate
+                                            if (panel1year.Width == 0)
                                             {
-                                                panel1year.Location = new Point((int)(60 * UIScale) - panel1year.Width, panel1year.Location.Y);
-                                                panel1year.BackColor = Color.IndianRed;
-                                            });
+                                                panel1year.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel1year.Width = 1;
+                                                });
+                                            }
+                                            if (coinGeckoMarketData.Market_data.price_change_percentage_1y_in_currency.usd >= 0)
+                                            {
+                                                panel1year.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel1year.Location = new Point((int)(61 * UIScale), panel1year.Location.Y);
+                                                    panel1year.BackColor = Color.OliveDrab;
+                                                });
+                                            }
+                                            else
+                                            {
+                                                panel1year.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel1year.Location = new Point((int)(60 * UIScale) - panel1year.Width, panel1year.Location.Y);
+                                                    panel1year.BackColor = Color.IndianRed;
+                                                });
+                                            }
                                         }
                                     }
+                                    //GBP
+                                    if (btnGBP.Enabled == false)
+                                    {
+                                        UpdateLabelValueAsync(lblATH, "£" + Convert.ToString(coinGeckoMarketData.Market_data.Ath.gbp));
+                                        lblATHPercentChange.Invoke((MethodInvoker)delegate
+                                        {
+                                            lblATHPercentChange.Text = coinGeckoMarketData.Market_data.Ath_change_percentage.gbp.ToString("F2") + "%";
+                                        });
+                                        UpdateLabelValueAsync(lblATHDate, Convert.ToString(coinGeckoMarketData.Market_data.Ath_date.gbp).Substring(0, 10));
 
+                                        DateTime parsedDate = DateTime.ParseExact(lblATHDate.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                                        DateTime currentDate = DateTime.Now.Date;
+                                        TimeSpan difference = currentDate - parsedDate;
+                                        lblATHDaysElapsed.Invoke((MethodInvoker)delegate
+                                        {
+                                            lblATHDaysElapsed.Text = Convert.ToString(difference.Days) + " days ago";
+                                        });
 
+                                        UpdateLabelValueAsync(lbl24HoursHighestPrice, "£" + Convert.ToString(coinGeckoMarketData.Market_data.high_24h.gbp));
+                                        UpdateLabelValueAsync(lbl24HoursLowestPrice, "£" + Convert.ToString(coinGeckoMarketData.Market_data.low_24h.gbp));
+
+                                        #region numeric values next to mini-chart
+                                        //24 hours
+                                        if (Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_24h_in_currency.gbp) > highestAbsValuePriceChange)
+                                        {
+                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.price_change_percentage_24h_in_currency.gbp;
+                                        }
+                                        UpdateLabelValueAsync(lblPrice24Hours, coinGeckoMarketData.Market_data.price_change_percentage_24h_in_currency.gbp.ToString("F2") + "%");
+                                        //7 days
+                                        if (Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_7d_in_currency.gbp) > highestAbsValuePriceChange)
+                                        {
+                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.price_change_percentage_7d_in_currency.gbp;
+                                        }
+                                        UpdateLabelValueAsync(lblPrice7Days, coinGeckoMarketData.Market_data.price_change_percentage_7d_in_currency.gbp.ToString("F2") + "%");
+                                        //14 days 
+                                        if (Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_14d) > highestAbsValuePriceChange)
+                                        {
+                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.price_change_percentage_14d_in_currency.gbp;
+                                        }
+                                        UpdateLabelValueAsync(lblPrice14Days, coinGeckoMarketData.Market_data.price_change_percentage_14d_in_currency.gbp.ToString("F2") + "%");
+                                        //30 days
+                                        if (Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_30d_in_currency.gbp) > highestAbsValuePriceChange)
+                                        {
+                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.price_change_percentage_30d_in_currency.gbp;
+                                        }
+                                        UpdateLabelValueAsync(lblPrice30Days, coinGeckoMarketData.Market_data.price_change_percentage_30d_in_currency.gbp.ToString("F2") + "%");
+                                        //60 days
+                                        if (Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_60d_in_currency.gbp) > highestAbsValuePriceChange)
+                                        {
+                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.price_change_percentage_60d_in_currency.gbp;
+                                        }
+                                        UpdateLabelValueAsync(lblPrice60Days, coinGeckoMarketData.Market_data.price_change_percentage_60d_in_currency.gbp.ToString("F2") + "%");
+                                        //200 days
+                                        if (Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_200d_in_currency.gbp) > highestAbsValuePriceChange)
+                                        {
+                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.price_change_percentage_200d_in_currency.gbp;
+                                        }
+                                        UpdateLabelValueAsync(lblPrice200Days, coinGeckoMarketData.Market_data.price_change_percentage_200d_in_currency.gbp.ToString("F2") + "%");
+                                        //1 year
+                                        if (Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_1y_in_currency.gbp) > highestAbsValuePriceChange)
+                                        {
+                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.price_change_percentage_1y_in_currency.gbp;
+                                        }
+                                        UpdateLabelValueAsync(lblPrice1Year, coinGeckoMarketData.Market_data.price_change_percentage_1y_in_currency.gbp.ToString("F2") + "%");
+                                        #endregion
+
+                                        if (highestAbsValuePriceChange > 0)
+                                        {
+                                            //24 hours
+                                            panel24hours.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel24hours.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_24h_in_currency.gbp) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                            });
+                                            if (panel24hours.Width == 0)
+                                            {
+                                                panel24hours.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel24hours.Width = 1;
+                                                });
+                                            }
+                                            if (coinGeckoMarketData.Market_data.price_change_percentage_24h_in_currency.gbp >= 0)
+                                            {
+                                                panel24hours.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel24hours.Location = new Point((int)(61 * UIScale), panel24hours.Location.Y);
+                                                    panel24hours.BackColor = Color.OliveDrab;
+                                                });
+                                            }
+                                            else
+                                            {
+                                                panel24hours.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel24hours.Location = new Point((int)(60 * UIScale) - panel24hours.Width, panel24hours.Location.Y);
+                                                    panel24hours.BackColor = Color.IndianRed;
+                                                });
+                                            }
+
+                                            //7 days
+                                            panel7days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel7days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_7d_in_currency.gbp) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                            });
+
+                                            if (panel7days.Width == 0)
+                                            {
+                                                panel7days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel7days.Width = 1;
+                                                });
+                                            }
+                                            if (coinGeckoMarketData.Market_data.price_change_percentage_7d_in_currency.gbp >= 0)
+                                            {
+                                                panel7days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel7days.Location = new Point((int)(61 * UIScale), panel7days.Location.Y);
+                                                    panel7days.BackColor = Color.OliveDrab;
+                                                });
+                                            }
+                                            else
+                                            {
+                                                panel7days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel7days.Location = new Point((int)(60 * UIScale) - panel7days.Width, panel7days.Location.Y);
+                                                    panel7days.BackColor = Color.IndianRed;
+                                                });
+                                            }
+
+                                            //14 days
+                                            panel14days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel14days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_14d_in_currency.gbp) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                            });
+                                            if (panel14days.Width == 0)
+                                            {
+                                                panel14days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel14days.Width = 1;
+                                                });
+                                            }
+                                            if (coinGeckoMarketData.Market_data.price_change_percentage_14d_in_currency.gbp >= 0)
+                                            {
+                                                panel14days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel14days.Location = new Point((int)(61 * UIScale), panel14days.Location.Y);
+                                                    panel14days.BackColor = Color.OliveDrab;
+                                                });
+                                            }
+                                            else
+                                            {
+                                                panel14days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel14days.Location = new Point((int)(60 * UIScale) - panel14days.Width, panel14days.Location.Y);
+                                                    panel14days.BackColor = Color.IndianRed;
+                                                });
+                                            }
+
+                                            //30 days
+                                            panel30days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel30days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_30d_in_currency.gbp) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                            });
+
+                                            if (panel30days.Width == 0)
+                                            {
+                                                panel30days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel30days.Width = 1;
+                                                });
+                                            }
+                                            if (coinGeckoMarketData.Market_data.price_change_percentage_30d_in_currency.gbp >= 0)
+                                            {
+                                                panel30days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel30days.Location = new Point((int)(61 * UIScale), panel30days.Location.Y);
+                                                    panel30days.BackColor = Color.OliveDrab;
+                                                });
+                                            }
+                                            else
+                                            {
+                                                panel30days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel30days.Location = new Point((int)(60 * UIScale) - panel30days.Width, panel30days.Location.Y);
+                                                    panel30days.BackColor = Color.IndianRed;
+                                                });
+                                            }
+
+                                            //60 days
+                                            panel60days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel60days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_60d_in_currency.gbp) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                            });
+                                            if (panel60days.Width == 0)
+                                            {
+                                                panel60days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel60days.Width = 1;
+                                                });
+                                            }
+                                            if (coinGeckoMarketData.Market_data.price_change_percentage_60d_in_currency.gbp >= 0)
+                                            {
+                                                panel60days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel60days.Location = new Point((int)(61 * UIScale), panel60days.Location.Y);
+                                                    panel60days.BackColor = Color.OliveDrab;
+                                                });
+                                            }
+                                            else
+                                            {
+                                                panel60days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel60days.Location = new Point((int)(60 * UIScale) - panel60days.Width, panel60days.Location.Y);
+                                                    panel60days.BackColor = Color.IndianRed;
+                                                });
+                                            }
+
+                                            //200 days
+                                            panel200days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel200days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_200d_in_currency.gbp) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                            });
+                                            if (panel200days.Width == 0)
+                                            {
+                                                panel200days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel200days.Width = 1;
+                                                });
+                                            }
+                                            if (coinGeckoMarketData.Market_data.price_change_percentage_200d_in_currency.gbp >= 0)
+                                            {
+                                                panel200days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel200days.Location = new Point((int)(61 * UIScale), panel200days.Location.Y);
+                                                    panel200days.BackColor = Color.OliveDrab;
+                                                });
+                                            }
+                                            else
+                                            {
+                                                panel200days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel200days.Location = new Point((int)(60 * UIScale) - panel200days.Width, panel200days.Location.Y);
+                                                    panel200days.BackColor = Color.IndianRed;
+                                                });
+                                            }
+
+                                            //1 year
+                                            panel1year.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel1year.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_1y_in_currency.gbp) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                            });
+                                            if (panel1year.Width == 0)
+                                            {
+                                                panel1year.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel1year.Width = 1;
+                                                });
+                                            }
+                                            if (coinGeckoMarketData.Market_data.price_change_percentage_1y_in_currency.gbp >= 0)
+                                            {
+                                                panel1year.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel1year.Location = new Point((int)(61 * UIScale), panel1year.Location.Y);
+                                                    panel1year.BackColor = Color.OliveDrab;
+                                                });
+                                            }
+                                            else
+                                            {
+                                                panel1year.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel1year.Location = new Point((int)(60 * UIScale) - panel1year.Width, panel1year.Location.Y);
+                                                    panel1year.BackColor = Color.IndianRed;
+                                                });
+                                            }
+                                        }
+
+                                    }
+                                    //EUR
+                                    if (btnEUR.Enabled == false)
+                                    {
+                                        UpdateLabelValueAsync(lblATH, "€" + Convert.ToString(coinGeckoMarketData.Market_data.Ath.eur));
+                                        lblATHPercentChange.Invoke((MethodInvoker)delegate
+                                        {
+                                            lblATHPercentChange.Text = coinGeckoMarketData.Market_data.Ath_change_percentage.eur.ToString("F2") + "%";
+                                        });
+                                        UpdateLabelValueAsync(lblATHDate, Convert.ToString(coinGeckoMarketData.Market_data.Ath_date.eur).Substring(0, 10));
+
+                                        DateTime parsedDate = DateTime.ParseExact(lblATHDate.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                                        DateTime currentDate = DateTime.Now.Date;
+                                        TimeSpan difference = currentDate - parsedDate;
+                                        lblATHDaysElapsed.Invoke((MethodInvoker)delegate
+                                        {
+                                            lblATHDaysElapsed.Text = Convert.ToString(difference.Days) + " days ago";
+                                        });
+
+                                        UpdateLabelValueAsync(lbl24HoursHighestPrice, "€" + Convert.ToString(coinGeckoMarketData.Market_data.high_24h.eur));
+                                        UpdateLabelValueAsync(lbl24HoursLowestPrice, "€" + Convert.ToString(coinGeckoMarketData.Market_data.low_24h.eur));
+
+                                        #region numeric values next to mini-chart
+                                        //24 hours
+                                        if (Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_24h_in_currency.eur) > highestAbsValuePriceChange)
+                                        {
+                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.price_change_percentage_24h_in_currency.eur;
+                                        }
+                                        UpdateLabelValueAsync(lblPrice24Hours, coinGeckoMarketData.Market_data.price_change_percentage_24h_in_currency.eur.ToString("F2") + "%");
+                                        //7 days
+                                        if (Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_7d_in_currency.eur) > highestAbsValuePriceChange)
+                                        {
+                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.price_change_percentage_7d_in_currency.eur;
+                                        }
+                                        UpdateLabelValueAsync(lblPrice7Days, coinGeckoMarketData.Market_data.price_change_percentage_7d_in_currency.eur.ToString("F2") + "%");
+                                        //14 days 
+                                        if (Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_14d) > highestAbsValuePriceChange)
+                                        {
+                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.price_change_percentage_14d_in_currency.eur;
+                                        }
+                                        UpdateLabelValueAsync(lblPrice14Days, coinGeckoMarketData.Market_data.price_change_percentage_14d_in_currency.eur.ToString("F2") + "%");
+                                        //30 days
+                                        if (Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_30d_in_currency.eur) > highestAbsValuePriceChange)
+                                        {
+                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.price_change_percentage_30d_in_currency.eur;
+                                        }
+                                        UpdateLabelValueAsync(lblPrice30Days, coinGeckoMarketData.Market_data.price_change_percentage_30d_in_currency.eur.ToString("F2") + "%");
+                                        //60 days
+                                        if (Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_60d_in_currency.eur) > highestAbsValuePriceChange)
+                                        {
+                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.price_change_percentage_60d_in_currency.eur;
+                                        }
+                                        UpdateLabelValueAsync(lblPrice60Days, coinGeckoMarketData.Market_data.price_change_percentage_60d_in_currency.eur.ToString("F2") + "%");
+                                        //200 days
+                                        if (Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_200d_in_currency.eur) > highestAbsValuePriceChange)
+                                        {
+                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.price_change_percentage_200d_in_currency.eur;
+                                        }
+                                        UpdateLabelValueAsync(lblPrice200Days, coinGeckoMarketData.Market_data.price_change_percentage_200d_in_currency.eur.ToString("F2") + "%");
+                                        //1 year
+                                        if (Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_1y_in_currency.eur) > highestAbsValuePriceChange)
+                                        {
+                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.price_change_percentage_1y_in_currency.eur;
+                                        }
+                                        UpdateLabelValueAsync(lblPrice1Year, coinGeckoMarketData.Market_data.price_change_percentage_1y_in_currency.eur.ToString("F2") + "%");
+                                        #endregion
+
+                                        if (highestAbsValuePriceChange > 0)
+                                        {
+                                            //24 hours
+                                            panel24hours.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel24hours.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_24h_in_currency.eur) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                            });
+                                            if (panel24hours.Width == 0)
+                                            {
+                                                panel24hours.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel24hours.Width = 1;
+                                                });
+                                            }
+                                            if (coinGeckoMarketData.Market_data.price_change_percentage_24h_in_currency.eur >= 0)
+                                            {
+                                                panel24hours.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel24hours.Location = new Point((int)(61 * UIScale), panel24hours.Location.Y);
+                                                    panel24hours.BackColor = Color.OliveDrab;
+                                                });
+                                            }
+                                            else
+                                            {
+                                                panel24hours.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel24hours.Location = new Point((int)(60 * UIScale) - panel24hours.Width, panel24hours.Location.Y);
+                                                    panel24hours.BackColor = Color.IndianRed;
+                                                });
+                                            }
+
+                                            //7 days
+                                            panel7days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel7days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_7d_in_currency.eur) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                            });
+
+                                            if (panel7days.Width == 0)
+                                            {
+                                                panel7days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel7days.Width = 1;
+                                                });
+                                            }
+                                            if (coinGeckoMarketData.Market_data.price_change_percentage_7d_in_currency.eur >= 0)
+                                            {
+                                                panel7days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel7days.Location = new Point((int)(61 * UIScale), panel7days.Location.Y);
+                                                    panel7days.BackColor = Color.OliveDrab;
+                                                });
+                                            }
+                                            else
+                                            {
+                                                panel7days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel7days.Location = new Point((int)(60 * UIScale) - panel7days.Width, panel7days.Location.Y);
+                                                    panel7days.BackColor = Color.IndianRed;
+                                                });
+                                            }
+
+                                            //14 days
+                                            panel14days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel14days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_14d_in_currency.eur) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                            });
+                                            if (panel14days.Width == 0)
+                                            {
+                                                panel14days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel14days.Width = 1;
+                                                });
+                                            }
+                                            if (coinGeckoMarketData.Market_data.price_change_percentage_14d_in_currency.eur >= 0)
+                                            {
+                                                panel14days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel14days.Location = new Point((int)(61 * UIScale), panel14days.Location.Y);
+                                                    panel14days.BackColor = Color.OliveDrab;
+                                                });
+                                            }
+                                            else
+                                            {
+                                                panel14days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel14days.Location = new Point((int)(60 * UIScale) - panel14days.Width, panel14days.Location.Y);
+                                                    panel14days.BackColor = Color.IndianRed;
+                                                });
+                                            }
+
+                                            //30 days
+                                            panel30days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel30days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_30d_in_currency.eur) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                            });
+
+                                            if (panel30days.Width == 0)
+                                            {
+                                                panel30days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel30days.Width = 1;
+                                                });
+                                            }
+                                            if (coinGeckoMarketData.Market_data.price_change_percentage_30d_in_currency.eur >= 0)
+                                            {
+                                                panel30days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel30days.Location = new Point((int)(61 * UIScale), panel30days.Location.Y);
+                                                    panel30days.BackColor = Color.OliveDrab;
+                                                });
+                                            }
+                                            else
+                                            {
+                                                panel30days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel30days.Location = new Point((int)(60 * UIScale) - panel30days.Width, panel30days.Location.Y);
+                                                    panel30days.BackColor = Color.IndianRed;
+                                                });
+                                            }
+
+                                            //60 days
+                                            panel60days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel60days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_60d_in_currency.eur) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                            });
+                                            if (panel60days.Width == 0)
+                                            {
+                                                panel60days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel60days.Width = 1;
+                                                });
+                                            }
+                                            if (coinGeckoMarketData.Market_data.price_change_percentage_60d_in_currency.eur >= 0)
+                                            {
+                                                panel60days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel60days.Location = new Point((int)(61 * UIScale), panel60days.Location.Y);
+                                                    panel60days.BackColor = Color.OliveDrab;
+                                                });
+                                            }
+                                            else
+                                            {
+                                                panel60days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel60days.Location = new Point((int)(60 * UIScale) - panel60days.Width, panel60days.Location.Y);
+                                                    panel60days.BackColor = Color.IndianRed;
+                                                });
+                                            }
+
+                                            //200 days
+                                            panel200days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel200days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_200d_in_currency.eur) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                            });
+                                            if (panel200days.Width == 0)
+                                            {
+                                                panel200days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel200days.Width = 1;
+                                                });
+                                            }
+                                            if (coinGeckoMarketData.Market_data.price_change_percentage_200d_in_currency.eur >= 0)
+                                            {
+                                                panel200days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel200days.Location = new Point((int)(61 * UIScale), panel200days.Location.Y);
+                                                    panel200days.BackColor = Color.OliveDrab;
+                                                });
+                                            }
+                                            else
+                                            {
+                                                panel200days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel200days.Location = new Point((int)(60 * UIScale) - panel200days.Width, panel200days.Location.Y);
+                                                    panel200days.BackColor = Color.IndianRed;
+                                                });
+                                            }
+
+                                            //1 year
+                                            panel1year.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel1year.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_1y_in_currency.eur) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                            });
+                                            if (panel1year.Width == 0)
+                                            {
+                                                panel1year.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel1year.Width = 1;
+                                                });
+                                            }
+                                            if (coinGeckoMarketData.Market_data.price_change_percentage_1y_in_currency.eur >= 0)
+                                            {
+                                                panel1year.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel1year.Location = new Point((int)(61 * UIScale), panel1year.Location.Y);
+                                                    panel1year.BackColor = Color.OliveDrab;
+                                                });
+                                            }
+                                            else
+                                            {
+                                                panel1year.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel1year.Location = new Point((int)(60 * UIScale) - panel1year.Width, panel1year.Location.Y);
+                                                    panel1year.BackColor = Color.IndianRed;
+                                                });
+                                            }
+                                        }
+
+                                    }
+                                    //XAU
+                                    if (btnXAU.Enabled == false)
+                                    {
+                                        UpdateLabelValueAsync(lblATH, "\U0001fa99" + Convert.ToString(coinGeckoMarketData.Market_data.Ath.xau));
+                                        lblATHPercentChange.Invoke((MethodInvoker)delegate
+                                        {
+                                            lblATHPercentChange.Text = coinGeckoMarketData.Market_data.Ath_change_percentage.xau.ToString("F2") + "%";
+                                        });
+                                        UpdateLabelValueAsync(lblATHDate, Convert.ToString(coinGeckoMarketData.Market_data.Ath_date.xau).Substring(0, 10));
+
+                                        DateTime parsedDate = DateTime.ParseExact(lblATHDate.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                                        DateTime currentDate = DateTime.Now.Date;
+                                        TimeSpan difference = currentDate - parsedDate;
+                                        lblATHDaysElapsed.Invoke((MethodInvoker)delegate
+                                        {
+                                            lblATHDaysElapsed.Text = Convert.ToString(difference.Days) + " days ago";
+                                        });
+
+                                        UpdateLabelValueAsync(lbl24HoursHighestPrice, "\U0001fa99" + Convert.ToString(coinGeckoMarketData.Market_data.high_24h.xau));
+                                        UpdateLabelValueAsync(lbl24HoursLowestPrice, "\U0001fa99" + Convert.ToString(coinGeckoMarketData.Market_data.low_24h.xau));
+
+                                        #region numeric values next to mini-chart
+                                        //24 hours
+                                        if (Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_24h_in_currency.xau) > highestAbsValuePriceChange)
+                                        {
+                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.price_change_percentage_24h_in_currency.xau;
+                                        }
+                                        UpdateLabelValueAsync(lblPrice24Hours, coinGeckoMarketData.Market_data.price_change_percentage_24h_in_currency.xau.ToString("F2") + "%");
+                                        //7 days
+                                        if (Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_7d_in_currency.xau) > highestAbsValuePriceChange)
+                                        {
+                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.price_change_percentage_7d_in_currency.xau;
+                                        }
+                                        UpdateLabelValueAsync(lblPrice7Days, coinGeckoMarketData.Market_data.price_change_percentage_7d_in_currency.xau.ToString("F2") + "%");
+                                        //14 days 
+                                        if (Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_14d) > highestAbsValuePriceChange)
+                                        {
+                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.price_change_percentage_14d_in_currency.xau;
+                                        }
+                                        UpdateLabelValueAsync(lblPrice14Days, coinGeckoMarketData.Market_data.price_change_percentage_14d_in_currency.xau.ToString("F2") + "%");
+                                        //30 days
+                                        if (Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_30d_in_currency.xau) > highestAbsValuePriceChange)
+                                        {
+                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.price_change_percentage_30d_in_currency.xau;
+                                        }
+                                        UpdateLabelValueAsync(lblPrice30Days, coinGeckoMarketData.Market_data.price_change_percentage_30d_in_currency.xau.ToString("F2") + "%");
+                                        //60 days
+                                        if (Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_60d_in_currency.xau) > highestAbsValuePriceChange)
+                                        {
+                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.price_change_percentage_60d_in_currency.xau;
+                                        }
+                                        UpdateLabelValueAsync(lblPrice60Days, coinGeckoMarketData.Market_data.price_change_percentage_60d_in_currency.xau.ToString("F2") + "%");
+                                        //200 days
+                                        if (Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_200d_in_currency.xau) > highestAbsValuePriceChange)
+                                        {
+                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.price_change_percentage_200d_in_currency.xau;
+                                        }
+                                        UpdateLabelValueAsync(lblPrice200Days, coinGeckoMarketData.Market_data.price_change_percentage_200d_in_currency.xau.ToString("F2") + "%");
+                                        //1 year
+                                        if (Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_1y_in_currency.xau) > highestAbsValuePriceChange)
+                                        {
+                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.price_change_percentage_1y_in_currency.xau;
+                                        }
+                                        UpdateLabelValueAsync(lblPrice1Year, coinGeckoMarketData.Market_data.price_change_percentage_1y_in_currency.xau.ToString("F2") + "%");
+                                        #endregion
+
+                                        if (highestAbsValuePriceChange > 0)
+                                        {
+                                            //24 hours
+                                            panel24hours.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel24hours.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_24h_in_currency.xau) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                            });
+                                            if (panel24hours.Width == 0)
+                                            {
+                                                panel24hours.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel24hours.Width = 1;
+                                                });
+                                            }
+                                            if (coinGeckoMarketData.Market_data.price_change_percentage_24h_in_currency.xau >= 0)
+                                            {
+                                                panel24hours.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel24hours.Location = new Point((int)(61 * UIScale), panel24hours.Location.Y);
+                                                    panel24hours.BackColor = Color.OliveDrab;
+                                                });
+                                            }
+                                            else
+                                            {
+                                                panel24hours.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel24hours.Location = new Point((int)(60 * UIScale) - panel24hours.Width, panel24hours.Location.Y);
+                                                    panel24hours.BackColor = Color.IndianRed;
+                                                });
+                                            }
+
+                                            //7 days
+                                            panel7days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel7days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_7d_in_currency.xau) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                            });
+
+                                            if (panel7days.Width == 0)
+                                            {
+                                                panel7days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel7days.Width = 1;
+                                                });
+                                            }
+                                            if (coinGeckoMarketData.Market_data.price_change_percentage_7d_in_currency.xau >= 0)
+                                            {
+                                                panel7days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel7days.Location = new Point((int)(61 * UIScale), panel7days.Location.Y);
+                                                    panel7days.BackColor = Color.OliveDrab;
+                                                });
+                                            }
+                                            else
+                                            {
+                                                panel7days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel7days.Location = new Point((int)(60 * UIScale) - panel7days.Width, panel7days.Location.Y);
+                                                    panel7days.BackColor = Color.IndianRed;
+                                                });
+                                            }
+
+                                            //14 days
+                                            panel14days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel14days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_14d_in_currency.xau) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                            });
+                                            if (panel14days.Width == 0)
+                                            {
+                                                panel14days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel14days.Width = 1;
+                                                });
+                                            }
+                                            if (coinGeckoMarketData.Market_data.price_change_percentage_14d_in_currency.xau >= 0)
+                                            {
+                                                panel14days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel14days.Location = new Point((int)(61 * UIScale), panel14days.Location.Y);
+                                                    panel14days.BackColor = Color.OliveDrab;
+                                                });
+                                            }
+                                            else
+                                            {
+                                                panel14days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel14days.Location = new Point((int)(60 * UIScale) - panel14days.Width, panel14days.Location.Y);
+                                                    panel14days.BackColor = Color.IndianRed;
+                                                });
+                                            }
+
+                                            //30 days
+                                            panel30days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel30days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_30d_in_currency.xau) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                            });
+
+                                            if (panel30days.Width == 0)
+                                            {
+                                                panel30days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel30days.Width = 1;
+                                                });
+                                            }
+                                            if (coinGeckoMarketData.Market_data.price_change_percentage_30d_in_currency.xau >= 0)
+                                            {
+                                                panel30days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel30days.Location = new Point((int)(61 * UIScale), panel30days.Location.Y);
+                                                    panel30days.BackColor = Color.OliveDrab;
+                                                });
+                                            }
+                                            else
+                                            {
+                                                panel30days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel30days.Location = new Point((int)(60 * UIScale) - panel30days.Width, panel30days.Location.Y);
+                                                    panel30days.BackColor = Color.IndianRed;
+                                                });
+                                            }
+
+                                            //60 days
+                                            panel60days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel60days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_60d_in_currency.xau) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                            });
+                                            if (panel60days.Width == 0)
+                                            {
+                                                panel60days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel60days.Width = 1;
+                                                });
+                                            }
+                                            if (coinGeckoMarketData.Market_data.price_change_percentage_60d_in_currency.xau >= 0)
+                                            {
+                                                panel60days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel60days.Location = new Point((int)(61 * UIScale), panel60days.Location.Y);
+                                                    panel60days.BackColor = Color.OliveDrab;
+                                                });
+                                            }
+                                            else
+                                            {
+                                                panel60days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel60days.Location = new Point((int)(60 * UIScale) - panel60days.Width, panel60days.Location.Y);
+                                                    panel60days.BackColor = Color.IndianRed;
+                                                });
+                                            }
+
+                                            //200 days
+                                            panel200days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel200days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_200d_in_currency.xau) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                            });
+                                            if (panel200days.Width == 0)
+                                            {
+                                                panel200days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel200days.Width = 1;
+                                                });
+                                            }
+                                            if (coinGeckoMarketData.Market_data.price_change_percentage_200d_in_currency.xau >= 0)
+                                            {
+                                                panel200days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel200days.Location = new Point((int)(61 * UIScale), panel200days.Location.Y);
+                                                    panel200days.BackColor = Color.OliveDrab;
+                                                });
+                                            }
+                                            else
+                                            {
+                                                panel200days.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel200days.Location = new Point((int)(60 * UIScale) - panel200days.Width, panel200days.Location.Y);
+                                                    panel200days.BackColor = Color.IndianRed;
+                                                });
+                                            }
+
+                                            //1 year
+                                            panel1year.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel1year.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.price_change_percentage_1y_in_currency.xau) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                            });
+                                            if (panel1year.Width == 0)
+                                            {
+                                                panel1year.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel1year.Width = 1;
+                                                });
+                                            }
+                                            if (coinGeckoMarketData.Market_data.price_change_percentage_1y_in_currency.xau >= 0)
+                                            {
+                                                panel1year.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel1year.Location = new Point((int)(61 * UIScale), panel1year.Location.Y);
+                                                    panel1year.BackColor = Color.OliveDrab;
+                                                });
+                                            }
+                                            else
+                                            {
+                                                panel1year.Invoke((MethodInvoker)delegate
+                                                {
+                                                    panel1year.Location = new Point((int)(60 * UIScale) - panel1year.Width, panel1year.Location.Y);
+                                                    panel1year.BackColor = Color.IndianRed;
+                                                });
+                                            }
+                                        }
+
+                                    }
                                 }
-
-
                             }
                             else
                             {
@@ -1979,13 +2801,29 @@ namespace SATSuma
                             }
                         }
                         #region shuffle stuff in to place
-                        lblPoolRankingChart.Invoke((MethodInvoker)delegate
+                        label80.Invoke((MethodInvoker)delegate
                         {
-                            lblPoolRankingChart.Location = new Point(lblBlocksIn24Hours.Location.X + lblBlocksIn24Hours.Width, lblPoolRankingChart.Location.Y);
+                            label80.Location = new Point(lblATH.Location.X + lblATH.Width, label80.Location.Y);
                         });
-                        lblUniqueAddressesChart.Invoke((MethodInvoker)delegate
+                        lblATHPercentChange.Invoke((MethodInvoker)delegate
                         {
-                            lblUniqueAddressesChart.Location = new Point(lblHodlingAddresses.Location.X + lblHodlingAddresses.Width, lblUniqueAddressesChart.Location.Y);
+                            lblATHPercentChange.Location = new Point(label80.Location.X + label80.Width, lblATHPercentChange.Location.Y);
+                        });
+                        label333.Invoke((MethodInvoker)delegate
+                        {
+                            label333.Location = new Point(lblATHDate.Location.X + lblATHDate.Width, label333.Location.Y);
+                        });
+                        lblATHDaysElapsed.Invoke((MethodInvoker)delegate
+                        {
+                            lblATHDaysElapsed.Location = new Point(label333.Location.X + label333.Width, lblATHDaysElapsed.Location.Y);
+                        });
+                        label339.Invoke((MethodInvoker)delegate
+                        {
+                            label339.Location = new Point(lbl24HoursHighestPrice.Location.X + lbl24HoursHighestPrice.Width, label339.Location.Y);
+                        });
+                        lbl24HoursLowestPrice.Invoke((MethodInvoker)delegate
+                        {
+                            lbl24HoursLowestPrice.Location = new Point(label339.Location.X + label339.Width, lbl24HoursLowestPrice.Location.Y);
                         });
                         #endregion
                         SetLightsMessagesAndResetTimers();
@@ -24993,7 +25831,7 @@ namespace SATSuma
                     });
                 }
                 //bitcoindashboard
-                Control[] listBitcoinDashboardDataFieldsToColor = { lblPrice, lblMoscowTime, lblMarketCapUSD, lblBTCInCirc, lblHodlingAddresses, lblTotalNoTransactions, lblBlocksIn24Hours, lbl24HourTransCount, lbl24HourBTCSent, lblTXInMempool, lblNextBlockMinMaxFee, lblNextBlockTotalFees, lblTransInNextBlock, lblAvgTimeBetweenBlocks, lblEstHashrate, lblNextDiffAdjBlock, lblDifficultyAdjEst, lblBlockSubsidy, lblProgressNextDiffAdjPercentage, lblBlocksUntilDiffAdj, lblEstDiffAdjDate, lblNodes, lblBlockchainSize, lblProgressToHalving, lblEstimatedHalvingDate, lblHalvingSecondsRemaining, lblBlockSubsidyAfterHalving, lblBTCToBeIssued, lblPercentIssued, lblDifficultyEpoch, lblNetworkAge, lblSubsidyEpoch, lblPrevDiffAdjustment };
+                Control[] listBitcoinDashboardDataFieldsToColor = { lblATH, lblATHPercentChange, lblATHDate, lblATHDaysElapsed, lbl24HoursHighestPrice, lbl24HoursLowestPrice, lblPrice14Days, lblPrice1Year, lblPrice200Days, lblPrice24Hours, lblPrice30Days, lblPrice60Days, lblPrice7Days, lblPrice, lblMoscowTime, lblMarketCapUSD, lblBTCInCirc, lblHodlingAddresses, lblTotalNoTransactions, lblBlocksIn24Hours, lbl24HourTransCount, lbl24HourBTCSent, lblTXInMempool, lblNextBlockMinMaxFee, lblNextBlockTotalFees, lblTransInNextBlock, lblAvgTimeBetweenBlocks, lblEstHashrate, lblNextDiffAdjBlock, lblDifficultyAdjEst, lblBlockSubsidy, lblProgressNextDiffAdjPercentage, lblBlocksUntilDiffAdj, lblEstDiffAdjDate, lblNodes, lblBlockchainSize, lblProgressToHalving, lblEstimatedHalvingDate, lblHalvingSecondsRemaining, lblBlockSubsidyAfterHalving, lblBTCToBeIssued, lblPercentIssued, lblDifficultyEpoch, lblNetworkAge, lblSubsidyEpoch, lblPrevDiffAdjustment };
                 foreach (Control control in listBitcoinDashboardDataFieldsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -25146,7 +25984,7 @@ namespace SATSuma
                     });
                 }
                 //bitcoindashboard
-                Control[] listBitcoinDashboardLabelsToColor = { label229, lblPoolRankingChart, lblDifficultyChart, lblHashrateChart, lblFeeRangeChart, lblBlockFeesChart, lblUniqueAddressesChart, lblChartCirculation, lblMarketCapChart, lblConverterChart, label296, label297, label301, label292, label294, lblPriceLabel, lblMoscowTimeLabel, lblMarketCapLabel, label7, label30, label14, label31, label10, label12, label11, label21, label20, label17, label27, label13, label9, label3, label2, label23, label134, label137, label32, label33, label57, label19, label85, lblPriceChart };
+                Control[] listBitcoinDashboardLabelsToColor = { label338, label341, label345, label353, label354, label347, label351, label349, label355, label357, label359, label80, label333, label339, label229, lblPoolRankingChart, lblDifficultyChart, lblHashrateChart, lblFeeRangeChart, lblBlockFeesChart, lblUniqueAddressesChart, lblChartCirculation, lblMarketCapChart, lblConverterChart, label296, label297, label301, label292, label294, lblPriceLabel, lblMoscowTimeLabel, lblMarketCapLabel, label7, label30, label14, label31, label10, label12, label11, label21, label20, label17, label27, label13, label9, label3, label2, label23, label134, label137, label32, label33, label57, label19, label85, lblPriceChart };
                 foreach (Control control in listBitcoinDashboardLabelsToColor)
                 {
                     control.Invoke((MethodInvoker)delegate
@@ -27589,10 +28427,6 @@ namespace SATSuma
                         {
                             lblPriceLabel.Text = "1 BTC / USD";
                         });
-                        lblMarketCapLabel.Invoke((MethodInvoker)delegate
-                        {
-                            lblMarketCapLabel.Text = "Market cap (USD)";
-                        });
                     }
                     if (!btnEUR.Enabled)
                     {
@@ -27622,10 +28456,7 @@ namespace SATSuma
                         {
                             lblPriceLabel.Text = "1 BTC / EUR";
                         });
-                        lblMarketCapLabel.Invoke((MethodInvoker)delegate
-                        {
-                            lblMarketCapLabel.Text = "Market cap (EUR)";
-                        });
+
                     }
                     if (!btnGBP.Enabled)
                     {
@@ -27655,10 +28486,6 @@ namespace SATSuma
                         {
                             lblPriceLabel.Text = "1 BTC / GBP";
                         });
-                        lblMarketCapLabel.Invoke((MethodInvoker)delegate
-                        {
-                            lblMarketCapLabel.Text = "Market cap (GBP)";
-                        });
                     }
                     if (!btnXAU.Enabled)
                     {
@@ -27677,10 +28504,6 @@ namespace SATSuma
                         lblPriceLabel.Invoke((MethodInvoker)delegate
                         {
                             lblPriceLabel.Text = "1 BTC / XAU";
-                        });
-                        lblMarketCapLabel.Invoke((MethodInvoker)delegate
-                        {
-                            lblMarketCapLabel.Text = "Market cap (XAU)";
                         });
                     }
 
@@ -27706,7 +28529,7 @@ namespace SATSuma
                                     {
                                         lblHeaderPriceChange.Visible = false;
                                     });
-                                    UpdateLabelValueAsync(lblHeaderPriceChange, "0"); // don't show a value for price change
+                                    UpdateLabelValueAsync(lblHeaderPriceChange, $"+{lblHeaderPrice.Text[0]}0"); // don't show a value for price change
                                 }
                                 else
                                 {
@@ -27723,7 +28546,7 @@ namespace SATSuma
                                 {
                                     lblHeaderPriceChange.Visible = false;
                                 });
-                                UpdateLabelValueAsync(lblHeaderPriceChange, "0"); // don't show a value for price change
+                                UpdateLabelValueAsync(lblHeaderPriceChange, $"+{lblHeaderPrice.Text[0]}0"); // don't show a value for price change
                             }
                         }
                         else
@@ -27732,7 +28555,7 @@ namespace SATSuma
                             {
                                 lblHeaderPriceChange.Visible = false;
                             });
-                            UpdateLabelValueAsync(lblHeaderPriceChange, "0"); // don't show a value for price change
+                            UpdateLabelValueAsync(lblHeaderPriceChange, $"+{lblHeaderPrice.Text[0]}0"); // don't show a value for price change
                         }
                     }
                     #endregion
@@ -27936,7 +28759,7 @@ namespace SATSuma
                     {
                         lblHeaderPriceChange.Visible = false;
                     });
-                    UpdateLabelValueAsync(lblHeaderPriceChange, "0"); // don't show a value for price change
+                    UpdateLabelValueAsync(lblHeaderPriceChange, $"+{lblHeaderPrice.Text[0]}0"); // don't show a value for price change
                 }
             }
             catch (WebException ex)
@@ -32468,6 +33291,10 @@ namespace SATSuma
                 }
                 #endregion
                 RefreshFiatValuesEverywhere();
+                lblHeaderPriceChange.Invoke((MethodInvoker)delegate
+                {
+                    lblHeaderPriceChange.Text = $"+{lblHeaderPrice.Text[0]}0";
+                });
             }
             catch (Exception ex)
             {
@@ -32526,6 +33353,10 @@ namespace SATSuma
                 }
                 #endregion
                 RefreshFiatValuesEverywhere();
+                lblHeaderPriceChange.Invoke((MethodInvoker)delegate
+                {
+                    lblHeaderPriceChange.Text = $"+{lblHeaderPrice.Text[0]}0";
+                });
             }
             catch (Exception ex)
             {
@@ -32584,6 +33415,10 @@ namespace SATSuma
                 }
                 #endregion
                 RefreshFiatValuesEverywhere();
+                lblHeaderPriceChange.Invoke((MethodInvoker)delegate
+                {
+                    lblHeaderPriceChange.Text = $"+{lblHeaderPrice.Text[0]}0";
+                });
             }
             catch (Exception ex)
             {
@@ -32642,6 +33477,10 @@ namespace SATSuma
                 }
                 #endregion
                 RefreshFiatValuesEverywhere();
+                lblHeaderPriceChange.Invoke((MethodInvoker)delegate
+                {
+                    lblHeaderPriceChange.Text = $"+{lblHeaderPrice.Text[0]}0";
+                });
             }
             catch (Exception ex)
             {
@@ -33288,7 +34127,7 @@ namespace SATSuma
             }
         }
 
-        private void lblHeaderFeeRangeChart_Click(object sender, EventArgs e)
+        private void LblHeaderFeeRangeChart_Click(object sender, EventArgs e)
         {
             try
             {
@@ -33301,7 +34140,7 @@ namespace SATSuma
             }
         }
 
-        private void lblHeaderBlockFeesChart_Click(object sender, EventArgs e)
+        private void LblHeaderBlockFeesChart_Click(object sender, EventArgs e)
         {
             try
             {
@@ -35162,19 +36001,19 @@ namespace SATSuma
 
         public class Rootobject
         {
-            public Market_Data market_data { get; set; }
+            public Market_Data Market_data { get; set; }
         }
 
         public class Market_Data
         {
-            public Current_Price current_price { get; set; }
-            public object total_value_locked { get; set; }
-            public object mcap_to_tvl_ratio { get; set; }
-            public object fdv_to_tvl_ratio { get; set; }
-            public object roi { get; set; }
-            public Ath ath { get; set; }
-            public Ath_Change_Percentage ath_change_percentage { get; set; }
-            public Ath_Date ath_date { get; set; }
+            public Current_Price Current_price { get; set; }
+            public object Total_value_locked { get; set; }
+            public object Mcap_to_tvl_ratio { get; set; }
+            public object Fdv_to_tvl_ratio { get; set; }
+            public object Roi { get; set; }
+            public Ath Ath { get; set; }
+            public Ath_Change_Percentage Ath_change_percentage { get; set; }
+            public Ath_Date Ath_date { get; set; }
             public Atl atl { get; set; }
             public Atl_Change_Percentage atl_change_percentage { get; set; }
             public Atl_Date atl_date { get; set; }

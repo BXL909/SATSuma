@@ -127,7 +127,7 @@
     <value>383, 17</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="panel109.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="panel187.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAwUAAAAXCAYAAABak+N0AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6
         JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACXBIWXMAAAsMAAALDAE/QCLIAAAa10lE
@@ -3161,9 +3161,6 @@
         DCgB4ywIEoJxFoLU+eDPs+SgFYJEKwVTORgt+z9dJsIyRntmzgAAAABJRU5ErkJggg==
 </value>
   </data>
-  <metadata name="listViewBookmarks.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <metadata name="BookmarksScrollTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>2010, 17</value>
   </metadata>
@@ -6277,6 +6274,27 @@ XXimpractical or result in timeouts.</value>
   <metadata name="openFileDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>244, 17</value>
   </metadata>
+  <data name="panel189.ToolTip" xml:space="preserve">
+    <value>Chart controls:
+XXMouse-wheel to zoom in and out.
+XXRight-click and hold while dragging horizontally to stretch scale horizontally.
+XXRight-click and hold while dragging vertically to stretch scale vertically.
+XXLeft-click and hold and drag any direction to move chart, unless the entire chart is already visible.</value>
+  </data>
+  <data name="label350.ToolTip" xml:space="preserve">
+    <value>Chart controls:
+XXMouse-wheel to zoom in and out.
+XXRight-click and hold while dragging horizontally to stretch scale horizontally.
+XXRight-click and hold while dragging vertically to stretch scale vertically.
+XXLeft-click and hold and drag any direction to move chart, unless the entire chart is already visible.</value>
+  </data>
+  <data name="label362.ToolTip" xml:space="preserve">
+    <value>Chart controls:
+XXMouse-wheel to zoom in and out.
+XXRight-click and hold while dragging horizontally to stretch scale horizontally.
+XXRight-click and hold while dragging vertically to stretch scale vertically.
+XXLeft-click and hold and drag any direction to move chart, unless the entire chart is already visible.</value>
+  </data>
   <data name="pictureBoxChartLoadingAnimation.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         R0lGODlhtwBbAPZMAEtLTkZHSkxMT0RFR////1FRVE5OUVBQU3BwctLS05WVl8zMzUNER3l5e0FCRHd3
@@ -13729,12 +13747,6 @@ XXimpractical or result in timeouts.</value>
         WA0rt0MvwAFVBxxVBwM+Z4NbUIRHmHZpBwMxsISfEAgAOw==
 </value>
   </data>
-  <metadata name="formsPlot3.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="formsPlot2.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <metadata name="timerNumUpDownContinuous.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>1511, 17</value>
   </metadata>
@@ -13989,7 +14001,21 @@ XXimpractical or result in timeouts.</value>
         DCgB4ywIEoJxFoLU+eDPs+SgFYJEKwVTORgt+z9dJsIyRntmzgAAAABJRU5ErkJggg==
 </value>
   </data>
-  <data name="btnCalculateDCA.ToolTip" xml:space="preserve">
+  <data name="panel191.ToolTip" xml:space="preserve">
+    <value>Chart controls:
+XXMouse-wheel to zoom in and out.
+XXRight-click and hold while dragging horizontally to stretch scale horizontally.
+XXRight-click and hold while dragging vertically to stretch scale vertically.
+XXLeft-click and hold and drag any direction to move chart, unless the entire chart is already visible.</value>
+  </data>
+  <data name="label363.ToolTip" xml:space="preserve">
+    <value>Chart controls:
+XXMouse-wheel to zoom in and out.
+XXRight-click and hold while dragging horizontally to stretch scale horizontally.
+XXRight-click and hold while dragging vertically to stretch scale vertically.
+XXLeft-click and hold and drag any direction to move chart, unless the entire chart is already visible.</value>
+  </data>
+  <data name="label364.ToolTip" xml:space="preserve">
     <value>Chart controls:
 XXMouse-wheel to zoom in and out.
 XXRight-click and hold while dragging horizontally to stretch scale horizontally.
@@ -21448,11 +21474,56 @@ XXLeft-click and hold and drag any direction to move chart, unless the entire ch
         WA0rt0MvwAFVBxxVBwM+Z4NbUIRHmHZpBwMxsISfEAgAOw==
 </value>
   </data>
-  <metadata name="formsPlotDCA.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <data name="labelDCADefinition.Text" xml:space="preserve">
     <value>Dollar-cost averaging (DCA) involves using a fixed amount of fiat money to purchase bitcoin over time at fixed regular intervals, regardless of its price fluctuations. This strategy helps mitigate the impact of volatility and can potentially lower the average cost per bitcoin purchased, thus reducing the risk associated with timing the market.</value>
+  </data>
+  <metadata name="toolTipForLblHeaderPrice.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>383, 17</value>
+  </metadata>
+  <metadata name="toolTipGeneralUse.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>571, 17</value>
+  </metadata>
+  <data name="panel193.ToolTip" xml:space="preserve">
+    <value>Chart controls:
+XXMouse-wheel to zoom in and out.
+XXRight-click and hold while dragging horizontally to stretch scale horizontally.
+XXRight-click and hold while dragging vertically to stretch scale vertically.
+XXLeft-click and hold and drag any direction to move chart, unless the entire chart is already visible.</value>
+  </data>
+  <data name="label365.ToolTip" xml:space="preserve">
+    <value>Chart controls:
+XXMouse-wheel to zoom in and out.
+XXRight-click and hold while dragging horizontally to stretch scale horizontally.
+XXRight-click and hold while dragging vertically to stretch scale vertically.
+XXLeft-click and hold and drag any direction to move chart, unless the entire chart is already visible.</value>
+  </data>
+  <data name="label369.ToolTip" xml:space="preserve">
+    <value>Chart controls:
+XXMouse-wheel to zoom in and out.
+XXRight-click and hold while dragging horizontally to stretch scale horizontally.
+XXRight-click and hold while dragging vertically to stretch scale vertically.
+XXLeft-click and hold and drag any direction to move chart, unless the entire chart is already visible.</value>
+  </data>
+  <data name="panel198.ToolTip" xml:space="preserve">
+    <value>Chart controls:
+XXMouse-wheel to zoom in and out.
+XXRight-click and hold while dragging horizontally to stretch scale horizontally.
+XXRight-click and hold while dragging vertically to stretch scale vertically.
+XXLeft-click and hold and drag any direction to move chart, unless the entire chart is already visible.</value>
+  </data>
+  <data name="label370.ToolTip" xml:space="preserve">
+    <value>Chart controls:
+XXMouse-wheel to zoom in and out.
+XXRight-click and hold while dragging horizontally to stretch scale horizontally.
+XXRight-click and hold while dragging vertically to stretch scale vertically.
+XXLeft-click and hold and drag any direction to move chart, unless the entire chart is already visible.</value>
+  </data>
+  <data name="label371.ToolTip" xml:space="preserve">
+    <value>Chart controls:
+XXMouse-wheel to zoom in and out.
+XXRight-click and hold while dragging horizontally to stretch scale horizontally.
+XXRight-click and hold while dragging vertically to stretch scale vertically.
+XXLeft-click and hold and drag any direction to move chart, unless the entire chart is already visible.</value>
   </data>
   <metadata name="timer50thSec.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>721, 17</value>
@@ -21699,9 +21770,6 @@ XXLeft-click and hold and drag any direction to move chart, unless the entire ch
         DCgB4ywIEoJxFoLU+eDPs+SgFYJEKwVTORgt+z9dJsIyRntmzgAAAABJRU5ErkJggg==
 </value>
   </data>
-  <metadata name="listViewAddressUTXOs.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <metadata name="UTXOsScrollTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>2202, 17</value>
   </metadata>
@@ -21826,9 +21894,6 @@ XXLeft-click and hold and drag any direction to move chart, unless the entire ch
         DCgB4ywIEoJxFoLU+eDPs+SgFYJEKwVTORgt+z9dJsIyRntmzgAAAABJRU5ErkJggg==
 </value>
   </data>
-  <metadata name="listViewPoolsByBlock.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <metadata name="PoolsBlocksScrollTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>2334, 16</value>
   </metadata>
@@ -21953,12 +22018,6 @@ XXLeft-click and hold and drag any direction to move chart, unless the entire ch
         DCgB4ywIEoJxFoLU+eDPs+SgFYJEKwVTORgt+z9dJsIyRntmzgAAAABJRU5ErkJggg==
 </value>
   </data>
-  <metadata name="listViewPoolsHashrate.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="formsPlotPoolRankForPoolScreen.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <data name="panel152.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAwUAAAAXCAYAAABak+N0AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6
@@ -22082,9 +22141,6 @@ XXLeft-click and hold and drag any direction to move chart, unless the entire ch
   </data>
   <metadata name="PoolsHashrateScrollTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>2491, 20</value>
-  </metadata>
-  <metadata name="formsPlotHashrateForPoolsScreen.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
   </metadata>
   <data name="panel154.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -22449,9 +22505,6 @@ XXLeft-click and hold and drag any direction to move chart, unless the entire ch
         DCgB4ywIEoJxFoLU+eDPs+SgFYJEKwVTORgt+z9dJsIyRntmzgAAAABJRU5ErkJggg==
 </value>
   </data>
-  <metadata name="listViewBlocksByPool.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <data name="panel155.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAwUAAAAXCAYAAABak+N0AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6
@@ -22573,12 +22626,6 @@ XXLeft-click and hold and drag any direction to move chart, unless the entire ch
         DCgB4ywIEoJxFoLU+eDPs+SgFYJEKwVTORgt+z9dJsIyRntmzgAAAABJRU5ErkJggg==
 </value>
   </data>
-  <metadata name="listViewPoolsList.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="formsPlotPoolHashrate.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <data name="panel164.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAwUAAAAXCAYAAABak+N0AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6

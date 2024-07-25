@@ -533,6 +533,16 @@ namespace SATSuma.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap tinylogo1trans {
+            get {
+                object obj = ResourceManager.GetObject("tinylogo1trans", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap titleBGLongerOrange {
             get {
                 object obj = ResourceManager.GetObject("titleBGLongerOrange", resourceCulture);

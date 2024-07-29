@@ -22586,6 +22586,8 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
+            this.Controls.Add(this.panelBlock);
+            this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelMiningPools);
@@ -22601,8 +22603,6 @@
             this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelAddressUTXO);
-            this.Controls.Add(this.panelAddress);
-            this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.lblHeaderBlockFeesChart);
             this.Controls.Add(this.lblHeaderNextBlockTotalFees);

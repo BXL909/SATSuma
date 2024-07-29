@@ -183,6 +183,16 @@ namespace SATSuma.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap FullScreenLoadingBG {
+            get {
+                object obj = ResourceManager.GetObject("FullScreenLoadingBG", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Genesis {
             get {
                 object obj = ResourceManager.GetObject("Genesis", resourceCulture);

@@ -139,8 +139,14 @@
   <data name="graphIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\graphIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="BlackFade" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BlackFade.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="marker" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\marker.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="spectrum2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\spectrum2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="titleBGLongerOrange" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\titleBGLongerOrange.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -151,17 +157,14 @@
   <data name="numericDown" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\numericDown.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="StackSats" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StackSats.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="setupscreenDropdown" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\setupscreenDropdown.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="OrangeFade" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\OrangeFade.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="infinityspectrum" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\infinityspectrum.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="CustomImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\CustomImage.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Closing" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Closing.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Polygons" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Polygons.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -169,20 +172,23 @@
   <data name="tinylogo1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\tinylogo1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="MainMenuFade" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\MainMenuFade.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="SpinningSatsuma" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SpinningSatsuma.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="YellowFade" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\YellowFade.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="RedFade" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\RedFade.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="SatsumaAnimated" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\SatsumaAnimated.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="logoNoText" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\logoNoText.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Untitled-2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Untitled-2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="tooltiplogo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tooltiplogo.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="transpTitle" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\transpTitle.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -190,8 +196,8 @@
   <data name="PurpleFade" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\PurpleFade.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="calendarWhite" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\calendarWhite.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Genesis" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Genesis.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="graphIcondisabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\graphIcondisabled.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -211,11 +217,11 @@
   <data name="ApplyingTheme" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ApplyingTheme.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Genesis" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Genesis.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="OrangeFade" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\OrangeFade.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="MainMenuFade" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\MainMenuFade.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Untitled-2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Untitled-2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="BlueFade" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BlueFade.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -223,8 +229,8 @@
   <data name="WhiteFade" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\WhiteFade.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="spectrum2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\spectrum2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="calendarWhite" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\calendarWhite.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Symbol" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Symbol.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -232,20 +238,17 @@
   <data name="dropdown" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\dropdown.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="BlackFade" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BlackFade.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="SatsumaAnimated" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SatsumaAnimated.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tinylogo1trans" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tinylogo1trans.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="CustomImage1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CustomImage.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ApplyingTheme1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ApplyingTheme1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="HoneyBadger" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\HoneyBadger.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="OrangeInfinity" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\OrangeInfinity.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="OrangePaler" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\OrangePaler.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -253,8 +256,8 @@
   <data name="SatsumaBTCdir1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Franklin.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="tooltiplogo" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tooltiplogo.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="CustomImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CustomImage.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="SatsumaButton-4" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SatsumaButton-4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -265,19 +268,19 @@
   <data name="calendarDark" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\calendarDark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="StackSats" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\StackSats.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="infinityspectrum" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\infinityspectrum.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="YellowFade" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\YellowFade.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ApplyingTheme1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ApplyingTheme1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Closing" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Closing.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="OrangeInfinity" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\OrangeInfinity.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Satsuma" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Satsuma.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="tinylogo1trans" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tinylogo1trans.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="FullScreenLoadingBG" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FullScreenLoadingBG.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

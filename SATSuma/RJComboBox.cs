@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,12 +25,12 @@ namespace CustomControls.RJControls
         private int borderSize = 1;
 
         //Items
-        private ComboBox cmbList;
-        private Label lblText;
-        private Button btnIcon;
+        private readonly ComboBox cmbList;
+        private readonly Label lblText;
+        private readonly Button btnIcon;
 
         //Events
-        public event EventHandler OnSelectedIndexChanged;//Default event
+        public event EventHandler? OnSelectedIndexChanged;//Default event
 
         //Constructor
         public RJComboBox()

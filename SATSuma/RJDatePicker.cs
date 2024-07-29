@@ -17,10 +17,10 @@ namespace CustomControls.RJControls
         private Color skinColor = Color.MediumSlateBlue;
         private Color textColor = Color.White;
         private Color borderColor = Color.PaleVioletRed;
-        private int borderSize = 0;
+        private int borderSize;
 
         //-> Other Values
-        private bool droppedDown = false;
+        private bool droppedDown;
         private Image calendarIcon = SATSuma.Properties.Resources.calendarWhite;
         
         private RectangleF iconButtonArea;
@@ -112,7 +112,7 @@ namespace CustomControls.RJControls
                 //Draw surface
                 graphics.FillRectangle(skinBrush, clientArea);
                 //Draw text
-                graphics.DrawString("   " + this.Text, this.Font, textBrush, clientArea, textFormat);
+                graphics.DrawString($"   {this.Text}", this.Font, textBrush, clientArea, textFormat);
                 //Draw open calendar icon highlight
                 if (droppedDown == true) graphics.FillRectangle(openIconBrush, iconArea);
                 //Draw border 

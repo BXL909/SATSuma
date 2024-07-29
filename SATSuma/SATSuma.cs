@@ -1,5 +1,5 @@
 ﻿//!_______________________________________________________________________________________________________
-//![](resources\SatsumaButton-4.png)v2.5
+//![](resources\SatsumaButton-4.png)v2.5 
 //!A block explorer, Xpub viewer, bitcoin & lightning dashboard, DCA calculator, multiple onchain & market
 //!charts, directory, fiat converter and loads more, with the ability to create encryted bookmarks and 
 //!notes, select from multiple preset themes or create your own. Xpub queries will only work on the users's
@@ -14,11 +14,12 @@
 //TODO Taproot support on xpub screen 
 //TODO documentation for new pools screens (code done, pages created, just do text)
 //TODO documentation for new btc dashboard fields
-//TODO find efficiencies and/or extend loading screen duration
+//TODO cancellation tokens for all async tasks. add cancel button.
+//TODO new closing screen to match loading screen
 //TODO testing
 //BUG LIST_______________________________________________________________________________________________
-//BUG Header fee priority values not showing right colour sometimes when on satsuma theme (probably all of them)
 //!_______________________________________________________________________________________________________
+#nullable enable
 #region Using
 using CustomControls.RJControls;
 using NBitcoin;
@@ -47,6 +48,7 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static SATSuma.SATSuma;
@@ -60,7 +62,6 @@ namespace SATSuma
     public partial class SATSuma : Form
     {
         readonly string CurrentVersion = "2.5";
-
         #region ⚡⚡⚡ rounded form
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
         private static extern IntPtr CreateRoundRectRgn
@@ -83,7 +84,7 @@ namespace SATSuma
         #region header variables
         bool isTextBoxUniversalSearchWatermarkTextDisplayed = true; // header for watermarked universal search
         bool firstTimeGettingBlockTip = true;
-        string searchTarget; // used to determine what the search button will search for
+        string searchTarget = string.Empty; // used to determine what the search button will search for
         int totalSecondsSinceLastBlock;
         #endregion
         #region address screen variables
@@ -140,7 +141,7 @@ namespace SATSuma
         private bool isXpubButtonPressed;
         private bool XpubDownButtonPressed;
         private bool XpubUpButtonPressed;
-        private string previousXpubScreenOwnNodeURLStringToCompare;
+        private string previousXpubScreenOwnNodeURLStringToCompare = string.Empty;
         private int XpubAddressesScrollPosition; // used to remember position in scrollable panel to return to that position after paint event
         #endregion
         #region block screen variables
@@ -181,8 +182,8 @@ namespace SATSuma
         bool isTextBoxSettingsOwnNodeURLWatermarkTextDisplayed = true; // settings screen for watermarked node field
         bool preventSavingSettings = true; // suppress auto-saves during initial launch.
         private string NodeURL = "https://mempool.space/api/"; // default value. Can be changed by user.
-        private string xpubNodeURL; // no default value. User must provide path to own node
-        string currentlyActiveTheme; // used to prevent user from deleting active theme
+        private string xpubNodeURL = string.Empty; // no default value. User must provide path to own node
+        string currentlyActiveTheme = string.Empty; // used to prevent user from deleting active theme
         string currencySelected = "D"; // for settings record in settings file
         string alwaysOnTop = "0"; // for settings record in settings file
         string selectedNetwork = "M"; // for settings record in settings file
@@ -192,37 +193,35 @@ namespace SATSuma
         string coinbaseEnpointsSelected = "1"; // for settings record in settings file
         string blockchainInfoEndpointsSelected = "1"; // for settings record in settings file
         string OfflineModeSelected = "0"; // for settings record in settings file 
-        string startupScreenToSave; // for settings record in settings file
+        string startupScreenToSave = string.Empty; // for settings record in settings file
         bool enableDirectory = true; // enable or disable links directory
         string directoryEnabled = "1"; // for settings record in settings file
-        string ownNode;
+        string ownNode = string.Empty;
         string defaultTheme = "Genesis (preset)";
         #endregion
         #region data services
-        private UTXOsForAddressService _UTXOsForAddressService;
-        private PoolsByBlockService _PoolsByBlockService;
-        private PoolsByHashrateService _PoolsByHashrateService;
-        private TransactionsForAddressService _transactionsForAddressService;
-        private TransactionsForXpubAddressService _transactionsForXpubAddressService;
-        private BlockDataService _blockService;
-        private TransactionService _transactionService;
-        private TransactionsForBlockService _transactionsForBlockService;
-        private HashrateAndDifficultyService _hashrateAndDifficultyService;
-        private HistoricPriceDataService _historicPriceDataService;
-        private MarketCapDataService _marketCapDataService;
-        private BlockFeeRatesDataService _blockFeeRatesDataService;
-        private BitcoinsInCirculationDataService _bitcoinsInCirculationDataService;
-        private BlockSizeAndWeightService _blockSizeAndWeightService;
-        private UniqueAddressesDataService _uniqueAddressesDataService;
-        private UTXODataService _utxoDataService;
-        private PoolsRankingDataService _poolsRankingDataService;
-        private LightningNodesByCountryService _lightningNodesByCountryService;
-        private MiningPoolsListService _miningPoolsListService;
-        private BlocksByPoolService _blocksByPoolService;
-        private PoolHashrateService _poolHashrateService;
-        private PoolDataService _poolDataService;
-        private CoinGeckoMarketDataService _coinGeckoMarketDataService;
-        private MessariMarketDataService _MessariMarketDataService;
+        private UTXOsForAddressService _UTXOsForAddressService = new UTXOsForAddressService("");
+        private PoolsByBlockService _PoolsByBlockService = new PoolsByBlockService("");
+        private PoolsByHashrateService _PoolsByHashrateService = new PoolsByHashrateService("");
+        private TransactionsForAddressService _transactionsForAddressService = new TransactionsForAddressService("");
+        private TransactionsForXpubAddressService _transactionsForXpubAddressService = new TransactionsForXpubAddressService("");
+        private BlockDataService _blockService = new BlockDataService("");
+        private TransactionService _transactionService = new TransactionService("");
+        private TransactionsForBlockService _transactionsForBlockService = new TransactionsForBlockService("");
+        private HashrateAndDifficultyService _hashrateAndDifficultyService = new HashrateAndDifficultyService("");
+        private HistoricPriceDataService _historicPriceDataService = new HistoricPriceDataService();
+        private MarketCapDataService _marketCapDataService = new MarketCapDataService();
+        private BitcoinsInCirculationDataService _bitcoinsInCirculationDataService = new BitcoinsInCirculationDataService();
+        private BlockSizeAndWeightService _blockSizeAndWeightService = new BlockSizeAndWeightService("");
+        private UniqueAddressesDataService _uniqueAddressesDataService = new UniqueAddressesDataService();
+        private UTXODataService _utxoDataService = new UTXODataService();
+        private PoolsRankingDataService _poolsRankingDataService = new PoolsRankingDataService("");
+        private MiningPoolsListService _miningPoolsListService = new MiningPoolsListService("");
+        private BlocksByPoolService _blocksByPoolService = new BlocksByPoolService("");
+        private PoolHashrateService _poolHashrateService = new PoolHashrateService("");
+        private PoolDataService _poolDataService = new PoolDataService("");
+        private CoinGeckoMarketDataService _coinGeckoMarketDataService = new CoinGeckoMarketDataService();
+        private MessariMarketDataService _MessariMarketDataService = new MessariMarketDataService();
         #endregion
         #region api use flag variables
         private bool RunCoinbaseAPI = true; // enable/disable API
@@ -310,12 +309,13 @@ namespace SATSuma
         #endregion
         #region variables specific to chart screen
         private int LastHighlightedIndex = -1; // used by charts for mousemove events to highlight plots closest to pointer
-        private ScottPlot.Plottable.ScatterPlot scatter; // chart data gets plotted onto this
-        private ScottPlot.Plottable.MarkerPlot HighlightedPoint; // highlighted (closest to pointer) plot gets plotted onto this
+        private ScottPlot.Plottable.ScatterPlot? scatter; // chart data gets plotted onto this
+        private ScottPlot.Plottable.MarkerPlot? HighlightedPoint; // highlighted (closest to pointer) plot gets plotted onto this
         bool ignoreMouseMoveOnChart; // ignore mouse move event while chart is still drawing
         string chartPeriod = "all"; // holds the string needed to generate charts with different time periods
-        string chartType; // keeps track of what type of chart is being displayed
+        string chartType = string.Empty; // keeps track of what type of chart is being displayed
         int previouslyShownChart; // combobox reverts to this if a disabled chart is selected
+        bool chartRendered; // if false, navigating to chart screen shows default feerates chart
         #endregion
         #region expanding panels
         private int currentHeightExpandingPanel;
@@ -332,13 +332,14 @@ namespace SATSuma
         bool firstTimeLoadingScreen = true;
         bool firstTimeCustomThemeIndexChanged = true;
         double DCAFrequencyDays = 1; // for dca calculator screen
-        Axis yAxis3; // dca chart
+        Axis? yAxis3; // dca chart
         string ActiveChart = "FeeRates"; // used to determine which chart needs refreshing when a theme change takes place
         bool firstThemeChange = true;
         bool readyToShowRedAndGreenLabelsYet;
         bool readyToShowPriceChangeLabelYet;
         bool fullScreenLoadingScreenVisible; // if the full size loading screen is visible, the smaller one won't be shown on top of it
         decimal calculatedBTCInCirculation = 0;
+        private FullSizeLoadingScreen? fullSizeLoadingScreen;
         #endregion
         #region market variables
         bool gotMarketDataInLastFewSecs = true; // avoids running getmarketdata() twice at startup.
@@ -363,6 +364,7 @@ namespace SATSuma
         int intThemeSavedMessageTimeShown;
 
         #endregion
+        bool DCAChartRendered; // if false, an initial dca illustration will be made when selected from menu
         #endregion
         //![](resources\tinylogo1.png;;;0.04706,0.04877)
         #region ⚡⚡⚡ INITIALISE
@@ -553,13 +555,16 @@ namespace SATSuma
 
                 #region display loading screen
                 bool wasOnTop = false;
-                Form loadingTheme1 = new LoadingTheme(UIScale)
+                fullSizeLoadingScreen = new FullSizeLoadingScreen(UIScale)
                 {
                     Owner = this,
                     StartPosition = FormStartPosition.CenterParent,
                     FormBorderStyle = FormBorderStyle.None,
                     BackColor = panel84.BackColor, // Set the background color to match panel colours
                     Opacity = 1,
+                    LabelColor = label77.ForeColor,
+                    Version = $"v{CurrentVersion}",
+                    OtherText = lblCurrentVersion.ForeColor
                 };
 
                 if (this.TopMost == true)
@@ -571,25 +576,29 @@ namespace SATSuma
                 {
                     fullScreenLoadingScreenVisible = true;
 
-                    loadingTheme1.StartPosition = FormStartPosition.CenterParent;
+                    fullSizeLoadingScreen.StartPosition = FormStartPosition.CenterParent;
 
                     // Calculate the overlay form's location to place it in the center of the parent form
-                    loadingTheme1.StartPosition = FormStartPosition.Manual;
+                    fullSizeLoadingScreen.StartPosition = FormStartPosition.Manual;
                     int parentCenterX = this.Location.X + this.Width / 2;
                     int parentCenterY = this.Location.Y + this.Height / 2;
-                    int overlayX = parentCenterX - loadingTheme1.Width / 2;
-                    int overlayY = parentCenterY - loadingTheme1.Height / 2;
-                    loadingTheme1.Location = new Point(overlayX, overlayY);
-                    loadingTheme1.Show(this);
+                    int overlayX = parentCenterX - fullSizeLoadingScreen.Width / 2;
+                    int overlayY = parentCenterY - fullSizeLoadingScreen.Height / 2;
+                    fullSizeLoadingScreen.Location = new Point(overlayX, overlayY);
+                    fullSizeLoadingScreen.Show(this);
                 }
-                #endregion 
+                #endregion
+
                 #region restore saved settings
+                fullSizeLoadingScreen.SetLoadingText("Restoring saved settings...", "Restoring preferences...");
                 RestoreSavedSettings(); // api choices, node, xpub node, theme
                 #endregion
                 #region check network
-                await CheckNetworkStatusAsync();
+                fullSizeLoadingScreen.SetLoadingText("Checking connection...", "Initialising...");
+                await CheckNetworkStatusAsync().ConfigureAwait(true);
                 #endregion
                 #region set/get some initial values (e.g block height, price)
+                fullSizeLoadingScreen.SetLoadingText("Getting block height and market data...", "Initialising...");
                 panelErrorMessage.Invoke((MethodInvoker)delegate
                 {
                     panelErrorMessage.Width = 0;
@@ -599,68 +608,32 @@ namespace SATSuma
                     lblCurrentVersion.Text = $"v{CurrentVersion}";
                     lblCurrentVersion.Location = new Point((lblSatsumaTitle.Location.X + lblSatsumaTitle.Width) - (int)(8 * UIScale), lblCurrentVersion.Location.Y);
                 });
-                ToggleLoadingAnimation("enable");
-                await GetBlockTipAndCirculationAsync();
-                ToggleLoadingAnimation("disable");
+                await GetBlockTipAndCirculationAsync().ConfigureAwait(true);
                 GetMarketData();
-                #endregion
-                #region populate all the screens that can be populated and start the timers ticking
-                #region Bitcoin dashboard
-                _ = UpdateBitcoinAndLightningDashboardsAsync(); // setting them now avoids waiting a whole minute for the first refresh
-                #endregion
-                #region start the timers
-                StartTheClocksTicking();
-                #endregion
-                # region block list screen
-                numericUpDownBlockHeightToStartListFrom.Invoke((MethodInvoker)delegate
-                {
-                    numericUpDownBlockHeightToStartListFrom.Text = lblHeaderBlockNumber.Text;
-                });
-                LookupBlockListAsync(); // fetch the first 15 blocks automatically for the block list initial view.
-                #endregion
-                numericUpDownSubmittedBlockNumber.Invoke((MethodInvoker)delegate
-                {
-                    numericUpDownSubmittedBlockNumber.Text = lblHeaderBlockNumber.Text;
-                });
-                LookupBlockAsync();
-                label107.Invoke((MethodInvoker)delegate
-                {
-                    label107.Location = new Point(lblHeaderTimestamp.Location.X + lblHeaderTimestamp.Width - (int)(4 * UIScale), label107.Location.Y);
-                });
-                #region mining pools screen
-                SetupPoolScreenAsync();
-                this.Visible = true;
-                #endregion
-                #region address screen
-                _ = AddressInvalidHideControlsAsync(); // Address screen - initially address textbox is empty so hide the controls
-                #endregion
-                #region charts screen
-                //prepopulate chart with fee rates (only if user hasn't selected one of the charts for their startup screen)
-                if (!comboBoxStartupScreen.Texts.StartsWith("chart - "))
-                {
-                    ChartFeeRatesAsync();
-                }
-                previouslyShownChart = 0;
-                #endregion
-                #region DCA calculator
+
+                #region initial values for DCA calculator
                 rjDatePickerDCAStartDate.MaxDate = DateTime.Today;
                 rjDatePickerDCAEndDate.MaxDate = DateTime.Today;
                 rjDatePickerDCAStartDate.Value = new DateTime(2016, 3, 4);
                 rjDatePickerDCAEndDate.Value = DateTime.Today;
                 comboBoxDCAFrequency.SelectedIndex = 2; // default to monthly
-                // add an extra Y axis to the chart to show the daily BTC amount bought
                 yAxis3 = formsPlotDCA.Plot.AddAxis(Edge.Right, axisIndex: 2, color: btnMenuDirectory.ForeColor);
-                // populate dca chart if the api is enabled
-                if (OneBTCinSelectedCurrency > 0)
-                {
-                    PopulateDCACalculatorAsync();
-                }
+                #endregion
+
+                #endregion
+                #region populate dashboards and start the timers ticking
+
+                #region Bitcoin dashboard
+                fullSizeLoadingScreen.SetLoadingText("Gatting dashboard data...", "Initialising...");
+                _ = UpdateBitcoinAndLightningDashboardsAsync(); // setting them now avoids waiting a whole minute for the first refresh
+                #endregion
+
+                #region start the timers
+                fullSizeLoadingScreen.SetLoadingText("Starting timers...", "Initialising...");
+                StartTheClocksTicking();
                 #endregion
                 #endregion
                 dontDisableButtons = false; // from here on, buttons are disabled during queries
-                #region check for updates to SATSuma
-                CheckForUpdates();
-                #endregion
                 #region set more initial values and populate directory screen
                 PopulateThemeComboboxes();
                 LoadAndStyleDirectoryBrowser();
@@ -669,7 +642,6 @@ namespace SATSuma
                 lblUpdateFlasher.Location = new Point((lblOpenHelpAboutMenu.Location.X + lblOpenHelpAboutMenu.Width) - (int)(3 * UIScale), lblUpdateFlasher.Location.Y);
                 #endregion
                 #region navigate to the saved startup screen
-
                 Dictionary<string, Action> buttonClickEvents = new Dictionary<string, Action>
                 {
                     { "blocks", () => BtnMenuBlockList_ClickAsync(sender, e) },
@@ -708,21 +680,23 @@ namespace SATSuma
                 }
                 else
                 {
-                    BtnMenuBlockList_ClickAsync(sender, e);
+                    BtnMenuBitcoinDashboard_ClickAsync(sender, e);
                 }
-
                 #endregion
-
+                #region close loading screen                
                 //close the loading screen
-                await Wait2SecsAsync();
-                loadingTheme1.Close();
+                await Wait2SecsAsync().ConfigureAwait(true);
+                fullSizeLoadingScreen.Close();
                 fullScreenLoadingScreenVisible = false;
 
                 if (wasOnTop)
                 {
                     this.TopMost = true;
                 }
-
+                #endregion
+                #region check for updates to SATSuma
+                CheckForUpdates();
+                #endregion
             }
             catch (WebException ex)
             {
@@ -851,1953 +825,795 @@ namespace SATSuma
             ToggleLoadingAnimation("enable");
             panelBitcoinDashboard.SuspendLayout();
             panelLightningDashboard.SuspendLayout();
-            using (WebClient client = new WebClient())
+            bool errorOccurred = false;
+            #region determine network age
+            if (fullSizeLoadingScreen!.Visible)
             {
-                bool errorOccurred = false;
+                fullSizeLoadingScreen.SetLoadingText("Determining network age...", "Initialising...");
+            }
 
-                #region determine network age
-                DateTime startDate = new DateTime(2009, 1, 3, 18, 15, 0); // Genesis block time
-                DateTime currentDate = DateTime.Now; // Current date and time
+            DateTime startDate = new DateTime(2009, 1, 3, 18, 15, 0); // Genesis block time
+            DateTime currentDate = DateTime.Now; // Current date and time
 
-                // Calculate years, months, days, hours, minutes, and seconds
-                int years = currentDate.Year - startDate.Year;
-                int months = currentDate.Month - startDate.Month;
-                int days = currentDate.Day - startDate.Day;
+            // Calculate years, months, days, hours, minutes, and seconds
+            int years = currentDate.Year - startDate.Year;
+            int months = currentDate.Month - startDate.Month;
+            int days = currentDate.Day - startDate.Day;
 
-                // Adjust negative months and days
-                if (days < 0)
+            // Adjust negative months and days
+            if (days < 0)
+            {
+                months--;
+                days += DateTime.DaysInMonth(startDate.Year, startDate.Month);
+            }
+            if (months < 0)
+            {
+                years--;
+                months += 12;
+            }
+            UpdateLabelValueAsync(lblNetworkAge, $"{years} years, {months} months, {days} days");
+            #endregion
+            #region tasks 0 & 1- mempool.space api's
+            Task task0 = Task.Run(async () => // mempool.space api's
+            {
+                #region block height, no. of tx in block, time since block, block size
+                try
                 {
-                    months--;
-                    days += DateTime.DaysInMonth(startDate.Year, startDate.Month);
-                }
-                if (months < 0)
-                {
-                    years--;
-                    months += 12;
-                }
-                UpdateLabelValueAsync(lblNetworkAge, $"{years} years, {months} months, {days} days");
-                #endregion
-                #region tasks 0 & 1- mempool.space api's
-                Task task0 = Task.Run(async () => // mempool.space api's
-                {
-                    #region block height, no. of tx in block, time since block, block size
-                    try
+                    if (fullSizeLoadingScreen.Visible)
                     {
-                        var blocksJson = await _blockService.GetBlockDataAsync("000000").ConfigureAwait(true);  // don't pass a block to start from - we want the tip
-                        var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
+                        fullSizeLoadingScreen.SetLoadingText("Gathering block data...", "Initialising...");
+                    }
 
-                        if (blocks != null)
+                    var blocksJson = await _blockService.GetBlockDataAsync("000000").ConfigureAwait(true);  // don't pass a block to start from - we want the tip
+                    var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
+
+                    if (blocks != null)
+                    {
+                        if (blocks.Count > 0)
                         {
-                            if (blocks.Count > 0)
+                            lblHeaderTransactions.Invoke((MethodInvoker)delegate
                             {
-                                lblHeaderTransactions.Invoke((MethodInvoker)delegate
+                                lblHeaderTransactions.Location = new Point(label148.Location.X + label148.Width, lblHeaderTransactions.Location.Y);
+                            });
+                            UpdateLabelValueAsync(lblHeaderTransactions, Convert.ToString(blocks[0].Tx_count));
+                            string newBlockHeight = blocks[0].Height!;
+                            string oldBlockHeight = lblHeaderBlockNumber.Text;
+                            if (String.Compare(newBlockHeight, oldBlockHeight) != 0 || firstTimeGettingBlockTip)
+                            {
+                                long timestamp = long.Parse(blocks[0].Timestamp);
+                                DateTimeOffset blockTime = DateTimeOffset.FromUnixTimeSeconds(timestamp);
+                                TimeSpan timeDifference = DateTimeOffset.Now - blockTime;
+                                totalSecondsSinceLastBlock = (int)timeDifference.TotalSeconds;
+                                int minutesSinceLastBlock = totalSecondsSinceLastBlock / 60;
+                                int secondsSinceLastBlock = totalSecondsSinceLastBlock % 60;
+                                string formattedTime = $"{minutesSinceLastBlock}m {secondsSinceLastBlock}s ago";
+                                lblHeaderBlockAge.Invoke((MethodInvoker)delegate
                                 {
-                                    lblHeaderTransactions.Location = new Point(label148.Location.X + label148.Width, lblHeaderTransactions.Location.Y);
+                                    lblHeaderBlockAge.Text = formattedTime;
                                 });
-                                UpdateLabelValueAsync(lblHeaderTransactions, Convert.ToString(blocks[0].Tx_count));
-                                string newBlockHeight = blocks[0].Height;
-                                string oldBlockHeight = lblHeaderBlockNumber.Text;
-                                if (String.Compare(newBlockHeight, oldBlockHeight) != 0 || firstTimeGettingBlockTip)
+                                UpdateLabelValueAsync(lblHeaderBlockNumber, Convert.ToString(blocks[0].Height));
+
+                                // calculate amount of btc issued
+                                int blockHeight = Convert.ToInt32(blocks[0].Height);
+                                decimal totalBitcoinsIssued = CirculationCalculator.CalculateTotalBitcoinsIssued(blockHeight);
+                                calculatedBTCInCirculation = totalBitcoinsIssued;
+
+                                UpdateLabelValueAsync(lblBTCInCirc, $"{calculatedBTCInCirculation:N2}");
+                                if (calculatedBTCInCirculation > 0)
                                 {
-                                    long timestamp = long.Parse(blocks[0].Timestamp);
-                                    DateTimeOffset blockTime = DateTimeOffset.FromUnixTimeSeconds(timestamp);
-                                    TimeSpan timeDifference = DateTimeOffset.Now - blockTime;
-                                    totalSecondsSinceLastBlock = (int)timeDifference.TotalSeconds;
-                                    int minutesSinceLastBlock = totalSecondsSinceLastBlock / 60;
-                                    int secondsSinceLastBlock = totalSecondsSinceLastBlock % 60;
-                                    string formattedTime = $"{minutesSinceLastBlock}m {secondsSinceLastBlock}s ago";
-                                    lblHeaderBlockAge.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblHeaderBlockAge.Text = formattedTime;
-                                    });
-                                    UpdateLabelValueAsync(lblHeaderBlockNumber, Convert.ToString(blocks[0].Height));
-
-                                    // calculate amount of btc issued
-                                    int blockHeight = Convert.ToInt32(blocks[0].Height);
-                                    decimal totalBitcoinsIssued = CirculationCalculator.CalculateTotalBitcoinsIssued(blockHeight);
-                                    calculatedBTCInCirculation = totalBitcoinsIssued;
-
-                                    UpdateLabelValueAsync(lblBTCInCirc, $"{calculatedBTCInCirculation:N2}");
-                                    if (calculatedBTCInCirculation > 0)
-                                    {
-                                        UpdateLabelValueAsync(lblBTCToBeIssued, Convert.ToString(21000000 - calculatedBTCInCirculation));
-                                    }
-                                    else
-                                    {
-                                        lblBTCToBeIssued.Invoke((MethodInvoker)delegate
-                                        {
-                                            lblBTCToBeIssued.Text = "0";
-                                        });
-                                    }
-                                    lblChartCirculation.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblChartCirculation.Location = new Point(lblBTCInCirc.Location.X + lblBTCInCirc.Width, lblChartCirculation.Location.Y);
-                                    });
-                                    decimal percentIssued = Math.Round((100m / 21000000) * calculatedBTCInCirculation, 2);
-                                    UpdateLabelValueAsync(lblPercentIssued, $"{percentIssued}%");
-
-                                    progressBarPercentIssued.Invoke((MethodInvoker)delegate
-                                    {
-                                        progressBarPercentIssued.Value = Convert.ToInt16(percentIssued);
-                                    });
-
-                                    lblHeaderBlockAge.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblHeaderBlockAge.Location = new Point(lblHeaderBlockNumber.Location.X + lblHeaderBlockNumber.Width - (int)(6 * UIScale), lblHeaderBlockAge.Location.Y);
-                                    });
-                                    lblHeaderTimestamp.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblHeaderTimestamp.Location = new Point(lblHeaderBlockNumber.Location.X + lblHeaderBlockNumber.Width - (int)(6 * UIScale), lblHeaderTimestamp.Location.Y);
-                                    });
-                                    label107.Invoke((MethodInvoker)delegate
-                                    {
-                                        label107.Location = new Point(lblHeaderTimestamp.Location.X + lblHeaderTimestamp.Width - (int)(4 * UIScale), label107.Location.Y);
-                                    });
-
-                                    firstTimeGettingBlockTip = false;
-                                }
-
-                                long sizeInBytes = blocks[0].Size;
-                                string sizeString; // convert display to bytes/kb/mb accordingly
-                                if (sizeInBytes < 1000)
-                                {
-                                    sizeString = $"{sizeInBytes} bytes";
-                                }
-                                else if (sizeInBytes < 1000 * 1000)
-                                {
-                                    double sizeInKB = (double)sizeInBytes / 1000;
-                                    sizeString = $"{sizeInKB:N2} KB";
+                                    UpdateLabelValueAsync(lblBTCToBeIssued, Convert.ToString(21000000 - calculatedBTCInCirculation));
                                 }
                                 else
                                 {
-                                    double sizeInMB = (double)sizeInBytes / (1000 * 1000);
-                                    sizeString = $"{sizeInMB:N2} MB";
+                                    lblBTCToBeIssued.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblBTCToBeIssued.Text = "0";
+                                    });
                                 }
-                                lblHeaderBlockSize.Invoke((MethodInvoker)delegate
+                                lblChartCirculation.Invoke((MethodInvoker)delegate
                                 {
-                                    lblHeaderBlockSize.Location = new Point(label149.Location.X + label149.Width, lblHeaderBlockSize.Location.Y);
+                                    lblChartCirculation.Location = new Point(lblBTCInCirc.Location.X + lblBTCInCirc.Width, lblChartCirculation.Location.Y);
                                 });
-                                UpdateLabelValueAsync(lblHeaderBlockSize, sizeString);
-                                lblHeaderBlockSizeChart.Invoke((MethodInvoker)delegate
+                                decimal percentIssued = Math.Round((100m / 21000000) * calculatedBTCInCirculation, 2);
+                                UpdateLabelValueAsync(lblPercentIssued, $"{percentIssued}%");
+
+                                progressBarPercentIssued.Invoke((MethodInvoker)delegate
                                 {
-                                    lblHeaderBlockSizeChart.Location = new Point(lblHeaderBlockSize.Location.X + lblHeaderBlockSize.Width, lblHeaderBlockSizeChart.Location.Y);
+                                    progressBarPercentIssued.Value = Convert.ToInt16(percentIssued);
                                 });
-                                // difficulty epoch = block height / 2016 rounded up to an integer
-                                UpdateLabelValueAsync(lblDifficultyEpoch, Convert.ToString((int)Math.Ceiling(Convert.ToDecimal(lblHeaderBlockNumber.Text) / 2016)));
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        errorOccurred = true;
-                        HandleException(ex, "UpdateDashboards(block size & tx count)");
-                    }
-                    #endregion
 
-                    #region fees
-                    try
-                    {
-                        var (fastestFee, halfHourFee, hourFee, economyFee) = MemSpGetFees();
-                        UpdateLabelValueAsync(lblHeaderfeesHighPriority, fastestFee);
-                        label15.Invoke((MethodInvoker)delegate
-                        {
-                            label15.Location = new Point(lblHeaderfeesHighPriority.Location.X + lblHeaderfeesHighPriority.Width - (int)(13 * UIScale), label15.Location.Y);
-                        });
-                        lblHeaderFeesMediumPriority.Invoke((MethodInvoker)delegate
-                        {
-                            lblHeaderFeesMediumPriority.Location = new Point(label15.Location.X + label15.Width - 10, lblHeaderFeesMediumPriority.Location.Y);
-                        });
-                        UpdateLabelValueAsync(lblHeaderFeesMediumPriority, halfHourFee);
-                        label25.Invoke((MethodInvoker)delegate
-                        {
-                            label25.Location = new Point(lblHeaderFeesMediumPriority.Location.X + lblHeaderFeesMediumPriority.Width - (int)(13 * UIScale), label25.Location.Y);
-                        });
-                        lblHeaderFeesLowPriority.Invoke((MethodInvoker)delegate
-                        {
-                            lblHeaderFeesLowPriority.Location = new Point(label25.Location.X + label25.Width - 10, lblHeaderFeesLowPriority.Location.Y);
-                        });
-                        UpdateLabelValueAsync(lblHeaderFeesLowPriority, hourFee);
-                        label28.Invoke((MethodInvoker)delegate
-                        {
-                            label28.Location = new Point(lblHeaderFeesLowPriority.Location.X + lblHeaderFeesLowPriority.Width - (int)(13 * UIScale), label28.Location.Y);
-                        });
-                        lblHeaderFeesNoPriority.Invoke((MethodInvoker)delegate
-                        {
-                            lblHeaderFeesNoPriority.Location = new Point(label28.Location.X + label28.Width - 10, lblHeaderFeesNoPriority.Location.Y);
-                        });
-                        UpdateLabelValueAsync(lblHeaderFeesNoPriority, economyFee);
-                        label29.Invoke((MethodInvoker)delegate
-                        {
-                            label29.Location = new Point(lblHeaderFeesNoPriority.Location.X + lblHeaderFeesNoPriority.Width - (int)(13 * UIScale), label29.Location.Y);
-                        });
-                        lblHeaderFeeRatesChart.Invoke((MethodInvoker)delegate
-                        {
-                            lblHeaderFeeRatesChart.Location = new Point(lblHeaderFeesNoPriority.Location.X + lblHeaderFeesNoPriority.Width - 10, lblHeaderFeeRatesChart.Location.Y);
-                        });
-                    }
-                    catch (Exception ex)
-                    {
-                        errorOccurred = true;
-                        HandleException(ex, "UpdateDashboards(fees)");
-                    }
-                    #endregion
-
-                    #region hashrate
-                    try
-                    {
-                        var currentHashrate = MemSpGetHashrate();
-                        BigInteger currentHashrateFormatted = BigInteger.Parse(currentHashrate);
-
-                        UpdateLabelValueAsync(lblEstHashrate, $"{currentHashrateFormatted:n0}");
-
-                        lblHashrateChart.Invoke((MethodInvoker)delegate
-                        {
-                            lblHashrateChart.Location = new Point(lblEstHashrate.Location.X + lblEstHashrate.Width, lblHashrateChart.Location.Y);
-                        });
-                        UpdateLabelValueAsync(lblBlockListEstHashRate, $"{currentHashrateFormatted:n0}");
-                        lblBlockListHashrateChart.Invoke((MethodInvoker)delegate
-                        {
-                            lblBlockListHashrateChart.Location = new Point(lblBlockListEstHashRate.Location.X + lblBlockListEstHashRate.Width, lblBlockListHashrateChart.Location.Y);
-                        });
-                    }
-                    catch (Exception ex)
-                    {
-                        errorOccurred = true;
-                        HandleException(ex, "UpdateDashboards(hashrate)");
-                    }
-                    #endregion
-
-                    #region determine block subsidy, subsidy after halving and fiat values of both
-                    // determine current block subsidy by calculating it from most recent block
-                    string blockSubsidy = MemSpGetRewardStats();
-                    UpdateLabelValueAsync(lblBlockSubsidy, blockSubsidy);
-
-                    if (decimal.TryParse(blockSubsidy, out decimal epoch))
-                    {
-                        epoch = (int)(Math.Log(Convert.ToDouble(blockSubsidy) / 50) / Math.Log(0.5)) + 1;
-                    }
-                    else
-                    {
-                        epoch = 0;
-                    }
-                    UpdateLabelValueAsync(lblSubsidyEpoch, Convert.ToString(epoch));
-                    label296.Invoke((MethodInvoker)delegate
-                    {
-                        label296.Location = new Point(lblSubsidyEpoch.Location.X + lblSubsidyEpoch.Width, label296.Location.Y);
-                    });
-                    lblBlockSubsidy.Invoke((MethodInvoker)delegate
-                    {
-                        lblBlockSubsidy.Location = new Point(label296.Location.X + label296.Width, lblBlockSubsidy.Location.Y);
-                    });
-
-                    if (decimal.TryParse(blockSubsidy, out decimal decimalBlockSubsidy))
-                    {
-                        UpdateLabelValueAsync(lblBlockRewardFiat, $"{fiatSymbol}{(decimalBlockSubsidy * OneBTCinSelectedCurrency):N2}");
-
-                        lblBlockRewardFiat.Invoke((MethodInvoker)delegate
-                        {
-                            lblBlockRewardFiat.Location = new Point(lblBlockSubsidy.Location.X + lblBlockSubsidy.Width, lblBlockRewardFiat.Location.Y);
-                        });
-                    }
-                    else
-                    {
-                        lblBlockRewardFiat.Invoke((MethodInvoker)delegate
-                        {
-                            lblBlockRewardFiat.Text = "0";
-                            lblBlockRewardFiat.Location = new Point(lblBlockSubsidy.Location.X + lblBlockSubsidy.Width, lblBlockRewardFiat.Location.Y);
-                        });
-                    }
-
-                    if (decimal.TryParse(blockSubsidy, out decimal DecBlockSubsidy))
-                    {
-                        DecBlockSubsidy = Convert.ToDecimal(blockSubsidy);
-                    }
-                    else
-                    {
-                        DecBlockSubsidy = 0;
-                    }
-                    decimal NextBlockSubsidy = DecBlockSubsidy / 2;
-                    UpdateLabelValueAsync(lblBlockSubsidyAfterHalving, Convert.ToString(NextBlockSubsidy));
-                    UpdateLabelValueAsync(lblBlockRewardAfterHalvingFiat, $"{fiatSymbol}{(Convert.ToDecimal(NextBlockSubsidy) * OneBTCinSelectedCurrency):N2}");
-
-                    lblBlockRewardAfterHalvingFiat.Invoke((MethodInvoker)delegate
-                    {
-                        lblBlockRewardAfterHalvingFiat.Location = new Point(lblBlockSubsidyAfterHalving.Location.X + lblBlockSubsidyAfterHalving.Width, lblBlockRewardAfterHalvingFiat.Location.Y);
-                    });
-                    UpdateLabelValueAsync(lblBlockListBlockSubsidy, blockSubsidy);
-                    if (decimal.TryParse(blockSubsidy, out decimal blockSubsidy2))
-                    {
-                        UpdateLabelValueAsync(lblBlockListBlockRewardFiat, $"{fiatSymbol}{(blockSubsidy2 * OneBTCinSelectedCurrency):N2}");
-
-                        lblBlockListBlockRewardFiat.Invoke((MethodInvoker)delegate // (Blocks list)
-                        {
-                            lblBlockListBlockRewardFiat.Location = new Point(lblBlockListBlockSubsidy.Location.X + lblBlockListBlockSubsidy.Width, lblBlockListBlockRewardFiat.Location.Y);
-                        });
-                    }
-                    else
-                    {
-                        lblBlockListBlockRewardFiat.Invoke((MethodInvoker)delegate // (Blocks list)
-                        {
-                            lblBlockListBlockRewardFiat.Text = "0";
-                            lblBlockListBlockRewardFiat.Location = new Point(lblBlockListBlockSubsidy.Location.X + lblBlockListBlockSubsidy.Width, lblBlockListBlockRewardFiat.Location.Y);
-                        });
-                    }
-
-                    #endregion
-
-                    #region difficulty adjustment
-                    try
-                    {
-                        string truncatedPercent = "0%";
-                        var (progressPercent, difficultyChange, estimatedRetargetDate, remainingBlocks, _, previousRetarget, nextRetargetHeight, timeAvg, _) = MemSpGetDifficultyAdjustment();
-                        if (decimal.TryParse(progressPercent, out decimal progressValue2))
-                        {
-                            progressValue2 = decimal.Parse(progressPercent.TrimEnd('%')) / 100; // convert to decimal and scale to range [0, 1]
-                            truncatedPercent = $"{progressValue2 * 100:F2}%"; // truncate to two decimal places
-                        }
-                        UpdateLabelValueAsync(lblProgressNextDiffAdjPercentage, truncatedPercent);
-                        UpdateLabelValueAsync(lblBlockListProgressNextDiffAdjPercentage, truncatedPercent);
-                        if (double.TryParse(previousRetarget, out double retargetValue))
-                        {
-                            // Format the double with two decimal places
-                            string formattedRetarget = retargetValue.ToString("0.00");
-
-                            // Update the label value
-                            UpdateLabelValueAsync(lblPrevDiffAdjustment, $"{formattedRetarget}%");
-                        }
-                        label229.Invoke((MethodInvoker)delegate
-                        {
-                            label229.Location = new Point(lblPrevDiffAdjustment.Location.X + lblPrevDiffAdjustment.Width, label229.Location.Y);
-                        });
-                        lblDifficultyAdjEst.Invoke((MethodInvoker)delegate
-                        {
-                            lblDifficultyAdjEst.Location = new Point(label229.Location.X + label229.Width, lblDifficultyAdjEst.Location.Y);
-                        });
-                        if (decimal.TryParse(progressPercent, out decimal progressValue))
-                        {
-                            progressValue = decimal.Parse(progressPercent); // convert to decimal and scale to range [0, 1]
-                            progressBarNextDiffAdj.Value = Convert.ToInt16(progressValue); // scale to fit progress bar range
-                            progressBarBlockListNextDiffAdj.Value = Convert.ToInt16(progressValue); // scale to fit progress bar range - Block List
-                        }
-                        UpdateLabelValueAsync(lblDifficultyAdjEst, $"{difficultyChange}%");
-                        lblDifficultyChart.Invoke((MethodInvoker)delegate
-                        {
-                            lblDifficultyChart.Location = new Point(lblDifficultyAdjEst.Location.X + lblDifficultyAdjEst.Width, lblDifficultyChart.Location.Y);
-                        });
-                        UpdateLabelValueAsync(lblBlockListNextDifficultyAdjustment, $"{difficultyChange}%");
-                        lblBlockListDifficultyChart.Invoke((MethodInvoker)delegate  // (Blocks list)
-                        {
-                            lblBlockListDifficultyChart.Location = new Point(lblBlockListNextDifficultyAdjustment.Location.X + lblBlockListNextDifficultyAdjustment.Width, lblBlockListDifficultyChart.Location.Y);
-                        });
-                        UpdateLabelValueAsync(lblBlocksUntilDiffAdj, remainingBlocks.ToString());
-                        string formattedDate;
-                        if (String.Compare(NodeURL, "https://mempool.space/api/") == 0 || String.Compare(NodeURL, "https://mempool.space/testnet/api/") == 0)
-                        {
-                            long unixTimestamp = Convert.ToInt64(estimatedRetargetDate);
-                            DateTime retargetDate = DateTimeExtensions.FromUnixTimeMilliseconds(unixTimestamp);
-                            formattedDate = retargetDate.ToString("yyyy-MM-dd");
-                        }
-                        else
-                        {
-                            double estRetargetDate = Convert.ToDouble(estimatedRetargetDate);
-                            DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeMilliseconds((long)estRetargetDate);
-                            DateTime dateTime = dateTimeOffset.LocalDateTime;
-                            formattedDate = dateTime.ToString();
-                        }
-                        UpdateLabelValueAsync(lblEstDiffAdjDate, formattedDate);
-                        UpdateLabelValueAsync(lblNextDiffAdjBlock, nextRetargetHeight);
-                        lblBlockListNextDiffAdjBlock.Invoke((MethodInvoker)delegate // (Blocks list)
-                        {
-                            lblBlockListNextDiffAdjBlock.Text = nextRetargetHeight;
-                        });
-
-                        int minutes = 0;
-                        int seconds = 0;
-                        if (decimal.TryParse(timeAvg, out decimal AvgTimeBetweenBlocks))
-                        {
-                            AvgTimeBetweenBlocks = (Convert.ToDecimal(timeAvg) / 1000) / 60;
-                            minutes = (int)AvgTimeBetweenBlocks;
-                            seconds = (int)((AvgTimeBetweenBlocks - minutes) * 60);
-                        }
-                        string timeString = $"{minutes} mins {seconds} secs";
-                        UpdateLabelValueAsync(lblAvgTimeBetweenBlocks, timeString);
-                        UpdateLabelValueAsync(lblBlockListAvgTimeBetweenBlocks, timeString);
-                    }
-                    catch (Exception ex)
-                    {
-                        errorOccurred = true;
-                        HandleException(ex, "UpdateDashboards(difficulty adjustment)");
-                    }
-                    #endregion
-
-                    #region fees and transactions in next block
-                    try
-                    {
-                        if (!testNet)
-                        {
-                            var (txInNextBlock, nextBlockMinFee, nextBlockMaxFee, nextBlockTotalFees) = MemSpNextBlock();
-                            UpdateLabelValueAsync(lblTransInNextBlock, txInNextBlock);
-                            UpdateLabelValueAsync(lblBlockListTXInNextBlock, txInNextBlock);
-
-                            lblNextBlockMinMaxFee.Invoke((MethodInvoker)delegate
-                            {
-                                lblNextBlockMinMaxFee.Text = $"{nextBlockMinFee} / {nextBlockMaxFee}";
-                            });
-                            lblHeaderNextBlockMinMaxFee.Invoke((MethodInvoker)delegate
-                            {
-                                lblHeaderNextBlockMinMaxFee.Text = $"{nextBlockMinFee} - {nextBlockMaxFee}";
-                                lblHeaderNextBlockMinMaxFee.Location = new Point(label110.Location.X + label110.Width, lblHeaderNextBlockMinMaxFee.Location.Y);
-                            });
-                            lblBlockListMinMaxInFeeNextBlock.Invoke((MethodInvoker)delegate // Blocks list
-                            {
-                                lblBlockListMinMaxInFeeNextBlock.Text = $"{nextBlockMinFee} / {nextBlockMaxFee}";
-                            });
-                            UpdateLabelValueAsync(lblNextBlockTotalFees, nextBlockTotalFees);
-                            lblHeaderNextBlockTotalFees.Invoke((MethodInvoker)delegate // Blocks list
-                            {
-                                lblHeaderNextBlockTotalFees.Location = new Point(label150.Location.X + label150.Width, lblHeaderNextBlockTotalFees.Location.Y);
-                            });
-                            UpdateLabelValueAsync(lblHeaderNextBlockTotalFees, nextBlockTotalFees);
-                            lblHeaderBlockFeesChart.Invoke((MethodInvoker)delegate
-                            {
-                                lblHeaderBlockFeesChart.Location = new Point(lblHeaderNextBlockTotalFees.Location.X + lblHeaderNextBlockTotalFees.Width, lblHeaderBlockFeesChart.Location.Y);
-                            });
-                            UpdateLabelValueAsync(lblNextBlockTotalFeesFiat, $"{fiatSymbol}{(Convert.ToDecimal(nextBlockTotalFees) * OneBTCinSelectedCurrency):N2}");
-                            lblNextBlockTotalFeesFiat.Invoke((MethodInvoker)delegate
-                            {
-                                lblNextBlockTotalFeesFiat.Location = new Point(lblNextBlockTotalFees.Location.X + lblNextBlockTotalFees.Width, lblNextBlockTotalFeesFiat.Location.Y);
-                            });
-                            UpdateLabelValueAsync(lblBlockListTotalFeesInNextBlock, nextBlockTotalFees);
-                            lblBlockListTotalFeesInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
-                            {
-                                lblBlockListTotalFeesInNextBlock.Text = nextBlockTotalFees;
-                            });
-
-                            UpdateLabelValueAsync(lblBlockListTotalFeesInNextBlockFiat, $"{fiatSymbol}{(Convert.ToDecimal(nextBlockTotalFees) * OneBTCinSelectedCurrency):N2}");
-                            lblBlockListTotalFeesInNextBlockFiat.Invoke((MethodInvoker)delegate // Blocks list
-                            {
-                                lblBlockListTotalFeesInNextBlockFiat.Location = new Point(lblBlockListTotalFeesInNextBlock.Location.X + lblBlockListTotalFeesInNextBlock.Width, lblBlockListTotalFeesInNextBlockFiat.Location.Y);
-                            });
-                        }
-                        else
-                        {
-                            Control[] controlsToShowAsTestnet = { lblTransInNextBlock, lblBlockListTXInNextBlock, lblNextBlockMinMaxFee, lblBlockListMinMaxInFeeNextBlock, lblNextBlockTotalFees, lblHeaderNextBlockTotalFees, lblBlockListTotalFeesInNextBlock, lblHeaderNextBlockMinMaxFee };
-                            foreach (Control control in controlsToShowAsTestnet)
-                            {
-                                control.Invoke((MethodInvoker)delegate
+                                lblHeaderBlockAge.Invoke((MethodInvoker)delegate
                                 {
-                                    control.Text = "unavailable on TestNet";
+                                    lblHeaderBlockAge.Location = new Point(lblHeaderBlockNumber.Location.X + lblHeaderBlockNumber.Width - (int)(6 * UIScale), lblHeaderBlockAge.Location.Y);
                                 });
+                                lblHeaderTimestamp.Invoke((MethodInvoker)delegate
+                                {
+                                    lblHeaderTimestamp.Location = new Point(lblHeaderBlockNumber.Location.X + lblHeaderBlockNumber.Width - (int)(6 * UIScale), lblHeaderTimestamp.Location.Y);
+                                });
+                                label107.Invoke((MethodInvoker)delegate
+                                {
+                                    label107.Location = new Point(lblHeaderTimestamp.Location.X + lblHeaderTimestamp.Width - (int)(4 * UIScale), label107.Location.Y);
+                                });
+
+                                firstTimeGettingBlockTip = false;
                             }
 
-                            lblNextBlockTotalFeesFiat.Invoke((MethodInvoker)delegate
+                            long sizeInBytes = blocks[0].Size;
+                            string sizeString; // convert display to bytes/kb/mb accordingly
+                            if (sizeInBytes < 1000)
                             {
-                                lblNextBlockTotalFeesFiat.Visible = false;
-                            });
-                        }
-                        lblFeeRangeChart.Invoke((MethodInvoker)delegate
-                        {
-                            lblFeeRangeChart.Location = new Point(lblNextBlockMinMaxFee.Location.X + lblNextBlockMinMaxFee.Width, lblFeeRangeChart.Location.Y);
-                        });
-                        lblHeaderFeeRangeChart.Invoke((MethodInvoker)delegate
-                        {
-                            lblHeaderFeeRangeChart.Location = new Point(lblHeaderNextBlockMinMaxFee.Location.X + lblHeaderNextBlockMinMaxFee.Width, lblHeaderFeeRangeChart.Location.Y);
-                        });
-                        lblBlockListFeeRangeChart2.Invoke((MethodInvoker)delegate
-                        {
-                            lblBlockListFeeRangeChart2.Location = new Point(lblBlockListMinMaxInFeeNextBlock.Location.X + lblBlockListMinMaxInFeeNextBlock.Width, lblBlockListFeeRangeChart2.Location.Y);
-                        });
-
-                        SetLightsMessagesAndResetTimers();
-                    }
-                    catch (Exception ex)
-                    {
-                        errorOccurred = true;
-                        HandleException(ex, "UpdateDashboards(Task3)");
-                    }
-                    #endregion
-
-                    #region transactions in mempool
-                    try
-                    {
-                        var (txCount, _, _) = MemSpGetMempool();
-                        string txInMempool = txCount;
-                        UpdateLabelValueAsync(lblTXInMempool, txInMempool);
-                        UpdateLabelValueAsync(lblBlockListTXInMempool, txInMempool);
-                    }
-                    catch (Exception ex)
-                    {
-                        errorOccurred = true;
-                        HandleException(ex, "UpdateAPIGroup1DataFields(GetMempool)");
-                    }
-                    #endregion
-
-                });
-                Task task1 = Task.Run(() => // mempool.space lightning JSON
-                {
-                    try
-                    {
-                        if (!testNet)
-                        {
-                            if (RunMempoolSpaceLightningAPI)
+                                sizeString = $"{sizeInBytes} bytes";
+                            }
+                            else if (sizeInBytes < 1000 * 1000)
                             {
-                                #region lightning stats
-                                var (channelCount, nodeCount, totalCapacity, torNodes, clearnetNodes, unannouncedNodes, avgCapacity, avgFeeRate, avgBaseeFeeMtokens, medCapacity, medFeeRate, medBaseeFeeMtokens, clearnetTorNodes) = MempoolSpaceLightning();
-                                UpdateLabelValueAsync(lblChannelCount, channelCount);
-                                UpdateLabelValueAsync(lblNodeCount, nodeCount);
-                                UpdateLabelValueAsync(lblTotalCapacity, totalCapacity);
-                                UpdateLabelValueAsync(lblTotalCapacityFiat, $"{fiatSymbol}{(Convert.ToDecimal(lblTotalCapacity.Text) * OneBTCinSelectedCurrency):N2}");
-
-                                UpdateLabelValueAsync(lblTorNodes, torNodes);
-                                UpdateLabelValueAsync(lblClearnetNodes, clearnetNodes);
-                                UpdateLabelValueAsync(lblAverageCapacity, avgCapacity);
-                                string avgcapacity = ConvertSatsToBitcoin(lblAverageCapacity.Text).ToString();
-                                UpdateLabelValueAsync(lblAverageCapacityFiat, $"{fiatSymbol}{(Convert.ToDecimal(avgcapacity) * OneBTCinSelectedCurrency):N2}");
-                                lblAverageCapacityFiat.Invoke((MethodInvoker)delegate
-                                {
-                                    lblAverageCapacityFiat.Location = new Point(lblAverageCapacity.Location.X + lblAverageCapacity.Width, lblAverageCapacityFiat.Location.Y);
-                                });
-                                UpdateLabelValueAsync(lblAverageFeeRate, avgFeeRate);
-                                string avgfeerate = ConvertSatsToBitcoin(lblAverageFeeRate.Text).ToString();
-                                UpdateLabelValueAsync(lblAverageFeeRateFiat, $"{fiatSymbol}{(Convert.ToDecimal(avgfeerate) * OneBTCinSelectedCurrency):N2}");
-                                lblAverageFeeRateFiat.Invoke((MethodInvoker)delegate
-                                {
-                                    lblAverageFeeRateFiat.Location = new Point(lblAverageFeeRate.Location.X + lblAverageFeeRate.Width, lblAverageFeeRateFiat.Location.Y);
-                                });
-                                UpdateLabelValueAsync(lblUnannouncedNodes, unannouncedNodes);
-                                UpdateLabelValueAsync(lblAverageBaseFeeMtokens, avgBaseeFeeMtokens);
-                                string avgbasefeerate = ConvertSatsToBitcoin(lblAverageBaseFeeMtokens.Text).ToString();
-                                UpdateLabelValueAsync(lblAverageBaseFeeMtokensFiat, $"{fiatSymbol}{((Convert.ToDecimal(avgbasefeerate) * OneBTCinSelectedCurrency) / 1000):N4}");
-                                lblAverageBaseFeeMtokensFiat.Invoke((MethodInvoker)delegate
-                                {
-                                    lblAverageBaseFeeMtokensFiat.Location = new Point(lblAverageBaseFeeMtokens.Location.X + lblAverageBaseFeeMtokens.Width, lblAverageBaseFeeMtokensFiat.Location.Y);
-                                });
-                                UpdateLabelValueAsync(lblMedCapacity, medCapacity);
-                                string medcapacity = ConvertSatsToBitcoin(lblMedCapacity.Text).ToString();
-                                UpdateLabelValueAsync(lblMedCapacityFiat, $"{fiatSymbol}{(Convert.ToDecimal(medcapacity) * OneBTCinSelectedCurrency):N2}");
-                                lblMedCapacityFiat.Invoke((MethodInvoker)delegate
-                                {
-                                    lblMedCapacityFiat.Location = new Point(lblMedCapacity.Location.X + lblMedCapacity.Width, lblMedCapacityFiat.Location.Y);
-                                });
-                                UpdateLabelValueAsync(lblMedFeeRate, medFeeRate);
-                                string medfeerate = ConvertSatsToBitcoin(lblMedFeeRate.Text).ToString();
-                                UpdateLabelValueAsync(lblMedFeeRateFiat, $"{fiatSymbol}{(Convert.ToDecimal(medfeerate) * OneBTCinSelectedCurrency):N2}");
-                                lblMedFeeRateFiat.Invoke((MethodInvoker)delegate
-                                {
-                                    lblMedFeeRateFiat.Location = new Point(lblMedFeeRate.Location.X + lblMedFeeRate.Width, lblMedFeeRateFiat.Location.Y);
-                                });
-                                UpdateLabelValueAsync(lblMedBaseFeeTokens, medBaseeFeeMtokens);
-                                string medbasefeerate = ConvertSatsToBitcoin(lblMedBaseFeeTokens.Text).ToString();
-                                UpdateLabelValueAsync(lblMedBaseFeeTokensFiat, $"{fiatSymbol}{((Convert.ToDecimal(medbasefeerate) * OneBTCinSelectedCurrency) / 1000):N4}");
-                                lblMedBaseFeeTokensFiat.Invoke((MethodInvoker)delegate
-                                {
-                                    lblMedBaseFeeTokensFiat.Location = new Point(lblMedBaseFeeTokens.Location.X + lblMedBaseFeeTokens.Width, lblMedBaseFeeTokensFiat.Location.Y);
-                                });
-                                UpdateLabelValueAsync(lblClearnetTorNodes, clearnetTorNodes);
-                                #endregion
+                                double sizeInKB = (double)sizeInBytes / 1000;
+                                sizeString = $"{sizeInKB:N2} KB";
                             }
                             else
                             {
-                                #region mark it all as disabled
-                                lblChannelCount.Invoke((MethodInvoker)delegate
-                                {
-                                    lblChannelCount.Text = "Disabled";
-                                });
-                                lblNodeCount.Invoke((MethodInvoker)delegate
-                                {
-                                    lblNodeCount.Text = "Disabled";
-                                });
-                                lblTotalCapacity.Invoke((MethodInvoker)delegate
-                                {
-                                    lblTotalCapacity.Text = "Disabled";
-                                });
-                                lblTorNodes.Invoke((MethodInvoker)delegate
-                                {
-                                    lblTorNodes.Text = "Disabled";
-                                });
-                                lblClearnetNodes.Invoke((MethodInvoker)delegate
-                                {
-                                    lblClearnetNodes.Text = "Disabled";
-                                });
-                                lblAverageCapacity.Invoke((MethodInvoker)delegate
-                                {
-                                    lblAverageCapacity.Text = "Disabled";
-                                });
-                                lblAverageFeeRate.Invoke((MethodInvoker)delegate
-                                {
-                                    lblAverageFeeRate.Text = "Disabled";
-                                });
-                                lblUnannouncedNodes.Invoke((MethodInvoker)delegate
-                                {
-                                    lblUnannouncedNodes.Text = "Disabled";
-                                });
-                                lblAverageBaseFeeMtokens.Invoke((MethodInvoker)delegate
-                                {
-                                    lblAverageBaseFeeMtokens.Text = "Disabled";
-                                });
-                                lblMedCapacity.Invoke((MethodInvoker)delegate
-                                {
-                                    lblMedCapacity.Text = "Disabled";
-                                });
-                                lblMedFeeRate.Invoke((MethodInvoker)delegate
-                                {
-                                    lblMedFeeRate.Text = "Disabled";
-                                });
-                                lblMedBaseFeeTokens.Invoke((MethodInvoker)delegate
-                                {
-                                    lblMedBaseFeeTokens.Text = "Disabled";
-                                });
-                                lblClearnetTorNodes.Invoke((MethodInvoker)delegate
-                                {
-                                    lblClearnetTorNodes.Text = "Disabled";
-                                });
-                                #endregion
+                                double sizeInMB = (double)sizeInBytes / (1000 * 1000);
+                                sizeString = $"{sizeInMB:N2} MB";
                             }
-                            #region shuffle charts in to place
-                            lblLightningNodesChart.Invoke((MethodInvoker)delegate
+                            lblHeaderBlockSize.Invoke((MethodInvoker)delegate
                             {
-                                lblLightningNodesChart.Location = new Point(label40.Location.X + label40.Width, lblLightningNodesChart.Location.Y);
+                                lblHeaderBlockSize.Location = new Point(label149.Location.X + label149.Width, lblHeaderBlockSize.Location.Y);
                             });
-                            lblLightningChannelsChart.Invoke((MethodInvoker)delegate
+                            UpdateLabelValueAsync(lblHeaderBlockSize, sizeString);
+                            lblHeaderBlockSizeChart.Invoke((MethodInvoker)delegate
                             {
-                                lblLightningChannelsChart.Location = new Point(label34.Location.X + label34.Width, lblLightningChannelsChart.Location.Y);
+                                lblHeaderBlockSizeChart.Location = new Point(lblHeaderBlockSize.Location.X + lblHeaderBlockSize.Width, lblHeaderBlockSizeChart.Location.Y);
                             });
-                            lblLightningCapacityChart.Invoke((MethodInvoker)delegate
+                            // difficulty epoch = block height / 2016 rounded up to an integer
+                            UpdateLabelValueAsync(lblDifficultyEpoch, Convert.ToString((int)Math.Ceiling(Convert.ToDecimal(lblHeaderBlockNumber.Text) / 2016)));
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    errorOccurred = true;
+                    HandleException(ex, "UpdateDashboards(block size & tx count)");
+                }
+                #endregion
+
+                #region fees
+                try
+                {
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Getting fee priority data...", "Initialising...");
+                    }
+                    var (fastestFee, halfHourFee, hourFee, economyFee) = MemSpGetFees();
+                    UpdateLabelValueAsync(lblHeaderfeesHighPriority, fastestFee);
+                    label15.Invoke((MethodInvoker)delegate
+                    {
+                        label15.Location = new Point(lblHeaderfeesHighPriority.Location.X + lblHeaderfeesHighPriority.Width - (int)(13 * UIScale), label15.Location.Y);
+                    });
+                    lblHeaderFeesMediumPriority.Invoke((MethodInvoker)delegate
+                    {
+                        lblHeaderFeesMediumPriority.Location = new Point(label15.Location.X + label15.Width - 10, lblHeaderFeesMediumPriority.Location.Y);
+                    });
+                    UpdateLabelValueAsync(lblHeaderFeesMediumPriority, halfHourFee);
+                    label25.Invoke((MethodInvoker)delegate
+                    {
+                        label25.Location = new Point(lblHeaderFeesMediumPriority.Location.X + lblHeaderFeesMediumPriority.Width - (int)(13 * UIScale), label25.Location.Y);
+                    });
+                    lblHeaderFeesLowPriority.Invoke((MethodInvoker)delegate
+                    {
+                        lblHeaderFeesLowPriority.Location = new Point(label25.Location.X + label25.Width - 10, lblHeaderFeesLowPriority.Location.Y);
+                    });
+                    UpdateLabelValueAsync(lblHeaderFeesLowPriority, hourFee);
+                    label28.Invoke((MethodInvoker)delegate
+                    {
+                        label28.Location = new Point(lblHeaderFeesLowPriority.Location.X + lblHeaderFeesLowPriority.Width - (int)(13 * UIScale), label28.Location.Y);
+                    });
+                    lblHeaderFeesNoPriority.Invoke((MethodInvoker)delegate
+                    {
+                        lblHeaderFeesNoPriority.Location = new Point(label28.Location.X + label28.Width - 10, lblHeaderFeesNoPriority.Location.Y);
+                    });
+                    UpdateLabelValueAsync(lblHeaderFeesNoPriority, economyFee);
+                    label29.Invoke((MethodInvoker)delegate
+                    {
+                        label29.Location = new Point(lblHeaderFeesNoPriority.Location.X + lblHeaderFeesNoPriority.Width - (int)(13 * UIScale), label29.Location.Y);
+                    });
+                    lblHeaderFeeRatesChart.Invoke((MethodInvoker)delegate
+                    {
+                        lblHeaderFeeRatesChart.Location = new Point(lblHeaderFeesNoPriority.Location.X + lblHeaderFeesNoPriority.Width - 10, lblHeaderFeeRatesChart.Location.Y);
+                    });
+                }
+                catch (Exception ex)
+                {
+                    errorOccurred = true;
+                    HandleException(ex, "UpdateDashboards(fees)");
+                }
+                #endregion
+
+                #region hashrate
+                try
+                {
+                    if (fullSizeLoadingScreen!.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Determining hashrate...", "Initialising...");
+                    }
+                    var currentHashrate = MemSpGetHashrate();
+                    BigInteger currentHashrateFormatted = BigInteger.Parse(currentHashrate);
+
+                    UpdateLabelValueAsync(lblEstHashrate, $"{currentHashrateFormatted:n0}");
+
+                    lblHashrateChart.Invoke((MethodInvoker)delegate
+                    {
+                        lblHashrateChart.Location = new Point(lblEstHashrate.Location.X + lblEstHashrate.Width, lblHashrateChart.Location.Y);
+                    });
+                    UpdateLabelValueAsync(lblBlockListEstHashRate, $"{currentHashrateFormatted:n0}");
+                    lblBlockListHashrateChart.Invoke((MethodInvoker)delegate
+                    {
+                        lblBlockListHashrateChart.Location = new Point(lblBlockListEstHashRate.Location.X + lblBlockListEstHashRate.Width, lblBlockListHashrateChart.Location.Y);
+                    });
+                }
+                catch (Exception ex)
+                {
+                    errorOccurred = true;
+                    HandleException(ex, "UpdateDashboards(hashrate)");
+                }
+                #endregion
+
+                #region determine block subsidy, subsidy after halving and fiat values of both
+                // determine current block subsidy by calculating it from most recent block
+                if (fullSizeLoadingScreen!.Visible)
+                {
+                    fullSizeLoadingScreen.SetLoadingText("Gathering block subsidy and halving data...", "Initialising...");
+                }
+                string blockSubsidy = MemSpGetRewardStats();
+                UpdateLabelValueAsync(lblBlockSubsidy, blockSubsidy);
+
+                if (decimal.TryParse(blockSubsidy, out decimal epoch))
+                {
+                    epoch = (int)(Math.Log(Convert.ToDouble(blockSubsidy) / 50) / Math.Log(0.5)) + 1;
+                }
+                else
+                {
+                    epoch = 0;
+                }
+                UpdateLabelValueAsync(lblSubsidyEpoch, Convert.ToString(epoch));
+                label296.Invoke((MethodInvoker)delegate
+                {
+                    label296.Location = new Point(lblSubsidyEpoch.Location.X + lblSubsidyEpoch.Width, label296.Location.Y);
+                });
+                lblBlockSubsidy.Invoke((MethodInvoker)delegate
+                {
+                    lblBlockSubsidy.Location = new Point(label296.Location.X + label296.Width, lblBlockSubsidy.Location.Y);
+                });
+
+                if (decimal.TryParse(blockSubsidy, out decimal decimalBlockSubsidy))
+                {
+                    UpdateLabelValueAsync(lblBlockRewardFiat, $"{fiatSymbol}{(decimalBlockSubsidy * OneBTCinSelectedCurrency):N2}");
+
+                    lblBlockRewardFiat.Invoke((MethodInvoker)delegate
+                    {
+                        lblBlockRewardFiat.Location = new Point(lblBlockSubsidy.Location.X + lblBlockSubsidy.Width, lblBlockRewardFiat.Location.Y);
+                    });
+                }
+                else
+                {
+                    lblBlockRewardFiat.Invoke((MethodInvoker)delegate
+                    {
+                        lblBlockRewardFiat.Text = "0";
+                        lblBlockRewardFiat.Location = new Point(lblBlockSubsidy.Location.X + lblBlockSubsidy.Width, lblBlockRewardFiat.Location.Y);
+                    });
+                }
+
+                if (decimal.TryParse(blockSubsidy, out decimal DecBlockSubsidy))
+                {
+                    DecBlockSubsidy = Convert.ToDecimal(blockSubsidy);
+                }
+                else
+                {
+                    DecBlockSubsidy = 0;
+                }
+                decimal NextBlockSubsidy = DecBlockSubsidy / 2;
+                UpdateLabelValueAsync(lblBlockSubsidyAfterHalving, Convert.ToString(NextBlockSubsidy));
+                UpdateLabelValueAsync(lblBlockRewardAfterHalvingFiat, $"{fiatSymbol}{(Convert.ToDecimal(NextBlockSubsidy) * OneBTCinSelectedCurrency):N2}");
+
+                lblBlockRewardAfterHalvingFiat.Invoke((MethodInvoker)delegate
+                {
+                    lblBlockRewardAfterHalvingFiat.Location = new Point(lblBlockSubsidyAfterHalving.Location.X + lblBlockSubsidyAfterHalving.Width, lblBlockRewardAfterHalvingFiat.Location.Y);
+                });
+                UpdateLabelValueAsync(lblBlockListBlockSubsidy, blockSubsidy);
+                if (decimal.TryParse(blockSubsidy, out decimal blockSubsidy2))
+                {
+                    UpdateLabelValueAsync(lblBlockListBlockRewardFiat, $"{fiatSymbol}{(blockSubsidy2 * OneBTCinSelectedCurrency):N2}");
+
+                    lblBlockListBlockRewardFiat.Invoke((MethodInvoker)delegate // (Blocks list)
+                    {
+                        lblBlockListBlockRewardFiat.Location = new Point(lblBlockListBlockSubsidy.Location.X + lblBlockListBlockSubsidy.Width, lblBlockListBlockRewardFiat.Location.Y);
+                    });
+                }
+                else
+                {
+                    lblBlockListBlockRewardFiat.Invoke((MethodInvoker)delegate // (Blocks list)
+                    {
+                        lblBlockListBlockRewardFiat.Text = "0";
+                        lblBlockListBlockRewardFiat.Location = new Point(lblBlockListBlockSubsidy.Location.X + lblBlockListBlockSubsidy.Width, lblBlockListBlockRewardFiat.Location.Y);
+                    });
+                }
+
+                #endregion
+
+                #region difficulty adjustment
+                try
+                {
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Checking mining difficulty...", "Initialising...");
+                    }
+                    string truncatedPercent = "0%";
+                    var (progressPercent, difficultyChange, estimatedRetargetDate, remainingBlocks, _, previousRetarget, nextRetargetHeight, timeAvg, _) = MemSpGetDifficultyAdjustment();
+                    if (decimal.TryParse(progressPercent, out decimal progressValue2))
+                    {
+                        progressValue2 = decimal.Parse(progressPercent.TrimEnd('%')) / 100; // convert to decimal and scale to range [0, 1]
+                        truncatedPercent = $"{progressValue2 * 100:F2}%"; // truncate to two decimal places
+                    }
+                    UpdateLabelValueAsync(lblProgressNextDiffAdjPercentage, truncatedPercent);
+                    UpdateLabelValueAsync(lblBlockListProgressNextDiffAdjPercentage, truncatedPercent);
+                    if (double.TryParse(previousRetarget, out double retargetValue))
+                    {
+                        // Format the double with two decimal places
+                        string formattedRetarget = retargetValue.ToString("0.00");
+
+                        // Update the label value
+                        UpdateLabelValueAsync(lblPrevDiffAdjustment, $"{formattedRetarget}%");
+                    }
+                    label229.Invoke((MethodInvoker)delegate
+                    {
+                        label229.Location = new Point(lblPrevDiffAdjustment.Location.X + lblPrevDiffAdjustment.Width, label229.Location.Y);
+                    });
+                    lblDifficultyAdjEst.Invoke((MethodInvoker)delegate
+                    {
+                        lblDifficultyAdjEst.Location = new Point(label229.Location.X + label229.Width, lblDifficultyAdjEst.Location.Y);
+                    });
+                    if (decimal.TryParse(progressPercent, out decimal progressValue))
+                    {
+                        progressValue = decimal.Parse(progressPercent); // convert to decimal and scale to range [0, 1]
+                        progressBarNextDiffAdj.Value = Convert.ToInt16(progressValue); // scale to fit progress bar range
+                        progressBarBlockListNextDiffAdj.Value = Convert.ToInt16(progressValue); // scale to fit progress bar range - Block List
+                    }
+                    UpdateLabelValueAsync(lblDifficultyAdjEst, $"{difficultyChange}%");
+                    lblDifficultyChart.Invoke((MethodInvoker)delegate
+                    {
+                        lblDifficultyChart.Location = new Point(lblDifficultyAdjEst.Location.X + lblDifficultyAdjEst.Width, lblDifficultyChart.Location.Y);
+                    });
+                    UpdateLabelValueAsync(lblBlockListNextDifficultyAdjustment, $"{difficultyChange}%");
+                    lblBlockListDifficultyChart.Invoke((MethodInvoker)delegate  // (Blocks list)
+                    {
+                        lblBlockListDifficultyChart.Location = new Point(lblBlockListNextDifficultyAdjustment.Location.X + lblBlockListNextDifficultyAdjustment.Width, lblBlockListDifficultyChart.Location.Y);
+                    });
+                    UpdateLabelValueAsync(lblBlocksUntilDiffAdj, remainingBlocks.ToString());
+                    string formattedDate;
+                    if (String.Compare(NodeURL, "https://mempool.space/api/") == 0 || String.Compare(NodeURL, "https://mempool.space/testnet/api/") == 0)
+                    {
+                        long unixTimestamp = Convert.ToInt64(estimatedRetargetDate);
+                        DateTime retargetDate = DateTimeExtensions.FromUnixTimeMilliseconds(unixTimestamp);
+                        formattedDate = retargetDate.ToString("yyyy-MM-dd");
+                    }
+                    else
+                    {
+                        double estRetargetDate = Convert.ToDouble(estimatedRetargetDate);
+                        DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeMilliseconds((long)estRetargetDate);
+                        DateTime dateTime = dateTimeOffset.LocalDateTime;
+                        formattedDate = dateTime.ToString();
+                    }
+                    UpdateLabelValueAsync(lblEstDiffAdjDate, formattedDate);
+                    UpdateLabelValueAsync(lblNextDiffAdjBlock, nextRetargetHeight);
+                    lblBlockListNextDiffAdjBlock.Invoke((MethodInvoker)delegate // (Blocks list)
+                    {
+                        lblBlockListNextDiffAdjBlock.Text = nextRetargetHeight;
+                    });
+
+                    int minutes = 0;
+                    int seconds = 0;
+                    if (decimal.TryParse(timeAvg, out decimal AvgTimeBetweenBlocks))
+                    {
+                        AvgTimeBetweenBlocks = (Convert.ToDecimal(timeAvg) / 1000) / 60;
+                        minutes = (int)AvgTimeBetweenBlocks;
+                        seconds = (int)((AvgTimeBetweenBlocks - minutes) * 60);
+                    }
+                    string timeString = $"{minutes} mins {seconds} secs";
+                    UpdateLabelValueAsync(lblAvgTimeBetweenBlocks, timeString);
+                    UpdateLabelValueAsync(lblBlockListAvgTimeBetweenBlocks, timeString);
+                }
+                catch (Exception ex)
+                {
+                    errorOccurred = true;
+                    HandleException(ex, "UpdateDashboards(difficulty adjustment)");
+                }
+                #endregion
+
+                #region fees and transactions in next block
+                try
+                {
+                    if (!testNet)
+                    {
+                        if (fullSizeLoadingScreen.Visible)
+                        {
+                            fullSizeLoadingScreen.SetLoadingText("Gettings fees and transactions in next block...", "Initialising...");
+                        }
+
+                        var (txInNextBlock, nextBlockMinFee, nextBlockMaxFee, nextBlockTotalFees) = MemSpNextBlock();
+                        UpdateLabelValueAsync(lblTransInNextBlock, txInNextBlock);
+                        UpdateLabelValueAsync(lblBlockListTXInNextBlock, txInNextBlock);
+
+                        lblNextBlockMinMaxFee.Invoke((MethodInvoker)delegate
+                        {
+                            lblNextBlockMinMaxFee.Text = $"{nextBlockMinFee} / {nextBlockMaxFee}";
+                        });
+                        lblHeaderNextBlockMinMaxFee.Invoke((MethodInvoker)delegate
+                        {
+                            lblHeaderNextBlockMinMaxFee.Text = $"{nextBlockMinFee} - {nextBlockMaxFee}";
+                            lblHeaderNextBlockMinMaxFee.Location = new Point(label110.Location.X + label110.Width, lblHeaderNextBlockMinMaxFee.Location.Y);
+                        });
+                        lblBlockListMinMaxInFeeNextBlock.Invoke((MethodInvoker)delegate // Blocks list
+                        {
+                            lblBlockListMinMaxInFeeNextBlock.Text = $"{nextBlockMinFee} / {nextBlockMaxFee}";
+                        });
+                        UpdateLabelValueAsync(lblNextBlockTotalFees, nextBlockTotalFees);
+                        lblHeaderNextBlockTotalFees.Invoke((MethodInvoker)delegate // Blocks list
+                        {
+                            lblHeaderNextBlockTotalFees.Location = new Point(label150.Location.X + label150.Width, lblHeaderNextBlockTotalFees.Location.Y);
+                        });
+                        UpdateLabelValueAsync(lblHeaderNextBlockTotalFees, nextBlockTotalFees);
+                        lblHeaderBlockFeesChart.Invoke((MethodInvoker)delegate
+                        {
+                            lblHeaderBlockFeesChart.Location = new Point(lblHeaderNextBlockTotalFees.Location.X + lblHeaderNextBlockTotalFees.Width, lblHeaderBlockFeesChart.Location.Y);
+                        });
+                        UpdateLabelValueAsync(lblNextBlockTotalFeesFiat, $"{fiatSymbol}{(Convert.ToDecimal(nextBlockTotalFees) * OneBTCinSelectedCurrency):N2}");
+                        lblNextBlockTotalFeesFiat.Invoke((MethodInvoker)delegate
+                        {
+                            lblNextBlockTotalFeesFiat.Location = new Point(lblNextBlockTotalFees.Location.X + lblNextBlockTotalFees.Width, lblNextBlockTotalFeesFiat.Location.Y);
+                        });
+                        UpdateLabelValueAsync(lblBlockListTotalFeesInNextBlock, nextBlockTotalFees);
+                        lblBlockListTotalFeesInNextBlock.Invoke((MethodInvoker)delegate // Blocks list
+                        {
+                            lblBlockListTotalFeesInNextBlock.Text = nextBlockTotalFees;
+                        });
+
+                        UpdateLabelValueAsync(lblBlockListTotalFeesInNextBlockFiat, $"{fiatSymbol}{(Convert.ToDecimal(nextBlockTotalFees) * OneBTCinSelectedCurrency):N2}");
+                        lblBlockListTotalFeesInNextBlockFiat.Invoke((MethodInvoker)delegate // Blocks list
+                        {
+                            lblBlockListTotalFeesInNextBlockFiat.Location = new Point(lblBlockListTotalFeesInNextBlock.Location.X + lblBlockListTotalFeesInNextBlock.Width, lblBlockListTotalFeesInNextBlockFiat.Location.Y);
+                        });
+                    }
+                    else
+                    {
+                        Control[] controlsToShowAsTestnet = { lblTransInNextBlock, lblBlockListTXInNextBlock, lblNextBlockMinMaxFee, lblBlockListMinMaxInFeeNextBlock, lblNextBlockTotalFees, lblHeaderNextBlockTotalFees, lblBlockListTotalFeesInNextBlock, lblHeaderNextBlockMinMaxFee };
+                        foreach (Control control in controlsToShowAsTestnet)
+                        {
+                            control.Invoke((MethodInvoker)delegate
                             {
-                                lblLightningCapacityChart.Location = new Point(label38.Location.X + label38.Width, lblLightningCapacityChart.Location.Y);
+                                control.Text = "unavailable on TestNet";
+                            });
+                        }
+
+                        lblNextBlockTotalFeesFiat.Invoke((MethodInvoker)delegate
+                        {
+                            lblNextBlockTotalFeesFiat.Visible = false;
+                        });
+                    }
+                    lblFeeRangeChart.Invoke((MethodInvoker)delegate
+                    {
+                        lblFeeRangeChart.Location = new Point(lblNextBlockMinMaxFee.Location.X + lblNextBlockMinMaxFee.Width, lblFeeRangeChart.Location.Y);
+                    });
+                    lblHeaderFeeRangeChart.Invoke((MethodInvoker)delegate
+                    {
+                        lblHeaderFeeRangeChart.Location = new Point(lblHeaderNextBlockMinMaxFee.Location.X + lblHeaderNextBlockMinMaxFee.Width, lblHeaderFeeRangeChart.Location.Y);
+                    });
+                    lblBlockListFeeRangeChart2.Invoke((MethodInvoker)delegate
+                    {
+                        lblBlockListFeeRangeChart2.Location = new Point(lblBlockListMinMaxInFeeNextBlock.Location.X + lblBlockListMinMaxInFeeNextBlock.Width, lblBlockListFeeRangeChart2.Location.Y);
+                    });
+
+                    SetLightsMessagesAndResetTimers();
+                }
+                catch (Exception ex)
+                {
+                    errorOccurred = true;
+                    HandleException(ex, "UpdateDashboards(Task3)");
+                }
+                #endregion
+
+                #region transactions in mempool
+                try
+                {
+                    var (txCount, _, _) = MemSpGetMempool();
+                    string txInMempool = txCount;
+                    UpdateLabelValueAsync(lblTXInMempool, txInMempool);
+                    UpdateLabelValueAsync(lblBlockListTXInMempool, txInMempool);
+                }
+                catch (Exception ex)
+                {
+                    errorOccurred = true;
+                    HandleException(ex, "UpdateAPIGroup1DataFields(GetMempool)");
+                }
+                #endregion
+
+            });
+            Task task1 = Task.Run(() => // mempool.space lightning JSON
+            {
+                try
+                {
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Updating Lightning dashboard...", "Initialising...");
+                    }
+                    if (!testNet)
+                    {
+                        if (RunMempoolSpaceLightningAPI)
+                        {
+                            #region lightning stats
+                            var (channelCount, nodeCount, totalCapacity, torNodes, clearnetNodes, unannouncedNodes, avgCapacity, avgFeeRate, avgBaseeFeeMtokens, medCapacity, medFeeRate, medBaseeFeeMtokens, clearnetTorNodes) = MempoolSpaceLightning();
+                            UpdateLabelValueAsync(lblChannelCount, channelCount);
+                            UpdateLabelValueAsync(lblNodeCount, nodeCount);
+                            UpdateLabelValueAsync(lblTotalCapacity, totalCapacity);
+                            UpdateLabelValueAsync(lblTotalCapacityFiat, $"{fiatSymbol}{(Convert.ToDecimal(lblTotalCapacity.Text) * OneBTCinSelectedCurrency):N2}");
+
+                            UpdateLabelValueAsync(lblTorNodes, torNodes);
+                            UpdateLabelValueAsync(lblClearnetNodes, clearnetNodes);
+                            UpdateLabelValueAsync(lblAverageCapacity, avgCapacity);
+                            string avgcapacity = ConvertSatsToBitcoin(lblAverageCapacity.Text).ToString();
+                            UpdateLabelValueAsync(lblAverageCapacityFiat, $"{fiatSymbol}{(Convert.ToDecimal(avgcapacity) * OneBTCinSelectedCurrency):N2}");
+                            lblAverageCapacityFiat.Invoke((MethodInvoker)delegate
+                            {
+                                lblAverageCapacityFiat.Location = new Point(lblAverageCapacity.Location.X + lblAverageCapacity.Width, lblAverageCapacityFiat.Location.Y);
+                            });
+                            UpdateLabelValueAsync(lblAverageFeeRate, avgFeeRate);
+                            string avgfeerate = ConvertSatsToBitcoin(lblAverageFeeRate.Text).ToString();
+                            UpdateLabelValueAsync(lblAverageFeeRateFiat, $"{fiatSymbol}{(Convert.ToDecimal(avgfeerate) * OneBTCinSelectedCurrency):N2}");
+                            lblAverageFeeRateFiat.Invoke((MethodInvoker)delegate
+                            {
+                                lblAverageFeeRateFiat.Location = new Point(lblAverageFeeRate.Location.X + lblAverageFeeRate.Width, lblAverageFeeRateFiat.Location.Y);
+                            });
+                            UpdateLabelValueAsync(lblUnannouncedNodes, unannouncedNodes);
+                            UpdateLabelValueAsync(lblAverageBaseFeeMtokens, avgBaseeFeeMtokens);
+                            string avgbasefeerate = ConvertSatsToBitcoin(lblAverageBaseFeeMtokens.Text).ToString();
+                            UpdateLabelValueAsync(lblAverageBaseFeeMtokensFiat, $"{fiatSymbol}{((Convert.ToDecimal(avgbasefeerate) * OneBTCinSelectedCurrency) / 1000):N4}");
+                            lblAverageBaseFeeMtokensFiat.Invoke((MethodInvoker)delegate
+                            {
+                                lblAverageBaseFeeMtokensFiat.Location = new Point(lblAverageBaseFeeMtokens.Location.X + lblAverageBaseFeeMtokens.Width, lblAverageBaseFeeMtokensFiat.Location.Y);
+                            });
+                            UpdateLabelValueAsync(lblMedCapacity, medCapacity);
+                            string medcapacity = ConvertSatsToBitcoin(lblMedCapacity.Text).ToString();
+                            UpdateLabelValueAsync(lblMedCapacityFiat, $"{fiatSymbol}{(Convert.ToDecimal(medcapacity) * OneBTCinSelectedCurrency):N2}");
+                            lblMedCapacityFiat.Invoke((MethodInvoker)delegate
+                            {
+                                lblMedCapacityFiat.Location = new Point(lblMedCapacity.Location.X + lblMedCapacity.Width, lblMedCapacityFiat.Location.Y);
+                            });
+                            UpdateLabelValueAsync(lblMedFeeRate, medFeeRate);
+                            string medfeerate = ConvertSatsToBitcoin(lblMedFeeRate.Text).ToString();
+                            UpdateLabelValueAsync(lblMedFeeRateFiat, $"{fiatSymbol}{(Convert.ToDecimal(medfeerate) * OneBTCinSelectedCurrency):N2}");
+                            lblMedFeeRateFiat.Invoke((MethodInvoker)delegate
+                            {
+                                lblMedFeeRateFiat.Location = new Point(lblMedFeeRate.Location.X + lblMedFeeRate.Width, lblMedFeeRateFiat.Location.Y);
+                            });
+                            UpdateLabelValueAsync(lblMedBaseFeeTokens, medBaseeFeeMtokens);
+                            string medbasefeerate = ConvertSatsToBitcoin(lblMedBaseFeeTokens.Text).ToString();
+                            UpdateLabelValueAsync(lblMedBaseFeeTokensFiat, $"{fiatSymbol}{((Convert.ToDecimal(medbasefeerate) * OneBTCinSelectedCurrency) / 1000):N4}");
+                            lblMedBaseFeeTokensFiat.Invoke((MethodInvoker)delegate
+                            {
+                                lblMedBaseFeeTokensFiat.Location = new Point(lblMedBaseFeeTokens.Location.X + lblMedBaseFeeTokens.Width, lblMedBaseFeeTokensFiat.Location.Y);
+                            });
+                            UpdateLabelValueAsync(lblClearnetTorNodes, clearnetTorNodes);
+                            #endregion
+                        }
+                        else
+                        {
+                            #region mark it all as disabled
+                            lblChannelCount.Invoke((MethodInvoker)delegate
+                            {
+                                lblChannelCount.Text = "Disabled";
+                            });
+                            lblNodeCount.Invoke((MethodInvoker)delegate
+                            {
+                                lblNodeCount.Text = "Disabled";
+                            });
+                            lblTotalCapacity.Invoke((MethodInvoker)delegate
+                            {
+                                lblTotalCapacity.Text = "Disabled";
+                            });
+                            lblTorNodes.Invoke((MethodInvoker)delegate
+                            {
+                                lblTorNodes.Text = "Disabled";
+                            });
+                            lblClearnetNodes.Invoke((MethodInvoker)delegate
+                            {
+                                lblClearnetNodes.Text = "Disabled";
+                            });
+                            lblAverageCapacity.Invoke((MethodInvoker)delegate
+                            {
+                                lblAverageCapacity.Text = "Disabled";
+                            });
+                            lblAverageFeeRate.Invoke((MethodInvoker)delegate
+                            {
+                                lblAverageFeeRate.Text = "Disabled";
+                            });
+                            lblUnannouncedNodes.Invoke((MethodInvoker)delegate
+                            {
+                                lblUnannouncedNodes.Text = "Disabled";
+                            });
+                            lblAverageBaseFeeMtokens.Invoke((MethodInvoker)delegate
+                            {
+                                lblAverageBaseFeeMtokens.Text = "Disabled";
+                            });
+                            lblMedCapacity.Invoke((MethodInvoker)delegate
+                            {
+                                lblMedCapacity.Text = "Disabled";
+                            });
+                            lblMedFeeRate.Invoke((MethodInvoker)delegate
+                            {
+                                lblMedFeeRate.Text = "Disabled";
+                            });
+                            lblMedBaseFeeTokens.Invoke((MethodInvoker)delegate
+                            {
+                                lblMedBaseFeeTokens.Text = "Disabled";
+                            });
+                            lblClearnetTorNodes.Invoke((MethodInvoker)delegate
+                            {
+                                lblClearnetTorNodes.Text = "Disabled";
                             });
                             #endregion
-                            if (RunMempoolSpaceLightningAPI)
+                        }
+                        #region shuffle charts in to place
+                        lblLightningNodesChart.Invoke((MethodInvoker)delegate
+                        {
+                            lblLightningNodesChart.Location = new Point(label40.Location.X + label40.Width, lblLightningNodesChart.Location.Y);
+                        });
+                        lblLightningChannelsChart.Invoke((MethodInvoker)delegate
+                        {
+                            lblLightningChannelsChart.Location = new Point(label34.Location.X + label34.Width, lblLightningChannelsChart.Location.Y);
+                        });
+                        lblLightningCapacityChart.Invoke((MethodInvoker)delegate
+                        {
+                            lblLightningCapacityChart.Location = new Point(label38.Location.X + label38.Width, lblLightningCapacityChart.Location.Y);
+                        });
+                        #endregion
+                        if (RunMempoolSpaceLightningAPI)
+                        {
+                            #region capacity
+                            var (clearnetCapacity, torCapacity, unknownCapacity) = MemSpCapacityBreakdown();
+                            UpdateLabelValueAsync(lblClearnetCapacity, clearnetCapacity);
+                            UpdateLabelValueAsync(lblClearnetCapacityFiat, $"{fiatSymbol}{(Convert.ToDecimal(lblClearnetCapacity.Text) * OneBTCinSelectedCurrency):N2}");
+                            lblClearnetCapacityFiat.Invoke((MethodInvoker)delegate
                             {
-                                #region capacity
-                                var (clearnetCapacity, torCapacity, unknownCapacity) = MemSpCapacityBreakdown();
-                                UpdateLabelValueAsync(lblClearnetCapacity, clearnetCapacity);
-                                UpdateLabelValueAsync(lblClearnetCapacityFiat, $"{fiatSymbol}{(Convert.ToDecimal(lblClearnetCapacity.Text) * OneBTCinSelectedCurrency):N2}");
-                                lblClearnetCapacityFiat.Invoke((MethodInvoker)delegate
+                                lblClearnetCapacityFiat.Location = new Point(lblClearnetCapacity.Location.X + lblClearnetCapacity.Width, lblClearnetCapacityFiat.Location.Y);
+                            });
+                            UpdateLabelValueAsync(lblTorCapacity, torCapacity);
+                            UpdateLabelValueAsync(lblTorCapacityFiat, $"{fiatSymbol}{(Convert.ToDecimal(lblTorCapacity.Text) * OneBTCinSelectedCurrency):N2}");
+                            lblTorCapacityFiat.Invoke((MethodInvoker)delegate
+                            {
+                                lblTorCapacityFiat.Location = new Point(lblTorCapacity.Location.X + lblTorCapacity.Width, lblTorCapacityFiat.Location.Y);
+                            });
+                            UpdateLabelValueAsync(lblUnknownCapacity, unknownCapacity);
+                            UpdateLabelValueAsync(lblUnknownCapacityFiat, $"{fiatSymbol}{(Convert.ToDecimal(lblUnknownCapacity.Text) * OneBTCinSelectedCurrency):N2}");
+                            lblUnknownCapacityFiat.Invoke((MethodInvoker)delegate
+                            {
+                                lblUnknownCapacityFiat.Location = new Point(lblUnknownCapacity.Location.X + lblUnknownCapacity.Width, lblUnknownCapacityFiat.Location.Y);
+                            });
+                            #endregion
+                        }
+                        else
+                        {
+                            #region mark as disabled
+                            lblClearnetCapacity.Invoke((MethodInvoker)delegate
+                            {
+                                lblClearnetCapacity.Text = "Disabled";
+                            });
+                            lblTorCapacity.Invoke((MethodInvoker)delegate
+                            {
+                                lblTorCapacity.Text = "Disabled";
+                            });
+                            lblUnknownCapacity.Invoke((MethodInvoker)delegate
+                            {
+                                lblUnknownCapacity.Text = "Disabled";
+                            });
+                            #endregion
+                        }
+                        if (RunMempoolSpaceLightningAPI)
+                        {
+                            #region liquidity & connectivity rankings
+                            var (aliases, capacities) = MemSpLiquidityRanking();
+                            for (int i = 0; i < aliases.Count && i < capacities.Count && i < 10; i++)
+                            {
+                                Label aliasLabel = (Label)this.Controls.Find($"aliasLabel{i + 1}", true)[0];
+                                aliasLabel.Invoke((MethodInvoker)delegate
                                 {
-                                    lblClearnetCapacityFiat.Location = new Point(lblClearnetCapacity.Location.X + lblClearnetCapacity.Width, lblClearnetCapacityFiat.Location.Y);
+                                    aliasLabel.Text = aliases[i];
                                 });
-                                UpdateLabelValueAsync(lblTorCapacity, torCapacity);
-                                UpdateLabelValueAsync(lblTorCapacityFiat, $"{fiatSymbol}{(Convert.ToDecimal(lblTorCapacity.Text) * OneBTCinSelectedCurrency):N2}");
-                                lblTorCapacityFiat.Invoke((MethodInvoker)delegate
+                                Label capacityLabel = (Label)this.Controls.Find($"capacityLabel{i + 1}", true)[0];
+                                Label capacityLabelFiat = (Label)this.Controls.Find($"capacityLabelFiat{i + 1}", true)[0];
+                                UpdateLabelValueAsync(capacityLabel, capacities[i]);
+                                UpdateLabelValueAsync(capacityLabelFiat, $"{fiatSymbol}{(Convert.ToDecimal(capacityLabel.Text) * OneBTCinSelectedCurrency):N2}");
+                                capacityLabelFiat.Invoke((MethodInvoker)delegate
                                 {
-                                    lblTorCapacityFiat.Location = new Point(lblTorCapacity.Location.X + lblTorCapacity.Width, lblTorCapacityFiat.Location.Y);
+                                    capacityLabelFiat.Location = new Point(capacityLabel.Location.X + capacityLabel.Width, capacityLabelFiat.Location.Y);
                                 });
-                                UpdateLabelValueAsync(lblUnknownCapacity, unknownCapacity);
-                                UpdateLabelValueAsync(lblUnknownCapacityFiat, $"{fiatSymbol}{(Convert.ToDecimal(lblUnknownCapacity.Text) * OneBTCinSelectedCurrency):N2}");
-                                lblUnknownCapacityFiat.Invoke((MethodInvoker)delegate
-                                {
-                                    lblUnknownCapacityFiat.Location = new Point(lblUnknownCapacity.Location.X + lblUnknownCapacity.Width, lblUnknownCapacityFiat.Location.Y);
-                                });
-                                #endregion
                             }
-                            else
+                            var result7 = MemSpConnectivityRanking();
+                            if (result7.aliases.Count > 0)
                             {
-                                #region mark as disabled
-                                lblClearnetCapacity.Invoke((MethodInvoker)delegate
-                                {
-                                    lblClearnetCapacity.Text = "Disabled";
-                                });
-                                lblTorCapacity.Invoke((MethodInvoker)delegate
-                                {
-                                    lblTorCapacity.Text = "Disabled";
-                                });
-                                lblUnknownCapacity.Invoke((MethodInvoker)delegate
-                                {
-                                    lblUnknownCapacity.Text = "Disabled";
-                                });
-                                #endregion
-                            }
-                            if (RunMempoolSpaceLightningAPI)
-                            {
-                                #region liquidity & connectivity rankings
-                                var (aliases, capacities) = MemSpLiquidityRanking();
-                                for (int i = 0; i < aliases.Count && i < capacities.Count && i < 10; i++)
-                                {
-                                    Label aliasLabel = (Label)this.Controls.Find($"aliasLabel{i + 1}", true)[0];
-                                    aliasLabel.Invoke((MethodInvoker)delegate
-                                    {
-                                        aliasLabel.Text = aliases[i];
-                                    });
-                                    Label capacityLabel = (Label)this.Controls.Find($"capacityLabel{i + 1}", true)[0];
-                                    Label capacityLabelFiat = (Label)this.Controls.Find($"capacityLabelFiat{i + 1}", true)[0];
-                                    UpdateLabelValueAsync(capacityLabel, capacities[i]);
-                                    UpdateLabelValueAsync(capacityLabelFiat, $"{fiatSymbol}{(Convert.ToDecimal(capacityLabel.Text) * OneBTCinSelectedCurrency):N2}");
-                                    capacityLabelFiat.Invoke((MethodInvoker)delegate
-                                    {
-                                        capacityLabelFiat.Location = new Point(capacityLabel.Location.X + capacityLabel.Width, capacityLabelFiat.Location.Y);
-                                    });
-                                }
-                                var result7 = MemSpConnectivityRanking();
-                                if (result7.aliases.Count > 0)
-                                {
-                                    for (int i = 0; i < result7.aliases.Count && i < 10; i++)
-                                    {
-                                        Label aliasLabel = (Label)this.Controls.Find($"aliasConnLabel{i + 1}", true)[0];
-                                        aliasLabel.Invoke((MethodInvoker)delegate
-                                        {
-                                            aliasLabel.Text = result7.aliases[i];
-                                        });
-                                        Label channelLabel = (Label)this.Controls.Find($"channelLabel{i + 1}", true)[0];
-                                        UpdateLabelValueAsync(channelLabel, result7.channels[i]);
-                                    }
-                                }
-                                #endregion
-                            }
-                            else
-                            {
-                                #region mark it all as disabled
-                                for (int i = 0; i < 10; i++)
-                                {
-                                    Label aliasLabel = (Label)this.Controls.Find($"aliasLabel{i + 1}", true)[0];
-                                    aliasLabel.Invoke((MethodInvoker)delegate
-                                    {
-                                        aliasLabel.Text = "disabled";
-                                    });
-                                    Label capacityLabel = (Label)this.Controls.Find($"capacityLabel{i + 1}", true)[0];
-                                    capacityLabel.Invoke((MethodInvoker)delegate
-                                    {
-                                        capacityLabel.Text = "disabled";
-                                    });
-                                }
-                                for (int i = 0; i < 10; i++)
+                                for (int i = 0; i < result7.aliases.Count && i < 10; i++)
                                 {
                                     Label aliasLabel = (Label)this.Controls.Find($"aliasConnLabel{i + 1}", true)[0];
                                     aliasLabel.Invoke((MethodInvoker)delegate
                                     {
-                                        aliasLabel.Text = "disabled";
+                                        aliasLabel.Text = result7.aliases[i];
                                     });
                                     Label channelLabel = (Label)this.Controls.Find($"channelLabel{i + 1}", true)[0];
-                                    channelLabel.Invoke((MethodInvoker)delegate
-                                    {
-                                        channelLabel.Text = "disabled";
-                                    });
-                                }
-                                #endregion
-                            }
-                        }
-                        SetLightsMessagesAndResetTimers();
-                    }
-                    catch (Exception ex)
-                    {
-                        errorOccurred = true;
-                        HandleException(ex, "Dashboards(Task1)");
-                    }
-                });
-                #endregion
-                #region task 2 - coinbase.com / mempool.space (price) / coingecko.com api (price)
-                Task task2 = Task.Run(() =>
-                {
-                    if (!offlineMode)
-                    {
-                        try
-                        {
-                            if (!testNet)
-                            {
-                                if (RunCoinbaseAPI || RunCoingeckoAPI || RunMempoolSpacePriceAPI)
-                                {
-                                    if (!gotMarketDataInLastFewSecs) // getmarketdata was performed during SATSuma_Load. No point in running it during first data refresh, but we want to run it every time after that
-                                    {
-                                        GetMarketData();
-                                    }
-                                }
-                                else
-                                {
-                                    Control[] controlsToShowAsDisabled = { lblPrice, lblMoscowTime, lblMarketCapUSD, lblHeaderPrice, lblHeaderMoscowTime, lblHeaderMarketCap };
-                                    foreach (Control control in controlsToShowAsDisabled)
-                                    {
-                                        control.Invoke((MethodInvoker)delegate
-                                        {
-                                            control.Text = "disabled";
-                                        });
-                                    }
-                                    GetMarketData(); // this time it won't actually get market data. It will just set indicators to grey, set the market tooltip, etc
+                                    UpdateLabelValueAsync(channelLabel, result7.channels[i]);
                                 }
                             }
-                            else
-                            {
-                                Control[] controlsToShowAsTestnet = { lblPrice, lblMoscowTime, lblMarketCapUSD, lblHeaderPrice, lblHeaderMoscowTime, lblHeaderMarketCap };
-                                foreach (Control control in controlsToShowAsTestnet)
-                                {
-                                    control.Invoke((MethodInvoker)delegate
-                                    {
-                                        control.Text = "0 (TestNet)";
-                                    });
-                                }
-                                GetMarketData(); // this time it won't actually get market data. It will just set indicators to grey, set the market tooltip, etc
-                            }
-                            #region shuffle stuff in to place
-                            lblMarketCapChart.Invoke((MethodInvoker)delegate
-                            {
-                                lblMarketCapChart.Location = new Point(lblMarketCapUSD.Location.X + lblMarketCapUSD.Width, lblMarketCapChart.Location.Y);
-                            });
-                            lblPriceChart.Invoke((MethodInvoker)delegate
-                            {
-                                lblPriceChart.Location = new Point(lblPrice.Location.X + lblPrice.Width, lblPriceChart.Location.Y);
-                            });
-                            lblConverterChart.Invoke((MethodInvoker)delegate
-                            {
-                                lblConverterChart.Location = new Point(lblMoscowTime.Location.X + lblMoscowTime.Width, lblConverterChart.Location.Y);
-                            });
-                            if (lblHeaderPriceChange.Visible)
-                            {
-                                lblHeaderPriceChart.Invoke((MethodInvoker)delegate
-                                {
-                                    lblHeaderPriceChart.Location = new Point(lblHeaderPriceChange.Location.X + lblHeaderPriceChange.Width, lblHeaderPriceChart.Location.Y);
-                                });
-                            }
-                            else
-                            {
-                                lblHeaderPriceChart.Invoke((MethodInvoker)delegate
-                                {
-                                    lblHeaderPriceChart.Location = new Point((lblHeaderPrice.Location.X + lblHeaderPrice.Width) - (int)(7 * UIScale), lblHeaderPriceChart.Location.Y);
-                                });
-                            }
-                            panelPriceSourceIndicatorsOuter.Invoke((MethodInvoker)delegate
-                            {
-                                panelPriceSourceIndicatorsOuter.Location = new Point((lblHeaderPrice.Location.X + lblHeaderPrice.Width) - (int)(8 * UIScale), panelPriceSourceIndicatorsOuter.Location.Y);
-                            });
-                            lblHeaderConverterChart.Invoke((MethodInvoker)delegate
-                            {
-                                lblHeaderConverterChart.Location = new Point(lblHeaderMoscowTime.Location.X + lblHeaderMoscowTime.Width, lblHeaderConverterChart.Location.Y);
-                            });
-                            lblHeaderMarketCapChart.Invoke((MethodInvoker)delegate
-                            {
-                                lblHeaderMarketCapChart.Location = new Point(lblHeaderMarketCap.Location.X + lblHeaderMarketCap.Width, lblHeaderMarketCapChart.Location.Y);
-                            });
                             #endregion
-                            SetLightsMessagesAndResetTimers();
                         }
-                        catch (Exception ex)
+                        else
                         {
-                            errorOccurred = true;
-                            HandleException(ex, "Dashboards(Task2)");
+                            #region mark it all as disabled
+                            for (int i = 0; i < 10; i++)
+                            {
+                                Label aliasLabel = (Label)this.Controls.Find($"aliasLabel{i + 1}", true)[0];
+                                aliasLabel.Invoke((MethodInvoker)delegate
+                                {
+                                    aliasLabel.Text = "disabled";
+                                });
+                                Label capacityLabel = (Label)this.Controls.Find($"capacityLabel{i + 1}", true)[0];
+                                capacityLabel.Invoke((MethodInvoker)delegate
+                                {
+                                    capacityLabel.Text = "disabled";
+                                });
+                            }
+                            for (int i = 0; i < 10; i++)
+                            {
+                                Label aliasLabel = (Label)this.Controls.Find($"aliasConnLabel{i + 1}", true)[0];
+                                aliasLabel.Invoke((MethodInvoker)delegate
+                                {
+                                    aliasLabel.Text = "disabled";
+                                });
+                                Label channelLabel = (Label)this.Controls.Find($"channelLabel{i + 1}", true)[0];
+                                channelLabel.Invoke((MethodInvoker)delegate
+                                {
+                                    channelLabel.Text = "disabled";
+                                });
+                            }
+                            #endregion
                         }
                     }
-                    if (offlineMode || testNet)
-                    {
-                        GetMarketData(); // this time it won't actually get market data. It will just set indicators to grey, set the market tooltip, etc
-                    }
-                });
-                #endregion
-                #region task 3 - coingecko market data
-                Task task3 = Task.Run(async () =>  // coingecko.com for more market data
+                    SetLightsMessagesAndResetTimers();
+                }
+                catch (Exception ex)
+                {
+                    errorOccurred = true;
+                    HandleException(ex, "Dashboards(Task1)");
+                }
+            });
+            #endregion
+            #region task 2 - coinbase.com / mempool.space (price) / coingecko.com api (price)
+            Task task2 = Task.Run(() =>
+            {
+                if (fullSizeLoadingScreen.Visible)
+                {
+                    fullSizeLoadingScreen.SetLoadingText("Getting current market data...", "Initialising...");
+                }
+                if (!offlineMode)
                 {
                     try
                     {
                         if (!testNet)
                         {
-                            if (RunCoingeckoAPI)
+                            if (RunCoinbaseAPI || RunCoingeckoAPI || RunMempoolSpacePriceAPI)
                             {
-                                var CoinGeckoMarketDataJson = await _coinGeckoMarketDataService.GetCoinGeckoMarketDataAsync().ConfigureAwait(true);
-                                var coinGeckoMarketData = JsonConvert.DeserializeObject<Rootobject>(CoinGeckoMarketDataJson);
-
-                                if (coinGeckoMarketData != null)
+                                if (!gotMarketDataInLastFewSecs) // getmarketdata was performed during SATSuma_Load. No point in running it during first data refresh, but we want to run it every time after that
                                 {
-                                    //USD
-                                    if (btnUSD.Enabled == false)
-                                    {
-                                        UpdateLabelValueAsync(lblATH, $"${coinGeckoMarketData.Market_data.Ath.Usd}");
-                                        lblATHPercentChange.Invoke((MethodInvoker)delegate
-                                        {
-                                            lblATHPercentChange.Text = $"{coinGeckoMarketData.Market_data.Ath_change_percentage.Usd.ToString("F2")}%";
-                                        });
-                                        UpdateLabelValueAsync(lblATHDate, Convert.ToString(coinGeckoMarketData.Market_data.Ath_date.Usd).Substring(0, 10));
-
-                                        DateTime parsedDate = DateTime.ParseExact(lblATHDate.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                                        DateTime currentDate = DateTime.Now.Date;
-                                        TimeSpan difference = currentDate - parsedDate;
-                                        lblATHDaysElapsed.Invoke((MethodInvoker)delegate
-                                        {
-                                            lblATHDaysElapsed.Text = $"{difference.Days} days ago";
-                                        });
-
-                                        UpdateLabelValueAsync(lbl24HoursHighestPrice, $"${coinGeckoMarketData.Market_data.High_24h.Usd}");
-                                        
-                                        #region numeric values next to mini-chart
-                                        //24 hours
-                                        if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency.Usd) > highestAbsValuePriceChange)
-                                        {
-                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency.Usd;
-                                        }
-                                        UpdateLabelValueAsync(lblPrice24Hours, $"{coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency.Usd.ToString("F2")}%");
-                                        //7 days
-                                        if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency.Usd) > highestAbsValuePriceChange)
-                                        {
-                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency.Usd;
-                                        }
-                                        UpdateLabelValueAsync(lblPrice7Days, $"{coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency.Usd.ToString("F2")}%");
-                                        //14 days 
-                                        if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_14d) > highestAbsValuePriceChange)
-                                        {
-                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_14d_in_currency.Usd;
-                                        }
-                                        UpdateLabelValueAsync(lblPrice14Days, $"{coinGeckoMarketData.Market_data.Price_change_percentage_14d_in_currency.Usd.ToString("F2")}%");
-                                        //30 days
-                                        if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency.Usd) > highestAbsValuePriceChange)
-                                        {
-                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency.Usd;
-                                        }
-                                        UpdateLabelValueAsync(lblPrice30Days, $"{coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency.Usd.ToString("F2")}%");
-                                        //60 days
-                                        if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency.Usd) > highestAbsValuePriceChange)
-                                        {
-                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency.Usd;
-                                        }
-                                        UpdateLabelValueAsync(lblPrice60Days, $"{coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency.Usd.ToString("F2")}%");
-                                        //200 days
-                                        if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency.Usd) > highestAbsValuePriceChange)
-                                        {
-                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency.Usd;
-                                        }
-                                        UpdateLabelValueAsync(lblPrice200Days, $"{coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency.Usd.ToString("F2")}%");
-                                        //1 year
-                                        if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency.Usd) > highestAbsValuePriceChange)
-                                        {
-                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency.Usd;
-                                        }
-                                        UpdateLabelValueAsync(lblPrice1Year, $"{coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency.Usd.ToString("F2")}%");
-                                        #endregion
-
-                                        if (highestAbsValuePriceChange > 0)
-                                        {
-                                            //24 hours
-                                            panel24hours.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel24hours.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency.Usd) / highestAbsValuePriceChange) * (60.0 * UIScale));
-                                            });
-                                            if (panel24hours.Width == 0)
-                                            {
-                                                panel24hours.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel24hours.Width = 1;
-                                                });
-                                            }
-                                            if (coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency.Usd >= 0)
-                                            {
-                                                panel24hours.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel24hours.Location = new Point((int)(61 * UIScale), panel24hours.Location.Y);
-                                                    panel24hours.BackColor = Color.OliveDrab;
-                                                });
-                                            }
-                                            else
-                                            {
-                                                panel24hours.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel24hours.Location = new Point((int)(60 * UIScale) - panel24hours.Width, panel24hours.Location.Y);
-                                                    panel24hours.BackColor = Color.IndianRed;
-                                                });
-                                            }
-
-                                            //7 days
-                                            panel7days.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel7days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency.Usd) / highestAbsValuePriceChange) * (60.0 * UIScale));
-                                            });
-
-                                            if (panel7days.Width == 0)
-                                            {
-                                                panel7days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel7days.Width = 1;
-                                                });
-                                            }
-                                            if (coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency.Usd >= 0)
-                                            {
-                                                panel7days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel7days.Location = new Point((int)(61 * UIScale), panel7days.Location.Y);
-                                                    panel7days.BackColor = Color.OliveDrab;
-                                                });
-                                            }
-                                            else
-                                            {
-                                                panel7days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel7days.Location = new Point((int)(60 * UIScale) - panel7days.Width, panel7days.Location.Y);
-                                                    panel7days.BackColor = Color.IndianRed;
-                                                });
-                                            }
-
-                                            //14 days
-                                            panel14days.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel14days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_14d_in_currency.Usd) / highestAbsValuePriceChange) * (60.0 * UIScale));
-                                            });
-                                            if (panel14days.Width == 0)
-                                            {
-                                                panel14days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel14days.Width = 1;
-                                                });
-                                            }
-                                            if (coinGeckoMarketData.Market_data.Price_change_percentage_14d_in_currency.Usd >= 0)
-                                            {
-                                                panel14days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel14days.Location = new Point((int)(61 * UIScale), panel14days.Location.Y);
-                                                    panel14days.BackColor = Color.OliveDrab;
-                                                });
-                                            }
-                                            else
-                                            {
-                                                panel14days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel14days.Location = new Point((int)(60 * UIScale) - panel14days.Width, panel14days.Location.Y);
-                                                    panel14days.BackColor = Color.IndianRed;
-                                                });
-                                            }
-
-                                            //30 days
-                                            panel30days.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel30days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency.Usd) / highestAbsValuePriceChange) * (60.0 * UIScale));
-                                            });
-
-                                            if (panel30days.Width == 0)
-                                            {
-                                                panel30days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel30days.Width = 1;
-                                                });
-                                            }
-                                            if (coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency.Usd >= 0)
-                                            {
-                                                panel30days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel30days.Location = new Point((int)(61 * UIScale), panel30days.Location.Y);
-                                                    panel30days.BackColor = Color.OliveDrab;
-                                                });
-                                            }
-                                            else
-                                            {
-                                                panel30days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel30days.Location = new Point((int)(60 * UIScale) - panel30days.Width, panel30days.Location.Y);
-                                                    panel30days.BackColor = Color.IndianRed;
-                                                });
-                                            }
-
-                                            //60 days
-                                            panel60days.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel60days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency.Usd) / highestAbsValuePriceChange) * (60.0 * UIScale));
-                                            });
-                                            if (panel60days.Width == 0)
-                                            {
-                                                panel60days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel60days.Width = 1;
-                                                });
-                                            }
-                                            if (coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency.Usd >= 0)
-                                            {
-                                                panel60days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel60days.Location = new Point((int)(61 * UIScale), panel60days.Location.Y);
-                                                    panel60days.BackColor = Color.OliveDrab;
-                                                });
-                                            }
-                                            else
-                                            {
-                                                panel60days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel60days.Location = new Point((int)(60 * UIScale) - panel60days.Width, panel60days.Location.Y);
-                                                    panel60days.BackColor = Color.IndianRed;
-                                                });
-                                            }
-
-                                            //200 days
-                                            panel200days.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel200days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency.Usd) / highestAbsValuePriceChange) * (60.0 * UIScale));
-                                            });
-                                            if (panel200days.Width == 0)
-                                            {
-                                                panel200days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel200days.Width = 1;
-                                                });
-                                            }
-                                            if (coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency.Usd >= 0)
-                                            {
-                                                panel200days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel200days.Location = new Point((int)(61 * UIScale), panel200days.Location.Y);
-                                                    panel200days.BackColor = Color.OliveDrab;
-                                                });
-                                            }
-                                            else
-                                            {
-                                                panel200days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel200days.Location = new Point((int)(60 * UIScale) - panel200days.Width, panel200days.Location.Y);
-                                                    panel200days.BackColor = Color.IndianRed;
-                                                });
-                                            }
-
-                                            //1 year
-                                            panel1year.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel1year.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency.Usd) / highestAbsValuePriceChange) * (60.0 * UIScale));
-                                            });
-                                            if (panel1year.Width == 0)
-                                            {
-                                                panel1year.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel1year.Width = 1;
-                                                });
-                                            }
-                                            if (coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency.Usd >= 0)
-                                            {
-                                                panel1year.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel1year.Location = new Point((int)(61 * UIScale), panel1year.Location.Y);
-                                                    panel1year.BackColor = Color.OliveDrab;
-                                                });
-                                            }
-                                            else
-                                            {
-                                                panel1year.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel1year.Location = new Point((int)(60 * UIScale) - panel1year.Width, panel1year.Location.Y);
-                                                    panel1year.BackColor = Color.IndianRed;
-                                                });
-                                            }
-                                        }
-                                    }
-                                    //GBP
-                                    if (btnGBP.Enabled == false)
-                                    {
-                                        UpdateLabelValueAsync(lblATH, $"£{coinGeckoMarketData.Market_data.Ath.Gbp}");
-                                        lblATHPercentChange.Invoke((MethodInvoker)delegate
-                                        {
-                                            lblATHPercentChange.Text = $"{coinGeckoMarketData.Market_data.Ath_change_percentage.Gbp.ToString("F2")}%";
-                                        });
-                                        UpdateLabelValueAsync(lblATHDate, Convert.ToString(coinGeckoMarketData.Market_data.Ath_date.Gbp).Substring(0, 10));
-
-                                        DateTime parsedDate = DateTime.ParseExact(lblATHDate.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                                        DateTime currentDate = DateTime.Now.Date;
-                                        TimeSpan difference = currentDate - parsedDate;
-                                        lblATHDaysElapsed.Invoke((MethodInvoker)delegate
-                                        {
-                                            lblATHDaysElapsed.Text = $"{difference.Days} days ago";
-                                        });
-
-                                        UpdateLabelValueAsync(lbl24HoursHighestPrice, $"£{coinGeckoMarketData.Market_data.High_24h.Gbp}");
-                                        UpdateLabelValueAsync(lbl24HoursLowestPrice, $"£{coinGeckoMarketData.Market_data.Low_24h.Gbp}");
-
-                                        #region numeric values next to mini-chart
-                                        //24 hours
-                                        if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency.Gbp) > highestAbsValuePriceChange)
-                                        {
-                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency.Gbp;
-                                        }
-                                        UpdateLabelValueAsync(lblPrice24Hours, $"{coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency.Gbp.ToString("F2")}%");
-                                        //7 days
-                                        if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency.Gbp) > highestAbsValuePriceChange)
-                                        {
-                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency.Gbp;
-                                        }
-                                        UpdateLabelValueAsync(lblPrice7Days, $"{coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency.Gbp.ToString("F2")}%");
-                                        //14 days 
-                                        if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_14d) > highestAbsValuePriceChange)
-                                        {
-                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_14d_in_currency.Gbp;
-                                        }
-                                        UpdateLabelValueAsync(lblPrice14Days, $"{coinGeckoMarketData.Market_data.Price_change_percentage_14d_in_currency.Gbp.ToString("F2")}%");
-                                        //30 days
-                                        if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency.Gbp) > highestAbsValuePriceChange)
-                                        {
-                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency.Gbp;
-                                        }
-                                        UpdateLabelValueAsync(lblPrice30Days, $"{coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency.Gbp.ToString("F2")}%");
-                                        //60 days
-                                        if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency.Gbp) > highestAbsValuePriceChange)
-                                        {
-                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency.Gbp;
-                                        }
-                                        UpdateLabelValueAsync(lblPrice60Days, $"{coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency.Gbp.ToString("F2")}%");
-                                        //200 days
-                                        if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency.Gbp) > highestAbsValuePriceChange)
-                                        {
-                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency.Gbp;
-                                        }
-                                        UpdateLabelValueAsync(lblPrice200Days, $"{coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency.Gbp.ToString("F2")}%");
-                                        //1 year
-                                        if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency.Gbp) > highestAbsValuePriceChange)
-                                        {
-                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency.Gbp;
-                                        }
-                                        UpdateLabelValueAsync(lblPrice1Year, $"{coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency.Gbp.ToString("F2")}%");
-                                        #endregion
-
-                                        if (highestAbsValuePriceChange > 0)
-                                        {
-                                            //24 hours
-                                            panel24hours.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel24hours.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency.Gbp) / highestAbsValuePriceChange) * (60.0 * UIScale));
-                                            });
-                                            if (panel24hours.Width == 0)
-                                            {
-                                                panel24hours.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel24hours.Width = 1;
-                                                });
-                                            }
-                                            if (coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency.Gbp >= 0)
-                                            {
-                                                panel24hours.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel24hours.Location = new Point((int)(61 * UIScale), panel24hours.Location.Y);
-                                                    panel24hours.BackColor = Color.OliveDrab;
-                                                });
-                                            }
-                                            else
-                                            {
-                                                panel24hours.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel24hours.Location = new Point((int)(60 * UIScale) - panel24hours.Width, panel24hours.Location.Y);
-                                                    panel24hours.BackColor = Color.IndianRed;
-                                                });
-                                            }
-
-                                            //7 days
-                                            panel7days.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel7days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency.Gbp) / highestAbsValuePriceChange) * (60.0 * UIScale));
-                                            });
-
-                                            if (panel7days.Width == 0)
-                                            {
-                                                panel7days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel7days.Width = 1;
-                                                });
-                                            }
-                                            if (coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency.Gbp >= 0)
-                                            {
-                                                panel7days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel7days.Location = new Point((int)(61 * UIScale), panel7days.Location.Y);
-                                                    panel7days.BackColor = Color.OliveDrab;
-                                                });
-                                            }
-                                            else
-                                            {
-                                                panel7days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel7days.Location = new Point((int)(60 * UIScale) - panel7days.Width, panel7days.Location.Y);
-                                                    panel7days.BackColor = Color.IndianRed;
-                                                });
-                                            }
-
-                                            //14 days
-                                            panel14days.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel14days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_14d_in_currency.Gbp) / highestAbsValuePriceChange) * (60.0 * UIScale));
-                                            });
-                                            if (panel14days.Width == 0)
-                                            {
-                                                panel14days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel14days.Width = 1;
-                                                });
-                                            }
-                                            if (coinGeckoMarketData.Market_data.Price_change_percentage_14d_in_currency.Gbp >= 0)
-                                            {
-                                                panel14days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel14days.Location = new Point((int)(61 * UIScale), panel14days.Location.Y);
-                                                    panel14days.BackColor = Color.OliveDrab;
-                                                });
-                                            }
-                                            else
-                                            {
-                                                panel14days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel14days.Location = new Point((int)(60 * UIScale) - panel14days.Width, panel14days.Location.Y);
-                                                    panel14days.BackColor = Color.IndianRed;
-                                                });
-                                            }
-
-                                            //30 days
-                                            panel30days.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel30days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency.Gbp) / highestAbsValuePriceChange) * (60.0 * UIScale));
-                                            });
-
-                                            if (panel30days.Width == 0)
-                                            {
-                                                panel30days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel30days.Width = 1;
-                                                });
-                                            }
-                                            if (coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency.Gbp >= 0)
-                                            {
-                                                panel30days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel30days.Location = new Point((int)(61 * UIScale), panel30days.Location.Y);
-                                                    panel30days.BackColor = Color.OliveDrab;
-                                                });
-                                            }
-                                            else
-                                            {
-                                                panel30days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel30days.Location = new Point((int)(60 * UIScale) - panel30days.Width, panel30days.Location.Y);
-                                                    panel30days.BackColor = Color.IndianRed;
-                                                });
-                                            }
-
-                                            //60 days
-                                            panel60days.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel60days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency.Gbp) / highestAbsValuePriceChange) * (60.0 * UIScale));
-                                            });
-                                            if (panel60days.Width == 0)
-                                            {
-                                                panel60days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel60days.Width = 1;
-                                                });
-                                            }
-                                            if (coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency.Gbp >= 0)
-                                            {
-                                                panel60days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel60days.Location = new Point((int)(61 * UIScale), panel60days.Location.Y);
-                                                    panel60days.BackColor = Color.OliveDrab;
-                                                });
-                                            }
-                                            else
-                                            {
-                                                panel60days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel60days.Location = new Point((int)(60 * UIScale) - panel60days.Width, panel60days.Location.Y);
-                                                    panel60days.BackColor = Color.IndianRed;
-                                                });
-                                            }
-
-                                            //200 days
-                                            panel200days.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel200days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency.Gbp) / highestAbsValuePriceChange) * (60.0 * UIScale));
-                                            });
-                                            if (panel200days.Width == 0)
-                                            {
-                                                panel200days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel200days.Width = 1;
-                                                });
-                                            }
-                                            if (coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency.Gbp >= 0)
-                                            {
-                                                panel200days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel200days.Location = new Point((int)(61 * UIScale), panel200days.Location.Y);
-                                                    panel200days.BackColor = Color.OliveDrab;
-                                                });
-                                            }
-                                            else
-                                            {
-                                                panel200days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel200days.Location = new Point((int)(60 * UIScale) - panel200days.Width, panel200days.Location.Y);
-                                                    panel200days.BackColor = Color.IndianRed;
-                                                });
-                                            }
-
-                                            //1 year
-                                            panel1year.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel1year.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency.Gbp) / highestAbsValuePriceChange) * (60.0 * UIScale));
-                                            });
-                                            if (panel1year.Width == 0)
-                                            {
-                                                panel1year.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel1year.Width = 1;
-                                                });
-                                            }
-                                            if (coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency.Gbp >= 0)
-                                            {
-                                                panel1year.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel1year.Location = new Point((int)(61 * UIScale), panel1year.Location.Y);
-                                                    panel1year.BackColor = Color.OliveDrab;
-                                                });
-                                            }
-                                            else
-                                            {
-                                                panel1year.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel1year.Location = new Point((int)(60 * UIScale) - panel1year.Width, panel1year.Location.Y);
-                                                    panel1year.BackColor = Color.IndianRed;
-                                                });
-                                            }
-                                        }
-
-                                    }
-                                    //EUR
-                                    if (btnEUR.Enabled == false)
-                                    {
-                                        UpdateLabelValueAsync(lblATH, $"€{coinGeckoMarketData.Market_data.Ath.Eur}");
-                                        lblATHPercentChange.Invoke((MethodInvoker)delegate
-                                        {
-                                            lblATHPercentChange.Text = $"{coinGeckoMarketData.Market_data.Ath_change_percentage.Eur.ToString("F2")}%";
-                                        });
-                                        UpdateLabelValueAsync(lblATHDate, Convert.ToString(coinGeckoMarketData.Market_data.Ath_date.Eur).Substring(0, 10));
-
-                                        DateTime parsedDate = DateTime.ParseExact(lblATHDate.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                                        DateTime currentDate = DateTime.Now.Date;
-                                        TimeSpan difference = currentDate - parsedDate;
-                                        lblATHDaysElapsed.Invoke((MethodInvoker)delegate
-                                        {
-                                            lblATHDaysElapsed.Text = $"{difference.Days} days ago";
-                                        });
-
-                                        UpdateLabelValueAsync(lbl24HoursHighestPrice, $"€{coinGeckoMarketData.Market_data.High_24h.Eur}");
-                                        UpdateLabelValueAsync(lbl24HoursLowestPrice, $"€{coinGeckoMarketData.Market_data.Low_24h.Eur}");
-
-                                        #region numeric values next to mini-chart
-                                        //24 hours
-                                        if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency.Eur) > highestAbsValuePriceChange)
-                                        {
-                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency.Eur;
-                                        }
-                                        UpdateLabelValueAsync(lblPrice24Hours, $"{coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency.Eur.ToString("F2")}%");
-                                        //7 days
-                                        if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency.Eur) > highestAbsValuePriceChange)
-                                        {
-                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency.Eur;
-                                        }
-                                        UpdateLabelValueAsync(lblPrice7Days, coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency.Eur.ToString("F2") + "%");
-                                        //14 days 
-                                        if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_14d) > highestAbsValuePriceChange)
-                                        {
-                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_14d_in_currency.Eur;
-                                        }
-                                        UpdateLabelValueAsync(lblPrice14Days, coinGeckoMarketData.Market_data.Price_change_percentage_14d_in_currency.Eur.ToString("F2") + "%");
-                                        //30 days
-                                        if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency.Eur) > highestAbsValuePriceChange)
-                                        {
-                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency.Eur;
-                                        }
-                                        UpdateLabelValueAsync(lblPrice30Days, coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency.Eur.ToString("F2") + "%");
-                                        //60 days
-                                        if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency.Eur) > highestAbsValuePriceChange)
-                                        {
-                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency.Eur;
-                                        }
-                                        UpdateLabelValueAsync(lblPrice60Days, coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency.Eur.ToString("F2") + "%");
-                                        //200 days
-                                        if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency.Eur) > highestAbsValuePriceChange)
-                                        {
-                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency.Eur;
-                                        }
-                                        UpdateLabelValueAsync(lblPrice200Days, coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency.Eur.ToString("F2") + "%");
-                                        //1 year
-                                        if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency.Eur) > highestAbsValuePriceChange)
-                                        {
-                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency.Eur;
-                                        }
-                                        UpdateLabelValueAsync(lblPrice1Year, coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency.Eur.ToString("F2") + "%");
-                                        #endregion
-
-                                        if (highestAbsValuePriceChange > 0)
-                                        {
-                                            //24 hours
-                                            panel24hours.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel24hours.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency.Eur) / highestAbsValuePriceChange) * (60.0 * UIScale));
-                                            });
-                                            if (panel24hours.Width == 0)
-                                            {
-                                                panel24hours.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel24hours.Width = 1;
-                                                });
-                                            }
-                                            if (coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency.Eur >= 0)
-                                            {
-                                                panel24hours.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel24hours.Location = new Point((int)(61 * UIScale), panel24hours.Location.Y);
-                                                    panel24hours.BackColor = Color.OliveDrab;
-                                                });
-                                            }
-                                            else
-                                            {
-                                                panel24hours.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel24hours.Location = new Point((int)(60 * UIScale) - panel24hours.Width, panel24hours.Location.Y);
-                                                    panel24hours.BackColor = Color.IndianRed;
-                                                });
-                                            }
-
-                                            //7 days
-                                            panel7days.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel7days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency.Eur) / highestAbsValuePriceChange) * (60.0 * UIScale));
-                                            });
-
-                                            if (panel7days.Width == 0)
-                                            {
-                                                panel7days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel7days.Width = 1;
-                                                });
-                                            }
-                                            if (coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency.Eur >= 0)
-                                            {
-                                                panel7days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel7days.Location = new Point((int)(61 * UIScale), panel7days.Location.Y);
-                                                    panel7days.BackColor = Color.OliveDrab;
-                                                });
-                                            }
-                                            else
-                                            {
-                                                panel7days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel7days.Location = new Point((int)(60 * UIScale) - panel7days.Width, panel7days.Location.Y);
-                                                    panel7days.BackColor = Color.IndianRed;
-                                                });
-                                            }
-
-                                            //14 days
-                                            panel14days.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel14days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_14d_in_currency.Eur) / highestAbsValuePriceChange) * (60.0 * UIScale));
-                                            });
-                                            if (panel14days.Width == 0)
-                                            {
-                                                panel14days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel14days.Width = 1;
-                                                });
-                                            }
-                                            if (coinGeckoMarketData.Market_data.Price_change_percentage_14d_in_currency.Eur >= 0)
-                                            {
-                                                panel14days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel14days.Location = new Point((int)(61 * UIScale), panel14days.Location.Y);
-                                                    panel14days.BackColor = Color.OliveDrab;
-                                                });
-                                            }
-                                            else
-                                            {
-                                                panel14days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel14days.Location = new Point((int)(60 * UIScale) - panel14days.Width, panel14days.Location.Y);
-                                                    panel14days.BackColor = Color.IndianRed;
-                                                });
-                                            }
-
-                                            //30 days
-                                            panel30days.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel30days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency.Eur) / highestAbsValuePriceChange) * (60.0 * UIScale));
-                                            });
-
-                                            if (panel30days.Width == 0)
-                                            {
-                                                panel30days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel30days.Width = 1;
-                                                });
-                                            }
-                                            if (coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency.Eur >= 0)
-                                            {
-                                                panel30days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel30days.Location = new Point((int)(61 * UIScale), panel30days.Location.Y);
-                                                    panel30days.BackColor = Color.OliveDrab;
-                                                });
-                                            }
-                                            else
-                                            {
-                                                panel30days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel30days.Location = new Point((int)(60 * UIScale) - panel30days.Width, panel30days.Location.Y);
-                                                    panel30days.BackColor = Color.IndianRed;
-                                                });
-                                            }
-
-                                            //60 days
-                                            panel60days.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel60days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency.Eur) / highestAbsValuePriceChange) * (60.0 * UIScale));
-                                            });
-                                            if (panel60days.Width == 0)
-                                            {
-                                                panel60days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel60days.Width = 1;
-                                                });
-                                            }
-                                            if (coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency.Eur >= 0)
-                                            {
-                                                panel60days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel60days.Location = new Point((int)(61 * UIScale), panel60days.Location.Y);
-                                                    panel60days.BackColor = Color.OliveDrab;
-                                                });
-                                            }
-                                            else
-                                            {
-                                                panel60days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel60days.Location = new Point((int)(60 * UIScale) - panel60days.Width, panel60days.Location.Y);
-                                                    panel60days.BackColor = Color.IndianRed;
-                                                });
-                                            }
-
-                                            //200 days
-                                            panel200days.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel200days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency.Eur) / highestAbsValuePriceChange) * (60.0 * UIScale));
-                                            });
-                                            if (panel200days.Width == 0)
-                                            {
-                                                panel200days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel200days.Width = 1;
-                                                });
-                                            }
-                                            if (coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency.Eur >= 0)
-                                            {
-                                                panel200days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel200days.Location = new Point((int)(61 * UIScale), panel200days.Location.Y);
-                                                    panel200days.BackColor = Color.OliveDrab;
-                                                });
-                                            }
-                                            else
-                                            {
-                                                panel200days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel200days.Location = new Point((int)(60 * UIScale) - panel200days.Width, panel200days.Location.Y);
-                                                    panel200days.BackColor = Color.IndianRed;
-                                                });
-                                            }
-
-                                            //1 year
-                                            panel1year.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel1year.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency.Eur) / highestAbsValuePriceChange) * (60.0 * UIScale));
-                                            });
-                                            if (panel1year.Width == 0)
-                                            {
-                                                panel1year.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel1year.Width = 1;
-                                                });
-                                            }
-                                            if (coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency.Eur >= 0)
-                                            {
-                                                panel1year.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel1year.Location = new Point((int)(61 * UIScale), panel1year.Location.Y);
-                                                    panel1year.BackColor = Color.OliveDrab;
-                                                });
-                                            }
-                                            else
-                                            {
-                                                panel1year.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel1year.Location = new Point((int)(60 * UIScale) - panel1year.Width, panel1year.Location.Y);
-                                                    panel1year.BackColor = Color.IndianRed;
-                                                });
-                                            }
-                                        }
-
-                                    }
-                                    //XAU
-                                    if (btnXAU.Enabled == false)
-                                    {
-                                        UpdateLabelValueAsync(lblATH, "\U0001fa99" + Convert.ToString(coinGeckoMarketData.Market_data.Ath.Xau));
-                                        lblATHPercentChange.Invoke((MethodInvoker)delegate
-                                        {
-                                            lblATHPercentChange.Text = coinGeckoMarketData.Market_data.Ath_change_percentage.Xau.ToString("F2") + "%";
-                                        });
-                                        UpdateLabelValueAsync(lblATHDate, Convert.ToString(coinGeckoMarketData.Market_data.Ath_date.Xau).Substring(0, 10));
-
-                                        DateTime parsedDate = DateTime.ParseExact(lblATHDate.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                                        DateTime currentDate = DateTime.Now.Date;
-                                        TimeSpan difference = currentDate - parsedDate;
-                                        lblATHDaysElapsed.Invoke((MethodInvoker)delegate
-                                        {
-                                            lblATHDaysElapsed.Text = Convert.ToString(difference.Days) + " days ago";
-                                        });
-
-                                        UpdateLabelValueAsync(lbl24HoursHighestPrice, "\U0001fa99" + Convert.ToString(coinGeckoMarketData.Market_data.High_24h.Xau));
-                                        UpdateLabelValueAsync(lbl24HoursLowestPrice, "\U0001fa99" + Convert.ToString(coinGeckoMarketData.Market_data.Low_24h.Xau));
-
-                                        #region numeric values next to mini-chart
-                                        //24 hours
-                                        if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency.Xau) > highestAbsValuePriceChange)
-                                        {
-                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency.Xau;
-                                        }
-                                        UpdateLabelValueAsync(lblPrice24Hours, coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency.Xau.ToString("F2") + "%");
-                                        //7 days
-                                        if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency.Xau) > highestAbsValuePriceChange)
-                                        {
-                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency.Xau;
-                                        }
-                                        UpdateLabelValueAsync(lblPrice7Days, coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency.Xau.ToString("F2") + "%");
-                                        //14 days 
-                                        if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_14d) > highestAbsValuePriceChange)
-                                        {
-                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_14d_in_currency.Xau;
-                                        }
-                                        UpdateLabelValueAsync(lblPrice14Days, coinGeckoMarketData.Market_data.Price_change_percentage_14d_in_currency.Xau.ToString("F2") + "%");
-                                        //30 days
-                                        if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency.Xau) > highestAbsValuePriceChange)
-                                        {
-                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency.Xau;
-                                        }
-                                        UpdateLabelValueAsync(lblPrice30Days, coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency.Xau.ToString("F2") + "%");
-                                        //60 days
-                                        if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency.Xau) > highestAbsValuePriceChange)
-                                        {
-                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency.Xau;
-                                        }
-                                        UpdateLabelValueAsync(lblPrice60Days, coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency.Xau.ToString("F2") + "%");
-                                        //200 days
-                                        if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency.Xau) > highestAbsValuePriceChange)
-                                        {
-                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency.Xau;
-                                        }
-                                        UpdateLabelValueAsync(lblPrice200Days, coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency.Xau.ToString("F2") + "%");
-                                        //1 year
-                                        if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency.Xau) > highestAbsValuePriceChange)
-                                        {
-                                            highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency.Xau;
-                                        }
-                                        UpdateLabelValueAsync(lblPrice1Year, coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency.Xau.ToString("F2") + "%");
-                                        #endregion
-
-                                        if (highestAbsValuePriceChange > 0)
-                                        {
-                                            //24 hours
-                                            panel24hours.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel24hours.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency.Xau) / highestAbsValuePriceChange) * (60.0 * UIScale));
-                                            });
-                                            if (panel24hours.Width == 0)
-                                            {
-                                                panel24hours.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel24hours.Width = 1;
-                                                });
-                                            }
-                                            if (coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency.Xau >= 0)
-                                            {
-                                                panel24hours.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel24hours.Location = new Point((int)(61 * UIScale), panel24hours.Location.Y);
-                                                    panel24hours.BackColor = Color.OliveDrab;
-                                                });
-                                            }
-                                            else
-                                            {
-                                                panel24hours.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel24hours.Location = new Point((int)(60 * UIScale) - panel24hours.Width, panel24hours.Location.Y);
-                                                    panel24hours.BackColor = Color.IndianRed;
-                                                });
-                                            }
-
-                                            //7 days
-                                            panel7days.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel7days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency.Xau) / highestAbsValuePriceChange) * (60.0 * UIScale));
-                                            });
-
-                                            if (panel7days.Width == 0)
-                                            {
-                                                panel7days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel7days.Width = 1;
-                                                });
-                                            }
-                                            if (coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency.Xau >= 0)
-                                            {
-                                                panel7days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel7days.Location = new Point((int)(61 * UIScale), panel7days.Location.Y);
-                                                    panel7days.BackColor = Color.OliveDrab;
-                                                });
-                                            }
-                                            else
-                                            {
-                                                panel7days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel7days.Location = new Point((int)(60 * UIScale) - panel7days.Width, panel7days.Location.Y);
-                                                    panel7days.BackColor = Color.IndianRed;
-                                                });
-                                            }
-
-                                            //14 days
-                                            panel14days.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel14days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_14d_in_currency.Xau) / highestAbsValuePriceChange) * (60.0 * UIScale));
-                                            });
-                                            if (panel14days.Width == 0)
-                                            {
-                                                panel14days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel14days.Width = 1;
-                                                });
-                                            }
-                                            if (coinGeckoMarketData.Market_data.Price_change_percentage_14d_in_currency.Xau >= 0)
-                                            {
-                                                panel14days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel14days.Location = new Point((int)(61 * UIScale), panel14days.Location.Y);
-                                                    panel14days.BackColor = Color.OliveDrab;
-                                                });
-                                            }
-                                            else
-                                            {
-                                                panel14days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel14days.Location = new Point((int)(60 * UIScale) - panel14days.Width, panel14days.Location.Y);
-                                                    panel14days.BackColor = Color.IndianRed;
-                                                });
-                                            }
-
-                                            //30 days
-                                            panel30days.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel30days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency.Xau) / highestAbsValuePriceChange) * (60.0 * UIScale));
-                                            });
-
-                                            if (panel30days.Width == 0)
-                                            {
-                                                panel30days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel30days.Width = 1;
-                                                });
-                                            }
-                                            if (coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency.Xau >= 0)
-                                            {
-                                                panel30days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel30days.Location = new Point((int)(61 * UIScale), panel30days.Location.Y);
-                                                    panel30days.BackColor = Color.OliveDrab;
-                                                });
-                                            }
-                                            else
-                                            {
-                                                panel30days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel30days.Location = new Point((int)(60 * UIScale) - panel30days.Width, panel30days.Location.Y);
-                                                    panel30days.BackColor = Color.IndianRed;
-                                                });
-                                            }
-
-                                            //60 days
-                                            panel60days.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel60days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency.Xau) / highestAbsValuePriceChange) * (60.0 * UIScale));
-                                            });
-                                            if (panel60days.Width == 0)
-                                            {
-                                                panel60days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel60days.Width = 1;
-                                                });
-                                            }
-                                            if (coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency.Xau >= 0)
-                                            {
-                                                panel60days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel60days.Location = new Point((int)(61 * UIScale), panel60days.Location.Y);
-                                                    panel60days.BackColor = Color.OliveDrab;
-                                                });
-                                            }
-                                            else
-                                            {
-                                                panel60days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel60days.Location = new Point((int)(60 * UIScale) - panel60days.Width, panel60days.Location.Y);
-                                                    panel60days.BackColor = Color.IndianRed;
-                                                });
-                                            }
-
-                                            //200 days
-                                            panel200days.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel200days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency.Xau) / highestAbsValuePriceChange) * (60.0 * UIScale));
-                                            });
-                                            if (panel200days.Width == 0)
-                                            {
-                                                panel200days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel200days.Width = 1;
-                                                });
-                                            }
-                                            if (coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency.Xau >= 0)
-                                            {
-                                                panel200days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel200days.Location = new Point((int)(61 * UIScale), panel200days.Location.Y);
-                                                    panel200days.BackColor = Color.OliveDrab;
-                                                });
-                                            }
-                                            else
-                                            {
-                                                panel200days.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel200days.Location = new Point((int)(60 * UIScale) - panel200days.Width, panel200days.Location.Y);
-                                                    panel200days.BackColor = Color.IndianRed;
-                                                });
-                                            }
-
-                                            //1 year
-                                            panel1year.Invoke((MethodInvoker)delegate
-                                            {
-                                                panel1year.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency.Xau) / highestAbsValuePriceChange) * (60.0 * UIScale));
-                                            });
-                                            if (panel1year.Width == 0)
-                                            {
-                                                panel1year.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel1year.Width = 1;
-                                                });
-                                            }
-                                            if (coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency.Xau >= 0)
-                                            {
-                                                panel1year.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel1year.Location = new Point((int)(61 * UIScale), panel1year.Location.Y);
-                                                    panel1year.BackColor = Color.OliveDrab;
-                                                });
-                                            }
-                                            else
-                                            {
-                                                panel1year.Invoke((MethodInvoker)delegate
-                                                {
-                                                    panel1year.Location = new Point((int)(60 * UIScale) - panel1year.Width, panel1year.Location.Y);
-                                                    panel1year.BackColor = Color.IndianRed;
-                                                });
-                                            }
-                                        }
-
-                                    }
+                                    GetMarketData();
                                 }
                             }
                             else
                             {
-                                //zz
-                                Control[] controlsToShowAsDisabled = { lblATH, lblATHPercentChange, lblATHDate, lblATHDaysElapsed, lbl24HoursHighestPrice, lbl24HoursLowestPrice, lblPrice14Days, lblPrice1Year, lblPrice200Days, lblPrice24Hours, lblPrice30Days, lblPrice60Days, lblPrice7Days };
+                                Control[] controlsToShowAsDisabled = { lblPrice, lblMoscowTime, lblMarketCapUSD, lblHeaderPrice, lblHeaderMoscowTime, lblHeaderMarketCap };
                                 foreach (Control control in controlsToShowAsDisabled)
                                 {
                                     control.Invoke((MethodInvoker)delegate
@@ -2805,25 +1621,1203 @@ namespace SATSuma
                                         control.Text = "disabled";
                                     });
                                 }
-
-                                Control[] panelsToShrink = { panel24hours, panel7days, panel14days, panel30days, panel60days, panel200days, panel1year };
-                                foreach (Control control in panelsToShrink)
+                                GetMarketData(); // this time it won't actually get market data. It will just set indicators to grey, set the market tooltip, etc
+                            }
+                        }
+                        else
+                        {
+                            Control[] controlsToShowAsTestnet = { lblPrice, lblMoscowTime, lblMarketCapUSD, lblHeaderPrice, lblHeaderMoscowTime, lblHeaderMarketCap };
+                            foreach (Control control in controlsToShowAsTestnet)
+                            {
+                                control.Invoke((MethodInvoker)delegate
                                 {
-                                    control.Invoke((MethodInvoker)delegate
+                                    control.Text = "0 (TestNet)";
+                                });
+                            }
+                            GetMarketData(); // this time it won't actually get market data. It will just set indicators to grey, set the market tooltip, etc
+                        }
+                        #region shuffle stuff in to place
+                        lblMarketCapChart.Invoke((MethodInvoker)delegate
+                        {
+                            lblMarketCapChart.Location = new Point(lblMarketCapUSD.Location.X + lblMarketCapUSD.Width, lblMarketCapChart.Location.Y);
+                        });
+                        lblPriceChart.Invoke((MethodInvoker)delegate
+                        {
+                            lblPriceChart.Location = new Point(lblPrice.Location.X + lblPrice.Width, lblPriceChart.Location.Y);
+                        });
+                        lblConverterChart.Invoke((MethodInvoker)delegate
+                        {
+                            lblConverterChart.Location = new Point(lblMoscowTime.Location.X + lblMoscowTime.Width, lblConverterChart.Location.Y);
+                        });
+                        if (lblHeaderPriceChange.Visible)
+                        {
+                            lblHeaderPriceChart.Invoke((MethodInvoker)delegate
+                            {
+                                lblHeaderPriceChart.Location = new Point(lblHeaderPriceChange.Location.X + lblHeaderPriceChange.Width, lblHeaderPriceChart.Location.Y);
+                            });
+                        }
+                        else
+                        {
+                            lblHeaderPriceChart.Invoke((MethodInvoker)delegate
+                            {
+                                lblHeaderPriceChart.Location = new Point((lblHeaderPrice.Location.X + lblHeaderPrice.Width) - (int)(7 * UIScale), lblHeaderPriceChart.Location.Y);
+                            });
+                        }
+                        panelPriceSourceIndicatorsOuter.Invoke((MethodInvoker)delegate
+                        {
+                            panelPriceSourceIndicatorsOuter.Location = new Point((lblHeaderPrice.Location.X + lblHeaderPrice.Width) - (int)(8 * UIScale), panelPriceSourceIndicatorsOuter.Location.Y);
+                        });
+                        lblHeaderConverterChart.Invoke((MethodInvoker)delegate
+                        {
+                            lblHeaderConverterChart.Location = new Point(lblHeaderMoscowTime.Location.X + lblHeaderMoscowTime.Width, lblHeaderConverterChart.Location.Y);
+                        });
+                        lblHeaderMarketCapChart.Invoke((MethodInvoker)delegate
+                        {
+                            lblHeaderMarketCapChart.Location = new Point(lblHeaderMarketCap.Location.X + lblHeaderMarketCap.Width, lblHeaderMarketCapChart.Location.Y);
+                        });
+                        #endregion
+                        SetLightsMessagesAndResetTimers();
+                    }
+                    catch (Exception ex)
+                    {
+                        errorOccurred = true;
+                        HandleException(ex, "Dashboards(Task2)");
+                    }
+                }
+                if (offlineMode || testNet)
+                {
+                    GetMarketData(); // this time it won't actually get market data. It will just set indicators to grey, set the market tooltip, etc
+                }
+            });
+            #endregion
+            #region task 3 - coingecko market data
+            Task task3 = Task.Run(async () =>  // coingecko.com for more market data
+            {
+                try
+                {
+                    if (!testNet)
+                    {
+                        if (RunCoingeckoAPI)
+                        {
+                            if (fullSizeLoadingScreen.Visible)
+                            {
+                                fullSizeLoadingScreen.SetLoadingText("Getting historic market stats...", "Initialising...");
+                            }
+                            var CoinGeckoMarketDataJson = await _coinGeckoMarketDataService.GetCoinGeckoMarketDataAsync().ConfigureAwait(true);
+                            var coinGeckoMarketData = JsonConvert.DeserializeObject<Rootobject>(CoinGeckoMarketDataJson);
+
+                            if (coinGeckoMarketData != null)
+                            {
+                                //USD
+                                if (btnUSD.Enabled == false)
+                                {
+                                    UpdateLabelValueAsync(lblATH, $"${coinGeckoMarketData.Market_data!.Ath!.Usd}");
+                                    lblATHPercentChange.Invoke((MethodInvoker)delegate
                                     {
-                                        control.Width = 0;
+                                        lblATHPercentChange.Text = $"{coinGeckoMarketData.Market_data.Ath_change_percentage!.Usd:F2}%";
                                     });
+                                    UpdateLabelValueAsync(lblATHDate, Convert.ToString(coinGeckoMarketData.Market_data.Ath_date!.Usd).Substring(0, 10));
+                                    UpdateLabelValueAsync(lbl24HoursLowestPrice, $"${coinGeckoMarketData.Market_data.Low_24h!.Usd}");
+
+                                    DateTime parsedDate = DateTime.ParseExact(lblATHDate.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                                    DateTime currentDate = DateTime.Now.Date;
+                                    TimeSpan difference = currentDate - parsedDate;
+                                    lblATHDaysElapsed.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblATHDaysElapsed.Text = $"{difference.Days} days ago";
+                                    });
+
+                                    UpdateLabelValueAsync(lbl24HoursHighestPrice, $"${coinGeckoMarketData.Market_data.High_24h!.Usd}");
+                                        
+                                    #region numeric values next to mini-chart
+                                    //24 hours
+                                    if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency!.Usd) > highestAbsValuePriceChange)
+                                    {
+                                        highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency.Usd;
+                                    }
+                                    UpdateLabelValueAsync(lblPrice24Hours, $"{coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency.Usd:F2}%");
+                                    //7 days
+                                    if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency!.Usd) > highestAbsValuePriceChange)
+                                    {
+                                        highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency.Usd;
+                                    }
+                                    UpdateLabelValueAsync(lblPrice7Days, $"{coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency.Usd:F2}%");
+                                    //14 days 
+                                    if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_14d_in_currency!.Usd) > highestAbsValuePriceChange)
+                                    {
+                                        highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_14d_in_currency.Usd;
+                                    }
+                                    UpdateLabelValueAsync(lblPrice14Days, $"{coinGeckoMarketData.Market_data.Price_change_percentage_14d_in_currency.Usd:F2}%");
+                                    //30 days
+                                    if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency!.Usd) > highestAbsValuePriceChange)
+                                    {
+                                        highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency.Usd;
+                                    }
+                                    UpdateLabelValueAsync(lblPrice30Days, $"{coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency.Usd:F2}%");
+                                    //60 days
+                                    if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency!.Usd) > highestAbsValuePriceChange)
+                                    {
+                                        highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency.Usd;
+                                    }
+                                    UpdateLabelValueAsync(lblPrice60Days, $"{coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency.Usd:F2}%");
+                                    //200 days
+                                    if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency!.Usd) > highestAbsValuePriceChange)
+                                    {
+                                        highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency.Usd;
+                                    }
+                                    UpdateLabelValueAsync(lblPrice200Days, $"{coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency.Usd:F2}%");
+                                    //1 year
+                                    if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency!.Usd) > highestAbsValuePriceChange)
+                                    {
+                                        highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency.Usd;
+                                    }
+                                    UpdateLabelValueAsync(lblPrice1Year, $"{coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency.Usd:F2}%");
+                                    #endregion
+
+                                    if (highestAbsValuePriceChange > 0)
+                                    {
+                                        //24 hours
+                                        panel24hours.Invoke((MethodInvoker)delegate
+                                        {
+                                            panel24hours.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency.Usd) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                        });
+                                        if (panel24hours.Width == 0)
+                                        {
+                                            panel24hours.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel24hours.Width = 1;
+                                            });
+                                        }
+                                        if (coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency.Usd >= 0)
+                                        {
+                                            panel24hours.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel24hours.Location = new Point((int)(61 * UIScale), panel24hours.Location.Y);
+                                                panel24hours.BackColor = Color.OliveDrab;
+                                            });
+                                        }
+                                        else
+                                        {
+                                            panel24hours.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel24hours.Location = new Point((int)(60 * UIScale) - panel24hours.Width, panel24hours.Location.Y);
+                                                panel24hours.BackColor = Color.IndianRed;
+                                            });
+                                        }
+
+                                        //7 days
+                                        panel7days.Invoke((MethodInvoker)delegate
+                                        {
+                                            panel7days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency.Usd) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                        });
+
+                                        if (panel7days.Width == 0)
+                                        {
+                                            panel7days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel7days.Width = 1;
+                                            });
+                                        }
+                                        if (coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency.Usd >= 0)
+                                        {
+                                            panel7days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel7days.Location = new Point((int)(61 * UIScale), panel7days.Location.Y);
+                                                panel7days.BackColor = Color.OliveDrab;
+                                            });
+                                        }
+                                        else
+                                        {
+                                            panel7days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel7days.Location = new Point((int)(60 * UIScale) - panel7days.Width, panel7days.Location.Y);
+                                                panel7days.BackColor = Color.IndianRed;
+                                            });
+                                        }
+
+                                        //14 days
+                                        panel14days.Invoke((MethodInvoker)delegate
+                                        {
+                                            panel14days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_14d_in_currency.Usd) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                        });
+                                        if (panel14days.Width == 0)
+                                        {
+                                            panel14days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel14days.Width = 1;
+                                            });
+                                        }
+                                        if (coinGeckoMarketData.Market_data.Price_change_percentage_14d_in_currency.Usd >= 0)
+                                        {
+                                            panel14days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel14days.Location = new Point((int)(61 * UIScale), panel14days.Location.Y);
+                                                panel14days.BackColor = Color.OliveDrab;
+                                            });
+                                        }
+                                        else
+                                        {
+                                            panel14days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel14days.Location = new Point((int)(60 * UIScale) - panel14days.Width, panel14days.Location.Y);
+                                                panel14days.BackColor = Color.IndianRed;
+                                            });
+                                        }
+
+                                        //30 days
+                                        panel30days.Invoke((MethodInvoker)delegate
+                                        {
+                                            panel30days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency.Usd) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                        });
+
+                                        if (panel30days.Width == 0)
+                                        {
+                                            panel30days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel30days.Width = 1;
+                                            });
+                                        }
+                                        if (coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency.Usd >= 0)
+                                        {
+                                            panel30days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel30days.Location = new Point((int)(61 * UIScale), panel30days.Location.Y);
+                                                panel30days.BackColor = Color.OliveDrab;
+                                            });
+                                        }
+                                        else
+                                        {
+                                            panel30days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel30days.Location = new Point((int)(60 * UIScale) - panel30days.Width, panel30days.Location.Y);
+                                                panel30days.BackColor = Color.IndianRed;
+                                            });
+                                        }
+
+                                        //60 days
+                                        panel60days.Invoke((MethodInvoker)delegate
+                                        {
+                                            panel60days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency.Usd) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                        });
+                                        if (panel60days.Width == 0)
+                                        {
+                                            panel60days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel60days.Width = 1;
+                                            });
+                                        }
+                                        if (coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency.Usd >= 0)
+                                        {
+                                            panel60days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel60days.Location = new Point((int)(61 * UIScale), panel60days.Location.Y);
+                                                panel60days.BackColor = Color.OliveDrab;
+                                            });
+                                        }
+                                        else
+                                        {
+                                            panel60days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel60days.Location = new Point((int)(60 * UIScale) - panel60days.Width, panel60days.Location.Y);
+                                                panel60days.BackColor = Color.IndianRed;
+                                            });
+                                        }
+
+                                        //200 days
+                                        panel200days.Invoke((MethodInvoker)delegate
+                                        {
+                                            panel200days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency.Usd) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                        });
+                                        if (panel200days.Width == 0)
+                                        {
+                                            panel200days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel200days.Width = 1;
+                                            });
+                                        }
+                                        if (coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency.Usd >= 0)
+                                        {
+                                            panel200days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel200days.Location = new Point((int)(61 * UIScale), panel200days.Location.Y);
+                                                panel200days.BackColor = Color.OliveDrab;
+                                            });
+                                        }
+                                        else
+                                        {
+                                            panel200days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel200days.Location = new Point((int)(60 * UIScale) - panel200days.Width, panel200days.Location.Y);
+                                                panel200days.BackColor = Color.IndianRed;
+                                            });
+                                        }
+
+                                        //1 year
+                                        panel1year.Invoke((MethodInvoker)delegate
+                                        {
+                                            panel1year.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency.Usd) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                        });
+                                        if (panel1year.Width == 0)
+                                        {
+                                            panel1year.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel1year.Width = 1;
+                                            });
+                                        }
+                                        if (coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency.Usd >= 0)
+                                        {
+                                            panel1year.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel1year.Location = new Point((int)(61 * UIScale), panel1year.Location.Y);
+                                                panel1year.BackColor = Color.OliveDrab;
+                                            });
+                                        }
+                                        else
+                                        {
+                                            panel1year.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel1year.Location = new Point((int)(60 * UIScale) - panel1year.Width, panel1year.Location.Y);
+                                                panel1year.BackColor = Color.IndianRed;
+                                            });
+                                        }
+                                    }
+                                }
+                                //GBP
+                                if (btnGBP.Enabled == false)
+                                {
+                                    UpdateLabelValueAsync(lblATH, $"£{coinGeckoMarketData.Market_data!.Ath!.Gbp}");
+                                    lblATHPercentChange.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblATHPercentChange.Text = $"{coinGeckoMarketData.Market_data.Ath_change_percentage!.Gbp:F2}%";
+                                    });
+                                    UpdateLabelValueAsync(lblATHDate, Convert.ToString(coinGeckoMarketData.Market_data.Ath_date!.Gbp).Substring(0, 10));
+
+                                    DateTime parsedDate = DateTime.ParseExact(lblATHDate.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                                    DateTime currentDate = DateTime.Now.Date;
+                                    TimeSpan difference = currentDate - parsedDate;
+                                    lblATHDaysElapsed.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblATHDaysElapsed.Text = $"{difference.Days} days ago";
+                                    });
+
+                                    UpdateLabelValueAsync(lbl24HoursHighestPrice, $"£{coinGeckoMarketData.Market_data.High_24h!.Gbp}");
+                                    UpdateLabelValueAsync(lbl24HoursLowestPrice, $"£{coinGeckoMarketData.Market_data.Low_24h!.Gbp}");
+
+                                    #region numeric values next to mini-chart
+                                    //24 hours
+                                    if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency!.Gbp) > highestAbsValuePriceChange)
+                                    {
+                                        highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency.Gbp;
+                                    }
+                                    UpdateLabelValueAsync(lblPrice24Hours, $"{coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency.Gbp:F2}%");
+                                    //7 days
+                                    if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency!.Gbp) > highestAbsValuePriceChange)
+                                    {
+                                        highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency.Gbp;
+                                    }
+                                    UpdateLabelValueAsync(lblPrice7Days, $"{coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency.Gbp:F2}%");
+                                    //14 days 
+                                    if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_14d_in_currency!.Gbp) > highestAbsValuePriceChange)
+                                    {
+                                        highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_14d_in_currency.Gbp;
+                                    }
+                                    UpdateLabelValueAsync(lblPrice14Days, $"{coinGeckoMarketData.Market_data.Price_change_percentage_14d_in_currency.Gbp:F2}%");
+                                    //30 days
+                                    if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency!.Gbp) > highestAbsValuePriceChange)
+                                    {
+                                        highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency.Gbp;
+                                    }
+                                    UpdateLabelValueAsync(lblPrice30Days, $"{coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency.Gbp:F2}%");
+                                    //60 days
+                                    if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency!.Gbp) > highestAbsValuePriceChange)
+                                    {
+                                        highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency.Gbp;
+                                    }
+                                    UpdateLabelValueAsync(lblPrice60Days, $"{coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency.Gbp:F2}%");
+                                    //200 days
+                                    if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency!.Gbp) > highestAbsValuePriceChange)
+                                    {
+                                        highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency.Gbp;
+                                    }
+                                    UpdateLabelValueAsync(lblPrice200Days, $"{coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency.Gbp:F2}%");
+                                    //1 year
+                                    if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency!.Gbp) > highestAbsValuePriceChange)
+                                    {
+                                        highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency.Gbp;
+                                    }
+                                    UpdateLabelValueAsync(lblPrice1Year, $"{coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency.Gbp:F2}%");
+                                    #endregion
+
+                                    if (highestAbsValuePriceChange > 0)
+                                    {
+                                        //24 hours
+                                        panel24hours.Invoke((MethodInvoker)delegate
+                                        {
+                                            panel24hours.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency.Gbp) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                        });
+                                        if (panel24hours.Width == 0)
+                                        {
+                                            panel24hours.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel24hours.Width = 1;
+                                            });
+                                        }
+                                        if (coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency.Gbp >= 0)
+                                        {
+                                            panel24hours.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel24hours.Location = new Point((int)(61 * UIScale), panel24hours.Location.Y);
+                                                panel24hours.BackColor = Color.OliveDrab;
+                                            });
+                                        }
+                                        else
+                                        {
+                                            panel24hours.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel24hours.Location = new Point((int)(60 * UIScale) - panel24hours.Width, panel24hours.Location.Y);
+                                                panel24hours.BackColor = Color.IndianRed;
+                                            });
+                                        }
+
+                                        //7 days
+                                        panel7days.Invoke((MethodInvoker)delegate
+                                        {
+                                            panel7days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency.Gbp) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                        });
+
+                                        if (panel7days.Width == 0)
+                                        {
+                                            panel7days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel7days.Width = 1;
+                                            });
+                                        }
+                                        if (coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency.Gbp >= 0)
+                                        {
+                                            panel7days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel7days.Location = new Point((int)(61 * UIScale), panel7days.Location.Y);
+                                                panel7days.BackColor = Color.OliveDrab;
+                                            });
+                                        }
+                                        else
+                                        {
+                                            panel7days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel7days.Location = new Point((int)(60 * UIScale) - panel7days.Width, panel7days.Location.Y);
+                                                panel7days.BackColor = Color.IndianRed;
+                                            });
+                                        }
+
+                                        //14 days
+                                        panel14days.Invoke((MethodInvoker)delegate
+                                        {
+                                            panel14days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_14d_in_currency.Gbp) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                        });
+                                        if (panel14days.Width == 0)
+                                        {
+                                            panel14days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel14days.Width = 1;
+                                            });
+                                        }
+                                        if (coinGeckoMarketData.Market_data.Price_change_percentage_14d_in_currency.Gbp >= 0)
+                                        {
+                                            panel14days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel14days.Location = new Point((int)(61 * UIScale), panel14days.Location.Y);
+                                                panel14days.BackColor = Color.OliveDrab;
+                                            });
+                                        }
+                                        else
+                                        {
+                                            panel14days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel14days.Location = new Point((int)(60 * UIScale) - panel14days.Width, panel14days.Location.Y);
+                                                panel14days.BackColor = Color.IndianRed;
+                                            });
+                                        }
+
+                                        //30 days
+                                        panel30days.Invoke((MethodInvoker)delegate
+                                        {
+                                            panel30days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency.Gbp) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                        });
+
+                                        if (panel30days.Width == 0)
+                                        {
+                                            panel30days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel30days.Width = 1;
+                                            });
+                                        }
+                                        if (coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency.Gbp >= 0)
+                                        {
+                                            panel30days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel30days.Location = new Point((int)(61 * UIScale), panel30days.Location.Y);
+                                                panel30days.BackColor = Color.OliveDrab;
+                                            });
+                                        }
+                                        else
+                                        {
+                                            panel30days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel30days.Location = new Point((int)(60 * UIScale) - panel30days.Width, panel30days.Location.Y);
+                                                panel30days.BackColor = Color.IndianRed;
+                                            });
+                                        }
+
+                                        //60 days
+                                        panel60days.Invoke((MethodInvoker)delegate
+                                        {
+                                            panel60days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency.Gbp) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                        });
+                                        if (panel60days.Width == 0)
+                                        {
+                                            panel60days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel60days.Width = 1;
+                                            });
+                                        }
+                                        if (coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency.Gbp >= 0)
+                                        {
+                                            panel60days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel60days.Location = new Point((int)(61 * UIScale), panel60days.Location.Y);
+                                                panel60days.BackColor = Color.OliveDrab;
+                                            });
+                                        }
+                                        else
+                                        {
+                                            panel60days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel60days.Location = new Point((int)(60 * UIScale) - panel60days.Width, panel60days.Location.Y);
+                                                panel60days.BackColor = Color.IndianRed;
+                                            });
+                                        }
+
+                                        //200 days
+                                        panel200days.Invoke((MethodInvoker)delegate
+                                        {
+                                            panel200days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency.Gbp) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                        });
+                                        if (panel200days.Width == 0)
+                                        {
+                                            panel200days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel200days.Width = 1;
+                                            });
+                                        }
+                                        if (coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency.Gbp >= 0)
+                                        {
+                                            panel200days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel200days.Location = new Point((int)(61 * UIScale), panel200days.Location.Y);
+                                                panel200days.BackColor = Color.OliveDrab;
+                                            });
+                                        }
+                                        else
+                                        {
+                                            panel200days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel200days.Location = new Point((int)(60 * UIScale) - panel200days.Width, panel200days.Location.Y);
+                                                panel200days.BackColor = Color.IndianRed;
+                                            });
+                                        }
+
+                                        //1 year
+                                        panel1year.Invoke((MethodInvoker)delegate
+                                        {
+                                            panel1year.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency.Gbp) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                        });
+                                        if (panel1year.Width == 0)
+                                        {
+                                            panel1year.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel1year.Width = 1;
+                                            });
+                                        }
+                                        if (coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency.Gbp >= 0)
+                                        {
+                                            panel1year.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel1year.Location = new Point((int)(61 * UIScale), panel1year.Location.Y);
+                                                panel1year.BackColor = Color.OliveDrab;
+                                            });
+                                        }
+                                        else
+                                        {
+                                            panel1year.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel1year.Location = new Point((int)(60 * UIScale) - panel1year.Width, panel1year.Location.Y);
+                                                panel1year.BackColor = Color.IndianRed;
+                                            });
+                                        }
+                                    }
+
+                                }
+                                //EUR
+                                if (btnEUR.Enabled == false)
+                                {
+                                    UpdateLabelValueAsync(lblATH, $"€{coinGeckoMarketData.Market_data!.Ath!.Eur}");
+                                    lblATHPercentChange.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblATHPercentChange.Text = $"{coinGeckoMarketData.Market_data.Ath_change_percentage!.Eur:F2}%";
+                                    });
+                                    UpdateLabelValueAsync(lblATHDate, Convert.ToString(coinGeckoMarketData.Market_data.Ath_date!.Eur).Substring(0, 10));
+
+                                    DateTime parsedDate = DateTime.ParseExact(lblATHDate.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                                    DateTime currentDate = DateTime.Now.Date;
+                                    TimeSpan difference = currentDate - parsedDate;
+                                    lblATHDaysElapsed.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblATHDaysElapsed.Text = $"{difference.Days} days ago";
+                                    });
+
+                                    UpdateLabelValueAsync(lbl24HoursHighestPrice, $"€{coinGeckoMarketData.Market_data.High_24h!.Eur}");
+                                    UpdateLabelValueAsync(lbl24HoursLowestPrice, $"€{coinGeckoMarketData.Market_data.Low_24h!.Eur}");
+
+                                    #region numeric values next to mini-chart
+                                    //24 hours
+                                    if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency!.Eur) > highestAbsValuePriceChange)
+                                    {
+                                        highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency.Eur;
+                                    }
+                                    UpdateLabelValueAsync(lblPrice24Hours, $"{coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency.Eur:F2}%");
+                                    //7 days
+                                    if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency!.Eur) > highestAbsValuePriceChange)
+                                    {
+                                        highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency.Eur;
+                                    }
+                                    UpdateLabelValueAsync(lblPrice7Days, $"{coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency.Eur:F2}%");
+                                    //14 days 
+                                    if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_14d_in_currency!.Eur) > highestAbsValuePriceChange)
+                                    {
+                                        highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_14d_in_currency.Eur;
+                                    }
+                                    UpdateLabelValueAsync(lblPrice14Days, $"{coinGeckoMarketData.Market_data.Price_change_percentage_14d_in_currency.Eur:F2}%");
+                                    //30 days
+                                    if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency!.Eur) > highestAbsValuePriceChange)
+                                    {
+                                        highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency.Eur;
+                                    }
+                                    UpdateLabelValueAsync(lblPrice30Days, $"{coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency.Eur:F2}%");
+                                    //60 days
+                                    if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency!.Eur) > highestAbsValuePriceChange)
+                                    {
+                                        highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency.Eur;
+                                    }
+                                    UpdateLabelValueAsync(lblPrice60Days, $"{coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency.Eur:F2}%");
+                                    //200 days
+                                    if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency!.Eur) > highestAbsValuePriceChange)
+                                    {
+                                        highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency.Eur;
+                                    }
+                                    UpdateLabelValueAsync(lblPrice200Days, $"{coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency.Eur:F2}%");
+                                    //1 year
+                                    if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency!.Eur) > highestAbsValuePriceChange)
+                                    {
+                                        highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency.Eur;
+                                    }
+                                    UpdateLabelValueAsync(lblPrice1Year, $"{coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency.Eur:F2}%");
+                                    #endregion
+
+                                    if (highestAbsValuePriceChange > 0)
+                                    {
+                                        //24 hours
+                                        panel24hours.Invoke((MethodInvoker)delegate
+                                        {
+                                            panel24hours.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency.Eur) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                        });
+                                        if (panel24hours.Width == 0)
+                                        {
+                                            panel24hours.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel24hours.Width = 1;
+                                            });
+                                        }
+                                        if (coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency.Eur >= 0)
+                                        {
+                                            panel24hours.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel24hours.Location = new Point((int)(61 * UIScale), panel24hours.Location.Y);
+                                                panel24hours.BackColor = Color.OliveDrab;
+                                            });
+                                        }
+                                        else
+                                        {
+                                            panel24hours.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel24hours.Location = new Point((int)(60 * UIScale) - panel24hours.Width, panel24hours.Location.Y);
+                                                panel24hours.BackColor = Color.IndianRed;
+                                            });
+                                        }
+
+                                        //7 days
+                                        panel7days.Invoke((MethodInvoker)delegate
+                                        {
+                                            panel7days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency.Eur) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                        });
+
+                                        if (panel7days.Width == 0)
+                                        {
+                                            panel7days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel7days.Width = 1;
+                                            });
+                                        }
+                                        if (coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency.Eur >= 0)
+                                        {
+                                            panel7days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel7days.Location = new Point((int)(61 * UIScale), panel7days.Location.Y);
+                                                panel7days.BackColor = Color.OliveDrab;
+                                            });
+                                        }
+                                        else
+                                        {
+                                            panel7days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel7days.Location = new Point((int)(60 * UIScale) - panel7days.Width, panel7days.Location.Y);
+                                                panel7days.BackColor = Color.IndianRed;
+                                            });
+                                        }
+
+                                        //14 days
+                                        panel14days.Invoke((MethodInvoker)delegate
+                                        {
+                                            panel14days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_14d_in_currency.Eur) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                        });
+                                        if (panel14days.Width == 0)
+                                        {
+                                            panel14days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel14days.Width = 1;
+                                            });
+                                        }
+                                        if (coinGeckoMarketData.Market_data.Price_change_percentage_14d_in_currency.Eur >= 0)
+                                        {
+                                            panel14days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel14days.Location = new Point((int)(61 * UIScale), panel14days.Location.Y);
+                                                panel14days.BackColor = Color.OliveDrab;
+                                            });
+                                        }
+                                        else
+                                        {
+                                            panel14days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel14days.Location = new Point((int)(60 * UIScale) - panel14days.Width, panel14days.Location.Y);
+                                                panel14days.BackColor = Color.IndianRed;
+                                            });
+                                        }
+
+                                        //30 days
+                                        panel30days.Invoke((MethodInvoker)delegate
+                                        {
+                                            panel30days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency.Eur) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                        });
+
+                                        if (panel30days.Width == 0)
+                                        {
+                                            panel30days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel30days.Width = 1;
+                                            });
+                                        }
+                                        if (coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency.Eur >= 0)
+                                        {
+                                            panel30days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel30days.Location = new Point((int)(61 * UIScale), panel30days.Location.Y);
+                                                panel30days.BackColor = Color.OliveDrab;
+                                            });
+                                        }
+                                        else
+                                        {
+                                            panel30days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel30days.Location = new Point((int)(60 * UIScale) - panel30days.Width, panel30days.Location.Y);
+                                                panel30days.BackColor = Color.IndianRed;
+                                            });
+                                        }
+
+                                        //60 days
+                                        panel60days.Invoke((MethodInvoker)delegate
+                                        {
+                                            panel60days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency.Eur) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                        });
+                                        if (panel60days.Width == 0)
+                                        {
+                                            panel60days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel60days.Width = 1;
+                                            });
+                                        }
+                                        if (coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency.Eur >= 0)
+                                        {
+                                            panel60days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel60days.Location = new Point((int)(61 * UIScale), panel60days.Location.Y);
+                                                panel60days.BackColor = Color.OliveDrab;
+                                            });
+                                        }
+                                        else
+                                        {
+                                            panel60days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel60days.Location = new Point((int)(60 * UIScale) - panel60days.Width, panel60days.Location.Y);
+                                                panel60days.BackColor = Color.IndianRed;
+                                            });
+                                        }
+
+                                        //200 days
+                                        panel200days.Invoke((MethodInvoker)delegate
+                                        {
+                                            panel200days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency.Eur) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                        });
+                                        if (panel200days.Width == 0)
+                                        {
+                                            panel200days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel200days.Width = 1;
+                                            });
+                                        }
+                                        if (coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency.Eur >= 0)
+                                        {
+                                            panel200days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel200days.Location = new Point((int)(61 * UIScale), panel200days.Location.Y);
+                                                panel200days.BackColor = Color.OliveDrab;
+                                            });
+                                        }
+                                        else
+                                        {
+                                            panel200days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel200days.Location = new Point((int)(60 * UIScale) - panel200days.Width, panel200days.Location.Y);
+                                                panel200days.BackColor = Color.IndianRed;
+                                            });
+                                        }
+
+                                        //1 year
+                                        panel1year.Invoke((MethodInvoker)delegate
+                                        {
+                                            panel1year.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency.Eur) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                        });
+                                        if (panel1year.Width == 0)
+                                        {
+                                            panel1year.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel1year.Width = 1;
+                                            });
+                                        }
+                                        if (coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency.Eur >= 0)
+                                        {
+                                            panel1year.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel1year.Location = new Point((int)(61 * UIScale), panel1year.Location.Y);
+                                                panel1year.BackColor = Color.OliveDrab;
+                                            });
+                                        }
+                                        else
+                                        {
+                                            panel1year.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel1year.Location = new Point((int)(60 * UIScale) - panel1year.Width, panel1year.Location.Y);
+                                                panel1year.BackColor = Color.IndianRed;
+                                            });
+                                        }
+                                    }
+
+                                }
+                                //XAU
+                                if (btnXAU.Enabled == false)
+                                {
+                                    UpdateLabelValueAsync(lblATH, $"\U0001fa99{coinGeckoMarketData.Market_data!.Ath!.Xau}");
+                                    lblATHPercentChange.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblATHPercentChange.Text = $"{coinGeckoMarketData.Market_data.Ath_change_percentage!.Xau:F2}%";
+                                    });
+                                    UpdateLabelValueAsync(lblATHDate, Convert.ToString(coinGeckoMarketData.Market_data.Ath_date!.Xau).Substring(0, 10));
+
+                                    DateTime parsedDate = DateTime.ParseExact(lblATHDate.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                                    DateTime currentDate = DateTime.Now.Date;
+                                    TimeSpan difference = currentDate - parsedDate;
+                                    lblATHDaysElapsed.Invoke((MethodInvoker)delegate
+                                    {
+                                        lblATHDaysElapsed.Text = $"{difference.Days} days ago";
+                                    });
+
+                                    UpdateLabelValueAsync(lbl24HoursHighestPrice, $"\U0001fa99{coinGeckoMarketData.Market_data.High_24h!.Xau}");
+                                    UpdateLabelValueAsync(lbl24HoursLowestPrice, $"\U0001fa99{coinGeckoMarketData.Market_data.Low_24h!.Xau}");
+
+                                    #region numeric values next to mini-chart
+                                    //24 hours
+                                    if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency!.Xau) > highestAbsValuePriceChange)
+                                    {
+                                        highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency.Xau;
+                                    }
+                                    UpdateLabelValueAsync(lblPrice24Hours, $"{coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency.Xau:F2}%");
+                                    //7 days
+                                    if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency!.Xau) > highestAbsValuePriceChange)
+                                    {
+                                        highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency.Xau;
+                                    }
+                                    UpdateLabelValueAsync(lblPrice7Days, $"{coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency.Xau:F2}%");
+                                    //14 days 
+                                    if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_14d_in_currency!.Xau) > highestAbsValuePriceChange)
+                                    {
+                                        highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_14d_in_currency.Xau;
+                                    }
+                                    UpdateLabelValueAsync(lblPrice14Days, $"{coinGeckoMarketData.Market_data.Price_change_percentage_14d_in_currency.Xau:F2}%");
+                                    //30 days
+                                    if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency!.Xau) > highestAbsValuePriceChange)
+                                    {
+                                        highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency.Xau;
+                                    }
+                                    UpdateLabelValueAsync(lblPrice30Days, $"{coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency.Xau:F2}%");
+                                    //60 days
+                                    if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency!.Xau) > highestAbsValuePriceChange)
+                                    {
+                                        highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency.Xau;
+                                    }
+                                    UpdateLabelValueAsync(lblPrice60Days, $"{coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency.Xau:F2}%");
+                                    //200 days
+                                    if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency!.Xau) > highestAbsValuePriceChange)
+                                    {
+                                        highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency.Xau;
+                                    }
+                                    UpdateLabelValueAsync(lblPrice200Days, $"{coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency.Xau:F2}%");
+                                    //1 year
+                                    if (Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency!.Xau) > highestAbsValuePriceChange)
+                                    {
+                                        highestAbsValuePriceChange = coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency.Xau;
+                                    }
+                                    UpdateLabelValueAsync(lblPrice1Year, $"{coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency.Xau:F2}%");
+                                    #endregion
+
+                                    if (highestAbsValuePriceChange > 0)
+                                    {
+                                        //24 hours
+                                        panel24hours.Invoke((MethodInvoker)delegate
+                                        {
+                                            panel24hours.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency.Xau) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                        });
+                                        if (panel24hours.Width == 0)
+                                        {
+                                            panel24hours.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel24hours.Width = 1;
+                                            });
+                                        }
+                                        if (coinGeckoMarketData.Market_data.Price_change_percentage_24h_in_currency.Xau >= 0)
+                                        {
+                                            panel24hours.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel24hours.Location = new Point((int)(61 * UIScale), panel24hours.Location.Y);
+                                                panel24hours.BackColor = Color.OliveDrab;
+                                            });
+                                        }
+                                        else
+                                        {
+                                            panel24hours.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel24hours.Location = new Point((int)(60 * UIScale) - panel24hours.Width, panel24hours.Location.Y);
+                                                panel24hours.BackColor = Color.IndianRed;
+                                            });
+                                        }
+
+                                        //7 days
+                                        panel7days.Invoke((MethodInvoker)delegate
+                                        {
+                                            panel7days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency.Xau) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                        });
+
+                                        if (panel7days.Width == 0)
+                                        {
+                                            panel7days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel7days.Width = 1;
+                                            });
+                                        }
+                                        if (coinGeckoMarketData.Market_data.Price_change_percentage_7d_in_currency.Xau >= 0)
+                                        {
+                                            panel7days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel7days.Location = new Point((int)(61 * UIScale), panel7days.Location.Y);
+                                                panel7days.BackColor = Color.OliveDrab;
+                                            });
+                                        }
+                                        else
+                                        {
+                                            panel7days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel7days.Location = new Point((int)(60 * UIScale) - panel7days.Width, panel7days.Location.Y);
+                                                panel7days.BackColor = Color.IndianRed;
+                                            });
+                                        }
+
+                                        //14 days
+                                        panel14days.Invoke((MethodInvoker)delegate
+                                        {
+                                            panel14days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_14d_in_currency.Xau) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                        });
+                                        if (panel14days.Width == 0)
+                                        {
+                                            panel14days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel14days.Width = 1;
+                                            });
+                                        }
+                                        if (coinGeckoMarketData.Market_data.Price_change_percentage_14d_in_currency.Xau >= 0)
+                                        {
+                                            panel14days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel14days.Location = new Point((int)(61 * UIScale), panel14days.Location.Y);
+                                                panel14days.BackColor = Color.OliveDrab;
+                                            });
+                                        }
+                                        else
+                                        {
+                                            panel14days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel14days.Location = new Point((int)(60 * UIScale) - panel14days.Width, panel14days.Location.Y);
+                                                panel14days.BackColor = Color.IndianRed;
+                                            });
+                                        }
+
+                                        //30 days
+                                        panel30days.Invoke((MethodInvoker)delegate
+                                        {
+                                            panel30days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency.Xau) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                        });
+
+                                        if (panel30days.Width == 0)
+                                        {
+                                            panel30days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel30days.Width = 1;
+                                            });
+                                        }
+                                        if (coinGeckoMarketData.Market_data.Price_change_percentage_30d_in_currency.Xau >= 0)
+                                        {
+                                            panel30days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel30days.Location = new Point((int)(61 * UIScale), panel30days.Location.Y);
+                                                panel30days.BackColor = Color.OliveDrab;
+                                            });
+                                        }
+                                        else
+                                        {
+                                            panel30days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel30days.Location = new Point((int)(60 * UIScale) - panel30days.Width, panel30days.Location.Y);
+                                                panel30days.BackColor = Color.IndianRed;
+                                            });
+                                        }
+
+                                        //60 days
+                                        panel60days.Invoke((MethodInvoker)delegate
+                                        {
+                                            panel60days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency.Xau) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                        });
+                                        if (panel60days.Width == 0)
+                                        {
+                                            panel60days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel60days.Width = 1;
+                                            });
+                                        }
+                                        if (coinGeckoMarketData.Market_data.Price_change_percentage_60d_in_currency.Xau >= 0)
+                                        {
+                                            panel60days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel60days.Location = new Point((int)(61 * UIScale), panel60days.Location.Y);
+                                                panel60days.BackColor = Color.OliveDrab;
+                                            });
+                                        }
+                                        else
+                                        {
+                                            panel60days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel60days.Location = new Point((int)(60 * UIScale) - panel60days.Width, panel60days.Location.Y);
+                                                panel60days.BackColor = Color.IndianRed;
+                                            });
+                                        }
+
+                                        //200 days
+                                        panel200days.Invoke((MethodInvoker)delegate
+                                        {
+                                            panel200days.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency.Xau) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                        });
+                                        if (panel200days.Width == 0)
+                                        {
+                                            panel200days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel200days.Width = 1;
+                                            });
+                                        }
+                                        if (coinGeckoMarketData.Market_data.Price_change_percentage_200d_in_currency.Xau >= 0)
+                                        {
+                                            panel200days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel200days.Location = new Point((int)(61 * UIScale), panel200days.Location.Y);
+                                                panel200days.BackColor = Color.OliveDrab;
+                                            });
+                                        }
+                                        else
+                                        {
+                                            panel200days.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel200days.Location = new Point((int)(60 * UIScale) - panel200days.Width, panel200days.Location.Y);
+                                                panel200days.BackColor = Color.IndianRed;
+                                            });
+                                        }
+
+                                        //1 year
+                                        panel1year.Invoke((MethodInvoker)delegate
+                                        {
+                                            panel1year.Width = Convert.ToInt32((Math.Abs(coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency.Xau) / highestAbsValuePriceChange) * (60.0 * UIScale));
+                                        });
+                                        if (panel1year.Width == 0)
+                                        {
+                                            panel1year.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel1year.Width = 1;
+                                            });
+                                        }
+                                        if (coinGeckoMarketData.Market_data.Price_change_percentage_1y_in_currency.Xau >= 0)
+                                        {
+                                            panel1year.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel1year.Location = new Point((int)(61 * UIScale), panel1year.Location.Y);
+                                                panel1year.BackColor = Color.OliveDrab;
+                                            });
+                                        }
+                                        else
+                                        {
+                                            panel1year.Invoke((MethodInvoker)delegate
+                                            {
+                                                panel1year.Location = new Point((int)(60 * UIScale) - panel1year.Width, panel1year.Location.Y);
+                                                panel1year.BackColor = Color.IndianRed;
+                                            });
+                                        }
+                                    }
+
                                 }
                             }
                         }
                         else
                         {
-                            Control[] controlsToShowAsTestnet = { lblATH, lblATHPercentChange, lblATHDate, lblATHDaysElapsed, lbl24HoursHighestPrice, lbl24HoursLowestPrice, lblPrice14Days, lblPrice1Year, lblPrice200Days, lblPrice24Hours, lblPrice30Days, lblPrice60Days, lblPrice7Days };
-                            foreach (Control control in controlsToShowAsTestnet)
+                            //zz
+                            Control[] controlsToShowAsDisabled = { lblATH, lblATHPercentChange, lblATHDate, lblATHDaysElapsed, lbl24HoursHighestPrice, lbl24HoursLowestPrice, lblPrice14Days, lblPrice1Year, lblPrice200Days, lblPrice24Hours, lblPrice30Days, lblPrice60Days, lblPrice7Days };
+                            foreach (Control control in controlsToShowAsDisabled)
                             {
                                 control.Invoke((MethodInvoker)delegate
                                 {
-                                    control.Text = "unavailable on TestNet";
+                                    control.Text = "disabled";
                                 });
                             }
 
@@ -2836,313 +2830,338 @@ namespace SATSuma
                                 });
                             }
                         }
-                        #region shuffle stuff in to place
-                        label80.Invoke((MethodInvoker)delegate
-                        {
-                            label80.Location = new Point(lblATH.Location.X + lblATH.Width, label80.Location.Y);
-                        });
-                        lblATHPercentChange.Invoke((MethodInvoker)delegate
-                        {
-                            lblATHPercentChange.Location = new Point(label80.Location.X + label80.Width, lblATHPercentChange.Location.Y);
-                        });
-                        label333.Invoke((MethodInvoker)delegate
-                        {
-                            label333.Location = new Point(lblATHDate.Location.X + lblATHDate.Width, label333.Location.Y);
-                        });
-                        lblATHDaysElapsed.Invoke((MethodInvoker)delegate
-                        {
-                            lblATHDaysElapsed.Location = new Point(label333.Location.X + label333.Width, lblATHDaysElapsed.Location.Y);
-                        });
-                        label339.Invoke((MethodInvoker)delegate
-                        {
-                            label339.Location = new Point(lbl24HoursHighestPrice.Location.X + lbl24HoursHighestPrice.Width, label339.Location.Y);
-                        });
-                        lbl24HoursLowestPrice.Invoke((MethodInvoker)delegate
-                        {
-                            lbl24HoursLowestPrice.Location = new Point(label339.Location.X + label339.Width, lbl24HoursLowestPrice.Location.Y);
-                        });
-                        #endregion
-                        SetLightsMessagesAndResetTimers();
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        errorOccurred = true;
-                        HandleException(ex, "Dashboards(Task3)");
-                    }
-                });
-
-                #endregion
-                #region task 4 - messari.io api
-                Task task4 = Task.Run(async () =>  // messari.io for various stats
-                {
-                    try
-                    {
-                        if (!testNet)
+                        Control[] controlsToShowAsTestnet = { lblATH, lblATHPercentChange, lblATHDate, lblATHDaysElapsed, lbl24HoursHighestPrice, lbl24HoursLowestPrice, lblPrice14Days, lblPrice1Year, lblPrice200Days, lblPrice24Hours, lblPrice30Days, lblPrice60Days, lblPrice7Days };
+                        foreach (Control control in controlsToShowAsTestnet)
                         {
-                            if (RunMessariAPI)
+                            control.Invoke((MethodInvoker)delegate
                             {
-                                var MessariMarketDataJson = await _MessariMarketDataService.GetMessariMarketDataAsync().ConfigureAwait(true);
-                                var messariMarketData = JsonConvert.DeserializeObject<MessariRootobject>(MessariMarketDataJson);
+                                control.Text = "unavailable on TestNet";
+                            });
+                        }
 
-                                if (messariMarketData != null)
+                        Control[] panelsToShrink = { panel24hours, panel7days, panel14days, panel30days, panel60days, panel200days, panel1year };
+                        foreach (Control control in panelsToShrink)
+                        {
+                            control.Invoke((MethodInvoker)delegate
+                            {
+                                control.Width = 0;
+                            });
+                        }
+                    }
+                    #region shuffle stuff in to place
+                    label80.Invoke((MethodInvoker)delegate
+                    {
+                        label80.Location = new Point(lblATH.Location.X + lblATH.Width, label80.Location.Y);
+                    });
+                    lblATHPercentChange.Invoke((MethodInvoker)delegate
+                    {
+                        lblATHPercentChange.Location = new Point(label80.Location.X + label80.Width, lblATHPercentChange.Location.Y);
+                    });
+                    label333.Invoke((MethodInvoker)delegate
+                    {
+                        label333.Location = new Point(lblATHDate.Location.X + lblATHDate.Width, label333.Location.Y);
+                    });
+                    lblATHDaysElapsed.Invoke((MethodInvoker)delegate
+                    {
+                        lblATHDaysElapsed.Location = new Point(label333.Location.X + label333.Width, lblATHDaysElapsed.Location.Y);
+                    });
+                    label339.Invoke((MethodInvoker)delegate
+                    {
+                        label339.Location = new Point(lbl24HoursHighestPrice.Location.X + lbl24HoursHighestPrice.Width, label339.Location.Y);
+                    });
+                    lbl24HoursLowestPrice.Invoke((MethodInvoker)delegate
+                    {
+                        lbl24HoursLowestPrice.Location = new Point(label339.Location.X + label339.Width, lbl24HoursLowestPrice.Location.Y);
+                    });
+                    #endregion
+                    SetLightsMessagesAndResetTimers();
+                }
+                catch (Exception ex)
+                {
+                    errorOccurred = true;
+                    HandleException(ex, "Dashboards(Task3)");
+                }
+            });
+
+            #endregion
+            #region task 4 - messari.io api
+            Task task4 = Task.Run(async () =>  // messari.io for various stats
+            {
+                try
+                {
+                    if (!testNet)
+                    {
+                        if (RunMessariAPI)
+                        {
+                            if (fullSizeLoadingScreen.Visible)
+                            {
+                                fullSizeLoadingScreen.SetLoadingText("determining network usage...", "Initialising...");
+                            }
+                            var MessariMarketDataJson = await _MessariMarketDataService.GetMessariMarketDataAsync().ConfigureAwait(true);
+                            var messariMarketData = JsonConvert.DeserializeObject<MessariRootobject>(MessariMarketDataJson);
+
+                            if (messariMarketData != null)
+                            {
+                                int active_addresses = messariMarketData.Data!.Blockchain_stats_24_hours!.Count_of_active_addresses;
+                                if (active_addresses > 0) // this api sometimes doesn't populate this field with anything but 0
                                 {
-                                    int active_addresses = messariMarketData.Data.blockchain_stats_24_hours.count_of_active_addresses;
-                                    if (active_addresses > 0) // this api sometimes doesn't populate this field with anything but 0
-                                    {
-                                        UpdateLabelValueAsync(lblActiveAddresses, Convert.ToString(messariMarketData.Data.blockchain_stats_24_hours.count_of_active_addresses));
-                                    }
-                                    else
-                                    {
-                                        lblActiveAddresses.Invoke((MethodInvoker)delegate
-                                        {
-                                            lblActiveAddresses.Text = "no data";
-                                        });
-                                    }
-                                    int total_addresses = messariMarketData.Data.on_chain_data.addresses_count;
-                                    if (total_addresses > 0) // this api sometimes doesn't populate this field with anything but 0
-                                    {
-                                        UpdateLabelValueAsync(lblTotalAddresses, Convert.ToString(messariMarketData.Data.on_chain_data.addresses_count));
-                                    }
-                                    else
-                                    {
-                                        lblTotalAddresses.Invoke((MethodInvoker)delegate
-                                        {
-                                            lblTotalAddresses.Text = "no data";
-                                        });
-                                    }
-                                    label32.Invoke((MethodInvoker)delegate
-                                    {
-                                        label32.Location = new Point(lblTotalAddresses.Location.X + lblTotalAddresses.Width, label32.Location.Y);
-                                    });
+                                    UpdateLabelValueAsync(lblActiveAddresses, Convert.ToString(messariMarketData.Data.Blockchain_stats_24_hours.Count_of_active_addresses));
+                                }
+                                else
+                                {
                                     lblActiveAddresses.Invoke((MethodInvoker)delegate
                                     {
-                                        lblActiveAddresses.Location = new Point(label32.Location.X + label32.Width, lblActiveAddresses.Location.Y);
-                                    });
-
-
-                                    UpdateLabelValueAsync(lblBlocksIn24Hours, Convert.ToString(messariMarketData.Data.blockchain_stats_24_hours.count_of_blocks_added));
-                                    UpdateLabelValueAsync(lbl24HourTransCount, Convert.ToString(messariMarketData.Data.blockchain_stats_24_hours.count_of_tx));
-
-                                    decimal volume24hBTC = Convert.ToDecimal(messariMarketData.Data.on_chain_data.txn_volume_last_24_hours_native_units);
-                                    UpdateLabelValueAsync(lbl24HourBTCSent, Convert.ToString(messariMarketData.Data.on_chain_data.txn_volume_last_24_hours_native_units));
-                                    UpdateLabelValueAsync(lbl24HourBTCSentFiat, $"{fiatSymbol}{(volume24hBTC * OneBTCinSelectedCurrency):N2}");
-                                    lbl24HourBTCSentFiat.Invoke((MethodInvoker)delegate
-                                    {
-                                        lbl24HourBTCSentFiat.Location = new Point(lbl24HourBTCSent.Location.X + lbl24HourBTCSent.Width, lbl24HourBTCSentFiat.Location.Y);
-                                    });
-                                    UpdateLabelValueAsync(lblChangeSinceCycleLow, "+" + messariMarketData.Data.cycle_low.percent_up.ToString("N2") + "%");
-                                    label14.Invoke((MethodInvoker)delegate
-                                    {
-                                        label14.Location = new Point(lblATHPercentChange.Location.X + lblATHPercentChange.Width, label14.Location.Y);
-                                    });
-                                    lblChangeSinceCycleLow.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblChangeSinceCycleLow.Location = new Point(label14.Location.X + label14.Width, lblChangeSinceCycleLow.Location.Y);
-                                    });
-                                    UpdateLabelValueAsync(lblUTXOAvgAge, Convert.ToString((int)(messariMarketData.Data.on_chain_data.average_utxo_age) + " days"));
-                                    UpdateLabelValueAsync(lblUTXOMedAge, Convert.ToString((int)(messariMarketData.Data.on_chain_data.median_utxo_age) + " days"));
-
-                                    #region values next to distribution bars
-                                    UpdateLabelValueAsync(lblAddresses100kSats, Convert.ToString(messariMarketData.Data.on_chain_data.addresses_balance_greater_0_001_native_units_count));
-                                    UpdateLabelValueAsync(lblAddresses1mSats, Convert.ToString(messariMarketData.Data.on_chain_data.addresses_balance_greater_0_01_native_units_count));
-                                    UpdateLabelValueAsync(lblAddresses10mSats, Convert.ToString(messariMarketData.Data.on_chain_data.addresses_balance_greater_0_1_native_units_count));
-                                    UpdateLabelValueAsync(lblAddresses1BTC, Convert.ToString(messariMarketData.Data.on_chain_data.addresses_balance_greater_1_native_units_count));
-                                    UpdateLabelValueAsync(lblAddresses10BTC, Convert.ToString(messariMarketData.Data.on_chain_data.addresses_balance_greater_10_native_units_count));
-                                    UpdateLabelValueAsync(lblAddresses100BTC, Convert.ToString(messariMarketData.Data.on_chain_data.addresses_balance_greater_100_native_units_count));
-                                    UpdateLabelValueAsync(lblAddresses1000BTC, Convert.ToString(messariMarketData.Data.on_chain_data.addresses_balance_greater_1k_native_units_count));
-                                    UpdateLabelValueAsync(lblAddresses10000BTC, Convert.ToString(messariMarketData.Data.on_chain_data.addresses_balance_greater_10k_native_units_count));
-                                    UpdateLabelValueAsync(lblAddresses100kBTC, Convert.ToString(messariMarketData.Data.on_chain_data.addresses_balance_greater_100k_native_units_count));
-                                    UpdateLabelValueAsync(lblAddresses1mBTC, Convert.ToString(messariMarketData.Data.on_chain_data.addresses_balance_greater_1m_native_units_count));
-                                    UpdateLabelValueAsync(lblIssuance, Convert.ToString(messariMarketData.Data.on_chain_data.issuance_last_24_hours_native_units));
-                                    UpdateLabelValueAsync(lblTotalUTXOs, Convert.ToString(messariMarketData.Data.on_chain_data.utxo_count_last_24_hours));
-                                    #endregion
-
-                                    #region distribution bar widths
-                                    if (!btnDistributionLin.Enabled)
-                                    {
-                                        DistributionBarsLinear();
-                                    }
-                                    else
-                                    {
-                                        DistributionBarsLog();
-                                    }
-                                    #endregion
-
-                                    label33.Invoke((MethodInvoker)delegate
-                                    {
-                                        label33.Location = new Point(lblTotalUTXOs.Location.X + lblTotalUTXOs.Width, label33.Location.Y);
-                                    });
-                                    lblUTXOAvgAge.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblUTXOAvgAge.Location = new Point(label33.Location.X + label33.Width, lblUTXOAvgAge.Location.Y);
-                                    });
-                                    label360.Invoke((MethodInvoker)delegate
-                                    {
-                                        label360.Location = new Point(lblUTXOAvgAge.Location.X + lblUTXOAvgAge.Width, label360.Location.Y);
-                                    });
-                                    lblUTXOMedAge.Invoke((MethodInvoker)delegate
-                                    {
-                                        lblUTXOMedAge.Location = new Point(label360.Location.X + label360.Width, lblUTXOMedAge.Location.Y);
+                                        lblActiveAddresses.Text = "no data";
                                     });
                                 }
-                            }
-                            else
-                            {
-                                Control[] controlsToShowAsDisabled = { lblActiveAddresses, lblBlocksIn24Hours, lbl24HourBTCSent, lbl24HourTransCount, lblAddresses100kSats, lblAddresses1mSats, lblAddresses10mSats, lblAddresses1BTC, lblAddresses10BTC, lblAddresses100BTC, lblAddresses1000BTC, lblAddresses10000BTC, lblAddresses100kBTC, lblAddresses1mBTC, lblIssuance, lblTotalUTXOs, lblChangeSinceCycleLow, lblTotalAddresses };
-                                foreach (Control control in controlsToShowAsDisabled)
+                                int total_addresses = messariMarketData.Data.On_chain_data!.Addresses_count;
+                                if (total_addresses > 0) // this api sometimes doesn't populate this field with anything but 0
                                 {
-                                    control.Invoke((MethodInvoker)delegate
+                                    UpdateLabelValueAsync(lblTotalAddresses, Convert.ToString(messariMarketData.Data.On_chain_data.Addresses_count));
+                                }
+                                else
+                                {
+                                    lblTotalAddresses.Invoke((MethodInvoker)delegate
                                     {
-                                        control.Text = "disabled";
+                                        lblTotalAddresses.Text = "no data";
                                     });
                                 }
-                            }
-                        }
-                        else
-                        {
-                            Control[] controlsToShowAsTestnet = { lblActiveAddresses, lblBlocksIn24Hours, lbl24HourBTCSent, lbl24HourTransCount, lblAddresses100kSats, lblAddresses1mSats, lblAddresses10mSats, lblAddresses1BTC, lblAddresses10BTC, lblAddresses100BTC, lblAddresses1000BTC, lblAddresses10000BTC, lblAddresses100kBTC, lblAddresses1mBTC, lblIssuance, lblTotalUTXOs, lblChangeSinceCycleLow, lblTotalAddresses };
-                            foreach (Control control in controlsToShowAsTestnet)
-                            {
-                                control.Invoke((MethodInvoker)delegate
+                                label32.Invoke((MethodInvoker)delegate
                                 {
-                                    control.Text = "unavailable on TestNet";
+                                    label32.Location = new Point(lblTotalAddresses.Location.X + lblTotalAddresses.Width, label32.Location.Y);
+                                });
+                                lblActiveAddresses.Invoke((MethodInvoker)delegate
+                                {
+                                    lblActiveAddresses.Location = new Point(label32.Location.X + label32.Width, lblActiveAddresses.Location.Y);
+                                });
+
+
+                                UpdateLabelValueAsync(lblBlocksIn24Hours, Convert.ToString(messariMarketData.Data.Blockchain_stats_24_hours.Count_of_blocks_added));
+                                UpdateLabelValueAsync(lbl24HourTransCount, Convert.ToString(messariMarketData.Data.Blockchain_stats_24_hours.Count_of_tx));
+
+                                decimal volume24hBTC = Convert.ToDecimal(messariMarketData.Data.On_chain_data.Txn_volume_last_24_hours_native_units);
+                                UpdateLabelValueAsync(lbl24HourBTCSent, Convert.ToString(messariMarketData.Data.On_chain_data.Txn_volume_last_24_hours_native_units));
+                                UpdateLabelValueAsync(lbl24HourBTCSentFiat, $"{fiatSymbol}{(volume24hBTC * OneBTCinSelectedCurrency):N2}");
+                                lbl24HourBTCSentFiat.Invoke((MethodInvoker)delegate
+                                {
+                                    lbl24HourBTCSentFiat.Location = new Point(lbl24HourBTCSent.Location.X + lbl24HourBTCSent.Width, lbl24HourBTCSentFiat.Location.Y);
+                                });
+                                UpdateLabelValueAsync(lblChangeSinceCycleLow, $"+{messariMarketData.Data.Cycle_low!.Percent_up:N2}%");
+                                label14.Invoke((MethodInvoker)delegate
+                                {
+                                    label14.Location = new Point(lblATHPercentChange.Location.X + lblATHPercentChange.Width, label14.Location.Y);
+                                });
+                                lblChangeSinceCycleLow.Invoke((MethodInvoker)delegate
+                                {
+                                    lblChangeSinceCycleLow.Location = new Point(label14.Location.X + label14.Width, lblChangeSinceCycleLow.Location.Y);
+                                });
+                                    
+                                UpdateLabelValueAsync(lblUTXOAvgAge, $"{(int)(messariMarketData.Data.On_chain_data.Average_utxo_age)} days");
+                                UpdateLabelValueAsync(lblUTXOMedAge, $"{(int)(messariMarketData.Data.On_chain_data.Median_utxo_age)} days");
+
+                                #region values next to distribution bars
+                                UpdateLabelValueAsync(lblAddresses100kSats, Convert.ToString(messariMarketData.Data.On_chain_data.Addresses_balance_greater_0_001_native_units_count));
+                                UpdateLabelValueAsync(lblAddresses1mSats, Convert.ToString(messariMarketData.Data.On_chain_data.Addresses_balance_greater_0_01_native_units_count));
+                                UpdateLabelValueAsync(lblAddresses10mSats, Convert.ToString(messariMarketData.Data.On_chain_data.Addresses_balance_greater_0_1_native_units_count));
+                                UpdateLabelValueAsync(lblAddresses1BTC, Convert.ToString(messariMarketData.Data.On_chain_data.Addresses_balance_greater_1_native_units_count));
+                                UpdateLabelValueAsync(lblAddresses10BTC, Convert.ToString(messariMarketData.Data.On_chain_data.Addresses_balance_greater_10_native_units_count));
+                                UpdateLabelValueAsync(lblAddresses100BTC, Convert.ToString(messariMarketData.Data.On_chain_data.Addresses_balance_greater_100_native_units_count));
+                                UpdateLabelValueAsync(lblAddresses1000BTC, Convert.ToString(messariMarketData.Data.On_chain_data.Addresses_balance_greater_1k_native_units_count));
+                                UpdateLabelValueAsync(lblAddresses10000BTC, Convert.ToString(messariMarketData.Data.On_chain_data.Addresses_balance_greater_10k_native_units_count));
+                                UpdateLabelValueAsync(lblAddresses100kBTC, Convert.ToString(messariMarketData.Data.On_chain_data.Addresses_balance_greater_100k_native_units_count));
+                                UpdateLabelValueAsync(lblAddresses1mBTC, Convert.ToString(messariMarketData.Data.On_chain_data.Addresses_balance_greater_1m_native_units_count));
+                                UpdateLabelValueAsync(lblIssuance, Convert.ToString(messariMarketData.Data.On_chain_data.Issuance_last_24_hours_native_units));
+                                UpdateLabelValueAsync(lblTotalUTXOs, Convert.ToString(messariMarketData.Data.On_chain_data.Utxo_count_last_24_hours));
+                                #endregion
+
+                                #region distribution bar widths
+                                if (!btnDistributionLin.Enabled)
+                                {
+                                    DistributionBarsLinear();
+                                }
+                                else
+                                {
+                                    DistributionBarsLog();
+                                }
+                                #endregion
+
+                                label33.Invoke((MethodInvoker)delegate
+                                {
+                                    label33.Location = new Point(lblTotalUTXOs.Location.X + lblTotalUTXOs.Width, label33.Location.Y);
+                                });
+                                lblUTXOAvgAge.Invoke((MethodInvoker)delegate
+                                {
+                                    lblUTXOAvgAge.Location = new Point(label33.Location.X + label33.Width, lblUTXOAvgAge.Location.Y);
+                                });
+                                label360.Invoke((MethodInvoker)delegate
+                                {
+                                    label360.Location = new Point(lblUTXOAvgAge.Location.X + lblUTXOAvgAge.Width, label360.Location.Y);
+                                });
+                                lblUTXOMedAge.Invoke((MethodInvoker)delegate
+                                {
+                                    lblUTXOMedAge.Location = new Point(label360.Location.X + label360.Width, lblUTXOMedAge.Location.Y);
                                 });
                             }
                         }
-                        #region shuffle stuff in to place
-                        lblPoolRankingChart.Invoke((MethodInvoker)delegate
+                        else
                         {
-                            lblPoolRankingChart.Location = new Point(lblBlocksIn24Hours.Location.X + lblBlocksIn24Hours.Width, lblPoolRankingChart.Location.Y);
-                        });
-                        lblUniqueAddressesChart.Invoke((MethodInvoker)delegate
-                        {
-                            lblUniqueAddressesChart.Location = new Point(lblActiveAddresses.Location.X + lblActiveAddresses.Width, lblUniqueAddressesChart.Location.Y);
-                        });
-                        #endregion
-                        SetLightsMessagesAndResetTimers();
-                    }
-                    catch (Exception ex)
-                    {
-                        errorOccurred = true;
-                        HandleException(ex, "Dashboards(Task4)");
-                    }
-                });
-                #endregion
-                #region task 5 - derive halving date etc
-                Task task5 = Task.Run(() =>  // derive/estimate halving block/date
-                {
-                    try
-                    {
-                        if (!testNet)
-                        {
-                            int currentBlock = Convert.ToInt32(lblHeaderBlockNumber.Text);
-                            int halvingInterval = 210000;
-                            int numberOfHalvings = currentBlock / halvingInterval;
-                            int halveningBlock = (numberOfHalvings + 1) * halvingInterval;
-                            int blocksLeft = halveningBlock - currentBlock;
-                            int minutesRemaining = blocksLeft * 10; //assume 10 mins to mine each block on avg
-                            int seconds_left = minutesRemaining * 60;
-                            DateTime currentDateTime = DateTime.UtcNow;
-                            DateTime estimatedHalvingDateTime = currentDateTime.AddMinutes(minutesRemaining);
-                            string halveningTime = estimatedHalvingDateTime.ToString("yyyy-MM-dd HH:mm:ss");
-
-                            UpdateLabelValueAsync(lblProgressToHalving, $"{halveningBlock} / {blocksLeft}");
-                            int progressBarValue = 0;
-                            try
+                            Control[] controlsToShowAsDisabled = { lblActiveAddresses, lblBlocksIn24Hours, lbl24HourBTCSent, lbl24HourTransCount, lblAddresses100kSats, lblAddresses1mSats, lblAddresses10mSats, lblAddresses1BTC, lblAddresses10BTC, lblAddresses100BTC, lblAddresses1000BTC, lblAddresses10000BTC, lblAddresses100kBTC, lblAddresses1mBTC, lblIssuance, lblTotalUTXOs, lblChangeSinceCycleLow, lblTotalAddresses };
+                            foreach (Control control in controlsToShowAsDisabled)
                             {
-                                progressBarValue = 210000 - Convert.ToInt32(blocksLeft);
-                                if (progressBarValue > 210000 || progressBarValue < 0)
+                                control.Invoke((MethodInvoker)delegate
                                 {
-                                    progressBarValue = 0;
-                                }
+                                    control.Text = "disabled";
+                                });
                             }
-                            catch (Exception)
+                        }
+                    }
+                    else
+                    {
+                        Control[] controlsToShowAsTestnet = { lblActiveAddresses, lblBlocksIn24Hours, lbl24HourBTCSent, lbl24HourTransCount, lblAddresses100kSats, lblAddresses1mSats, lblAddresses10mSats, lblAddresses1BTC, lblAddresses10BTC, lblAddresses100BTC, lblAddresses1000BTC, lblAddresses10000BTC, lblAddresses100kBTC, lblAddresses1mBTC, lblIssuance, lblTotalUTXOs, lblChangeSinceCycleLow, lblTotalAddresses };
+                        foreach (Control control in controlsToShowAsTestnet)
+                        {
+                            control.Invoke((MethodInvoker)delegate
+                            {
+                                control.Text = "unavailable on TestNet";
+                            });
+                        }
+                    }
+                    #region shuffle stuff in to place
+                    lblPoolRankingChart.Invoke((MethodInvoker)delegate
+                    {
+                        lblPoolRankingChart.Location = new Point(lblBlocksIn24Hours.Location.X + lblBlocksIn24Hours.Width, lblPoolRankingChart.Location.Y);
+                    });
+                    lblUniqueAddressesChart.Invoke((MethodInvoker)delegate
+                    {
+                        lblUniqueAddressesChart.Location = new Point(lblActiveAddresses.Location.X + lblActiveAddresses.Width, lblUniqueAddressesChart.Location.Y);
+                    });
+                    #endregion
+                    SetLightsMessagesAndResetTimers();
+                }
+                catch (Exception ex)
+                {
+                    errorOccurred = true;
+                    HandleException(ex, "Dashboards(Task4)");
+                }
+            });
+            #endregion
+            #region task 5 - derive halving date etc
+            Task task5 = Task.Run(() =>  // derive/estimate halving block/date
+            {
+                try
+                {
+                    if (!testNet)
+                    {
+                        int currentBlock = Convert.ToInt32(lblHeaderBlockNumber.Text);
+                        int halvingInterval = 210000;
+                        int numberOfHalvings = currentBlock / halvingInterval;
+                        int halveningBlock = (numberOfHalvings + 1) * halvingInterval;
+                        int blocksLeft = halveningBlock - currentBlock;
+                        int minutesRemaining = blocksLeft * 10; //assume 10 mins to mine each block on avg
+                        int seconds_left = minutesRemaining * 60;
+                        DateTime currentDateTime = DateTime.UtcNow;
+                        DateTime estimatedHalvingDateTime = currentDateTime.AddMinutes(minutesRemaining);
+                        string halveningTime = estimatedHalvingDateTime.ToString("yyyy-MM-dd HH:mm:ss");
+
+                        UpdateLabelValueAsync(lblProgressToHalving, $"{halveningBlock} / {blocksLeft}");
+                        int progressBarValue = 0;
+                        try
+                        {
+                            progressBarValue = 210000 - Convert.ToInt32(blocksLeft);
+                            if (progressBarValue > 210000 || progressBarValue < 0)
                             {
                                 progressBarValue = 0;
                             }
-                            progressBarProgressToHalving.Value = progressBarValue;
-                            progressBarBlockListHalvingProgress.Value = progressBarValue;
-                            UpdateLabelValueAsync(lblBlockListHalvingBlockAndRemaining, $"{halveningBlock} / {blocksLeft}");
-                            string halvening_time = halveningTime;
-                            string halveningDate = "";
-                            try
-                            {
-                                DateTime halveningDateTime = DateTime.ParseExact(halvening_time, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                                halveningDate = halveningDateTime.Date.ToString("yyyy-MM-dd");
-                            }
-                            catch (Exception)
-                            {
-                                halveningDate = "9999-12-31";
-                            }
-
-                            lblEstimatedHalvingDate.Invoke((MethodInvoker)delegate
-                            {
-                                lblEstimatedHalvingDate.Text = $"{halveningDate}";
-                            });
-                            lblHalvingSecondsRemaining.Invoke((MethodInvoker)delegate
-                            {
-                                lblHalvingSecondsRemaining.Location = new Point(lblEstimatedHalvingDate.Location.X + lblEstimatedHalvingDate.Width - (int)(8 * UIScale), lblEstimatedHalvingDate.Location.Y);
-                                if (seconds_left > 0)
-                                {
-                                    lblHalvingSecondsRemaining.Text = Convert.ToString(seconds_left);
-                                    ObtainedHalvingSecondsRemainingYet = true; // signifies that we can now start deducting from this
-                                }
-                            });
                         }
-                        else
+                        catch (Exception)
                         {
-                            progressBarProgressToHalving.Value = 0;
-                            progressBarBlockListHalvingProgress.Value = 0;
-                            lblProgressToHalving.Invoke((MethodInvoker)delegate
-                            {
-                                lblProgressToHalving.Text = "unavailable";
-                            });
-                            lblBlockListHalvingBlockAndRemaining.Invoke((MethodInvoker)delegate // Blocks list
-                            {
-                                lblBlockListHalvingBlockAndRemaining.Text = "unavailable";
-                            });
-
-                            lblEstimatedHalvingDate.Invoke((MethodInvoker)delegate
-                            {
-                                lblEstimatedHalvingDate.Text = "unavailable on TestNet";
-                            });
-                            lblHalvingSecondsRemaining.Invoke((MethodInvoker)delegate
-                            {
-                                lblHalvingSecondsRemaining.Text = "";
-                            });
+                            progressBarValue = 0;
                         }
-                        label301.Invoke((MethodInvoker)delegate
+                        progressBarProgressToHalving.Value = progressBarValue;
+                        progressBarBlockListHalvingProgress.Value = progressBarValue;
+                        UpdateLabelValueAsync(lblBlockListHalvingBlockAndRemaining, $"{halveningBlock} / {blocksLeft}");
+                        string halvening_time = halveningTime;
+                        string halveningDate = "";
+                        try
                         {
-                            label301.Location = new Point(lblEstimatedHalvingDate.Location.X + lblEstimatedHalvingDate.Width, label301.Location.Y);
+                            DateTime halveningDateTime = DateTime.ParseExact(halvening_time, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                            halveningDate = halveningDateTime.Date.ToString("yyyy-MM-dd");
+                        }
+                        catch (Exception)
+                        {
+                            halveningDate = "9999-12-31";
+                        }
+
+                        lblEstimatedHalvingDate.Invoke((MethodInvoker)delegate
+                        {
+                            lblEstimatedHalvingDate.Text = $"{halveningDate}";
                         });
                         lblHalvingSecondsRemaining.Invoke((MethodInvoker)delegate
                         {
-                            lblHalvingSecondsRemaining.Location = new Point(label301.Location.X + label301.Width, lblHalvingSecondsRemaining.Location.Y);
+                            lblHalvingSecondsRemaining.Location = new Point(lblEstimatedHalvingDate.Location.X + lblEstimatedHalvingDate.Width - (int)(8 * UIScale), lblEstimatedHalvingDate.Location.Y);
+                            if (seconds_left > 0)
+                            {
+                                lblHalvingSecondsRemaining.Text = Convert.ToString(seconds_left);
+                                ObtainedHalvingSecondsRemainingYet = true; // signifies that we can now start deducting from this
+                            }
                         });
-                        SetLightsMessagesAndResetTimers();
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        errorOccurred = true;
-                        HandleException(ex, "Dashboards(Task5)");
-                    }
-                });
-                #endregion
-                await Task.WhenAll(task0, task2).ConfigureAwait(true);
-                await Task.WhenAll(task3, task1, task4, task5).ConfigureAwait(true);
+                        progressBarProgressToHalving.Value = 0;
+                        progressBarBlockListHalvingProgress.Value = 0;
+                        lblProgressToHalving.Invoke((MethodInvoker)delegate
+                        {
+                            lblProgressToHalving.Text = "unavailable";
+                        });
+                        lblBlockListHalvingBlockAndRemaining.Invoke((MethodInvoker)delegate // Blocks list
+                        {
+                            lblBlockListHalvingBlockAndRemaining.Text = "unavailable";
+                        });
 
-                if (errorOccurred)
-                {
-                    intDisplayCountdownToRefresh = APIGroup1DisplayTimerIntervalSecsConstant;
-                    lblStatusLight.Invoke((MethodInvoker)delegate
+                        lblEstimatedHalvingDate.Invoke((MethodInvoker)delegate
+                        {
+                            lblEstimatedHalvingDate.Text = "unavailable on TestNet";
+                        });
+                        lblHalvingSecondsRemaining.Invoke((MethodInvoker)delegate
+                        {
+                            lblHalvingSecondsRemaining.Text = "";
+                        });
+                    }
+                    label301.Invoke((MethodInvoker)delegate
                     {
-                        lblStatusLight.ForeColor = Color.Red;
+                        label301.Location = new Point(lblEstimatedHalvingDate.Location.X + lblEstimatedHalvingDate.Width, label301.Location.Y);
                     });
-                    lblStatusLight.Invoke((MethodInvoker)delegate
+                    lblHalvingSecondsRemaining.Invoke((MethodInvoker)delegate
                     {
-                        lblStatusLight.Text = "🔴";
+                        lblHalvingSecondsRemaining.Location = new Point(label301.Location.X + label301.Width, lblHalvingSecondsRemaining.Location.Y);
                     });
+                    SetLightsMessagesAndResetTimers();
                 }
+                catch (Exception ex)
+                {
+                    errorOccurred = true;
+                    HandleException(ex, "Dashboards(Task5)");
+                }
+            });
+            #endregion
+            await Task.WhenAll(task0, task2).ConfigureAwait(true);
+            await Task.WhenAll(task3, task1, task4, task5).ConfigureAwait(true);
+
+            if (errorOccurred)
+            {
+                intDisplayCountdownToRefresh = APIGroup1DisplayTimerIntervalSecsConstant;
+                lblStatusLight.Invoke((MethodInvoker)delegate
+                {
+                    lblStatusLight.ForeColor = Color.Red;
+                });
+                lblStatusLight.Invoke((MethodInvoker)delegate
+                {
+                    lblStatusLight.Text = "🔴";
+                });
             }
             panelLightningDashboard.ResumeLayout(false);
             panelBitcoinDashboard.ResumeLayout(false);
@@ -3490,7 +3509,7 @@ namespace SATSuma
                 if (data["progressPercent"] != null && data["difficultyChange"] != null && data["estimatedRetargetDate"] != null && data["remainingBlocks"] != null && data["remainingTime"] != null && data["previousRetarget"] != null && data["nextRetargetHeight"] != null && data["timeAvg"] != null && data["timeOffset"] != null)
                 {
                     string progressPercent = Convert.ToString(data["progressPercent"]);
-                    decimal difficultyChangeFull = (decimal)data["difficultyChange"];
+                    decimal difficultyChangeFull = (decimal)data["difficultyChange"]!;
                     string difficultyChange = Math.Round(difficultyChangeFull, 2).ToString();
                     string estimatedRetargetDate = Convert.ToString(data["estimatedRetargetDate"]);
                     string remainingBlocks = Convert.ToString(data["remainingBlocks"]);
@@ -3582,18 +3601,18 @@ namespace SATSuma
                 {
                     try
                     {
-                        string alias = (string)data[i]["alias"];
-                        string capacity = (string)data[i]["capacity"];
+                        string? alias = data[i]["alias"]?.ToString();
+                        string? capacity = data[i]["capacity"]?.ToString();
 
                         // Check if alias and capacity exist before adding to the lists
                         if (!string.IsNullOrEmpty(alias) && !string.IsNullOrEmpty(capacity))
                         {
-                            capacity = ConvertSatsToBitcoin(capacity).ToString();
+                            capacity = ConvertSatsToBitcoin(capacity!).ToString();
                             double dblCapacity = Convert.ToDouble(capacity);
                             dblCapacity = Math.Round(dblCapacity, 2); // round to 2 decimal places
                             capacity = Convert.ToString(dblCapacity);
 
-                            aliases.Add(alias);
+                            aliases.Add(alias!);
                             capacities.Add(capacity);
                         }
                         else
@@ -3633,18 +3652,19 @@ namespace SATSuma
                 {
                     try
                     {
-                        string alias = (string)data[i]["alias"];
-                        string channelCount = (string)data[i]["channels"];
+                        string? alias = data[i]["alias"]?.ToString();
+                        string? channelCount = data[i]["channels"]?.ToString();
 
                         // Check if alias and channelCount exist before adding to the lists
                         if (!string.IsNullOrEmpty(alias) && !string.IsNullOrEmpty(channelCount))
                         {
-                            aliases.Add(alias);
-                            channels.Add(channelCount);
+                            aliases.Add(alias!);
+                            channels.Add(channelCount!);
                         }
                         else
                         {
-                            // Handle the case where alias or channelCount is missing
+                            aliases.Add("error");
+                            channels.Add("0");
                         }
                     }
                     catch (Exception ex)
@@ -3677,28 +3697,28 @@ namespace SATSuma
 
                 try
                 {
-                    string clearnetCapacityString = (string)data["clearnetCapacity"];
+                    string? clearnetCapacityString = data["clearnetCapacity"]?.ToString();
                     if (!string.IsNullOrEmpty(clearnetCapacityString))
                     {
-                        clearnetCapacity = ConvertSatsToBitcoin(clearnetCapacityString).ToString();
+                        clearnetCapacity = ConvertSatsToBitcoin(clearnetCapacityString!).ToString();
                         double dblClearnetCapacity = Convert.ToDouble(clearnetCapacity);
                         dblClearnetCapacity = Math.Round(dblClearnetCapacity, 2); // round to 2 decimal places
                         clearnetCapacity = Convert.ToString(dblClearnetCapacity);
                     }
 
-                    string torCapacityString = (string)data["torCapacity"];
+                    string? torCapacityString = data["torCapacity"]?.ToString();
                     if (!string.IsNullOrEmpty(torCapacityString))
                     {
-                        torCapacity = ConvertSatsToBitcoin(torCapacityString).ToString();
+                        torCapacity = ConvertSatsToBitcoin(torCapacityString!).ToString();
                         double dblTorCapacity = Convert.ToDouble(torCapacity);
                         dblTorCapacity = Math.Round(dblTorCapacity, 2);
                         torCapacity = Convert.ToString(dblTorCapacity);
                     }
 
-                    string unknownCapacityString = (string)data["unknownCapacity"];
+                    string? unknownCapacityString = data["unknownCapacity"]?.ToString();
                     if (!string.IsNullOrEmpty(unknownCapacityString))
                     {
-                        unknownCapacity = ConvertSatsToBitcoin(unknownCapacityString).ToString();
+                        unknownCapacity = ConvertSatsToBitcoin(unknownCapacityString!).ToString();
                         double dblUnknownCapacity = Convert.ToDouble(unknownCapacity);
                         dblUnknownCapacity = Math.Round(dblUnknownCapacity, 2);
                         unknownCapacity = Convert.ToString(dblUnknownCapacity);
@@ -3706,7 +3726,6 @@ namespace SATSuma
                 }
                 catch (Exception ex)
                 {
-                    // Handle parsing errors for specific capacity types
                     HandleException(ex, "Parsing error for capacity types");
                 }
 
@@ -3728,11 +3747,11 @@ namespace SATSuma
                 LightUpNodeLight();
                 var response = client.DownloadString($"{NodeURL}v1/lightning/statistics/latest");
                 var data = JObject.Parse(response);
-                if (data["latest"]["channel_count"] != null && data["latest"]["node_count"] != null && data["latest"]["total_capacity"] != null && data["latest"]["tor_nodes"] != null && data["latest"]["clearnet_nodes"] != null && data["latest"]["unannounced_nodes"] != null && data["latest"]["avg_capacity"] != null && data["latest"]["avg_fee_rate"] != null && data["latest"]["avg_base_fee_mtokens"] != null && data["latest"]["med_capacity"] != null && data["latest"]["med_fee_rate"] != null && data["latest"]["med_base_fee_mtokens"] != null && data["latest"]["clearnet_tor_nodes"] != null)
+                if (data["latest"]?["channel_count"] != null && data["latest"]?["node_count"] != null && data["latest"]?["total_capacity"] != null && data["latest"]?["tor_nodes"] != null && data["latest"]?["clearnet_nodes"] != null && data["latest"]?["unannounced_nodes"] != null && data["latest"]?["avg_capacity"] != null && data["latest"]?["avg_fee_rate"] != null && data["latest"]?["avg_base_fee_mtokens"] != null && data["latest"]?["med_capacity"] != null && data["latest"]?["med_fee_rate"] != null && data["latest"]?["med_base_fee_mtokens"] != null && data["latest"]?["clearnet_tor_nodes"] != null)
                 {
-                    var channelCount = (string)data["latest"]["channel_count"];
-                    var nodeCount = (string)data["latest"]["node_count"];
-                    string totalCapacityString = Convert.ToString(data["latest"]["total_capacity"]);
+                    var channelCount = data["latest"]?["channel_count"]?.ToString() ??"0";
+                    var nodeCount = data["latest"]?["node_count"]?.ToString() ?? "0";
+                    string totalCapacityString = Convert.ToString(data["latest"]?["total_capacity"]) ?? "0";
                     string totalCapacity = ConvertSatsToBitcoin(totalCapacityString).ToString();
                     if (double.TryParse(totalCapacity, out double dblTotalCapacity))
                     {
@@ -3744,17 +3763,17 @@ namespace SATSuma
                     {
                         totalCapacity = "0";
                     }
-                    var torNodes = (string)data["latest"]["tor_nodes"];
-                    var clearnetNodes = (string)data["latest"]["clearnet_nodes"];
-                    var unannouncedNodes = (string)data["latest"]["unannounced_nodes"];
-                    var avgCapacity = (string)data["latest"]["avg_capacity"];
-                    var avgFeeRate = (string)data["latest"]["avg_fee_rate"];
-                    var avgBaseeFeeMtokens = (string)data["latest"]["avg_base_fee_mtokens"];
-                    var medCapacity = (string)data["latest"]["med_capacity"];
-                    var medFeeRate = (string)data["latest"]["med_fee_rate"];
-                    var medBaseeFeeMtokens = (string)data["latest"]["med_base_fee_mtokens"];
+                    var torNodes = data["latest"]?["tor_nodes"]?.ToString() ?? "0";
+                    var clearnetNodes = data["latest"]?["clearnet_nodes"]?.ToString() ?? "0";
+                    var unannouncedNodes = data["latest"]?["unannounced_nodes"]?.ToString() ?? "0";
+                    var avgCapacity = data["latest"]?["avg_capacity"]?.ToString() ?? "0";
+                    var avgFeeRate = data["latest"]?["avg_fee_rate"]?.ToString() ?? "0";
+                    var avgBaseeFeeMtokens = data["latest"]?["avg_base_fee_mtokens"]?.ToString() ?? "0";
+                    var medCapacity = data["latest"]?["med_capacity"]?.ToString() ?? "0";
+                    var medFeeRate = data["latest"]?["med_fee_rate"]?.ToString() ?? "0";
+                    var medBaseeFeeMtokens = data["latest"]?["med_base_fee_mtokens"]?.ToString() ?? "0";
                     medBaseeFeeMtokens ??= "0";
-                    var clearnetTorNodes = (string)data["latest"]["clearnet_tor_nodes"];
+                    var clearnetTorNodes = data["latest"]?["clearnet_tor_nodes"]?.ToString() ?? "0";
                     return (channelCount, nodeCount, totalCapacity, torNodes, clearnetNodes, unannouncedNodes, avgCapacity, avgFeeRate, avgBaseeFeeMtokens, medCapacity, medFeeRate, medBaseeFeeMtokens, clearnetTorNodes);
                 }
                 else
@@ -3781,14 +3800,14 @@ namespace SATSuma
 
                 if (data != null)
                 {
-                    var txInNextBlock = data["nTx"].ToString();
+                    var txInNextBlock = data["nTx"]?.ToString() ?? "0";
                     string nextBlockMinFeeSats = data["feeRange"].FirstOrDefault().ToString();
                     decimal MinFee = Convert.ToDecimal(nextBlockMinFeeSats);
                     string nextBlockMinFee = MinFee.ToString("0");
                     var nextBlockMaxFeeSats = data["feeRange"].LastOrDefault().ToString();
                     decimal MaxFee = Convert.ToDecimal(nextBlockMaxFeeSats);
                     string nextBlockMaxFee = MaxFee.ToString("0");
-                    string nextBlockTotalFeesInSats = data["totalFees"].ToString();
+                    string nextBlockTotalFeesInSats = data["totalFees"]?.ToString() ?? "0";
                     decimal nextBlockTotalFeesDecimal = ConvertSatsToBitcoin(nextBlockTotalFeesInSats);
                     string nextBlockTotalFees = Convert.ToString(nextBlockTotalFeesDecimal);
                     return (txInNextBlock, nextBlockMinFee, nextBlockMaxFee, nextBlockTotalFees);
@@ -3811,19 +3830,19 @@ namespace SATSuma
                 using WebClient client = new WebClient();
                 var responseUSD = client.DownloadString("https://api.coinbase.com/v2/prices/BTC-USD/spot");
                 var dataUSD = JObject.Parse(responseUSD);
-                string priceUSD = dataUSD["data"] != null && dataUSD["data"]["amount"] != null ? dataUSD["data"]["amount"].ToString() : "0";
+                string priceUSD = dataUSD["data"] != null && dataUSD["data"]!["amount"] != null ? dataUSD["data"]!["amount"]!.ToString() : "0";
 
                 var responseEUR = client.DownloadString("https://api.coinbase.com/v2/prices/BTC-EUR/spot");
                 var dataEUR = JObject.Parse(responseEUR);
-                string priceEUR = dataEUR["data"] != null && dataEUR["data"]["amount"] != null ? dataEUR["data"]["amount"].ToString() : "0";
+                string priceEUR = dataEUR["data"] != null && dataEUR["data"]!["amount"] != null ? dataEUR["data"]!["amount"]!.ToString() : "0";
 
                 var responseGBP = client.DownloadString("https://api.coinbase.com/v2/prices/BTC-GBP/spot");
                 var dataGBP = JObject.Parse(responseGBP);
-                string priceGBP = dataGBP["data"] != null && dataGBP["data"]["amount"] != null ? dataGBP["data"]["amount"].ToString() : "0";
+                string priceGBP = dataGBP["data"] != null && dataGBP["data"]!["amount"] != null ? dataGBP["data"]!["amount"]!.ToString() : "0";
 
                 var responseXAU = client.DownloadString("https://api.coinbase.com/v2/prices/BTC-XAU/spot");
                 var dataXAU = JObject.Parse(responseXAU);
-                string priceXAU = dataXAU["data"] != null && dataXAU["data"]["amount"] != null ? dataXAU["data"]["amount"].ToString() : "0";
+                string priceXAU = dataXAU["data"] != null && dataXAU["data"]!["amount"] != null ? dataXAU["data"]!["amount"]!.ToString() : "0";
 
                 return (priceUSD, priceGBP, priceEUR, priceXAU);
             }
@@ -3844,10 +3863,10 @@ namespace SATSuma
                 var data = JObject.Parse(response);
 
                 // Check if each key exists and assign its value, otherwise set it to "0"
-                string cgPriceUSD = data["bitcoin"]["usd"] != null ? data["bitcoin"]["usd"].ToString() : "0";
-                string cgPriceGBP = data["bitcoin"]["gbp"] != null ? data["bitcoin"]["gbp"].ToString() : "0";
-                string cgPriceEUR = data["bitcoin"]["eur"] != null ? data["bitcoin"]["eur"].ToString() : "0";
-                string cgPriceXAU = data["bitcoin"]["xau"] != null ? data["bitcoin"]["xau"].ToString() : "0";
+                string cgPriceUSD = data["bitcoin"]!["usd"] != null ? data["bitcoin"]!["usd"]!.ToString() : "0";
+                string cgPriceGBP = data["bitcoin"]!["gbp"] != null ? data["bitcoin"]!["gbp"]!.ToString() : "0";
+                string cgPriceEUR = data["bitcoin"]!["eur"] != null ? data["bitcoin"]!["eur"]!.ToString() : "0";
+                string cgPriceXAU = data["bitcoin"]!["xau"] != null ? data["bitcoin"]!["xau"]!.ToString() : "0";
                 return (cgPriceUSD, cgPriceGBP, cgPriceEUR, cgPriceXAU);
             }
             catch (Exception ex)
@@ -4098,8 +4117,9 @@ namespace SATSuma
                             control.Text = string.Empty;
                         });
                     }
+                    await AddressInvalidHideControlsAsync().ConfigureAwait(true);
                     ResumeLayout(false);
-                    await AddressInvalidHideControlsAsync();
+
                 }
             }
             catch (Exception ex)
@@ -4113,59 +4133,63 @@ namespace SATSuma
         {
             try
             {
-                NBitcoin.BitcoinAddress bitcoinAddress;
-                if (String.Compare(NodeURL, "https://mempool.space/api/") == 0) //mempool.space mainnet
+                if (string.Compare(address, "") != 0 && string.Compare(address, null) != 0 && string.Compare(address, "block height, address, transaction ID or xpub...") !=0)
                 {
-                    bitcoinAddress = NBitcoin.BitcoinAddress.Create(address, Network.Main);
-                }
-                else
-                {
-                    if (String.Compare(NodeURL, "https://mempool.space/testnet/api/") == 0) //mempool.space testnet
+                    NBitcoin.BitcoinAddress bitcoinAddress;
+                    if (String.Compare(NodeURL, "https://mempool.space/api/") == 0) //mempool.space mainnet
                     {
-                        bitcoinAddress = NBitcoin.BitcoinAddress.Create(address, Network.TestNet);
+                        bitcoinAddress = NBitcoin.BitcoinAddress.Create(address, Network.Main);
                     }
                     else
                     {
-                        bool containsTestnet = NodeURL.Contains("testnet");
-                        if (containsTestnet) // own node, testnet
+                        if (String.Compare(NodeURL, "https://mempool.space/testnet/api/") == 0) //mempool.space testnet
                         {
                             bitcoinAddress = NBitcoin.BitcoinAddress.Create(address, Network.TestNet);
                         }
-                        else //own node, mainnet
+                        else
                         {
-                            bitcoinAddress = NBitcoin.BitcoinAddress.Create(address, Network.Main);
+                            bool containsTestnet = NodeURL.Contains("testnet");
+                            if (containsTestnet) // own node, testnet
+                            {
+                                bitcoinAddress = NBitcoin.BitcoinAddress.Create(address, Network.TestNet);
+                            }
+                            else //own node, mainnet
+                            {
+                                bitcoinAddress = NBitcoin.BitcoinAddress.Create(address, Network.Main);
+                            }
                         }
                     }
-                }
 
-                if (bitcoinAddress is BitcoinPubKeyAddress)
-                {
-                    return "P2PKH (legacy)"; // Legacy P2PKH
-                }
-                else if (bitcoinAddress is BitcoinScriptAddress)
-                {
-                    return "P2SH"; // (pay-to-script-hash) Multisig P2SH
-                }
-                else if (bitcoinAddress is BitcoinWitPubKeyAddress)
-                {
-                    return "P2WPKH (segwit)"; // P2WPKH
-                }
-                else if (bitcoinAddress is BitcoinWitScriptAddress)
-                {
-                    return "P2WSH"; // (pay-to- witness-script-hash) P2WSH 
-                }
-                else if (address.StartsWith("bc1p") && (address.Length > 41 || address.Length < 73))
-                {
-                    for (int i = 4; i < address.Length - 4; i++)
+                    if (bitcoinAddress is BitcoinPubKeyAddress)
                     {
-                        char c = address[i];
-                        if (((c >= '0' && c <= '9') || (c >= 'q' && c <= 'z')))
+                        return "P2PKH (legacy)"; // Legacy P2PKH
+                    }
+                    else if (bitcoinAddress is BitcoinScriptAddress)
+                    {
+                        return "P2SH"; // (pay-to-script-hash) Multisig P2SH
+                    }
+                    else if (bitcoinAddress is BitcoinWitPubKeyAddress)
+                    {
+                        return "P2WPKH (segwit)"; // P2WPKH
+                    }
+                    else if (bitcoinAddress is BitcoinWitScriptAddress)
+                    {
+                        return "P2WSH"; // (pay-to- witness-script-hash) P2WSH 
+                    }
+                    else if (address.StartsWith("bc1p") && (address.Length > 41 || address.Length < 73))
+                    {
+                        for (int i = 4; i < address.Length - 4; i++)
                         {
-                            return "P2TT (taproot)";
+                            char c = address[i];
+                            if (((c >= '0' && c <= '9') || (c >= 'q' && c <= 'z')))
+                            {
+                                return "P2TT (taproot)";
+                            }
                         }
                     }
+                    return "unknown";
                 }
-                return "unknown";
+                return "Invalid address format";
             }
             catch (FormatException)
             {
@@ -4206,7 +4230,7 @@ namespace SATSuma
 
                 if (String.Compare(addressScreenConfUnconfOrAllTx, "chain") == 0 && !PartOfAnAllAddressTransactionsRequest)  //confirmed stats only. 'All' reverts to 'chain' after the first query, so we need to exclude those
                 {
-                    if (addressData["chain_stats"]["tx_count"] != null && addressData["chain_stats"]["funded_txo_sum"] != null && addressData["chain_stats"]["funded_txo_count"] != null && addressData["chain_stats"]["spent_txo_sum"] != null && addressData["chain_stats"]["spent_txo_count"] != null)
+                    if (addressData["chain_stats"]?["tx_count"] != null && addressData["chain_stats"]?["funded_txo_sum"] != null && addressData["chain_stats"]?["funded_txo_count"] != null && addressData["chain_stats"]?["spent_txo_sum"] != null && addressData["chain_stats"]?["spent_txo_count"] != null)
                     {
                         label61.Invoke((MethodInvoker)delegate
                         {
@@ -4226,36 +4250,36 @@ namespace SATSuma
                         });
                         lblAddressConfirmedTransactionCount.Invoke((MethodInvoker)delegate
                         {
-                            lblAddressConfirmedTransactionCount.Text = Convert.ToString(addressData["chain_stats"]["tx_count"]);
+                            lblAddressConfirmedTransactionCount.Text = Convert.ToString(addressData["chain_stats"]?["tx_count"]);
                         });
                         lblAddressConfirmedReceived.Invoke((MethodInvoker)delegate
                         {
-                            lblAddressConfirmedReceived.Text = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["funded_txo_sum"])).ToString();
+                            lblAddressConfirmedReceived.Text = ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]?["funded_txo_sum"])).ToString();
                         });
                         lblAddressConfirmedReceivedOutputs.Invoke((MethodInvoker)delegate
                         {
-                            lblAddressConfirmedReceivedOutputs.Text = $"({addressData["chain_stats"]["funded_txo_count"]} outputs)";
+                            lblAddressConfirmedReceivedOutputs.Text = $"({addressData["chain_stats"]?["funded_txo_count"]} outputs)";
                         });
                         lblAddressConfirmedReceivedFiat.Invoke((MethodInvoker)delegate
                         {
-                            lblAddressConfirmedReceivedFiat.Text = $"{fiatSymbol}{(Convert.ToDecimal(addressData["chain_stats"]["funded_txo_sum"]) / 100000000 * OneBTCinSelectedCurrency):N2}";
+                            lblAddressConfirmedReceivedFiat.Text = $"{fiatSymbol}{(Convert.ToDecimal(addressData["chain_stats"]?["funded_txo_sum"]) / 100000000 * OneBTCinSelectedCurrency):N2}";
                         });
                         lblAddressConfirmedSpent.Invoke((MethodInvoker)delegate
                         {
-                            lblAddressConfirmedSpent.Text = $"{ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"]))}";
+                            lblAddressConfirmedSpent.Text = $"{ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]?["spent_txo_sum"]))}";
                         });
                         lblAddressConfirmedSpentFiat.Invoke((MethodInvoker)delegate
                         {
-                            lblAddressConfirmedSpentFiat.Text = $"{fiatSymbol}{(Convert.ToDecimal(addressData["chain_stats"]["spent_txo_sum"]) / 100000000 * OneBTCinSelectedCurrency):N2}";
+                            lblAddressConfirmedSpentFiat.Text = $"{fiatSymbol}{(Convert.ToDecimal(addressData["chain_stats"]?["spent_txo_sum"]) / 100000000 * OneBTCinSelectedCurrency):N2}";
                         });
                         lblAddressConfirmedSpentOutputs.Invoke((MethodInvoker)delegate
                         {
-                            lblAddressConfirmedSpentOutputs.Text = $"({addressData["chain_stats"]["spent_txo_count"]} outputs)";
+                            lblAddressConfirmedSpentOutputs.Text = $"({addressData["chain_stats"]?["spent_txo_count"]} outputs)";
                         });
-                        var fundedTx = Convert.ToDouble(addressData["chain_stats"]["funded_txo_count"]);
-                        var spentTx = Convert.ToDouble(addressData["chain_stats"]["spent_txo_count"]);
-                        var confirmedReceived = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
-                        var confirmedSpent = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
+                        var fundedTx = Convert.ToDouble(addressData["chain_stats"]?["funded_txo_count"]);
+                        var spentTx = Convert.ToDouble(addressData["chain_stats"]?["spent_txo_count"]);
+                        var confirmedReceived = Convert.ToDouble(addressData["chain_stats"]?["funded_txo_sum"]);
+                        var confirmedSpent = Convert.ToDouble(addressData["chain_stats"]?["spent_txo_sum"]);
                         var confirmedUnspent = confirmedReceived - confirmedSpent;
                         var unSpentTxOutputs = fundedTx - spentTx;
                         lblAddressConfirmedUnspent.Invoke((MethodInvoker)delegate
@@ -4274,7 +4298,7 @@ namespace SATSuma
                 }
                 if (String.Compare(addressScreenConfUnconfOrAllTx, "mempool") == 0) //mempool stats only
                 {
-                    if (addressData["mempool_stats"]["tx_count"] != null && addressData["mempool_stats"]["funded_txo_sum"] != null && addressData["mempool_stats"]["funded_txo_count"] != null && addressData["mempool_stats"]["funded_txo_sum"] != null && addressData["mempool_stats"]["spent_txo_sum"] != null && addressData["chain_stats"]["spent_txo_count"] != null)
+                    if (addressData["mempool_stats"]?["tx_count"] != null && addressData["mempool_stats"]?["funded_txo_sum"] != null && addressData["mempool_stats"]?["funded_txo_count"] != null && addressData["mempool_stats"]?["funded_txo_sum"] != null && addressData["mempool_stats"]?["spent_txo_sum"] != null && addressData["chain_stats"]?["spent_txo_count"] != null)
                     {
                         label61.Invoke((MethodInvoker)delegate
                         {
@@ -4294,36 +4318,36 @@ namespace SATSuma
                         });
                         lblAddressConfirmedTransactionCount.Invoke((MethodInvoker)delegate
                         {
-                            lblAddressConfirmedTransactionCount.Text = Convert.ToString(addressData["mempool_stats"]["tx_count"]);
+                            lblAddressConfirmedTransactionCount.Text = Convert.ToString(addressData["mempool_stats"]?["tx_count"]);
                         });
                         lblAddressConfirmedReceived.Invoke((MethodInvoker)delegate
                         {
-                            lblAddressConfirmedReceived.Text = ConvertSatsToBitcoin(Convert.ToString(addressData["mempool_stats"]["funded_txo_sum"])).ToString();
+                            lblAddressConfirmedReceived.Text = ConvertSatsToBitcoin(Convert.ToString(addressData["mempool_stats"]?["funded_txo_sum"])).ToString();
                         });
                         lblAddressConfirmedReceivedOutputs.Invoke((MethodInvoker)delegate
                         {
-                            lblAddressConfirmedReceivedOutputs.Text = $"({addressData["mempool_stats"]["funded_txo_count"]} outputs)";
+                            lblAddressConfirmedReceivedOutputs.Text = $"({addressData["mempool_stats"]?["funded_txo_count"]} outputs)";
                         });
                         lblAddressConfirmedReceivedFiat.Invoke((MethodInvoker)delegate
                         {
-                            lblAddressConfirmedReceivedFiat.Text = $"{fiatSymbol}{(Convert.ToDecimal(addressData["mempool_stats"]["funded_txo_sum"]) / 100000000 * OneBTCinSelectedCurrency):N2}";
+                            lblAddressConfirmedReceivedFiat.Text = $"{fiatSymbol}{(Convert.ToDecimal(addressData["mempool_stats"]?["funded_txo_sum"]) / 100000000 * OneBTCinSelectedCurrency):N2}";
                         });
                         lblAddressConfirmedSpent.Invoke((MethodInvoker)delegate
                         {
-                            lblAddressConfirmedSpent.Text = ConvertSatsToBitcoin(Convert.ToString(addressData["mempool_stats"]["spent_txo_sum"])).ToString();
+                            lblAddressConfirmedSpent.Text = ConvertSatsToBitcoin(Convert.ToString(addressData["mempool_stats"]?["spent_txo_sum"])).ToString();
                         });
                         lblAddressConfirmedSpentFiat.Invoke((MethodInvoker)delegate
                         {
-                            lblAddressConfirmedSpentFiat.Text = $"{fiatSymbol}{(Convert.ToDecimal(addressData["mempool_stats"]["spent_txo_sum"]) / 100000000 * OneBTCinSelectedCurrency):N2}";
+                            lblAddressConfirmedSpentFiat.Text = $"{fiatSymbol}{(Convert.ToDecimal(addressData["mempool_stats"]?["spent_txo_sum"]) / 100000000 * OneBTCinSelectedCurrency):N2}";
                         });
                         lblAddressConfirmedSpentOutputs.Invoke((MethodInvoker)delegate
                         {
-                            lblAddressConfirmedSpentOutputs.Text = $"({addressData["mempool_stats"]["spent_txo_count"]} outputs)";
+                            lblAddressConfirmedSpentOutputs.Text = $"({addressData["mempool_stats"]?["spent_txo_count"]} outputs)";
                         });
-                        var fundedTx = Convert.ToDouble(addressData["mempool_stats"]["funded_txo_count"]);
-                        var spentTx = Convert.ToDouble(addressData["mempool_stats"]["spent_txo_count"]);
-                        var confirmedReceived = Convert.ToDouble(addressData["mempool_stats"]["funded_txo_sum"]);
-                        var confirmedSpent = Convert.ToDouble(addressData["mempool_stats"]["spent_txo_sum"]);
+                        var fundedTx = Convert.ToDouble(addressData["mempool_stats"]?["funded_txo_count"]);
+                        var spentTx = Convert.ToDouble(addressData["mempool_stats"]?["spent_txo_count"]);
+                        var confirmedReceived = Convert.ToDouble(addressData["mempool_stats"]?["funded_txo_sum"]);
+                        var confirmedSpent = Convert.ToDouble(addressData["mempool_stats"]?["spent_txo_sum"]);
                         var confirmedUnspent = confirmedReceived - confirmedSpent;
                         var unSpentTxOutputs = fundedTx - spentTx;
                         lblAddressConfirmedUnspent.Invoke((MethodInvoker)delegate
@@ -4342,7 +4366,7 @@ namespace SATSuma
                 }
                 if (String.Compare(addressScreenConfUnconfOrAllTx, "all") == 0 || (String.Compare(addressScreenConfUnconfOrAllTx, "chain") == 0 && PartOfAnAllAddressTransactionsRequest)) // all TXs so will need to add chain and mempool amounts together before displaying. 
                 {
-                    if (addressData["mempool_stats"]["tx_count"] != null && addressData["mempool_stats"]["funded_txo_sum"] != null && addressData["mempool_stats"]["funded_txo_count"] != null && addressData["mempool_stats"]["funded_txo_sum"] != null && addressData["mempool_stats"]["spent_txo_sum"] != null && addressData["chain_stats"]["spent_txo_count"] != null && addressData["chain_stats"]["tx_count"] != null && addressData["chain_stats"]["funded_txo_sum"] != null && addressData["chain_stats"]["funded_txo_count"] != null && addressData["chain_stats"]["spent_txo_sum"] != null && addressData["chain_stats"]["spent_txo_count"] != null)
+                    if (addressData["mempool_stats"]?["tx_count"] != null && addressData["mempool_stats"]?["funded_txo_sum"] != null && addressData["mempool_stats"]?["funded_txo_count"] != null && addressData["mempool_stats"]?["funded_txo_sum"] != null && addressData["mempool_stats"]?["spent_txo_sum"] != null && addressData["chain_stats"]?["spent_txo_count"] != null && addressData["chain_stats"]?["tx_count"] != null && addressData["chain_stats"]?["funded_txo_sum"] != null && addressData["chain_stats"]?["funded_txo_count"] != null && addressData["chain_stats"]?["spent_txo_sum"] != null && addressData["chain_stats"]?["spent_txo_count"] != null)
                     {
                         label61.Invoke((MethodInvoker)delegate
                         {
@@ -4360,16 +4384,16 @@ namespace SATSuma
                         {
                             label63.Text = "TOTAL SPENT";
                         });
-                        int chainTransactionCount = Convert.ToInt32(addressData["chain_stats"]["tx_count"]);
-                        int mempoolTransactionCount = Convert.ToInt32(addressData["mempool_stats"]["tx_count"]);
+                        int chainTransactionCount = Convert.ToInt32(addressData["chain_stats"]?["tx_count"]);
+                        int mempoolTransactionCount = Convert.ToInt32(addressData["mempool_stats"]?["tx_count"]);
                         int totalTransactionCount = chainTransactionCount + mempoolTransactionCount;
                         lblAddressConfirmedTransactionCount.Invoke((MethodInvoker)delegate
                         {
                             lblAddressConfirmedTransactionCount.Text = Convert.ToString(totalTransactionCount);
                         });
 
-                        long chainReceived = Convert.ToInt64(addressData["chain_stats"]["funded_txo_sum"]);
-                        long mempoolReceived = Convert.ToInt64(addressData["mempool_stats"]["funded_txo_sum"]);
+                        long chainReceived = Convert.ToInt64(addressData["chain_stats"]?["funded_txo_sum"]);
+                        long mempoolReceived = Convert.ToInt64(addressData["mempool_stats"]?["funded_txo_sum"]);
                         long totalReceived = chainReceived + mempoolReceived;
                         decimal BTCtotalReceived = ConvertSatsToBitcoin(totalReceived.ToString());
                         lblAddressConfirmedReceived.Invoke((MethodInvoker)delegate
@@ -4380,16 +4404,16 @@ namespace SATSuma
                         {
                             lblAddressConfirmedReceivedFiat.Text = $"{fiatSymbol}{(Convert.ToDecimal(totalReceived) / 100000000 * OneBTCinSelectedCurrency):N2}";
                         });
-                        int chainReceivedOutputs = Convert.ToInt32(addressData["chain_stats"]["funded_txo_count"]);
-                        int mempoolReceivedOutputs = Convert.ToInt32(addressData["mempool_stats"]["funded_txo_count"]);
+                        int chainReceivedOutputs = Convert.ToInt32(addressData["chain_stats"]?["funded_txo_count"]);
+                        int mempoolReceivedOutputs = Convert.ToInt32(addressData["mempool_stats"]?["funded_txo_count"]);
                         int totalReceivedOutputs = chainReceivedOutputs + mempoolReceivedOutputs;
                         lblAddressConfirmedReceivedOutputs.Invoke((MethodInvoker)delegate
                         {
                             lblAddressConfirmedReceivedOutputs.Text = $"({totalReceivedOutputs} outputs)";
                         });
 
-                        long chainSpent = Convert.ToInt64(addressData["chain_stats"]["spent_txo_sum"]);
-                        long mempoolSpent = Convert.ToInt64(addressData["mempool_stats"]["spent_txo_sum"]);
+                        long chainSpent = Convert.ToInt64(addressData["chain_stats"]?["spent_txo_sum"]);
+                        long mempoolSpent = Convert.ToInt64(addressData["mempool_stats"]?["spent_txo_sum"]);
                         long totalSpent = chainSpent + mempoolSpent;
                         decimal BTCtotalSpent = ConvertSatsToBitcoin(totalSpent.ToString());
                         lblAddressConfirmedSpent.Invoke((MethodInvoker)delegate
@@ -4400,22 +4424,22 @@ namespace SATSuma
                         {
                             lblAddressConfirmedSpentFiat.Text = $"{fiatSymbol}{(Convert.ToDecimal(totalSpent) / 100000000 * OneBTCinSelectedCurrency):N2}";
                         });
-                        int chainSpentOutputs = Convert.ToInt32(addressData["chain_stats"]["spent_txo_count"]);
-                        int mempoolSpentOutputs = Convert.ToInt32(addressData["mempool_stats"]["spent_txo_count"]);
+                        int chainSpentOutputs = Convert.ToInt32(addressData["chain_stats"]?["spent_txo_count"]);
+                        int mempoolSpentOutputs = Convert.ToInt32(addressData["mempool_stats"]?["spent_txo_count"]);
                         int totalSpentOutputs = chainSpentOutputs + mempoolSpentOutputs;
                         lblAddressConfirmedSpentOutputs.Invoke((MethodInvoker)delegate
                         {
                             lblAddressConfirmedSpentOutputs.Text = $"({totalSpentOutputs} outputs)";
                         });
 
-                        var chainFundedTx = Convert.ToDouble(addressData["chain_stats"]["funded_txo_count"]);
-                        var chainSpentTx = Convert.ToDouble(addressData["chain_stats"]["spent_txo_count"]);
-                        var chainReceived2 = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
-                        var chainSpent2 = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
-                        var mempoolFundedTx = Convert.ToDouble(addressData["mempool_stats"]["funded_txo_count"]);
-                        var mempoolSpentTx = Convert.ToDouble(addressData["mempool_stats"]["spent_txo_count"]);
-                        var mempoolReceived2 = Convert.ToDouble(addressData["mempool_stats"]["funded_txo_sum"]);
-                        var mempoolSpent2 = Convert.ToDouble(addressData["mempool_stats"]["spent_txo_sum"]);
+                        var chainFundedTx = Convert.ToDouble(addressData["chain_stats"]?["funded_txo_count"]);
+                        var chainSpentTx = Convert.ToDouble(addressData["chain_stats"]?["spent_txo_count"]);
+                        var chainReceived2 = Convert.ToDouble(addressData["chain_stats"]?["funded_txo_sum"]);
+                        var chainSpent2 = Convert.ToDouble(addressData["chain_stats"]?["spent_txo_sum"]);
+                        var mempoolFundedTx = Convert.ToDouble(addressData["mempool_stats"]?["funded_txo_count"]);
+                        var mempoolSpentTx = Convert.ToDouble(addressData["mempool_stats"]?["spent_txo_count"]);
+                        var mempoolReceived2 = Convert.ToDouble(addressData["mempool_stats"]?["funded_txo_sum"]);
+                        var mempoolSpent2 = Convert.ToDouble(addressData["mempool_stats"]?["spent_txo_sum"]);
 
                         var chainUnspent = chainReceived2 - chainSpent2;
                         var chainUnspentTxOutputs = chainFundedTx - chainSpentTx;
@@ -4471,17 +4495,17 @@ namespace SATSuma
                 var transactions = JsonConvert.DeserializeObject<List<AddressTransactions>>(transactionsJson);
 
                 // Update lastSeenTxId if this isn't our first fetch of tranasctions to restart from the right place
-                if (transactions.Count > 0)
+                if (transactions!.Count > 0)
                 {
-                    if (String.Compare(transactions.Last().Status.Confirmed, "true") == 0) // make sure the last shown tx wasn't a mempool tx before using its txid as a key to a subsequent call. 
+                    if (String.Compare(transactions.Last().Status!.Confirmed, "true") == 0) // make sure the last shown tx wasn't a mempool tx before using its txid as a key to a subsequent call. 
                     {
-                        lastSeenTxId = transactions.Last().Txid; // it was a confirmed tx so we can carry on the next api call from that point
+                        lastSeenTxId = transactions.Last().Txid!; // it was a confirmed tx so we can carry on the next api call from that point
                     }
                     else
                     {
                         lastSeenTxId = ""; // If it was a mempool record then the next call (to confirmed tx's) will need a null txid to start from the beginning
                     }
-                    lastSeenTxId = transactions.Last().Txid;
+                    lastSeenTxId = transactions.Last().Txid!;
                 }
 
                 //LIST VIEW
@@ -4570,7 +4594,7 @@ namespace SATSuma
                         .Sum(v => v.Value);
                     balanceChangeVin = (decimal)transaction.Vin
                         .Where(v => v.Prevout != null && String.Compare(v.Prevout.Scriptpubkey_address, addressString) == 0)
-                        .Sum(v => v.Prevout.Value);
+                        .Sum(v => v.Prevout!.Value);
 
                     balanceChange = balanceChangeVout - balanceChangeVin; // calculate net change to balance for this transaction
                     string balanceChangeString = balanceChange.ToString();
@@ -4588,7 +4612,7 @@ namespace SATSuma
 
                     item.SubItems.Add(balanceChangeString.ToString()); // add net change to balance
 
-                    if (String.Compare(transaction.Status.Confirmed, "true") == 0)
+                    if (String.Compare(transaction.Status!.Confirmed, "true") == 0)
                     {
                         decimal CurrentBlockForCalc = Convert.ToDecimal(CurrentBlockHeightStringForCalc);
                         decimal TransactionBlockForCalc = transaction.Status.Block_height;
@@ -4680,7 +4704,7 @@ namespace SATSuma
                 }
 
                 // set focus
-                if (btnNextAddressTransactions.Enabled && btnNextAddressTransactions.Enabled)
+                if (btnNextAddressTransactions.Enabled)
                 {
                     btnNextAddressTransactions.Focus();
                 }
@@ -4866,7 +4890,7 @@ namespace SATSuma
         {
             try
             {
-                await CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync().ConfigureAwait(true);
                 // Get the selected item
                 ListViewItem selectedItem = listViewAddressTransactions.SelectedItems[0];
                 // Get the second subitem in the selected item 
@@ -4902,7 +4926,7 @@ namespace SATSuma
         {
             try
             {
-                await CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync().ConfigureAwait(true);
                 // Get the selected item
                 ListViewItem selectedItem = listViewAddressTransactions.SelectedItems[0];
                 // Get the first subitem in the selected item 
@@ -4950,7 +4974,7 @@ namespace SATSuma
                             foreach (ListViewItem.ListViewSubItem subItem in item.SubItems)
                             {
                                 subItem.ForeColor = MakeColorLighter(tableTextColor, 40);
-                                if (subItem.Text == "------")
+                                if (String.Compare(subItem.Text, "------") == 0)
                                 {
                                     BtnViewBlockFromAddress.Invoke((MethodInvoker)delegate
                                     {
@@ -5127,7 +5151,7 @@ namespace SATSuma
                 }
 
 
-                if (lblHeaderPrice.Text != "disabled")
+                if (String.Compare(lblHeaderPrice.Text, "disabled") != 0)
                 {
                     lblAddressConfirmedReceivedFiat.Visible = true;
                     lblAddressConfirmedSpentFiat.Visible = true;
@@ -5395,7 +5419,7 @@ namespace SATSuma
                 var jsonData = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
                 var addressData = JObject.Parse(jsonData);
 
-                if (addressData["chain_stats"]["tx_count"] != null && addressData["chain_stats"]["funded_txo_sum"] != null && addressData["chain_stats"]["funded_txo_count"] != null && addressData["chain_stats"]["spent_txo_sum"] != null && addressData["chain_stats"]["spent_txo_count"] != null)
+                if (addressData["chain_stats"]!["tx_count"] != null && addressData["chain_stats"]!["funded_txo_sum"] != null && addressData["chain_stats"]!["funded_txo_count"] != null && addressData["chain_stats"]!["spent_txo_sum"] != null && addressData["chain_stats"]!["spent_txo_count"] != null)
                 {
                     label314.Invoke((MethodInvoker)delegate
                     {
@@ -5403,22 +5427,19 @@ namespace SATSuma
                     });
                     lblAddressConfirmedSpentUTXO.Invoke((MethodInvoker)delegate
                     {
-                        lblAddressConfirmedSpentUTXO.Text = $"{ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]["spent_txo_sum"]))}";
+                        lblAddressConfirmedSpentUTXO.Text = $"{ConvertSatsToBitcoin(Convert.ToString(addressData["chain_stats"]!["spent_txo_sum"]))}";
                     });
                     lblAddressConfirmedSpentUTXOFiat.Invoke((MethodInvoker)delegate
                     {
-                        lblAddressConfirmedSpentUTXOFiat.Text = $"{fiatSymbol}{(Convert.ToDecimal(addressData["chain_stats"]["spent_txo_sum"]) / 100000000 * OneBTCinSelectedCurrency):N2}";
+                        lblAddressConfirmedSpentUTXOFiat.Text = $"{fiatSymbol}{(Convert.ToDecimal(addressData["chain_stats"]!["spent_txo_sum"]) / 100000000 * OneBTCinSelectedCurrency):N2}";
                     });
                     lblAddressConfirmedSpentOutputsUTXO.Invoke((MethodInvoker)delegate
                     {
-                        lblAddressConfirmedSpentOutputsUTXO.Text = $"{addressData["chain_stats"]["spent_txo_count"]}";
+                        lblAddressConfirmedSpentOutputsUTXO.Text = $"{addressData["chain_stats"]!["spent_txo_count"]}";
                     });
-                    var fundedTx = Convert.ToDouble(addressData["chain_stats"]["funded_txo_count"]);
-                    var spentTx = Convert.ToDouble(addressData["chain_stats"]["spent_txo_count"]);
-                    var confirmedReceived = Convert.ToDouble(addressData["chain_stats"]["funded_txo_sum"]);
-                    var confirmedSpent = Convert.ToDouble(addressData["chain_stats"]["spent_txo_sum"]);
+                    var confirmedReceived = Convert.ToDouble(addressData["chain_stats"]!["funded_txo_sum"]);
+                    var confirmedSpent = Convert.ToDouble(addressData["chain_stats"]!["spent_txo_sum"]);
                     var confirmedUnspent = confirmedReceived - confirmedSpent;
-                    var unSpentTxOutputs = fundedTx - spentTx;
                     lblAddressConfirmedUnspentUTXO.Invoke((MethodInvoker)delegate
                     {
                         lblAddressConfirmedUnspentUTXO.Text = ConvertSatsToBitcoin(Convert.ToString(confirmedUnspent)).ToString();
@@ -5452,7 +5473,7 @@ namespace SATSuma
 
                 if (utxos != null)
                 {
-                    utxos = utxos.OrderByDescending(utxo => ConvertSatsToBitcoin(utxo.Value)).ToList();
+                    utxos = utxos.OrderByDescending(utxo => ConvertSatsToBitcoin(utxo.Value!)).ToList();
 
                     if (utxos.Count == 0)
                     {
@@ -5523,7 +5544,7 @@ namespace SATSuma
                         {
 
                             ListViewItem item = new ListViewItem(Convert.ToString(utxo.Txid)); // create new row
-                            decimal amountInBTC = ConvertSatsToBitcoin(utxo.Value); // convert it to bitcoin
+                            decimal amountInBTC = ConvertSatsToBitcoin(utxo.Value!); // convert it to bitcoin
                             if (amountInBTC > largestUTXO)
                             {
                                 largestUTXO = amountInBTC;
@@ -5533,7 +5554,7 @@ namespace SATSuma
                                 smallestUTXO = amountInBTC;
                             }
                             item.SubItems.Add(Convert.ToString(amountInBTC));
-                            if (utxo.Status.Block_height != 0)
+                            if (utxo.Status!.Block_height != 0)
                             {
                                 int confirmations = Convert.ToInt32(CurrentBlockHeightStringForCalc) - Convert.ToInt32(utxo.Status.Block_height);
                                 item.SubItems.Add(Convert.ToString(confirmations));
@@ -5569,7 +5590,7 @@ namespace SATSuma
                         }
                         lblUTXOCount.Invoke((MethodInvoker)delegate
                         {
-                            lblUTXOCount.Text = Convert.ToString(counter) + " UTXO's";
+                            lblUTXOCount.Text = $"{counter} UTXO's";
                         });
                         panelAddressUTXOTab.Invoke((MethodInvoker)delegate
                         {
@@ -5701,7 +5722,7 @@ namespace SATSuma
         {
             try
             {
-                await CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync().ConfigureAwait(true);
                 // Get the selected item
                 ListViewItem selectedItem = listViewAddressUTXOs.SelectedItems[0];
                 // Get the first subitem in the selected item 
@@ -5728,7 +5749,7 @@ namespace SATSuma
         {
             try
             {
-                await CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync().ConfigureAwait(true);
                 // Get the selected item
                 ListViewItem selectedItem = listViewAddressUTXOs.SelectedItems[0];
                 // Get the second subitem in the selected item 
@@ -5796,7 +5817,7 @@ namespace SATSuma
                                 btnViewBlockFromAddressUTXO.Location = new Point(listViewAddressUTXOs.Location.X + listViewAddressUTXOs.Width - (int)(13 * UIScale), item.Position.Y);
                                 btnViewBlockFromAddressUTXO.Height = item.Bounds.Height;
                             });
-                            if (item.SubItems[3].Text == "-")
+                            if (String.Compare(item.SubItems[3].Text, "-") == 0)
                             {
                                 btnViewBlockFromAddressUTXO.Enabled = false;
                             }
@@ -5977,7 +5998,7 @@ namespace SATSuma
                     });
                 }
 
-                if (lblHeaderPrice.Text != "disabled")
+                if (String.Compare(lblHeaderPrice.Text, "disabled") != 0)
                 {
                     lblAddressConfirmedSpentUTXOFiat.Visible = true;
                     lblAddressConfirmedUnspentUTXOFiat.Visible = true;
@@ -6373,7 +6394,7 @@ namespace SATSuma
                     });
                     label330.Invoke((MethodInvoker)delegate
                     {
-                        label330.Text = "TRANSACTIONS IN " + lblBlockBlockHeight.Text;
+                        label330.Text = $"TRANSACTIONS IN {lblBlockBlockHeight.Text}";
                     });
                     var blockNumber = Convert.ToString(numericUpDownSubmittedBlockNumber.Text);
                     await GetFifteenBlocksAsync(blockNumber).ConfigureAwait(true);
@@ -6403,9 +6424,9 @@ namespace SATSuma
                     DisableEnableBlockButtons("enable"); // enable buttons after operation is complete
                     lblNumberOfTXInBlock.Invoke((MethodInvoker)delegate
                     {
-                        lblNumberOfTXInBlock.Text = Convert.ToString(blocks[0].Tx_count);
+                        lblNumberOfTXInBlock.Text = Convert.ToString(blocks![0].Tx_count);
                     });
-                    long sizeInBytes = blocks[0].Size;
+                    long sizeInBytes = blocks![0].Size;
                     string sizeString; // convert display to bytes/kb/mb accordingly
                     if (sizeInBytes < 1000)
                     {
@@ -6440,7 +6461,7 @@ namespace SATSuma
                             lblBlockWeight.Text = strFormattedWeight;
                         });
                     }
-                    string TotalBlockFees = Convert.ToString(blocks[0].Extras.TotalFees);
+                    string TotalBlockFees = Convert.ToString(blocks[0].Extras!.TotalFees);
                     TotalBlockFees = Convert.ToString(ConvertSatsToBitcoin(TotalBlockFees));
                     lblTotalFees.Invoke((MethodInvoker)delegate
                     {
@@ -6458,7 +6479,7 @@ namespace SATSuma
                         lblBlockFeeChart.Location = new Point(lblTotalFees.Location.X + lblTotalFees.Width, lblBlockFeeChart.Location.Y);
                     });
 
-                    string nonceString = blocks[0].Nonce;
+                    string? nonceString = blocks[0].Nonce;
                     if (long.TryParse(nonceString, out long nonceLong))
                     {
                         lblNonce.Invoke((MethodInvoker)delegate
@@ -6467,7 +6488,7 @@ namespace SATSuma
                         });
                     }
 
-                    string Reward = Convert.ToString(blocks[0].Extras.Reward);
+                    string Reward = Convert.ToString(blocks[0].Extras!.Reward);
                     lblReward.Invoke((MethodInvoker)delegate
                     {
                         lblReward.Text = Convert.ToString(ConvertSatsToBitcoin(Reward));
@@ -6488,7 +6509,7 @@ namespace SATSuma
 
                     lblBlockFeeRangeAndMedianFee.Invoke((MethodInvoker)delegate
                     {
-                        lblBlockFeeRangeAndMedianFee.Text = $"{Convert.ToInt32(blocks[0].Extras.FeeRange[0])}-{Convert.ToInt32(blocks[0].Extras.FeeRange[6])} / {Convert.ToInt32(blocks[0].Extras.MedianFee)}";
+                        lblBlockFeeRangeAndMedianFee.Text = $"{Convert.ToInt32(blocks[0].Extras!.FeeRange![0])}-{Convert.ToInt32(blocks[0].Extras!.FeeRange![6])} / {Convert.ToInt32(blocks[0].Extras!.MedianFee)}";
                     });
                     lblBlockScreenChartFeeRange.Invoke((MethodInvoker)delegate
                     {
@@ -6496,11 +6517,11 @@ namespace SATSuma
                     });
                     lblBlockAverageFee.Invoke((MethodInvoker)delegate
                     {
-                        lblBlockAverageFee.Text = Convert.ToString(blocks[0].Extras.AvgFee);
+                        lblBlockAverageFee.Text = Convert.ToString(blocks[0].Extras!.AvgFee);
                     });
                     lblMiner.Invoke((MethodInvoker)delegate
                     {
-                        lblMiner.Text = Convert.ToString(blocks[0].Extras.Pool.Name);
+                        lblMiner.Text = Convert.ToString(blocks[0].Extras!.Pool!.Name);
                     });
                     btnViewPoolFromBlockScreen.Invoke((MethodInvoker)delegate
                     {
@@ -6542,7 +6563,7 @@ namespace SATSuma
                     var transactions = JsonConvert.DeserializeObject<List<Block_Transactions>>(BlockTransactionsJson);
                     ToggleLoadingAnimation("disable"); // stop the loading animation
                     DisableEnableBlockButtons("enable"); // enable buttons after operation is complete
-                    List<string> txIds = transactions.Select(t => t.Txid).ToList();
+                    List<string> txIds = transactions.Select(t => t.Txid).ToList()!;
 
                     // Update lastSeenTxId if this isn't our first fetch of tranasctions to restart from the right place
                     if (txIds.Count > 0)
@@ -6603,12 +6624,12 @@ namespace SATSuma
                     // Add the items to the ListView
                     int counter = 0; // used to count rows in list as they're added
 
-                    foreach (var blockTransaction in transactions)
+                    foreach (var blockTransaction in transactions!)
                     {
                         ListViewItem item = new ListViewItem(blockTransaction.Txid); // create new row
-                        item.SubItems.Add(blockTransaction.Fee.ToString());
-                        item.SubItems.Add(blockTransaction.Vin.Count.ToString()); // number of inputs
-                        item.SubItems.Add(blockTransaction.Vout.Count.ToString()); // number of outputs
+                        item.SubItems.Add(blockTransaction.Fee!.ToString());
+                        item.SubItems.Add(blockTransaction.Vin!.Count.ToString()); // number of inputs
+                        item.SubItems.Add(blockTransaction.Vout!.Count.ToString()); // number of outputs
                         decimal totalValue = blockTransaction.Vout.Sum(v => decimal.Parse(v.Value)); // sum of outputs
                         totalValue = ConvertSatsToBitcoin(totalValue.ToString());
                         item.SubItems.Add(totalValue.ToString());
@@ -6940,7 +6961,7 @@ namespace SATSuma
         {
             try
             {
-                await CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync().ConfigureAwait(true);
                 // Get the selected item
                 ListViewItem selectedItem = listViewBlockTransactions.SelectedItems[0];
                 // Get the first subitem in the selected item 
@@ -7062,18 +7083,6 @@ namespace SATSuma
             }
         }
 
-        private void PictureBoxBlockScreenPoolRankingChart_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                ChartPoolsRankingAsync();
-                BtnMenuCharts_ClickAsync(sender, e);
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "PictureBoxBlockScreenPoolRankingChart_Click");
-            }
-        }
         #endregion
         #region jump to pool screen
         private void BtnViewPoolFromBlockScreen_Click(object sender, EventArgs e)
@@ -7088,7 +7097,7 @@ namespace SATSuma
                 if (item != null)
                 {
                     counter++;
-                    if (item.SubItems[0].Text == poolNameToPass)
+                    if (String.Compare(item.SubItems[0].Text, poolNameToPass) == 0)
                     {
                         poolsListScrollPosition = counter * rowHeight;
                         break;
@@ -7209,6 +7218,10 @@ namespace SATSuma
         {
             try
             {
+                if (string.Compare(transactionId, null) == 0 || string.Compare(transactionId, "") == 0 || string.Compare(transactionId, "block height, address, transaction ID or xpub...") == 0)
+                {
+                    return false;
+                }
                 if (uint256.TryParse(transactionId, out uint256 _))
                 {
                     return true;
@@ -7278,7 +7291,7 @@ namespace SATSuma
                     panelTransactionDiagram.SuspendLayout();
                     lblTransactionBlockHeight.Invoke((MethodInvoker)delegate
                     {
-                        lblTransactionBlockHeight.Text = Convert.ToString(transaction.Status.Block_height);
+                        lblTransactionBlockHeight.Text = Convert.ToString(transaction!.Status!.Block_height);
                         lblTransactionBlockHeight.Location = new Point(label113.Location.X + label113.Width, lblTransactionBlockHeight.Location.Y);
                     });
                     label126.Invoke((MethodInvoker)delegate
@@ -7286,7 +7299,7 @@ namespace SATSuma
                         label126.Location = new Point(lblTransactionBlockHeight.Location.X + lblTransactionBlockHeight.Width + (int)(6 * UIScale), label126.Location.Y);
                     });
 
-                    long unixTimestamp = Convert.ToInt64(transaction.Status.Block_time);
+                    long unixTimestamp = Convert.ToInt64(transaction!.Status!.Block_time);
                     DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(unixTimestamp).ToLocalTime();
                     lblTransactionBlockTime.Invoke((MethodInvoker)delegate
                     {
@@ -7372,11 +7385,11 @@ namespace SATSuma
                     }
                     #region central bit of diagram
                     long totalValueIn = 0;
-                    foreach (TransactionVin vin in transaction.Vin)
+                    foreach (TransactionVin vin in transaction.Vin!)
                     {
                         if (!vin.Is_coinbase)
                         {
-                            totalValueIn += vin.Prevout.Value;
+                            totalValueIn += vin.Prevout!.Value;
                         }
                     }
                     string strTotalValueIn = totalValueIn.ToString();
@@ -7394,7 +7407,7 @@ namespace SATSuma
                     });
 
                     long totalValueOut = 0;
-                    foreach (TransactionVout vout in transaction.Vout)
+                    foreach (TransactionVout vout in transaction.Vout!)
                     {
                         totalValueOut += vout.Value;
                     }
@@ -7489,7 +7502,7 @@ namespace SATSuma
                         btnTransactionInputsUp.Visible = false;
                     }
 
-                    foreach (var _ in transaction.Vin)
+                    for (int i = 0; i < NumberOfInputLines; i++)
                     {
                         if (YInputsPos >= panelTransactionDiagram.Height)
                         {
@@ -7532,7 +7545,7 @@ namespace SATSuma
                         btnTransactionOutputsUp.Visible = false;
                     }
 
-                    foreach (var _ in transaction.Vout)
+                    for (int i = 0; i < NumberOfOutputLines; i++)
                     {
                         if (YOutputsPos >= panelTransactionDiagram.Height)
                         {
@@ -7581,7 +7594,7 @@ namespace SATSuma
 
                     foreach (TransactionVin vin in transaction.Vin)
                     {
-                        prevouts.Add(vin.Prevout);
+                        prevouts.Add(vin.Prevout!);
                     }
 
                     foreach (TransactionVinPrevout prevout in prevouts)
@@ -7614,14 +7627,14 @@ namespace SATSuma
                     {
                         lblTransasctionInCount.Invoke((MethodInvoker)delegate
                         {
-                            lblTransasctionInCount.Text = Convert.ToString(listViewTransactionInputs.Items.Count) + " TRANSACTION INPUT";
+                            lblTransasctionInCount.Text = $"{listViewTransactionInputs.Items.Count} TRANSACTION INPUT";
                         });
                     }
                     else
                     {
                         lblTransasctionInCount.Invoke((MethodInvoker)delegate
                         {
-                            lblTransasctionInCount.Text = Convert.ToString(listViewTransactionInputs.Items.Count) + " TRANSACTION INPUTS";
+                            lblTransasctionInCount.Text = $"{listViewTransactionInputs.Items.Count} TRANSACTION INPUTS";
                         });
                     }
 
@@ -7724,7 +7737,7 @@ namespace SATSuma
                         }
                         else // display OP RETURN after converting hex to ascii
                         {
-                            string input = vout.Scriptpubkey_asm;
+                            string input = vout.Scriptpubkey_asm!;
                             string hex = Regex.Match(input, @"\b([0-9A-Fa-f]{2})+\b").Value;
                             byte[] bytes = Enumerable.Range(0, hex.Length / 2)
                                 .Select(x => Convert.ToByte(hex.Substring(x * 2, 2), 16))
@@ -7747,14 +7760,14 @@ namespace SATSuma
                     {
                         lblTransasctionOutCount.Invoke((MethodInvoker)delegate
                         {
-                            lblTransasctionOutCount.Text = Convert.ToString(listViewTransactionOutputs.Items.Count) + " TRANSACTION OUTPUT";
+                            lblTransasctionOutCount.Text = $"{listViewTransactionOutputs.Items.Count} TRANSACTION OUTPUT";
                         });
                     }
                     else
                     {
                         lblTransasctionOutCount.Invoke((MethodInvoker)delegate
                         {
-                            lblTransasctionOutCount.Text = Convert.ToString(listViewTransactionOutputs.Items.Count) + " TRANSACTION OUTPUTS";
+                            lblTransasctionOutCount.Text = $"{listViewTransactionOutputs.Items.Count} TRANSACTION OUTPUTS";
                         });
                     }
 
@@ -8526,7 +8539,7 @@ namespace SATSuma
         {
             try
             {
-                await CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync().ConfigureAwait(true);
                 // Get the selected item
                 ListViewItem selectedItem = listViewTransactionInputs.SelectedItems[0];
                 // Get the first subitem in the selected item 
@@ -8552,7 +8565,7 @@ namespace SATSuma
         {
             try
             {
-                await CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync().ConfigureAwait(true);
                 // Get the selected item
                 ListViewItem selectedItem = listViewTransactionOutputs.SelectedItems[0];
                 // Get the first subitem in the selected item 
@@ -8777,7 +8790,7 @@ namespace SATSuma
                     DisableEnableBlockListButtons("enable"); // enable buttons after operation is complete
 
                     var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
-                    List<string> blocklist = blocks.Select(t => t.Height).ToList();
+                    List<string> blocklist = blocks.Select(t => t.Height).ToList()!;
 
                     // Update lastSeenBlockNumber if this isn't our first fetch of blocks to restart from the right place
                     if (blocklist.Count > 0)
@@ -8856,7 +8869,7 @@ namespace SATSuma
                     // Add the items to the ListView
                     int counter = 0; // used to count rows in list as they're added
                     string formattedDateTime;
-                    foreach (var block in blocks)
+                    foreach (var block in blocks!)
                     {
                         formattedDateTime = "00010101-01:01";
                         if (long.TryParse(block.Timestamp, out long unixTimestamp))
@@ -8870,7 +8883,7 @@ namespace SATSuma
                         decimal sizeInMB = block.Size;
                         sizeInMB /= 1000000;
                         item.SubItems.Add(sizeInMB.ToString("0.00")); // number of outputs
-                        string feerange = $"{Convert.ToInt32(block.Extras.FeeRange[0])}-{Convert.ToInt32(block.Extras.FeeRange[6])}";
+                        string feerange = $"{Convert.ToInt32(block.Extras!.FeeRange![0])}-{Convert.ToInt32(block.Extras.FeeRange[6])}";
                         item.SubItems.Add(feerange.ToString());
                         string medFee = $"~{Convert.ToInt32(block.Extras.MedianFee)}";
                         item.SubItems.Add(medFee.ToString());
@@ -9151,7 +9164,7 @@ namespace SATSuma
         {
             try
             {
-                await CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync().ConfigureAwait(true);
                 // Get the selected item
                 ListViewItem selectedItem = listViewBlockList.SelectedItems[0];
                 if (selectedItem != null)
@@ -9220,10 +9233,10 @@ namespace SATSuma
                                 var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
                                 lblBlockListBlockTime.Invoke((MethodInvoker)delegate
                                 {
-                                    lblBlockListBlockTime.Text = DateTimeOffset.FromUnixTimeSeconds(long.Parse(blocks[0].Timestamp)).ToString("yyyy-MM-dd HH:mm");
+                                    lblBlockListBlockTime.Text = DateTimeOffset.FromUnixTimeSeconds(long.Parse(blocks![0].Timestamp)).ToString("yyyy-MM-dd HH:mm");
                                     lblBlockListBlockTime.Location = new Point(label91.Location.X + label91.Width, lblBlockListBlockTime.Location.Y);
                                 });
-                                long sizeInBytes = blocks[0].Size;
+                                long sizeInBytes = blocks![0].Size;
                                 string sizeString = ""; // convert display to bytes/kb/mb accordingly
                                 if (sizeInBytes < 1000)
                                 {
@@ -9267,7 +9280,7 @@ namespace SATSuma
                                 }
                                 lblBlockListMiner.Invoke((MethodInvoker)delegate
                                 {
-                                    lblBlockListMiner.Text = Convert.ToString(blocks[0].Extras.Pool.Name);
+                                    lblBlockListMiner.Text = Convert.ToString(blocks[0].Extras!.Pool!.Name);
                                     lblBlockListMiner.Location = new Point(label95.Location.X + label95.Width, lblBlockListMiner.Location.Y);
                                 });
 
@@ -9280,14 +9293,14 @@ namespace SATSuma
                                 {
                                     btnViewBlockFromBlockList.Location = new Point(lblBlockListTransactionCount.Location.X + lblBlockListTransactionCount.Width, btnViewBlockFromBlockList.Location.Y);
                                 });
-                                string TotalBlockFees = Convert.ToString(blocks[0].Extras.TotalFees);
+                                string TotalBlockFees = Convert.ToString(blocks[0].Extras!.TotalFees);
                                 TotalBlockFees = Convert.ToString(ConvertSatsToBitcoin(TotalBlockFees));
                                 lblBlockListTotalFees.Invoke((MethodInvoker)delegate
                                 {
                                     lblBlockListTotalFees.Text = TotalBlockFees;
                                     lblBlockListTotalFees.Location = new Point(label88.Location.X + label88.Width, lblBlockListTotalFees.Location.Y);
                                 });
-                                string Reward = Convert.ToString(blocks[0].Extras.Reward);
+                                string Reward = Convert.ToString(blocks[0].Extras!.Reward);
                                 lblBlockListReward.Invoke((MethodInvoker)delegate
                                 {
                                     lblBlockListReward.Text = Convert.ToString(ConvertSatsToBitcoin(Reward));
@@ -9295,25 +9308,25 @@ namespace SATSuma
                                 });
                                 lblBlockListBlockFeeRangeAndMedianFee.Invoke((MethodInvoker)delegate
                                 {
-                                    lblBlockListBlockFeeRangeAndMedianFee.Text = $"{Convert.ToInt32(blocks[0].Extras.FeeRange[0])}-{Convert.ToInt32(blocks[0].Extras.FeeRange[6])} / {Convert.ToInt32(blocks[0].Extras.MedianFee)}";
+                                    lblBlockListBlockFeeRangeAndMedianFee.Text = $"{Convert.ToInt32(blocks[0].Extras!.FeeRange![0])}-{Convert.ToInt32(blocks[0].Extras!.FeeRange![6])} / {Convert.ToInt32(blocks[0].Extras!.MedianFee)}";
                                     lblBlockListBlockFeeRangeAndMedianFee.Location = new Point(label93.Location.X + label93.Width, lblBlockListBlockFeeRangeAndMedianFee.Location.Y);
                                 });
                                 lblBlockListAverageFee.Invoke((MethodInvoker)delegate
                                 {
-                                    lblBlockListAverageFee.Text = Convert.ToString(blocks[0].Extras.AvgFee);
+                                    lblBlockListAverageFee.Text = Convert.ToString(blocks[0].Extras!.AvgFee);
                                     lblBlockListAverageFee.Location = new Point(label97.Location.X + label97.Width, lblBlockListAverageFee.Location.Y);
                                 });
                                 lblBlockListTotalInputs.Invoke((MethodInvoker)delegate
                                 {
-                                    lblBlockListTotalInputs.Text = Convert.ToString(blocks[0].Extras.TotalInputs);
+                                    lblBlockListTotalInputs.Text = Convert.ToString(blocks[0].Extras!.TotalInputs);
                                     lblBlockListTotalInputs.Location = new Point(label89.Location.X + label89.Width, lblBlockListTotalInputs.Location.Y);
                                 });
                                 lblBlockListTotalOutputs.Invoke((MethodInvoker)delegate
                                 {
-                                    lblBlockListTotalOutputs.Text = Convert.ToString(blocks[0].Extras.TotalOutputs);
+                                    lblBlockListTotalOutputs.Text = Convert.ToString(blocks[0].Extras!.TotalOutputs);
                                     lblBlockListTotalOutputs.Location = new Point(label94.Location.X + label94.Width, lblBlockListTotalOutputs.Location.Y);
                                 });
-                                if (double.TryParse(blocks[0].Extras.AvgTxSize, out double avgTxSize))
+                                if (double.TryParse(blocks[0].Extras!.AvgTxSize, out double avgTxSize))
                                 {
                                     lblBlockListAverageTransactionSize.Invoke((MethodInvoker)delegate
                                     {
@@ -9410,19 +9423,6 @@ namespace SATSuma
             catch (Exception ex)
             {
                 HandleException(ex, "PictureBoxBlockListBlockSizeChart_Click");
-            }
-        }
-
-        private void PictureBoxBlockListPoolRanking_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                ChartPoolsRankingAsync();
-                BtnMenuCharts_ClickAsync(sender, e);
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex, "PictureBoxBlockListPoolRanking_Click");
             }
         }
 
@@ -9572,7 +9572,7 @@ namespace SATSuma
                 if (item != null)
                 {
                     counter++;
-                    if (item.SubItems[0].Text == poolNameToPass)
+                    if (String.Compare(item.SubItems[0].Text, poolNameToPass) == 0)
                     {
                         poolsListScrollPosition = counter * rowHeight;
                         break;
@@ -9686,8 +9686,12 @@ namespace SATSuma
                 try
                 {
                     string xpubString = textBoxSubmittedXpub.Text;
+                    if (textBoxSubmittedXpub.Text == "")
+                    {
+                        return;
+                    }
                     BitcoinExtPubKey xpub = new BitcoinExtPubKey(xpubString, Network.Main);
-                    PubKey _ = xpub.GetPublicKey();
+                    _ = xpub.GetPublicKey();
                 }
                 catch
                 {
@@ -9935,7 +9939,6 @@ namespace SATSuma
         //-------------------- CHECK NODE ONLINE -------------------------------------------------------
         private async void CheckOwnNodeIsOnlineAsync()
         {
-            using var client = new HttpClient();
             try
             {
                 Ping pingSender = new Ping();
@@ -10019,7 +10022,6 @@ namespace SATSuma
                             lblXpubScreenOwnNodeStatusLight.ForeColor = Color.IndianRed;
                         });
                         lblSettingsOwnNodeSelected.Enabled = false;
-                        string hostname = textBoxXpubScreenOwnNodeURL.Text;
                         label174.Invoke((MethodInvoker)delegate
                         {
                             label174.Text = "your node (not connected)";
@@ -10374,7 +10376,7 @@ namespace SATSuma
                         string lastSeenTxId = "";
                         decimal TotalInForAllTXOnThisAddress = 0;
                         decimal TotalOutForAllTXOnThisAddress = 0;
-                        int totalTXForAddress = Convert.ToInt32(addressData["chain_stats"]["tx_count"]);
+                        int totalTXForAddress = Convert.ToInt32(addressData["chain_stats"]!["tx_count"]);
                         int txProcessedForThisAddress = 0;
 
                         while (txProcessedForThisAddress != totalTXForAddress)
@@ -10385,7 +10387,7 @@ namespace SATSuma
                             if (!string.IsNullOrEmpty(transactionsJson))
                             {
                                 var transactions = JsonConvert.DeserializeObject<List<AddressTransactions>>(transactionsJson);
-                                foreach (AddressTransactions transaction in transactions)
+                                foreach (AddressTransactions transaction in transactions!)
                                 {
                                     decimal balanceChangeVin = 0; // will hold net result of inputs to this address
                                     decimal balanceChangeVout = 0; // will hold net result of outputs to this address    
@@ -10394,15 +10396,15 @@ namespace SATSuma
                                         .Sum(v => v.Value);
                                     balanceChangeVout = (decimal)transaction.Vin
                                         .Where(v => v.Prevout != null && String.Compare(v.Prevout.Scriptpubkey_address, Convert.ToString(address)) == 0)
-                                        .Sum(v => v.Prevout.Value);
+                                        .Sum(v => v.Prevout!.Value);
 
                                     TotalInForAllTXOnThisAddress += balanceChangeVin;
                                     TotalOutForAllTXOnThisAddress += balanceChangeVout;
                                     txProcessedForThisAddress++;
                                 }
-                                if (String.Compare(transactions.Last().Status.Confirmed, "true") == 0) // there might be more transactions to get. 
+                                if (String.Compare(transactions.Last().Status!.Confirmed, "true") == 0) // there might be more transactions to get. 
                                 {
-                                    lastSeenTxId = transactions.Last().Txid; // so we can carry on the next api call where we left off
+                                    lastSeenTxId = transactions.Last().Txid!; // so we can carry on the next api call where we left off
                                 }
                                 else
                                 {
@@ -10411,7 +10413,7 @@ namespace SATSuma
                             }
                         }
 
-                        string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
+                        string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]!["tx_count"]);
                         string ConfirmedReceived = Convert.ToString(ConvertSatsToBitcoin(Convert.ToString(TotalInForAllTXOnThisAddress)).ToString("0.00000000"));
                         string ConfirmedSpent = Convert.ToString(ConvertSatsToBitcoin(Convert.ToString(TotalOutForAllTXOnThisAddress)).ToString("0.00000000"));
                         var confirmedReceivedForCalc = Convert.ToDouble(TotalInForAllTXOnThisAddress);
@@ -10621,7 +10623,7 @@ namespace SATSuma
                         string lastSeenTxId = "";
                         decimal TotalInForAllTXOnThisAddress = 0;
                         decimal TotalOutForAllTXOnThisAddress = 0;
-                        int totalTXForAddress = Convert.ToInt32(addressData["chain_stats"]["tx_count"]);
+                        int totalTXForAddress = Convert.ToInt32(addressData["chain_stats"]!["tx_count"]);
                         int txProcessedForThisAddress = 0;
 
                         while (txProcessedForThisAddress != totalTXForAddress)
@@ -10632,7 +10634,7 @@ namespace SATSuma
                             if (!string.IsNullOrEmpty(transactionsJson))
                             {
                                 var transactions = JsonConvert.DeserializeObject<List<AddressTransactions>>(transactionsJson);
-                                foreach (AddressTransactions transaction in transactions)
+                                foreach (AddressTransactions transaction in transactions!)
                                 {
                                     decimal balanceChangeVin = 0; // will hold net result of inputs to this address
                                     decimal balanceChangeVout = 0; // will hold net result of outputs to this address    
@@ -10641,14 +10643,14 @@ namespace SATSuma
                                         .Sum(v => v.Value);
                                     balanceChangeVout = (decimal)transaction.Vin
                                         .Where(v => v.Prevout != null && String.Compare(v.Prevout.Scriptpubkey_address, Convert.ToString(address)) == 0)
-                                        .Sum(v => v.Prevout.Value);
+                                        .Sum(v => v.Prevout!.Value);
                                     TotalInForAllTXOnThisAddress += balanceChangeVin;
                                     TotalOutForAllTXOnThisAddress += balanceChangeVout;
                                     txProcessedForThisAddress++;
                                 }
-                                if (String.Compare(transactions.Last().Status.Confirmed, "true") == 0)// there might be more transactions to get. 
+                                if (String.Compare(transactions.Last().Status!.Confirmed, "true") == 0)// there might be more transactions to get. 
                                 {
-                                    lastSeenTxId = transactions.Last().Txid; // so we can carry on the next api call where we left off
+                                    lastSeenTxId = transactions.Last().Txid!; // so we can carry on the next api call where we left off
                                 }
                                 else
                                 {
@@ -10657,7 +10659,7 @@ namespace SATSuma
                             }
                         }
 
-                        string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
+                        string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]!["tx_count"]);
                         string ConfirmedReceived = Convert.ToString(ConvertSatsToBitcoin(Convert.ToString(TotalInForAllTXOnThisAddress)).ToString("0.00000000"));
                         string ConfirmedSpent = Convert.ToString(ConvertSatsToBitcoin(Convert.ToString(TotalOutForAllTXOnThisAddress)).ToString("0.00000000"));
                         var confirmedReceivedForCalc = Convert.ToDouble(TotalInForAllTXOnThisAddress);
@@ -10870,7 +10872,7 @@ namespace SATSuma
                         string lastSeenTxId = "";
                         decimal TotalInForAllTXOnThisAddress = 0;
                         decimal TotalOutForAllTXOnThisAddress = 0;
-                        int totalTXForAddress = Convert.ToInt32(addressData["chain_stats"]["tx_count"]);
+                        int totalTXForAddress = Convert.ToInt32(addressData["chain_stats"]!["tx_count"]);
                         int txProcessedForThisAddress = 0;
 
                         while (txProcessedForThisAddress != totalTXForAddress)
@@ -10881,7 +10883,7 @@ namespace SATSuma
                             if (!string.IsNullOrEmpty(transactionsJson))
                             {
                                 var transactions = JsonConvert.DeserializeObject<List<AddressTransactions>>(transactionsJson);
-                                foreach (AddressTransactions transaction in transactions)
+                                foreach (AddressTransactions transaction in transactions!)
                                 {
                                     decimal balanceChangeVin = 0; // will hold net result of inputs to this address
                                     decimal balanceChangeVout = 0; // will hold net result of outputs to this address    
@@ -10890,14 +10892,14 @@ namespace SATSuma
                                         .Sum(v => v.Value);
                                     balanceChangeVin = (decimal)transaction.Vin
                                         .Where(v => v.Prevout != null && String.Compare(v.Prevout.Scriptpubkey_address, Convert.ToString(address)) == 0)
-                                        .Sum(v => v.Prevout.Value);
+                                        .Sum(v => v.Prevout!.Value);
                                     TotalInForAllTXOnThisAddress += balanceChangeVin;
                                     TotalOutForAllTXOnThisAddress += balanceChangeVout;
                                     txProcessedForThisAddress++;
                                 }
-                                if (String.Compare(transactions.Last().Status.Confirmed, "true") == 0) // there might be more transactions to get. 
+                                if (String.Compare(transactions.Last().Status!.Confirmed, "true") == 0) // there might be more transactions to get. 
                                 {
-                                    lastSeenTxId = transactions.Last().Txid; // so we can carry on the next api call where we left off
+                                    lastSeenTxId = transactions.Last().Txid!; // so we can carry on the next api call where we left off
                                 }
                                 else
                                 {
@@ -10906,7 +10908,7 @@ namespace SATSuma
                             }
                         }
 
-                        string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
+                        string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]!["tx_count"]);
                         string ConfirmedReceived = Convert.ToString(TotalInForAllTXOnThisAddress.ToString("0.00000000"));
                         string ConfirmedSpent = Convert.ToString(TotalOutForAllTXOnThisAddress.ToString("0.00000000"));
 
@@ -11082,7 +11084,7 @@ namespace SATSuma
                         var redeemScript = pubkey.Derive(Convert.ToUInt32(DerivationPath)).Derive(index).PubKey.ScriptPubKey;
                         var scriptPubKey = redeemScript.Hash.ScriptPubKey;
                         var BitcoinAddress = scriptPubKey.GetDestinationAddress(Network.Main);
-                        P2SHAddresses.Add(BitcoinAddress);
+                        P2SHAddresses.Add(BitcoinAddress!);
                     }
 
 
@@ -11124,7 +11126,7 @@ namespace SATSuma
                         string lastSeenTxId = "";
                         decimal TotalInForAllTXOnThisAddress = 0;
                         decimal TotalOutForAllTXOnThisAddress = 0;
-                        int totalTXForAddress = Convert.ToInt32(addressData["chain_stats"]["tx_count"]);
+                        int totalTXForAddress = Convert.ToInt32(addressData["chain_stats"]?["tx_count"]);
                         int txProcessedForThisAddress = 0;
 
                         while (txProcessedForThisAddress != totalTXForAddress)
@@ -11135,7 +11137,7 @@ namespace SATSuma
                             if (!string.IsNullOrEmpty(transactionsJson))
                             {
                                 var transactions = JsonConvert.DeserializeObject<List<AddressTransactions>>(transactionsJson);
-                                foreach (AddressTransactions transaction in transactions)
+                                foreach (AddressTransactions transaction in transactions!)
                                 {
                                     decimal balanceChangeVin = 0; // will hold net result of inputs to this address
                                     decimal balanceChangeVout = 0; // will hold net result of outputs to this address    
@@ -11144,14 +11146,14 @@ namespace SATSuma
                                         .Sum(v => v.Value);
                                     balanceChangeVout = (decimal)transaction.Vin
                                         .Where(v => v.Prevout != null && String.Compare(v.Prevout.Scriptpubkey_address, Convert.ToString(address), StringComparison.Ordinal) == 0)
-                                        .Sum(v => v.Prevout.Value);
+                                        .Sum(v => v.Prevout!.Value);
                                     TotalInForAllTXOnThisAddress += balanceChangeVin;
                                     TotalOutForAllTXOnThisAddress += balanceChangeVout;
                                     txProcessedForThisAddress++;
                                 }
-                                if (String.Compare(transactions.Last().Status.Confirmed, "true") == 0) // there might be more transactions to get. 
+                                if (String.Compare(transactions.Last().Status!.Confirmed, "true") == 0) // there might be more transactions to get. 
                                 {
-                                    lastSeenTxId = transactions.Last().Txid; // so we can carry on the next api call where we left off
+                                    lastSeenTxId = transactions.Last().Txid!; // so we can carry on the next api call where we left off
                                 }
                                 else
                                 {
@@ -11160,7 +11162,7 @@ namespace SATSuma
                             }
                         }
 
-                        string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]["tx_count"]);
+                        string ConfirmedTransactionCount = Convert.ToString(addressData["chain_stats"]?["tx_count"]);
                         string ConfirmedReceived = Convert.ToString(ConvertSatsToBitcoin(Convert.ToString(TotalInForAllTXOnThisAddress)).ToString("0.00000000"));
                         string ConfirmedSpent = Convert.ToString(ConvertSatsToBitcoin(Convert.ToString(TotalOutForAllTXOnThisAddress)).ToString("0.00000000"));
                         var confirmedReceivedForCalc = Convert.ToDouble(TotalInForAllTXOnThisAddress);
@@ -11771,7 +11773,7 @@ namespace SATSuma
         {
             try
             {
-                await CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync().ConfigureAwait(true);
                 // Get the selected item
                 ListViewItem selectedItem = listViewXpubAddresses.SelectedItems[0];
                 // Get the first subitem in the selected item 
@@ -11855,10 +11857,10 @@ namespace SATSuma
                         item.SubItems.Add(Convert.ToString(pool.Rank));
                         item.SubItems.Add(Convert.ToString(pool.BlockCount));
                         decimal percentageFound = (100m / totalBlocksFound * Convert.ToDecimal(pool.BlockCount));
-                        item.SubItems.Add(Convert.ToString(percentageFound.ToString("F2")) + "%");
+                        item.SubItems.Add($"{percentageFound:F2}%");
                         item.SubItems.Add(Convert.ToString(pool.EmptyBlocks));
                         emptyPercent = (100m / Convert.ToDecimal(pool.BlockCount)) * Convert.ToDecimal(pool.EmptyBlocks);
-                        item.SubItems.Add(Convert.ToString(emptyPercent.ToString("F2")) + "%");
+                        item.SubItems.Add($"{emptyPercent:F2}%");
 
                         listViewPoolsByBlock.Invoke((MethodInvoker)delegate
                         {
@@ -12277,7 +12279,7 @@ namespace SATSuma
                 if (item != null)
                 {
                     counter++;
-                    if (item.SubItems[0].Text == poolNameToPass)
+                    if (String.Compare(item.SubItems[0].Text, poolNameToPass) == 0)
                     {
                         poolsListScrollPosition = counter * rowHeight;
                         break;
@@ -12299,7 +12301,7 @@ namespace SATSuma
                 {
                     comboBoxPoolsHashrateSortingSelect.Texts = "by hashrate";
                 });
-                BtnMenuPoolsByHashrate_ClickAsync(sender, e);
+                BtnMenuPoolsByHashrate_ClickAsync();
             }
         }
         #endregion
@@ -12722,7 +12724,7 @@ namespace SATSuma
                 if (item != null)
                 {
                     counter++;
-                    if (item.SubItems[0].Text == poolNameToPass)
+                    if (String.Compare(item.SubItems[0].Text, poolNameToPass) == 0)
                     {
                         poolsListScrollPosition = counter * rowHeight;
                         break;
@@ -12759,7 +12761,7 @@ namespace SATSuma
             {
                 label318.Invoke((MethodInvoker)delegate
                 {
-                    label318.Text = "TOTAL HASHRATE IN SELECTED PERIOD (" + timeperiod + ")";
+                    label318.Text = $"TOTAL HASHRATE IN SELECTED PERIOD ({timeperiod})";
                 });
                 // if chart period too short for this chart, set it to max instead
                 if (String.Compare(poolsHashrateTimePeriod, "24h") == 0
@@ -12780,7 +12782,7 @@ namespace SATSuma
                     JObject jsonObj = JObject.Parse(HashrateAndDifficultyJson);
 
                     //split the data into two lists
-                    List<HashrateSnapshot> hashratesList = JsonConvert.DeserializeObject<List<HashrateSnapshot>>(jsonObj["hashrates"].ToString());
+                    List<HashrateSnapshot>? hashratesList = JsonConvert.DeserializeObject<List<HashrateSnapshot>>(jsonObj["hashrates"]!.ToString());
 
                     // create arrays of doubles of the hashrates and the dates
                     double[] yValues = hashratesList.Select(h => (double)(h.AvgHashrate / (decimal)1E18)).ToArray(); // divide by 1E18 to get exahash
@@ -12830,7 +12832,7 @@ namespace SATSuma
             {
                 label213.Invoke((MethodInvoker)delegate
                 {
-                    label213.Text = "BLOCKS MINED IN SELECTED PERIOD (" + timeperiod + ")";
+                    label213.Text = $"BLOCKS MINED IN SELECTED PERIOD ({timeperiod})";
                 });
 
                 // clear any previous graph
@@ -12843,7 +12845,7 @@ namespace SATSuma
                 {
                     JObject jsonObj = JObject.Parse(PoolRankingDataJson);
 
-                    List<PoolsRanking> poolsRankingList = JsonConvert.DeserializeObject<List<PoolsRanking>>(jsonObj["pools"].ToString());
+                    List<PoolsRanking>? poolsRankingList = JsonConvert.DeserializeObject<List<PoolsRanking>>(jsonObj["pools"]!.ToString());
 
                     // Calculate the total BlockCount
                     int totalBlockCount = poolsRankingList.Sum(p => int.Parse(p.BlockCount));
@@ -12854,12 +12856,12 @@ namespace SATSuma
 
                     // Populate values and labels for the first 15 segments
                     int blocksMinedByTop15 = 0;
-                    for (int i = 0; i < Math.Min(15, poolsRankingList.Count); i++)
+                    for (int i = 0; i < Math.Min(15, poolsRankingList!.Count); i++)
                     {
                         var pool = poolsRankingList[i];
                         values.Add(double.Parse(pool.BlockCount));
                         blocksMinedByTop15 += Convert.ToInt32(pool.BlockCount);
-                        labels.Add(pool.Name);
+                        labels.Add(pool.Name!);
                     }
 
                     int numberOfBlocksMinedByOthers = totalBlockCount - blocksMinedByTop15;
@@ -13019,7 +13021,7 @@ namespace SATSuma
                         // Add the items to the ListView
                         int counter = 0;
                         //foreach (var pool in poolsList)
-                        foreach (var pool in poolsList.Pools)
+                        foreach (var pool in poolsList.Pools!)
                         {
 
                             ListViewItem item = new ListViewItem(Convert.ToString(pool.Name)); // create new row
@@ -13071,7 +13073,7 @@ namespace SATSuma
                 }
                 #endregion
                 #region set list selection to the pool that was passed as a parameter or to the first in the list
-                if (poolNameToPass != "empty") // we want to select a pool set by the pools hashrate or pools blocks screen
+                if (String.Compare(poolNameToPass, "empty") != 0) // we want to select a pool set by the pools hashrate or pools blocks screen
                 {
                     int counter = 0;
                     int rowHeight = listViewPoolsList.Margin.Vertical + listViewPoolsList.Padding.Vertical + listViewPoolsList.GetItemRect(0).Height;
@@ -13080,7 +13082,7 @@ namespace SATSuma
                         if (item != null)
                         {
                             counter++;
-                            if (item.SubItems[0].Text == poolNameToPass)
+                            if (String.Compare(item.SubItems[0].Text, poolNameToPass) == 0)
                             {
                                 item.Selected = true;
                                 lblSelectedPoolMarker.Invoke((MethodInvoker)delegate
@@ -13355,11 +13357,11 @@ namespace SATSuma
                 lblHeaderBlockAge.Focus();
                 label231.Invoke((MethodInvoker)delegate
                 {
-                    label231.Text = "RECENT BLOCKS MINED BY " + pool.ToUpper();
+                    label231.Text = $"RECENT BLOCKS MINED BY {pool.ToUpper()}";
                 });
                 label319.Invoke((MethodInvoker)delegate
                 {
-                    label319.Text = "ESTIMATED HASHRATE FOR " + pool.ToUpper();
+                    label319.Text = $"ESTIMATED HASHRATE FOR {pool.ToUpper()}";
                 });
                 label320.Invoke((MethodInvoker)delegate
                 {
@@ -13438,52 +13440,59 @@ namespace SATSuma
 
         private async void GetPoolStatsAsync(string slug)
         {
-            LightUpNodeLight();
-            var poolDataJson = await _poolDataService.GetPoolDataAsync(slug).ConfigureAwait(true);
-            if (poolDataJson != null)
+            try
             {
-                lblMiningPoolLink.Invoke((MethodInvoker)delegate
+                LightUpNodeLight();
+                var poolDataJson = await _poolDataService.GetPoolDataAsync(slug).ConfigureAwait(true);
+                if (poolDataJson != null)
                 {
-                    lblMiningPoolLink.Text = poolDataJson.Pool.Link;
-                });
-                lblMiningPoolPool.Invoke((MethodInvoker)delegate
-                {
-                    lblMiningPoolPool.Text = poolDataJson.Pool.Name;
-                });
-                lblMiningPoolHashrate.Invoke((MethodInvoker)delegate
-                {
-                    lblMiningPoolHashrate.Text = Convert.ToString(poolDataJson.EstimatedHashrate);
-                });
-                lblMiningPoolHashrate.Invoke((MethodInvoker)delegate
-                {
-                    lblMiningPoolHashrate.Text = Convert.ToString(poolDataJson.EstimatedHashrate);
-                });
-                lblMiningPoolBlocksAll.Invoke((MethodInvoker)delegate
-                {
-                    lblMiningPoolBlocksAll.Text = Convert.ToString(poolDataJson.BlockCount.All);
-                });
-                lblMiningPoolBlocks1w.Invoke((MethodInvoker)delegate
-                {
-                    lblMiningPoolBlocks1w.Text = Convert.ToString(poolDataJson.BlockCount._1w);
-                });
-                lblMiningPoolBlocks24h.Invoke((MethodInvoker)delegate
-                {
-                    lblMiningPoolBlocks24h.Text = Convert.ToString(poolDataJson.BlockCount._24h);
-                });
-                lblMiningPoolBlockShareAll.Invoke((MethodInvoker)delegate
-                {
-                    lblMiningPoolBlockShareAll.Text = (poolDataJson.BlockShare.All * 100).ToString("F5") + "%";
-                });
-                lblMiningPoolBlockShare1w.Invoke((MethodInvoker)delegate
-                {
-                    lblMiningPoolBlockShare1w.Text = (poolDataJson.BlockShare._1w * 100).ToString("F5") + "%";
-                });
-                lblMiningPoolBlockShare24h.Invoke((MethodInvoker)delegate
-                {
-                    lblMiningPoolBlockShare24h.Text = (poolDataJson.BlockShare._24h * 100).ToString("F5") + "%";
-                });
+                    lblMiningPoolLink.Invoke((MethodInvoker)delegate
+                    {
+                        lblMiningPoolLink.Text = poolDataJson.Pool!.Link;
+                    });
+                    lblMiningPoolPool.Invoke((MethodInvoker)delegate
+                    {
+                        lblMiningPoolPool.Text = poolDataJson.Pool!.Name;
+                    });
+                    lblMiningPoolHashrate.Invoke((MethodInvoker)delegate
+                    {
+                        lblMiningPoolHashrate.Text = Convert.ToString(poolDataJson.EstimatedHashrate);
+                    });
+                    lblMiningPoolHashrate.Invoke((MethodInvoker)delegate
+                    {
+                        lblMiningPoolHashrate.Text = Convert.ToString(poolDataJson.EstimatedHashrate);
+                    });
+                    lblMiningPoolBlocksAll.Invoke((MethodInvoker)delegate
+                    {
+                        lblMiningPoolBlocksAll.Text = Convert.ToString(poolDataJson.BlockCount!.All);
+                    });
+                    lblMiningPoolBlocks1w.Invoke((MethodInvoker)delegate
+                    {
+                        lblMiningPoolBlocks1w.Text = Convert.ToString(poolDataJson.BlockCount!._1w);
+                    });
+                    lblMiningPoolBlocks24h.Invoke((MethodInvoker)delegate
+                    {
+                        lblMiningPoolBlocks24h.Text = Convert.ToString(poolDataJson.BlockCount!._24h);
+                    });
+                    lblMiningPoolBlockShareAll.Invoke((MethodInvoker)delegate
+                    {
+                        lblMiningPoolBlockShareAll.Text = $"{poolDataJson.BlockShare!.All * 100:F5}%";
+                    });
+                    lblMiningPoolBlockShare1w.Invoke((MethodInvoker)delegate
+                    {
+                        lblMiningPoolBlockShare1w.Text = $"{poolDataJson.BlockShare!._1w * 100:F5}%";
+                    });
+                    lblMiningPoolBlockShare24h.Invoke((MethodInvoker)delegate
+                    {
+                        lblMiningPoolBlockShare24h.Text = $"{poolDataJson.BlockShare!._24h * 100:F5}%";
+                    });
+                }
             }
-        }
+            catch (Exception ex)
+            {
+                HandleException(ex, "GetPoolStatsAsync");
+            }
+}       
 
         #endregion
 
@@ -13551,7 +13560,7 @@ namespace SATSuma
                         //item.SubItems.Add(Convert.ToString(block.Timestamp));
                         item.SubItems.Add(Convert.ToString(block.TxCount));
                         item.SubItems.Add(Convert.ToString(block.Size));
-                        decimal rewardInBTC = Convert.ToDecimal(block.Extras.Reward) / 100000000;
+                        decimal rewardInBTC = Convert.ToDecimal(block.Extras!.Reward) / 100000000;
                         item.SubItems.Add(Convert.ToString(rewardInBTC));
                         decimal totalFeesInBTC = Convert.ToDecimal(block.Extras.TotalFees) / 100000000;
                         item.SubItems.Add(Convert.ToString(totalFeesInBTC));
@@ -13674,7 +13683,7 @@ namespace SATSuma
         {
             try
             {
-                await CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync().ConfigureAwait(true);
                 // Get the selected item
                 ListViewItem selectedItem = listViewBlocksByPool.SelectedItems[0];
                 if (selectedItem != null)
@@ -13716,7 +13725,7 @@ namespace SATSuma
                 var HashrateJson = await _poolHashrateService.GetPoolHashrateAsync(slug).ConfigureAwait(true);
                 if (!string.IsNullOrEmpty(HashrateJson))
                 {
-                    List<PoolHashrateSnapshot> hashratesList = JsonConvert.DeserializeObject<List<PoolHashrateSnapshot>>(HashrateJson);
+                    List<PoolHashrateSnapshot>? hashratesList = JsonConvert.DeserializeObject<List<PoolHashrateSnapshot>>(HashrateJson);
 
                     // create arrays of doubles of the hashrates and the dates
                     double[] yValues = hashratesList.Select(h => (double)(h.AvgHashrate / (decimal)1E18)).ToArray(); // divide by 1E18 to get exahash
@@ -13874,7 +13883,7 @@ namespace SATSuma
                 {
                     JObject jsonObj = JObject.Parse(PoolRankingDataJson);
 
-                    List<PoolsRanking> poolsRankingList = JsonConvert.DeserializeObject<List<PoolsRanking>>(jsonObj["pools"].ToString());
+                    List<PoolsRanking>? poolsRankingList = JsonConvert.DeserializeObject<List<PoolsRanking>>(jsonObj["pools"]!.ToString());
 
                     // Calculate the total BlockCount
                     int totalBlockCount = poolsRankingList.Sum(p => int.Parse(p.BlockCount));
@@ -13885,12 +13894,12 @@ namespace SATSuma
 
                     // Populate values and labels for the first 15 segments
                     int blocksMinedByTop15 = 0;
-                    for (int i = 0; i < Math.Min(15, poolsRankingList.Count); i++)
+                    for (int i = 0; i < Math.Min(15, poolsRankingList!.Count); i++)
                     {
                         var pool = poolsRankingList[i];
                         values.Add(double.Parse(pool.BlockCount));
                         blocksMinedByTop15 += Convert.ToInt32(pool.BlockCount);
-                        labels.Add(pool.Name);
+                        labels.Add(pool.Name!);
                     }
 
                     int numberOfBlocksMinedByOthers = totalBlockCount - blocksMinedByTop15;
@@ -13988,6 +13997,7 @@ namespace SATSuma
                     ToggleLoadingAnimation("disable");
                     DisableEnableChartButtons("enable");
                     HideChartLoadingPanel();
+                    chartRendered = true;
                 }
                 else
                 {
@@ -14035,7 +14045,7 @@ namespace SATSuma
                 string json = await client.GetStringAsync(url).ConfigureAwait(true);
                 if (!string.IsNullOrEmpty(json))
                 {
-                    List<BlockFeeRates> feeRatesList = JsonConvert.DeserializeObject<List<BlockFeeRates>>(json.ToString());
+                    List<BlockFeeRates>? feeRatesList = JsonConvert.DeserializeObject<List<BlockFeeRates>>(json.ToString());
 
                     // create arrays of doubles of the hashrates and the dates
                     double[] yValues1 = feeRatesList.Select(h => (double)(h.AvgFee_100)).ToArray();
@@ -14110,6 +14120,7 @@ namespace SATSuma
                     ToggleLoadingAnimation("disable");
                     DisableEnableChartButtons("enable");
                     HideChartLoadingPanel();
+                    chartRendered = true;
                 }
                 else
                 {
@@ -14170,7 +14181,7 @@ namespace SATSuma
                 string json = await client.GetStringAsync(url).ConfigureAwait(true);
                 if (!string.IsNullOrEmpty(json))
                 {
-                    List<NodesPerNetworkAndCapacity> lightningNodesPerNetworkList = JsonConvert.DeserializeObject<List<NodesPerNetworkAndCapacity>>(json.ToString());
+                    List<NodesPerNetworkAndCapacity>? lightningNodesPerNetworkList = JsonConvert.DeserializeObject<List<NodesPerNetworkAndCapacity>>(json.ToString());
 
                     // create arrays of doubles
                     double[] yValues1 = lightningNodesPerNetworkList.Select(h => (double)(h.Tor_nodes)).ToArray();
@@ -14227,6 +14238,7 @@ namespace SATSuma
                     ToggleLoadingAnimation("disable");
                     DisableEnableChartButtons("enable");
                     HideChartLoadingPanel();
+                    chartRendered = true;
                 }
                 else
                 {
@@ -14288,7 +14300,7 @@ namespace SATSuma
                     JObject jsonObj = JObject.Parse(HashrateAndDifficultyJson);
 
                     //split the data into two lists
-                    List<HashrateSnapshot> hashratesList = JsonConvert.DeserializeObject<List<HashrateSnapshot>>(jsonObj["hashrates"].ToString());
+                    List<HashrateSnapshot>? hashratesList = JsonConvert.DeserializeObject<List<HashrateSnapshot>>(jsonObj["hashrates"]!.ToString());
 
                     // create arrays of doubles of the hashrates and the dates
                     double[] yValues = hashratesList.Select(h => (double)(h.AvgHashrate / (decimal)1E18)).ToArray(); // divide by 1E18 to get exahash
@@ -14332,6 +14344,7 @@ namespace SATSuma
                     ToggleLoadingAnimation("disable");
                     DisableEnableChartButtons("enable");
                     HideChartLoadingPanel();
+                    chartRendered = true;
                 }
                 else
                 {
@@ -14392,7 +14405,7 @@ namespace SATSuma
                     JObject jsonObj = JObject.Parse(HashrateAndDifficultyJson);
 
                     //split the data into two lists
-                    List<HashrateSnapshot> hashratesList = JsonConvert.DeserializeObject<List<HashrateSnapshot>>(jsonObj["hashrates"].ToString());
+                    List<HashrateSnapshot>? hashratesList = JsonConvert.DeserializeObject<List<HashrateSnapshot>>(jsonObj["hashrates"]!.ToString());
 
                     // create arrays of doubles of the hashrates and the dates
                     double[] yValues = hashratesList.Select(h => (double)(h.AvgHashrate / (decimal)1E12)).ToArray(); // divide by 1E12 to get terrahash
@@ -14404,7 +14417,7 @@ namespace SATSuma
                     List<double> filteredYValues = new List<double>();
                     List<double> filteredXValues = new List<double>();
 
-                    for (int i = 0; i < hashratesList.Count; i++)
+                    for (int i = 0; i < hashratesList!.Count; i++)
                     {
                         double yValue = (double)yValues[i];
                         if (yValue > 0)
@@ -14458,6 +14471,7 @@ namespace SATSuma
                     ToggleLoadingAnimation("disable");
                     DisableEnableChartButtons("enable");
                     HideChartLoadingPanel();
+                    chartRendered = true;
                 }
                 else
                 {
@@ -14519,7 +14533,7 @@ namespace SATSuma
                 string json = await client.GetStringAsync(url).ConfigureAwait(true);
                 if (!string.IsNullOrEmpty(json))
                 {
-                    List<NodesPerNetworkAndCapacity> lightningCapacityList = JsonConvert.DeserializeObject<List<NodesPerNetworkAndCapacity>>(json.ToString());
+                    List<NodesPerNetworkAndCapacity>? lightningCapacityList = JsonConvert.DeserializeObject<List<NodesPerNetworkAndCapacity>>(json.ToString());
 
                     // create arrays of doubles
                     double[] yValuesCapacity = lightningCapacityList.Select(h => (double)(h.Total_capacity / 100000000)).ToArray();
@@ -14562,6 +14576,7 @@ namespace SATSuma
                     ToggleLoadingAnimation("disable");
                     DisableEnableChartButtons("enable");
                     HideChartLoadingPanel();
+                    chartRendered = true;
                 }
                 else
                 {
@@ -14622,7 +14637,7 @@ namespace SATSuma
                 string json = await client.GetStringAsync(url).ConfigureAwait(true);
                 if (!string.IsNullOrEmpty(json))
                 {
-                    List<NodesPerNetworkAndCapacity> lightningChannelsList = JsonConvert.DeserializeObject<List<NodesPerNetworkAndCapacity>>(json.ToString());
+                    List<NodesPerNetworkAndCapacity>? lightningChannelsList = JsonConvert.DeserializeObject<List<NodesPerNetworkAndCapacity>>(json.ToString());
 
                     // create arrays of doubles
                     double[] yValuesChannels = lightningChannelsList.Select(h => (double)(h.Channel_count)).ToArray();
@@ -14665,6 +14680,7 @@ namespace SATSuma
                     ToggleLoadingAnimation("disable");
                     DisableEnableChartButtons("enable");
                     HideChartLoadingPanel();
+                    chartRendered = true;
                 }
                 else
                 {
@@ -14727,7 +14743,7 @@ namespace SATSuma
                     var response = JsonConvert.DeserializeObject<LightningNodeCountry[]>(json);
 
                     // Extract the top 40 country names (En) and counts, handling nullable decimal values
-                    string[] countryNames = response.Select(node => node.Name.En).Take(40).ToArray();
+                    string[] countryNames = response.Select(node => node.Name!.En).Take(40).ToArray()!;
                     double[] counts = response.Select(node => Convert.ToDouble(node.Count)).Take(40).ToArray();
                     double[] allcounts = response.Select(node => Convert.ToDouble(node.Count)).ToArray();
                     double totalNodes = allcounts.Sum();
@@ -14761,6 +14777,7 @@ namespace SATSuma
                     ToggleLoadingAnimation("disable");
                     DisableEnableChartButtons("enable");
                     HideChartLoadingPanel();
+                    chartRendered = true;
                 }
                 else
                 {
@@ -14809,7 +14826,7 @@ namespace SATSuma
                 if (!string.IsNullOrEmpty(json))
                 {
                     // Deserialize JSON array into a list of HistoricRewardsAndPrice objects
-                    List<HistoricRewardsAndPrice> rewardsAndPriceList = JsonConvert.DeserializeObject<List<HistoricRewardsAndPrice>>(json);
+                    List<HistoricRewardsAndPrice>? rewardsAndPriceList = JsonConvert.DeserializeObject<List<HistoricRewardsAndPrice>>(json);
 
                     // create arrays of doubles of the rewards and the dates
                     double[] yValues = rewardsAndPriceList.Select(h => (double)(h.AvgRewards / 100000000)).ToArray();
@@ -14850,6 +14867,7 @@ namespace SATSuma
                     ToggleLoadingAnimation("disable");
                     DisableEnableChartButtons("enable");
                     HideChartLoadingPanel();
+                    chartRendered = true;
                 }
                 else
                 {
@@ -14898,7 +14916,7 @@ namespace SATSuma
                 if (!string.IsNullOrEmpty(json))
                 {
                     // Deserialize JSON array into a list of HistoricFeesAndPrice objects
-                    List<HistoricFeesAndPrice> feesAndPriceList = JsonConvert.DeserializeObject<List<HistoricFeesAndPrice>>(json);
+                    List<HistoricFeesAndPrice>? feesAndPriceList = JsonConvert.DeserializeObject<List<HistoricFeesAndPrice>>(json);
 
                     // create arrays of doubles of the rewards and the dates
                     double[] yValues = feesAndPriceList.Select(h => (double)(h.AvgFees / 100000000)).ToArray();
@@ -14937,6 +14955,7 @@ namespace SATSuma
                     ToggleLoadingAnimation("disable");
                     DisableEnableChartButtons("enable");
                     HideChartLoadingPanel();
+                    chartRendered = true;
                 }
                 else
                 {
@@ -15000,7 +15019,7 @@ namespace SATSuma
                     JObject jsonObj = JObject.Parse(HashrateAndDifficultyJson);
 
                     //split the data into two lists
-                    List<DifficultySnapshot> difficultyList = JsonConvert.DeserializeObject<List<DifficultySnapshot>>(jsonObj["difficulty"].ToString());
+                    List<DifficultySnapshot>? difficultyList = JsonConvert.DeserializeObject<List<DifficultySnapshot>>(jsonObj["difficulty"]!.ToString());
 
                     // create arrays of doubles of the difficulties and the dates
                     double[] yValues = difficultyList.Select(h => (double)(h.Difficulty / (decimal)1E12)).ToArray(); // divide by 1E12 to convert to trillions
@@ -15041,6 +15060,7 @@ namespace SATSuma
                     ToggleLoadingAnimation("disable");
                     DisableEnableChartButtons("enable");
                     HideChartLoadingPanel();
+                    chartRendered = true;
                 }
                 else
                 {
@@ -15100,7 +15120,7 @@ namespace SATSuma
                     JObject jsonObj = JObject.Parse(HashrateAndDifficultyJson);
 
                     //split the data into two lists
-                    List<DifficultySnapshot> difficultyList = JsonConvert.DeserializeObject<List<DifficultySnapshot>>(jsonObj["difficulty"].ToString());
+                    List<DifficultySnapshot>? difficultyList = JsonConvert.DeserializeObject<List<DifficultySnapshot>>(jsonObj["difficulty"]!.ToString());
 
                     // create arrays of doubles of the difficulties and the dates
                     double[] yValues = difficultyList.Select(h => (double)(h.Difficulty / (decimal)1E12)).ToArray(); // divide by 1E12 to convert to trillions
@@ -15112,7 +15132,7 @@ namespace SATSuma
                     List<double> filteredYValues = new List<double>();
                     List<double> filteredXValues = new List<double>();
 
-                    for (int i = 0; i < difficultyList.Count; i++)
+                    for (int i = 0; i < difficultyList!.Count; i++)
                     {
                         double yValue = (double)yValues[i];
                         if (yValue > 0)
@@ -15166,6 +15186,7 @@ namespace SATSuma
                     ToggleLoadingAnimation("disable");
                     DisableEnableChartButtons("enable");
                     HideChartLoadingPanel();
+                    chartRendered = true;
                 }
                 else
                 {
@@ -15231,7 +15252,7 @@ namespace SATSuma
                 {
                     JObject jsonObj = JObject.Parse(UniqueAddressesDataJson);
 
-                    List<UniqueAddressesList> AddressesList = JsonConvert.DeserializeObject<List<UniqueAddressesList>>(jsonObj["values"].ToString());
+                    List<UniqueAddressesList>? AddressesList = JsonConvert.DeserializeObject<List<UniqueAddressesList>>(jsonObj["values"]!.ToString());
 
                     // create arrays of doubles of the amounts and the dates
                     double[] yValues = AddressesList.Select(h => (double)(h.Y)).ToArray();
@@ -15272,6 +15293,7 @@ namespace SATSuma
                     ToggleLoadingAnimation("disable");
                     DisableEnableChartButtons("enable");
                     HideChartLoadingPanel();
+                    chartRendered = true;
                 }
                 else
                 {
@@ -15337,7 +15359,7 @@ namespace SATSuma
                 {
                     JObject jsonObj = JObject.Parse(UniqueAddressesDataJson);
 
-                    List<UniqueAddressesList> AddressList = JsonConvert.DeserializeObject<List<UniqueAddressesList>>(jsonObj["values"].ToString());
+                    List<UniqueAddressesList>? AddressList = JsonConvert.DeserializeObject<List<UniqueAddressesList>>(jsonObj["values"]!.ToString());
 
                     // create a new list of the dates, this time in DateTime format
                     List<DateTime> dateTimes = AddressList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.X)).LocalDateTime).ToList();
@@ -15347,7 +15369,7 @@ namespace SATSuma
                     List<double> filteredYValues = new List<double>();
                     List<double> filteredXValues = new List<double>();
 
-                    for (int i = 0; i < AddressList.Count; i++)
+                    for (int i = 0; i < AddressList!.Count; i++)
                     {
                         double yValue = (double)AddressList[i].Y;
                         if (yValue > 0)
@@ -15402,6 +15424,7 @@ namespace SATSuma
                     ToggleLoadingAnimation("disable");
                     DisableEnableChartButtons("enable");
                     HideChartLoadingPanel();
+                    chartRendered = true;
                 }
                 else
                 {
@@ -15473,7 +15496,7 @@ namespace SATSuma
                 {
                     JObject jsonObj = JObject.Parse(HistoricPriceDataJson);
 
-                    List<PriceCoordinatesList> PriceList = JsonConvert.DeserializeObject<List<PriceCoordinatesList>>(jsonObj["values"].ToString());
+                    List<PriceCoordinatesList>? PriceList = JsonConvert.DeserializeObject<List<PriceCoordinatesList>>(jsonObj["values"]!.ToString());
 
                     // convert data to GBP, EUR, XAU if needed
                     decimal selectedCurrency = 0;
@@ -15504,7 +15527,7 @@ namespace SATSuma
                         }
                         exchangeRate = selectedCurrency / Convert.ToDecimal(priceUSD);
 
-                        foreach (var item in PriceList)
+                        foreach (var item in PriceList!)
                         {
                             item.Y *= exchangeRate;
                         }
@@ -15548,6 +15571,7 @@ namespace SATSuma
                     ToggleLoadingAnimation("disable");
                     DisableEnableChartButtons("enable");
                     HideChartLoadingPanel();
+                    chartRendered = true;
                 }
                 else
                 {
@@ -15614,7 +15638,7 @@ namespace SATSuma
                 {
                     JObject jsonObj = JObject.Parse(HistoricPriceDataJson);
 
-                    List<PriceCoordinatesList> PriceList = JsonConvert.DeserializeObject<List<PriceCoordinatesList>>(jsonObj["values"].ToString());
+                    List<PriceCoordinatesList>? PriceList = JsonConvert.DeserializeObject<List<PriceCoordinatesList>>(jsonObj["values"]!.ToString());
 
                     // convert data to GBP, EUR, XAU if needed
                     decimal selectedCurrency = 0;
@@ -15645,7 +15669,7 @@ namespace SATSuma
                         }
                         exchangeRate = selectedCurrency / Convert.ToDecimal(priceUSD);
 
-                        foreach (var item in PriceList)
+                        foreach (var item in PriceList!)
                         {
                             item.Y *= exchangeRate;
                         }
@@ -15659,7 +15683,7 @@ namespace SATSuma
                     List<double> filteredYValues = new List<double>();
                     List<double> filteredXValues = new List<double>();
 
-                    for (int i = 0; i < PriceList.Count; i++)
+                    for (int i = 0; i < PriceList!.Count; i++)
                     {
                         double yValue = (double)PriceList[i].Y;
                         if (yValue > 0)
@@ -15712,6 +15736,7 @@ namespace SATSuma
                     ToggleLoadingAnimation("disable");
                     DisableEnableChartButtons("enable");
                     HideChartLoadingPanel();
+                    chartRendered = true;
                 }
                 else
                 {
@@ -15782,7 +15807,7 @@ namespace SATSuma
                 {
                     JObject jsonObj = JObject.Parse(MarketCapDataJson);
 
-                    List<MarketCapCoordinatesList> MarketCapList = JsonConvert.DeserializeObject<List<MarketCapCoordinatesList>>(jsonObj["values"].ToString());
+                    List<MarketCapCoordinatesList>? MarketCapList = JsonConvert.DeserializeObject<List<MarketCapCoordinatesList>>(jsonObj["values"]!.ToString());
 
                     // convert data to GBP, EUR, XAU if needed
                     decimal selectedCurrency = 0;
@@ -15813,7 +15838,7 @@ namespace SATSuma
                         }
                         exchangeRate = selectedCurrency / Convert.ToDecimal(priceUSD);
 
-                        foreach (var item in MarketCapList)
+                        foreach (var item in MarketCapList!)
                         {
                             item.Y *= exchangeRate;
                         }
@@ -15858,6 +15883,7 @@ namespace SATSuma
                     ToggleLoadingAnimation("disable");
                     DisableEnableChartButtons("enable");
                     HideChartLoadingPanel();
+                    chartRendered = true;
                 }
                 else
                 {
@@ -15925,7 +15951,7 @@ namespace SATSuma
                 {
                     JObject jsonObj = JObject.Parse(MarketCapDataJson);
 
-                    List<MarketCapCoordinatesList> MarketCapList = JsonConvert.DeserializeObject<List<MarketCapCoordinatesList>>(jsonObj["values"].ToString());
+                    List<MarketCapCoordinatesList>? MarketCapList = JsonConvert.DeserializeObject<List<MarketCapCoordinatesList>>(jsonObj["values"]!.ToString());
 
                     // convert data to GBP, EUR, XAU if needed
                     decimal selectedCurrency = 0;
@@ -15956,7 +15982,7 @@ namespace SATSuma
                         }
                         exchangeRate = selectedCurrency / Convert.ToDecimal(priceUSD);
 
-                        foreach (var item in MarketCapList)
+                        foreach (var item in MarketCapList!)
                         {
                             item.Y *= exchangeRate;
                         }
@@ -15970,7 +15996,7 @@ namespace SATSuma
                     List<double> filteredYValues = new List<double>();
                     List<double> filteredXValues = new List<double>();
 
-                    for (int i = 0; i < MarketCapList.Count; i++)
+                    for (int i = 0; i < MarketCapList!.Count; i++)
                     {
                         double yValue = (double)MarketCapList[i].Y;
                         if (yValue > 0)
@@ -16023,6 +16049,7 @@ namespace SATSuma
                     ToggleLoadingAnimation("disable");
                     DisableEnableChartButtons("enable");
                     HideChartLoadingPanel();
+                    chartRendered = true;
                 }
                 else
                 {
@@ -16091,7 +16118,7 @@ namespace SATSuma
                 {
                     JObject jsonObj = JObject.Parse(UTXODataJson);
 
-                    List<UTXOList> UTXOList = JsonConvert.DeserializeObject<List<UTXOList>>(jsonObj["values"].ToString());
+                    List<UTXOList>? UTXOList = JsonConvert.DeserializeObject<List<UTXOList>>(jsonObj["values"]!.ToString());
 
                     // create arrays of doubles
                     double[] yValues = UTXOList.Select(h => (double)(h.Y)).ToArray();
@@ -16132,6 +16159,7 @@ namespace SATSuma
                     ToggleLoadingAnimation("disable");
                     DisableEnableChartButtons("enable");
                     HideChartLoadingPanel();
+                    chartRendered = true;
                 }
                 else
                 {
@@ -16198,7 +16226,7 @@ namespace SATSuma
                 {
                     JObject jsonObj = JObject.Parse(UTXODataJson);
 
-                    List<UTXOList> UTXOList = JsonConvert.DeserializeObject<List<UTXOList>>(jsonObj["values"].ToString());
+                    List<UTXOList>? UTXOList = JsonConvert.DeserializeObject<List<UTXOList>>(jsonObj["values"]!.ToString());
 
                     // create a new list of the dates, this time in DateTime format
                     List<DateTime> dateTimes = UTXOList.Select(h => DateTimeOffset.FromUnixTimeSeconds(long.Parse(h.X)).LocalDateTime).ToList();
@@ -16208,7 +16236,7 @@ namespace SATSuma
                     List<double> filteredYValues = new List<double>();
                     List<double> filteredXValues = new List<double>();
 
-                    for (int i = 0; i < UTXOList.Count; i++)
+                    for (int i = 0; i < UTXOList!.Count; i++)
                     {
                         double yValue = (double)UTXOList[i].Y;
                         if (yValue > 0)
@@ -16262,6 +16290,7 @@ namespace SATSuma
                     ToggleLoadingAnimation("disable");
                     DisableEnableChartButtons("enable");
                     HideChartLoadingPanel();
+                    chartRendered = true;
                 }
                 else
                 {
@@ -16310,7 +16339,7 @@ namespace SATSuma
                     JObject jsonObj = JObject.Parse(BlockSizeAndWeightJson);
 
                     //split the data into two lists
-                    List<Sizes> blockSizeList = JsonConvert.DeserializeObject<List<Sizes>>(jsonObj["sizes"].ToString());
+                    List<Sizes>? blockSizeList = JsonConvert.DeserializeObject<List<Sizes>>(jsonObj["sizes"]!.ToString());
 
                     // create arrays of doubles of the hashrates and the dates
                     double[] yValues = blockSizeList.Select(h => (double)h.AvgSize / (1000 * 1000)).ToArray();
@@ -16351,6 +16380,7 @@ namespace SATSuma
                     ToggleLoadingAnimation("disable");
                     DisableEnableChartButtons("enable");
                     HideChartLoadingPanel();
+                    chartRendered = true;
                 }
                 else
                 {
@@ -16416,7 +16446,7 @@ namespace SATSuma
                 {
                     JObject jsonObj = JObject.Parse(CirculationJson);
 
-                    List<BTCInCircChartCoordinates> CirculationList = JsonConvert.DeserializeObject<List<BTCInCircChartCoordinates>>(jsonObj["values"].ToString());
+                    List<BTCInCircChartCoordinates>? CirculationList = JsonConvert.DeserializeObject<List<BTCInCircChartCoordinates>>(jsonObj["values"]!.ToString());
 
                     // create arrays of doubles of the difficulties and the dates
                     double[] yValues = CirculationList.Select(h => (double)(h.Y)).ToArray();
@@ -16484,6 +16514,7 @@ namespace SATSuma
                     ToggleLoadingAnimation("disable");
                     DisableEnableChartButtons("enable");
                     HideChartLoadingPanel();
+                    chartRendered = true;
                 }
                 else
                 {
@@ -17027,10 +17058,10 @@ namespace SATSuma
                         // determine point nearest the cursor
                         (double mouseCoordX, double mouseCoordY) = formsPlot1.GetMouseCoordinates();
                         double xyRatio = formsPlot1.Plot.XAxis.Dims.PxPerUnit / formsPlot1.Plot.YAxis.Dims.PxPerUnit;
-                        (double pointX, double pointY, int pointIndex) = scatter.GetPointNearest(mouseCoordX, mouseCoordY, xyRatio);
+                        (double pointX, double pointY, int pointIndex) = scatter!.GetPointNearest(mouseCoordX, mouseCoordY, xyRatio);
 
                         // place the highlight over the point of interest
-                        HighlightedPoint.X = pointX;
+                        HighlightedPoint!.X = pointX;
                         HighlightedPoint.Y = pointY;
                         HighlightedPoint.IsVisible = true;
 
@@ -18656,13 +18687,13 @@ namespace SATSuma
                     {
                         JObject jsonObj = JObject.Parse(HistoricPriceDataJson);
 
-                        List<PriceCoordinatesList> PriceList = JsonConvert.DeserializeObject<List<PriceCoordinatesList>>(jsonObj["values"].ToString());
+                        List<PriceCoordinatesList>? PriceList = JsonConvert.DeserializeObject<List<PriceCoordinatesList>>(jsonObj["values"]!.ToString());
 
                         long minUnixTime = long.MaxValue;
                         long maxUnixTime = long.MinValue;
 
                         // Find start and end dates in Unix timestamp format
-                        foreach (var item in PriceList)
+                        foreach (var item in PriceList!)
                         {
                             long unixTime = long.Parse(item.X);
                             if (unixTime < minUnixTime)
@@ -18834,7 +18865,7 @@ namespace SATSuma
 
                         // plot another set of data to show running total bought using the additional axis
                         var BTCRunningTotalscatter = formsPlotDCA.Plot.AddScatterStep(xDCAChartDates, yDCAChartBitcoinRunningTotal, color: Color.OliveDrab, lineWidth: 1, label: "BTC purchased over time");
-                        yAxis3.Label("", color: btnMenuDirectory.ForeColor);
+                        yAxis3!.Label("", color: btnMenuDirectory.ForeColor);
                         yAxis3.SetBoundary(0, yDCAChartBitcoinAmounts.Max() * 1.1);
                         BTCRunningTotalscatter.YAxisIndex = 1;
 
@@ -18954,6 +18985,7 @@ namespace SATSuma
 
                         ToggleLoadingAnimation("disable");
                         HideDCAChartLoadingPanel();
+                        DCAChartRendered = true;
                     }
                     else
                     {
@@ -19421,8 +19453,8 @@ namespace SATSuma
         {
             try
             {
-                System.Windows.Forms.TextBox textBox = sender as System.Windows.Forms.TextBox;
-                string text = textBox.Text;
+                System.Windows.Forms.TextBox? textBox = sender as System.Windows.Forms.TextBox;
+                string text = textBox!.Text;
 
                 // Allow digits, backspace, and decimal point
                 if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
@@ -19479,8 +19511,8 @@ namespace SATSuma
         {
             try
             {
-                System.Windows.Forms.TextBox textBox = sender as System.Windows.Forms.TextBox;
-                string text = textBox.Text;
+                TextBox? textBox = sender as TextBox;
+                string text = textBox!.Text;
 
                 // Allow digits, backspace, and decimal point
                 if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
@@ -19849,14 +19881,14 @@ namespace SATSuma
         }
         #endregion
         #region scroll the directory
-        private Timer scrollTimer;
+        private System.Windows.Forms.Timer? scrollTimer;
         private readonly int scrollStep = 6;
 
         private void BtnDirectoryScrollUp_MouseDown(object sender, MouseEventArgs e)
         {
             try
             {
-                scrollTimer = new Timer
+                scrollTimer = new System.Windows.Forms.Timer
                 {
                     Interval = 1 // scrolling speed
                 };
@@ -19877,7 +19909,7 @@ namespace SATSuma
         {
             try
             {
-                scrollTimer = new Timer
+                scrollTimer = new System.Windows.Forms.Timer
                 {
                     Interval = 1 // scrolling speed
                 };
@@ -19929,7 +19961,7 @@ namespace SATSuma
             try
             {
                 // Stop the timer when the mouse button is released
-                scrollTimer.Stop();
+                scrollTimer!.Stop();
                 scrollTimer.Dispose();
             }
             catch (Exception ex)
@@ -19963,7 +19995,7 @@ namespace SATSuma
             {
                 if (linkClicked) return; // If the link was already clicked less than a second ago, do nothing (linkClicked resets to false 1 sec after clicking link. Not doing this spawns multiple tabs)
 
-                HtmlElement linkElement = sender as HtmlElement;
+                HtmlElement? linkElement = sender as HtmlElement;
                 if (linkElement != null)
                 {
                     string url = linkElement.GetAttribute("href");
@@ -20179,14 +20211,14 @@ namespace SATSuma
                     });
                     NodeURL = "https://mempool.space/api/";
                     RunMempoolSpaceLightningAPI = true;
-                    await CheckNetworkStatusAsync();
+                    await CheckNetworkStatusAsync().ConfigureAwait(true);
                     CreateDataServices();
                     SaveSettings();
                     if (RunBlockchainInfoAPI)
                     {
                         EnableChartsThatUseBlockchainInfoAPI();
                     }
-                    await GetBlockTipAndCirculationAsync();
+                    await GetBlockTipAndCirculationAsync().ConfigureAwait(true);
                     LookupBlockListAsync();
                     EnableFunctionalityForMainNet();
                     _ = UpdateBitcoinAndLightningDashboardsAsync();
@@ -20223,11 +20255,11 @@ namespace SATSuma
                     });
                     NodeURL = "https://mempool.space/testnet/api/";
                     RunMempoolSpaceLightningAPI = true;
-                    await CheckNetworkStatusAsync();
+                    await CheckNetworkStatusAsync().ConfigureAwait(true);
                     CreateDataServices();
                     SaveSettings();
                     DisableFunctionalityForTestNet();
-                    await GetBlockTipAndCirculationAsync();
+                    await GetBlockTipAndCirculationAsync().ConfigureAwait(true);
                     LookupBlockListAsync();
                     _ = UpdateBitcoinAndLightningDashboardsAsync();
                     btnMenuAddressUTXO.Enabled = true;
@@ -20275,13 +20307,13 @@ namespace SATSuma
                     RunMempoolSpaceLightningAPI = false;
                     CheckOwnNodeIsOnlineAsync();
                     NodeURL = textBoxSettingsOwnNodeURL.Text;
-                    await CheckNetworkStatusAsync();
+                    await CheckNetworkStatusAsync().ConfigureAwait(true);
 
                     if (lblSettingsOwnNodeStatusLight.ForeColor == Color.OliveDrab)
                     {
                         CreateDataServices();
                         SaveSettings();
-                        await GetBlockTipAndCirculationAsync();
+                        await GetBlockTipAndCirculationAsync().ConfigureAwait(true);
                         LookupBlockListAsync();
                         _ = UpdateBitcoinAndLightningDashboardsAsync();
 
@@ -20874,7 +20906,7 @@ namespace SATSuma
 
                 CheckOwnNodeIsOnlineAsync();
                 NodeURL = textBoxSettingsOwnNodeURL.Text;
-                await CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync().ConfigureAwait(true);
 
                 lblSettingsNodeTestnetSelected.Invoke((MethodInvoker)delegate
                 {
@@ -21282,6 +21314,10 @@ namespace SATSuma
                 //var settings = ReadSettingsFromJsonFile();
 
                 #region determine startup screen (needs to occur before rest of settings screen is restored)
+                if (fullSizeLoadingScreen!.Visible)
+                {
+                    fullSizeLoadingScreen!.SetLoadingText("determining startup screen...", "Restoring preferences...");
+                }
                 // Define a dictionary to map strings to their corresponding values
                 Dictionary<string, string> screenMap = new Dictionary<string, string>
                 {
@@ -21318,12 +21354,12 @@ namespace SATSuma
 
                 };
 
-                if (screenMap.ContainsKey(SettingsManager.Settings.SettingsStartupScreen))
+                if (screenMap.ContainsKey(SettingsManager.Settings!.SettingsStartupScreen!))
                 {
-                    startupScreenToSave = SettingsManager.Settings.SettingsStartupScreen;
+                    startupScreenToSave = SettingsManager.Settings.SettingsStartupScreen!;
                     comboBoxStartupScreen.Invoke((MethodInvoker)delegate
                     {
-                        comboBoxStartupScreen.Texts = screenMap[SettingsManager.Settings.SettingsStartupScreen];
+                        comboBoxStartupScreen.Texts = screenMap[SettingsManager.Settings.SettingsStartupScreen!];
                     });
                 }
                 #endregion
@@ -21343,6 +21379,10 @@ namespace SATSuma
                 #region restore remainder of settings
                 // check if settings are already saved in the file and either restore them or use defaults
                 #region restore default fiat currency
+                if (fullSizeLoadingScreen.Visible)
+                {
+                    fullSizeLoadingScreen.SetLoadingText("restoring default currency...", "Restoring preferences...");
+                }
                 if (String.Compare(Convert.ToString(SettingsManager.Settings.SettingsCurrencySelected), "P") == 0)
                 {
                     //GBP
@@ -21425,6 +21465,10 @@ namespace SATSuma
                 }
                 #endregion
                 #region restore offline mode settings
+                if (fullSizeLoadingScreen.Visible)
+                {
+                    fullSizeLoadingScreen.SetLoadingText("restoring offline mode selection...", "Restoring preferences...");
+                }
                 if (String.Compare(Convert.ToString(SettingsManager.Settings.SettingsOfflineModeSelected), "1") == 0)
                 {
                     lblOfflineMode.Invoke((MethodInvoker)delegate
@@ -21461,6 +21505,10 @@ namespace SATSuma
                 }
                 #endregion
                 #region restore network
+                if (fullScreenLoadingScreenVisible)
+                {
+                    fullSizeLoadingScreen.SetLoadingText("restoring network settings...", "Restoring preferences...");
+                }
                 if (String.Compare(Convert.ToString(SettingsManager.Settings.SettingsSelectedNetwork), "M") == 0)
                 {
                     //mainnet
@@ -21535,6 +21583,10 @@ namespace SATSuma
                 }
                 #endregion
                 #region restore API settings
+                if (fullSizeLoadingScreen.Visible)
+                {
+                    fullSizeLoadingScreen.SetLoadingText("restoring API preferences...", "Restoring preferences...");
+                }
                 if (!offlineMode)
                 {
                     if (String.Compare(Convert.ToString(SettingsManager.Settings.SettingsMessariJSONSelected), "1") == 0)
@@ -21644,6 +21696,10 @@ namespace SATSuma
 
                 #endregion
                 #region restore directory settings
+                if (fullSizeLoadingScreen.Visible)
+                {
+                    fullSizeLoadingScreen.SetLoadingText("restoring directory preferences...", "Restoring preferences...");
+                }
                 if (!offlineMode)
                 {
                     if (String.Compare(Convert.ToString(SettingsManager.Settings.SettingsDirectoryEnabled), "1") == 0)
@@ -21669,6 +21725,10 @@ namespace SATSuma
                 }
                 #endregion
                 #region restore always on top setting
+                if (fullSizeLoadingScreen.Visible)
+                {
+                    fullSizeLoadingScreen.SetLoadingText("restoring 'always on top' setting...", "Restoring preferences...");
+                }
                 if (String.Compare(Convert.ToString(SettingsManager.Settings.SettingsAlwaysOnTop), "1") == 0)
                 {
                     lblAlwaysOnTop.Invoke((MethodInvoker)delegate
@@ -21694,9 +21754,13 @@ namespace SATSuma
                 numberUpDownDerivationPathsToCheck.Value = Convert.ToInt32(SettingsManager.Settings.SettingsNumberUpDownDerivationPathsToCheck);
                 #endregion
                 #region determine default theme
+                if (fullSizeLoadingScreen.Visible)
+                {
+                    fullSizeLoadingScreen.SetLoadingText("fetching default theme...", "Restoring preferences...");
+                }
                 // check if there is a default theme saved in the file
                 var themes = ThemesManager.Themes;
-                foreach (Theme theme in themes)
+                foreach (Theme theme in themes!)
                 {
                     if (String.Compare(theme.ThemeName, SettingsManager.Settings.SettingsDefaultTheme) == 0)
                     {
@@ -21875,8 +21939,8 @@ namespace SATSuma
                             }
                         }
 
-                        RestoreThemeAsync(theme);
-                        defaultTheme = SettingsManager.Settings.SettingsDefaultTheme;
+                        RestoreTheme(theme);
+                        defaultTheme = SettingsManager.Settings.SettingsDefaultTheme!;
                         return;
                     }
                 }
@@ -21895,8 +21959,7 @@ namespace SATSuma
         {
             try
             {
-                //var settings = ReadSettingsFromJsonFile();
-                if (SettingsManager.Settings.SettingsUIScale != null)
+                if (SettingsManager.Settings!.SettingsUIScale != null)
                 {
                     UIScaleInFile = SettingsManager.Settings.SettingsUIScale;
                 }
@@ -22278,12 +22341,12 @@ namespace SATSuma
                 });
                 ResetCustomThemeCombos();
                 var themes = ThemesManager.Themes;
-                foreach (Theme theme in themes)
+                foreach (Theme theme in themes!)
                 {
                     if (String.Compare(theme.ThemeName, "Genesis (preset)") == 0)
                     {
-                        RestoreThemeAsync(theme);
-                        SaveThemeAsDefault(theme.ThemeName);
+                        RestoreThemeWithLoadingScreenAsync(theme);
+                        SaveThemeAsDefault(theme.ThemeName!);
                         ReloadScreensWithListviews();
                         intSavingSettingsTimeLightLit = 0;
                         labelSettingsSaved.Invoke((MethodInvoker)delegate
@@ -22331,12 +22394,12 @@ namespace SATSuma
                 });
                 ResetCustomThemeCombos();
                 var themes = ThemesManager.Themes;
-                foreach (Theme theme in themes)
+                foreach (Theme theme in themes!)
                 {
                     if (String.Compare(theme.ThemeName, "Franklin (preset)") == 0)
                     {
-                        RestoreThemeAsync(theme);
-                        SaveThemeAsDefault(theme.ThemeName);
+                        RestoreThemeWithLoadingScreenAsync(theme);
+                        SaveThemeAsDefault(theme.ThemeName!);
                         ReloadScreensWithListviews();
                         intSavingSettingsTimeLightLit = 0;
                         labelSettingsSaved.Invoke((MethodInvoker)delegate
@@ -22384,12 +22447,12 @@ namespace SATSuma
                 });
                 ResetCustomThemeCombos();
                 var themes = ThemesManager.Themes;
-                foreach (Theme theme in themes)
+                foreach (Theme theme in themes!)
                 {
                     if (String.Compare(theme.ThemeName, "Satsuma (preset)") == 0)
                     {
-                        RestoreThemeAsync(theme);
-                        SaveThemeAsDefault(theme.ThemeName);
+                        RestoreThemeWithLoadingScreenAsync(theme);
+                        SaveThemeAsDefault(theme.ThemeName!);
                         ReloadScreensWithListviews();
                         intSavingSettingsTimeLightLit = 0;
                         labelSettingsSaved.Invoke((MethodInvoker)delegate
@@ -22437,12 +22500,12 @@ namespace SATSuma
                 });
                 ResetCustomThemeCombos();
                 var themes = ThemesManager.Themes;
-                foreach (Theme theme in themes)
+                foreach (Theme theme in themes!)
                 {
                     if (String.Compare(theme.ThemeName, "HoneyBadger (preset)") == 0)
                     {
-                        RestoreThemeAsync(theme);
-                        SaveThemeAsDefault(theme.ThemeName);
+                        RestoreThemeWithLoadingScreenAsync(theme);
+                        SaveThemeAsDefault(theme.ThemeName!);
                         ReloadScreensWithListviews();
                         intSavingSettingsTimeLightLit = 0;
                         labelSettingsSaved.Invoke((MethodInvoker)delegate
@@ -22490,12 +22553,12 @@ namespace SATSuma
                 });
                 ResetCustomThemeCombos();
                 var themes = ThemesManager.Themes;
-                foreach (Theme theme in themes)
+                foreach (Theme theme in themes!)
                 {
                     if (String.Compare(theme.ThemeName, "StackSats (preset)") == 0)
                     {
-                        RestoreThemeAsync(theme);
-                        SaveThemeAsDefault(theme.ThemeName);
+                        RestoreThemeWithLoadingScreenAsync(theme);
+                        SaveThemeAsDefault(theme.ThemeName!);
                         ReloadScreensWithListviews();
                         intSavingSettingsTimeLightLit = 0;
                         labelSettingsSaved.Invoke((MethodInvoker)delegate
@@ -22543,12 +22606,12 @@ namespace SATSuma
                 });
                 ResetCustomThemeCombos();
                 var themes = ThemesManager.Themes;
-                foreach (Theme theme in themes)
+                foreach (Theme theme in themes!)
                 {
                     if (String.Compare(theme.ThemeName, "Symbol (preset)") == 0)
                     {
-                        RestoreThemeAsync(theme);
-                        SaveThemeAsDefault(theme.ThemeName);
+                        RestoreThemeWithLoadingScreenAsync(theme);
+                        SaveThemeAsDefault(theme.ThemeName!);
                         ReloadScreensWithListviews();
                         intSavingSettingsTimeLightLit = 0;
                         labelSettingsSaved.Invoke((MethodInvoker)delegate
@@ -22599,7 +22662,7 @@ namespace SATSuma
             {
                 #region display loading screen
                 bool wasOnTop = false;
-                Form loadingScreen = null;
+                Form? loadingScreen = null;
                 if (!fullScreenLoadingScreenVisible)
                 {
                     if (this.TopMost == true)
@@ -22627,8 +22690,9 @@ namespace SATSuma
                 }
                 #endregion
                 CloseThemeMenu();
-                await HideAllScreensAsync();
+                
                 SuspendLayout();
+                await HideAllScreensAsync().ConfigureAwait(true);
                 btnMenuCreateTheme.Invoke((MethodInvoker)delegate
                 {
                     btnMenuCreateTheme.BackgroundImage = Resources.marker;
@@ -22670,7 +22734,7 @@ namespace SATSuma
                 //wait a moment to give time for screen to paint
                 await BriefPauseAsync(700).ConfigureAwait(true);
                 //close the loading screen
-                loadingScreen.Close();
+                loadingScreen!.Close();
                 #endregion
                 if (wasOnTop)
                 {
@@ -22694,7 +22758,7 @@ namespace SATSuma
 
                     CloseThemeMenu();
                     var themes = ThemesManager.Themes;
-                    foreach (Theme theme in themes)
+                    foreach (Theme theme in themes!)
                     {
                         if (String.Compare(theme.ThemeName, comboBoxHeaderCustomThemes.Texts.TrimStart()) == 0) // the theme names are displayed with 3 leading spaces in the combobox so trim them out for the compare
                         {
@@ -22728,8 +22792,8 @@ namespace SATSuma
                             {
                                 comboBoxCustomizeScreenThemeList.Texts = "select theme";
                             });
-                            RestoreThemeAsync(theme);
-                            SaveThemeAsDefault(theme.ThemeName);
+                            RestoreThemeWithLoadingScreenAsync(theme);
+                            SaveThemeAsDefault(theme.ThemeName!);
                             ReloadScreensWithListviews();
                             intSavingSettingsTimeLightLit = 0;
                             labelSettingsSaved.Invoke((MethodInvoker)delegate
@@ -23577,7 +23641,7 @@ namespace SATSuma
                     this.TopMost = false;
                 }
                 // display semi-transparent overlay form
-                Form loadingTheme = new LoadingTheme(UIScale)
+                Form loadingTheme = new FullSizeLoadingScreen(UIScale)
                 {
                     Owner = this,
                     StartPosition = FormStartPosition.CenterParent,
@@ -23789,7 +23853,7 @@ namespace SATSuma
                     wasOnTop = true;
                     this.TopMost = false;
                 }
-                Form loadingTheme = new LoadingTheme(UIScale)
+                Form loadingTheme = new FullSizeLoadingScreen(UIScale)
                 {
                     Owner = this,
                     StartPosition = FormStartPosition.CenterParent,
@@ -23855,7 +23919,7 @@ namespace SATSuma
                     wasOnTop = true;
                     this.TopMost = false;
                 }
-                Form loadingTheme = new LoadingTheme(UIScale)
+                Form loadingTheme = new FullSizeLoadingScreen(UIScale)
                 {
                     Owner = this,
                     StartPosition = FormStartPosition.CenterParent,
@@ -23922,7 +23986,7 @@ namespace SATSuma
                     wasOnTop = true;
                     this.TopMost = false;
                 }
-                Form loadingTheme = new LoadingTheme(UIScale)
+                Form loadingTheme = new FullSizeLoadingScreen(UIScale)
                 {
                     Owner = this,
                     StartPosition = FormStartPosition.CenterParent,
@@ -23988,7 +24052,7 @@ namespace SATSuma
                     wasOnTop = true;
                     this.TopMost = false;
                 }
-                Form loadingTheme = new LoadingTheme(UIScale)
+                Form loadingTheme = new FullSizeLoadingScreen(UIScale)
                 {
                     Owner = this,
                     StartPosition = FormStartPosition.CenterParent,
@@ -24054,7 +24118,7 @@ namespace SATSuma
                     wasOnTop = true;
                     this.TopMost = false;
                 }
-                Form loadingTheme = new LoadingTheme(UIScale)
+                Form loadingTheme = new FullSizeLoadingScreen(UIScale)
                 {
                     Owner = this,
                     StartPosition = FormStartPosition.CenterParent,
@@ -24120,7 +24184,7 @@ namespace SATSuma
                     wasOnTop = true;
                     this.TopMost = false;
                 }
-                Form loadingTheme = new LoadingTheme(UIScale)
+                Form loadingTheme = new FullSizeLoadingScreen(UIScale)
                 {
                     Owner = this,
                     StartPosition = FormStartPosition.CenterParent,
@@ -24193,7 +24257,7 @@ namespace SATSuma
                         wasOnTop = true;
                         this.TopMost = false;
                     }
-                    Form loadingTheme = new LoadingTheme(UIScale)
+                    Form loadingTheme = new FullSizeLoadingScreen(UIScale)
                     {
                         Owner = this,
                         StartPosition = FormStartPosition.CenterParent,
@@ -24267,7 +24331,7 @@ namespace SATSuma
                         wasOnTop = true;
                         this.TopMost = false;
                     }
-                    Form loadingTheme = new LoadingTheme(UIScale)
+                    Form loadingTheme = new FullSizeLoadingScreen(UIScale)
                     {
                         Owner = this,
                         StartPosition = FormStartPosition.CenterParent,
@@ -24665,7 +24729,7 @@ namespace SATSuma
                 var themes = ThemesManager.Themes;
 
                 // check here for duplicate themename
-                foreach (Theme theme in themes)
+                foreach (Theme theme in themes!)
                 {
                     if (String.Compare(theme.ThemeName, newTheme.ThemeName) == 0)
                     {
@@ -24722,7 +24786,7 @@ namespace SATSuma
             try
             {
                 var themes = ThemesManager.Themes;
-                foreach (Theme theme in themes)
+                foreach (Theme theme in themes!)
                 {
                     if (String.Compare(theme.ThemeName, comboBoxCustomizeScreenThemeList.Texts) == 0)
                     {
@@ -24758,8 +24822,8 @@ namespace SATSuma
                                         comboBoxCustomizeScreenThemeList.Texts = "select theme";
                                     });
                                     CloseThemeMenu();
-                                    RestoreThemeAsync(theme);
-                                    SaveThemeAsDefault(theme.ThemeName);
+                                    RestoreThemeWithLoadingScreenAsync(theme);
+                                    SaveThemeAsDefault(theme.ThemeName!);
                                     // reload the listviews to apply the new color
                                     LookupBlockListAsync();
                                     LookupBlockAsync();
@@ -24790,46 +24854,16 @@ namespace SATSuma
         }
         #endregion
         #region restore theme
-        private async void RestoreThemeAsync(Theme theme)
+
+        private void RestoreTheme(Theme theme)
         {
             try
             {
-                #region display loading screen
-                bool wasOnTop = false;
-                Form loadingTheme = new LoadingTheme(UIScale)
+                if (fullSizeLoadingScreen!.Visible)
                 {
-                    Owner = this,
-                    StartPosition = FormStartPosition.CenterParent,
-                    FormBorderStyle = FormBorderStyle.None,
-                    BackColor = panel84.BackColor, // Set the background color to match panel colours
-                    Opacity = 1,
-                };
-
-                if (this.TopMost == true)
-                {
-                    wasOnTop = true;
-                    this.TopMost = false;
+                    fullSizeLoadingScreen.SetLoadingText("getting ready to apply theme...", "Applying theme...");
                 }
-                if (!fullScreenLoadingScreenVisible)
-                {
-                    fullScreenLoadingScreenVisible = true;
-
-                    loadingTheme.StartPosition = FormStartPosition.CenterParent;
-
-                    // Calculate the overlay form's location to place it in the center of the parent form
-                    loadingTheme.StartPosition = FormStartPosition.Manual;
-                    int parentCenterX = this.Location.X + this.Width / 2;
-                    int parentCenterY = this.Location.Y + this.Height / 2;
-                    int overlayX = parentCenterX - loadingTheme.Width / 2;
-                    int overlayY = parentCenterY - loadingTheme.Height / 2;
-                    loadingTheme.Location = new Point(overlayX, overlayY);
-                    loadingTheme.Show(this);
-                }
-                #endregion 
-
-                await BriefPauseAsync(100).ConfigureAwait(true); // this small pause gives time for the loading screen to appear before items are re-themed (the loading screen hides flicker that occurs when themes are applied)
-
-                currentlyActiveTheme = theme.ThemeName;
+                currentlyActiveTheme = theme.ThemeName!;
                 if (theme.BackgroundGenesis)
                 {
                     lblShowClock.Enabled = true;
@@ -24838,7 +24872,8 @@ namespace SATSuma
                 {
                     lblShowClock.Enabled = false;
                 }
-                if (theme.ThemeName.Contains("(preset)"))
+
+                if (theme.ThemeName!.Contains("(preset)"))
                 {
                     btnMenuApplyCustomTheme.Text = "apply theme";
                     lblApplyThemeButtonDisabledMask.Visible = true;
@@ -24957,32 +24992,114 @@ namespace SATSuma
                     }
 
                     comboBoxTitlesBackgroundImage.SelectedIndex = (theme.TitlesBackgroundImage);
-
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Colouring data fields...", "Applying theme...");
+                    }
                     ColorDataFields(theme.DataFields);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Colouring labels...", "Applying theme...");
+                    }
                     labelColor = theme.Labels; // (only used for poolranking chart title)
                     ColorLabels(theme.Labels);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Colouring charts...", "Applying theme...");
+                    }
                     panelColour = theme.Panels; // used to colour chart backgrounds on the pools screens
                     CustomiseCharts(theme.PriceBlock);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Colouring fiat conversion fields...", "Applying theme...");
+                    }
                     ColorFiatConversionText(theme.FiatConversionText);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Colouring headings...", "Applying theme...");
+                    }
                     ColorHeadings(theme.Headings);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Colouring tables...", "Applying theme...");
+                    }
                     ColorTables(theme.Tables);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Colouring table headings...", "Applying theme...");
+                    }
                     ColorTableHeadings(theme.TableHeadings);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Colouring other text...", "Applying theme...");
+                    }
                     ColorOtherText(theme.OtherText);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Colouring header data...", "Applying theme...");
+                    }
                     ColorPriceBlock(theme.PriceBlock);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Colouring status messages...", "Applying theme...");
+                    }
                     ColorStatusError(theme.StatusErrors);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Colouring buttons...", "Applying theme...");
+                    }
                     ColorButtons(theme.Buttons);
                     ColorButtonText(theme.ButtonText);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Colouring lines...", "Applying theme...");
+                    }
                     ColorLines(theme.Lines);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Colouring textboxes...", "Applying theme...");
+                    }
                     ColorTextBoxes(theme.TextBoxes);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Colouring progress bars...", "Applying theme...");
+                    }
                     ColorProgressBars(theme.ProgressBars);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Colouring table backgrounds...", "Applying theme...");
+                    }
                     ColorTableBackgrounds(theme.TableBackgrounds);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Colouring table title bars...", "Applying theme...");
+                    }
                     ColorTableTitleBars(theme.TableTitleBars);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Colouring panels...", "Applying theme...");
+                    }
                     ColorPanels(theme.Panels);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Applying radius to controls...", "Applying theme...");
+                    }
                     SetButtonAndPanelRadius(theme.BorderRadius);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Applying opacity...", "Applying theme...");
+                    }
                     SetOpacity(theme.Opacity);
-                    StyleProgressBars(theme.ProgressBarStyle);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Styling progress bars...", "Applying theme...");
+                    }
+                    StyleProgressBars(theme.ProgressBarStyle!);
 
-
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Setting heading backgrounds...", "Applying theme...");
+                    }
                     if (theme.HeadingBGDefault == true)
                     {
                         lblTitleBackgroundCustom.Invoke((MethodInvoker)delegate
@@ -25043,6 +25160,624 @@ namespace SATSuma
                         });
                         titleBackgroundColor = theme.HeadingBackgrounds;
                         HeadingBackgroundsToCustomColor();
+                    }
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Applying background image...", "Applying theme...");
+                    }
+
+                    if (theme.BackgroundFranklin == true)
+                    {
+                        lblBackgroundFranklinSelected.Visible = true;
+                        Control[] controlsToHide = { lblBackgroundSatsumaSelected, lblBackgroundGenesisSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected };
+                        foreach (Control control in controlsToHide)
+                        {
+                            control.Invoke((MethodInvoker)delegate
+                            {
+                                control.Visible = false;
+                            });
+                        }
+                        this.BackgroundImage = Properties.Resources.Franklin;
+                        lblThemeImage.Text = "no custom image selected";
+                        pictureBoxCustomImage.Image = Properties.Resources.CustomImage;
+                    }
+                    if (theme.BackgroundGenesis == true)
+                    {
+                        Control[] controlsToHide = { lblBackgroundFranklinSelected, lblBackgroundSatsumaSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected };
+                        foreach (Control control in controlsToHide)
+                        {
+                            control.Invoke((MethodInvoker)delegate
+                            {
+                                control.Visible = false;
+                            });
+                        }
+                        lblBackgroundGenesisSelected.Visible = true;
+                        this.BackgroundImage = Properties.Resources.Genesis;
+                        lblThemeImage.Text = "no custom image selected";
+                        pictureBoxCustomImage.Image = Properties.Resources.CustomImage;
+                    }
+                    if (theme.BackgroundSatsuma == true)
+                    {
+                        lblBackgroundSatsumaSelected.Visible = true;
+                        Control[] controlsToHide = { lblBackgroundFranklinSelected, lblBackgroundGenesisSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected };
+                        foreach (Control control in controlsToHide)
+                        {
+                            control.Invoke((MethodInvoker)delegate
+                            {
+                                control.Visible = false;
+                            });
+                        }
+                        this.BackgroundImage = Properties.Resources.Satsuma;
+                        lblThemeImage.Text = "no custom image selected";
+                        pictureBoxCustomImage.Image = Properties.Resources.CustomImage;
+                    }
+                    if (theme.BackgroundHoneyBadger == true)
+                    {
+                        lblBackgroundHoneyBadgerSelected.Visible = true;
+                        Control[] controlsToHide = { lblBackgroundSatsumaSelected, lblBackgroundFranklinSelected, lblBackgroundGenesisSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected };
+                        foreach (Control control in controlsToHide)
+                        {
+                            control.Invoke((MethodInvoker)delegate
+                            {
+                                control.Visible = false;
+                            });
+                        }
+
+                        this.BackgroundImage = Properties.Resources.HoneyBadger;
+                        lblThemeImage.Text = "no custom image selected";
+                        pictureBoxCustomImage.Image = Properties.Resources.CustomImage;
+                    }
+                    if (theme.BackgroundSymbol == true)
+                    {
+                        lblBackgroundSymbolSelected.Visible = true;
+                        Control[] controlsToHide = { lblBackgroundSatsumaSelected, lblBackgroundFranklinSelected, lblBackgroundGenesisSelected, lblBackgroundStackSatsSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected };
+                        foreach (Control control in controlsToHide)
+                        {
+                            control.Invoke((MethodInvoker)delegate
+                            {
+                                control.Visible = false;
+                            });
+                        }
+                        this.BackgroundImage = Properties.Resources.Symbol;
+                        lblThemeImage.Text = "no custom image selected";
+                        pictureBoxCustomImage.Image = Properties.Resources.CustomImage;
+                    }
+                    if (theme.BackgroundStackSats == true)
+                    {
+                        lblBackgroundStackSatsSelected.Visible = true;
+                        Control[] controlsToHide = { lblBackgroundSatsumaSelected, lblBackgroundFranklinSelected, lblBackgroundGenesisSelected, lblBackgroundSymbolSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundCustomColorSelected, lblBackgroundCustomImageSelected };
+                        foreach (Control control in controlsToHide)
+                        {
+                            control.Invoke((MethodInvoker)delegate
+                            {
+                                control.Visible = false;
+                            });
+                        }
+                        this.BackgroundImage = Properties.Resources.StackSats;
+                        lblThemeImage.Text = "no custom image selected";
+                        pictureBoxCustomImage.Image = Properties.Resources.CustomImage;
+                    }
+                    if (theme.BackgroundCustomColor == true)
+                    {
+                        lblBackgroundCustomColorSelected.Visible = true;
+                        Control[] controlsToHide = { lblBackgroundFranklinSelected, lblBackgroundSatsumaSelected, lblBackgroundGenesisSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundCustomImageSelected };
+                        foreach (Control control in controlsToHide)
+                        {
+                            control.Invoke((MethodInvoker)delegate
+                            {
+                                control.Visible = false;
+                            });
+                        }
+                        this.BackgroundImage = null;
+                        this.BackColor = theme.WindowBackground;
+                        lblThemeImage.Text = "no custom image selected";
+                        pictureBoxCustomImage.Image = Properties.Resources.CustomImage;
+                    }
+                    if (theme.BackgroundCustomImage == true)
+                    {
+                        lblBackgroundCustomImageSelected.Visible = true;
+                        Control[] controlsToHide = { lblBackgroundFranklinSelected, lblBackgroundSatsumaSelected, lblBackgroundGenesisSelected, lblBackgroundSymbolSelected, lblBackgroundStackSatsSelected, lblBackgroundHoneyBadgerSelected, lblBackgroundCustomColorSelected };
+                        foreach (Control control in controlsToHide)
+                        {
+                            control.Invoke((MethodInvoker)delegate
+                            {
+                                control.Visible = false;
+                            });
+                        }
+                        lblThemeImage.Text = theme.WindowImage;
+                        this.BackgroundImage = System.Drawing.Image.FromFile(theme.WindowImage);
+                    }
+
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Applying loading animations...", "Applying theme...");
+                    }
+                    if (theme.OrangeInfinity == 1)
+                    {
+                        lblInfinity1.Invoke((MethodInvoker)delegate
+                        {
+                            lblInfinity1.ForeColor = Color.Green;
+                            lblInfinity1.Text = "✔️";
+                        });
+                        lblInfinity2.Invoke((MethodInvoker)delegate
+                        {
+                            lblInfinity2.ForeColor = Color.IndianRed;
+                            lblInfinity2.Text = "❌";
+                        });
+                        lblInfinity3.Invoke((MethodInvoker)delegate
+                        {
+                            lblInfinity3.ForeColor = Color.IndianRed;
+                            lblInfinity3.Text = "❌";
+                        });
+                        pictureBoxChartLoadingAnimation.Invoke((MethodInvoker)delegate
+                        {
+                            pictureBoxChartLoadingAnimation.Image = Properties.Resources.InfinityTrans;
+                        });
+                        pictureBoxDCAChartLoadingAnimation.Invoke((MethodInvoker)delegate
+                        {
+                            pictureBoxDCAChartLoadingAnimation.Image = Properties.Resources.InfinityTrans;
+                        });
+                    }
+                    if (theme.OrangeInfinity == 2)
+                    {
+                        lblInfinity1.Invoke((MethodInvoker)delegate
+                        {
+                            lblInfinity1.ForeColor = Color.IndianRed;
+                            lblInfinity1.Text = "❌";
+                        });
+                        lblInfinity2.Invoke((MethodInvoker)delegate
+                        {
+                            lblInfinity2.ForeColor = Color.Green;
+                            lblInfinity2.Text = "✔️";
+                        });
+                        lblInfinity3.Invoke((MethodInvoker)delegate
+                        {
+                            lblInfinity3.ForeColor = Color.IndianRed;
+                            lblInfinity3.Text = "❌";
+                        });
+                        pictureBoxChartLoadingAnimation.Invoke((MethodInvoker)delegate
+                        {
+                            pictureBoxChartLoadingAnimation.Image = Properties.Resources.OrangeInfinity;
+                        });
+                        pictureBoxDCAChartLoadingAnimation.Invoke((MethodInvoker)delegate
+                        {
+                            pictureBoxDCAChartLoadingAnimation.Image = Properties.Resources.OrangeInfinity;
+                        });
+                    }
+                    if (theme.OrangeInfinity == 3)
+                    {
+                        lblInfinity1.Invoke((MethodInvoker)delegate
+                        {
+                            lblInfinity1.ForeColor = Color.IndianRed;
+                            lblInfinity1.Text = "❌";
+                        });
+                        lblInfinity2.Invoke((MethodInvoker)delegate
+                        {
+                            lblInfinity2.ForeColor = Color.IndianRed;
+                            lblInfinity2.Text = "❌";
+                        });
+                        lblInfinity3.Invoke((MethodInvoker)delegate
+                        {
+                            lblInfinity3.ForeColor = Color.Green;
+                            lblInfinity3.Text = "✔️";
+                        });
+                        pictureBoxChartLoadingAnimation.Invoke((MethodInvoker)delegate
+                        {
+                            pictureBoxChartLoadingAnimation.Image = Properties.Resources.infinityspectrum;
+                        });
+                        pictureBoxDCAChartLoadingAnimation.Invoke((MethodInvoker)delegate
+                        {
+                            pictureBoxDCAChartLoadingAnimation.Image = Properties.Resources.infinityspectrum;
+                        });
+                    }
+
+                    if (theme.BackgroundCustomImage == true && theme.WindowImage!.Length > 0)
+                    {
+                        lblThemeImage.Text = theme.WindowImage;
+                        pictureBoxCustomImage.Image = System.Drawing.Image.FromFile(theme.WindowImage);
+                    }
+                    else
+                    {
+                        lblThemeImage.Text = "no custom image selected";
+                        pictureBoxCustomImage.Image = Properties.Resources.CustomImage;
+                    }
+
+                    ReloadScreensWithListviews();
+                    if (!firstThemeChange)
+                    {
+                        RegenerateVisibleCharts();
+                    }
+                    firstThemeChange = false;
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Styling the directory...", "Applying theme...");
+                    }
+                    LoadAndStyleDirectoryBrowser();
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Regenerating charts...", "Applying theme...");
+                    }
+                    formsPlot1.Render();
+                    if (theme.ShowTime == false)
+                    {
+                        lblShowClock.Invoke((MethodInvoker)delegate
+                        {
+                            lblShowClock.ForeColor = Color.IndianRed;
+                            lblShowClock.Text = "❌";
+                        });
+                        lblTime.Visible = false;
+                    }
+                    else
+                    {
+                        lblShowClock.Invoke((MethodInvoker)delegate
+                        {
+                            lblShowClock.ForeColor = Color.Green;
+                            lblShowClock.Text = "✔️";
+                        });
+                        if (theme.BackgroundGenesis == true)
+                        {
+                            lblTime.Font = new Font(lblTime.Font.FontFamily, (int)(14 * UIScale), lblTime.Font.Style);
+                            lblTime.Location = new Point((int)(840 * UIScale), (int)(42 * UIScale));
+                            lblTime.Visible = true;
+                            lblTime.BringToFront();
+                        }
+                    }
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("please wait a moment...", "Applying theme...");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    HandleException(ex, "RestoreTheme");
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "RestoreTheme");
+            }
+        }
+
+        private async void RestoreThemeWithLoadingScreenAsync(Theme theme)
+        {
+            try
+            {
+                #region display loading screen
+                bool wasOnTop = false;
+                fullSizeLoadingScreen = new FullSizeLoadingScreen(UIScale)
+                {
+                    Owner = this,
+                    StartPosition = FormStartPosition.CenterParent,
+                    FormBorderStyle = FormBorderStyle.None,
+                    BackColor = panel84.BackColor, // Set the background color to match panel colours
+                    Opacity = 1,
+                    LabelColor = label77.ForeColor,
+                    Version = $"v{CurrentVersion}",
+                    OtherText = lblCurrentVersion.ForeColor
+                };
+
+                if (this.TopMost == true)
+                {
+                    wasOnTop = true;
+                    this.TopMost = false;
+                }
+                if (!fullScreenLoadingScreenVisible)
+                {
+                    fullScreenLoadingScreenVisible = true;
+
+                    fullSizeLoadingScreen.StartPosition = FormStartPosition.CenterParent;
+
+                    // Calculate the overlay form's location to place it in the center of the parent form
+                    fullSizeLoadingScreen.StartPosition = FormStartPosition.Manual;
+                    int parentCenterX = this.Location.X + this.Width / 2;
+                    int parentCenterY = this.Location.Y + this.Height / 2;
+                    int overlayX = parentCenterX - fullSizeLoadingScreen.Width / 2;
+                    int overlayY = parentCenterY - fullSizeLoadingScreen.Height / 2;
+                    fullSizeLoadingScreen.Location = new Point(overlayX, overlayY);
+                    fullSizeLoadingScreen.Show(this);
+                }
+                #endregion
+                await BriefPauseAsync(100).ConfigureAwait(true); // this small pause gives time for the loading screen to appear before items are re-themed (the loading screen hides flicker that occurs when themes are applied)
+                currentlyActiveTheme = theme.ThemeName!;
+                if (theme.BackgroundGenesis)
+                {
+                    lblShowClock.Enabled = true;
+                }
+                else
+                {
+                    lblShowClock.Enabled = false;
+                }
+
+                if (theme.ThemeName!.Contains("(preset)"))
+                {
+                    btnMenuApplyCustomTheme.Text = "apply theme";
+                    lblApplyThemeButtonDisabledMask.Visible = true;
+                }
+                else
+                {
+                    btnMenuApplyCustomTheme.Text = theme.ThemeName;
+                    lblThemeMenuHighlightedButtonText.Text = theme.ThemeName;
+                    lblThemeMenuHighlightedButtonText.Visible = true;
+                    lblApplyThemeButtonDisabledMask.Visible = false;
+                }
+                try
+                {
+                    if (String.Compare(theme.ChartsDark, "D") == 0)
+                    {
+                        chartsBackgroundColor = Color.FromArgb(20, 20, 20);
+
+                        panelLoadingAnimationContainer.BackColor = Color.FromArgb(20, 20, 20);
+                        pictureBoxLoadingAnimation.Invoke((MethodInvoker)delegate
+                        {
+                            pictureBoxLoadingAnimation.Image = Properties.Resources.SatsumaAnimated;
+                        });
+                        lblChartsLightBackground.Invoke((MethodInvoker)delegate
+                        {
+                            lblChartsLightBackground.ForeColor = Color.IndianRed;
+                            lblChartsLightBackground.Text = "❌";
+                        });
+                        lblChartsMediumBackground.Invoke((MethodInvoker)delegate
+                        {
+                            lblChartsMediumBackground.ForeColor = Color.IndianRed;
+                            lblChartsMediumBackground.Text = "❌";
+                        });
+                        lblChartsDarkBackground.Invoke((MethodInvoker)delegate
+                        {
+                            lblChartsDarkBackground.ForeColor = Color.Green;
+                            lblChartsDarkBackground.Text = "✔️";
+                        });
+                        panelCustomThemeMenuTitleBG.Invoke((MethodInvoker)delegate
+                        {
+                            panelCustomThemeMenuTitleBG.BackColor = Color.Black;
+                        });
+                        panelPresetThemeMenuTitleBG.Invoke((MethodInvoker)delegate
+                        {
+                            panelPresetThemeMenuTitleBG.BackColor = Color.Black;
+                        });
+                    }
+                    else
+                    {
+                        if (String.Compare(theme.ChartsDark, "M") == 0)
+                        {
+                            chartsBackgroundColor = Color.FromArgb(40, 40, 40);
+                            panelLoadingAnimationContainer.BackColor = Color.FromArgb(40, 40, 40);
+                            pictureBoxLoadingAnimation.Invoke((MethodInvoker)delegate
+                            {
+                                pictureBoxLoadingAnimation.Image = Properties.Resources.SatsumaAnimated;
+                            });
+                            lblChartsLightBackground.Invoke((MethodInvoker)delegate
+                            {
+                                lblChartsLightBackground.ForeColor = Color.IndianRed;
+                                lblChartsLightBackground.Text = "❌";
+                            });
+                            lblChartsMediumBackground.Invoke((MethodInvoker)delegate
+                            {
+                                lblChartsMediumBackground.ForeColor = Color.Green;
+                                lblChartsMediumBackground.Text = "✔️";
+                            });
+                            lblChartsDarkBackground.Invoke((MethodInvoker)delegate
+                            {
+                                lblChartsDarkBackground.ForeColor = Color.IndianRed;
+                                lblChartsDarkBackground.Text = "❌";
+                            });
+                            panelCustomThemeMenuTitleBG.Invoke((MethodInvoker)delegate
+                            {
+                                panelCustomThemeMenuTitleBG.BackColor = Color.Black;
+                            });
+                            panelPresetThemeMenuTitleBG.Invoke((MethodInvoker)delegate
+                            {
+                                panelPresetThemeMenuTitleBG.BackColor = Color.Black;
+                            });
+                        }
+                        else
+                        {
+                            if (String.Compare(theme.ChartsDark, "L") == 0)
+                            {
+                                chartsBackgroundColor = Color.FromArgb(244, 244, 244);
+                                panelLoadingAnimationContainer.BackColor = Color.FromArgb(244, 244, 244);
+                                pictureBoxLoadingAnimation.Invoke((MethodInvoker)delegate
+                                {
+                                    pictureBoxLoadingAnimation.Image = Properties.Resources.SatsumaAnimatedWhite;
+                                });
+                                lblChartsLightBackground.Invoke((MethodInvoker)delegate
+                                {
+                                    lblChartsLightBackground.ForeColor = Color.Green;
+                                    lblChartsLightBackground.Text = "✔️";
+                                });
+                                lblChartsMediumBackground.Invoke((MethodInvoker)delegate
+                                {
+                                    lblChartsMediumBackground.ForeColor = Color.IndianRed;
+                                    lblChartsMediumBackground.Text = "❌";
+                                });
+                                lblChartsDarkBackground.Invoke((MethodInvoker)delegate
+                                {
+                                    lblChartsDarkBackground.ForeColor = Color.IndianRed;
+                                    lblChartsDarkBackground.Text = "❌";
+                                });
+                                panelCustomThemeMenuTitleBG.Invoke((MethodInvoker)delegate
+                                {
+                                    panelCustomThemeMenuTitleBG.BackColor = Color.Gainsboro;
+                                });
+                                panelPresetThemeMenuTitleBG.Invoke((MethodInvoker)delegate
+                                {
+                                    panelPresetThemeMenuTitleBG.BackColor = Color.Gainsboro;
+                                });
+                            }
+                        }
+                    }
+
+                    comboBoxTitlesBackgroundImage.SelectedIndex = (theme.TitlesBackgroundImage);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Colouring data fields...", "Applying theme...");
+                    }
+                    ColorDataFields(theme.DataFields);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Colouring labels...", "Applying theme...");
+                    }
+                    labelColor = theme.Labels; // (only used for poolranking chart title)
+                    ColorLabels(theme.Labels);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Colouring charts...", "Applying theme...");
+                    }
+                    panelColour = theme.Panels; // used to colour chart backgrounds on the pools screens
+                    CustomiseCharts(theme.PriceBlock);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Colouring fiat conversion fields...", "Applying theme...");
+                    }
+                    ColorFiatConversionText(theme.FiatConversionText);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Colouring headings...", "Applying theme...");
+                    }
+                    ColorHeadings(theme.Headings);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Colouring tables...", "Applying theme...");
+                    }
+                    ColorTables(theme.Tables);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Colouring table headings...", "Applying theme...");
+                    }
+                    ColorTableHeadings(theme.TableHeadings);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Colouring other text...", "Applying theme...");
+                    }
+                    ColorOtherText(theme.OtherText);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Colouring header data...", "Applying theme...");
+                    }
+                    ColorPriceBlock(theme.PriceBlock);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Colouring status messages...", "Applying theme...");
+                    }
+                    ColorStatusError(theme.StatusErrors);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Colouring buttons...", "Applying theme...");
+                    }
+                    ColorButtons(theme.Buttons);
+                    ColorButtonText(theme.ButtonText);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Colouring lines...", "Applying theme...");
+                    }
+                    ColorLines(theme.Lines);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Colouring textboxes...", "Applying theme...");
+                    }
+                    ColorTextBoxes(theme.TextBoxes);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Colouring progress bars...", "Applying theme...");
+                    }
+                    ColorProgressBars(theme.ProgressBars);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Colouring table backgrounds...", "Applying theme...");
+                    }
+                    ColorTableBackgrounds(theme.TableBackgrounds);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Colouring table title bars...", "Applying theme...");
+                    }
+                    ColorTableTitleBars(theme.TableTitleBars);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Colouring panels...", "Applying theme...");
+                    }
+                    ColorPanels(theme.Panels);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Applying radius to controls...", "Applying theme...");
+                    }
+                    SetButtonAndPanelRadius(theme.BorderRadius);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Applying opacity...", "Applying theme...");
+                    }
+                    SetOpacity(theme.Opacity);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Styling progress bars...", "Applying theme...");
+                    }
+                    StyleProgressBars(theme.ProgressBarStyle!);
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Setting heading backgrounds...", "Applying theme...");
+                    }
+                    if (theme.HeadingBGDefault == true)
+                    {
+                        lblTitleBackgroundCustom.Invoke((MethodInvoker)delegate
+                        {
+                            lblTitleBackgroundCustom.ForeColor = Color.IndianRed;
+                            lblTitleBackgroundCustom.Text = "❌";
+                        });
+                        lblTitleBackgroundNone.Invoke((MethodInvoker)delegate
+                        {
+                            lblTitleBackgroundNone.ForeColor = Color.IndianRed;
+                            lblTitleBackgroundNone.Text = "❌";
+                        });
+                        lblTitlesBackgroundImage.Invoke((MethodInvoker)delegate
+                        {
+                            lblTitlesBackgroundImage.ForeColor = Color.Green;
+                            lblTitlesBackgroundImage.Text = "✔️";
+                        });
+                        comboBoxTitlesBackgroundImage.Enabled = true;
+                        HeadingBackgroundsToImage();
+                    }
+                    if (theme.HeadingBGNone == true)
+                    {
+                        lblTitleBackgroundCustom.Invoke((MethodInvoker)delegate
+                        {
+                            lblTitleBackgroundCustom.ForeColor = Color.IndianRed;
+                            lblTitleBackgroundCustom.Text = "❌";
+                        });
+                        lblTitleBackgroundNone.Invoke((MethodInvoker)delegate
+                        {
+                            lblTitleBackgroundNone.ForeColor = Color.Green;
+                            lblTitleBackgroundNone.Text = "✔️";
+                        });
+                        lblTitlesBackgroundImage.Invoke((MethodInvoker)delegate
+                        {
+                            lblTitlesBackgroundImage.ForeColor = Color.IndianRed;
+                            lblTitlesBackgroundImage.Text = "❌";
+                        });
+                        comboBoxTitlesBackgroundImage.Enabled = false;
+                        HeadingBackgroundsToNone();
+                    }
+                    if (theme.HeadingBGCustom == true)
+                    {
+                        comboBoxTitlesBackgroundImage.Enabled = false;
+                        lblTitleBackgroundCustom.Invoke((MethodInvoker)delegate
+                        {
+                            lblTitleBackgroundCustom.ForeColor = Color.Green;
+                            lblTitleBackgroundCustom.Text = "✔️";
+                        });
+                        lblTitleBackgroundNone.Invoke((MethodInvoker)delegate
+                        {
+                            lblTitleBackgroundNone.ForeColor = Color.IndianRed;
+                            lblTitleBackgroundNone.Text = "❌";
+                        });
+                        lblTitlesBackgroundImage.Invoke((MethodInvoker)delegate
+                        {
+                            lblTitlesBackgroundImage.ForeColor = Color.IndianRed;
+                            lblTitlesBackgroundImage.Text = "❌";
+                        });
+                        titleBackgroundColor = theme.HeadingBackgrounds;
+                        HeadingBackgroundsToCustomColor();
+                    }
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Applying window background...", "Applying theme...");
                     }
                     if (theme.BackgroundFranklin == true)
                     {
@@ -25165,6 +25900,11 @@ namespace SATSuma
                         lblThemeImage.Text = theme.WindowImage;
                         this.BackgroundImage = System.Drawing.Image.FromFile(theme.WindowImage);
                     }
+
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Applying loading animations...", "Applying theme...");
+                    }
                     if (theme.OrangeInfinity == 1)
                     {
                         lblInfinity1.Invoke((MethodInvoker)delegate
@@ -25244,7 +25984,7 @@ namespace SATSuma
                         });
                     }
 
-                    if (theme.BackgroundCustomImage == true && theme.WindowImage.Length > 0)
+                    if (theme.BackgroundCustomImage == true && theme.WindowImage!.Length > 0)
                     {
                         lblThemeImage.Text = theme.WindowImage;
                         pictureBoxCustomImage.Image = System.Drawing.Image.FromFile(theme.WindowImage);
@@ -25261,7 +26001,15 @@ namespace SATSuma
                         RegenerateVisibleCharts();
                     }
                     firstThemeChange = false;
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Styling the directory...", "Applying theme...");
+                    }
                     LoadAndStyleDirectoryBrowser();
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("Regenerating charts...", "Applying theme...");
+                    }
                     formsPlot1.Render();
                     if (theme.ShowTime == false)
                     {
@@ -25287,6 +26035,10 @@ namespace SATSuma
                             lblTime.BringToFront();
                         }
                     }
+                    if (fullSizeLoadingScreen.Visible)
+                    {
+                        fullSizeLoadingScreen.SetLoadingText("please wait a moment...", "Applying theme...");
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -25296,7 +26048,7 @@ namespace SATSuma
                 await Wait2SecsAsync().ConfigureAwait(true);
 
                 //close the loading screen
-                loadingTheme.Close();
+                fullSizeLoadingScreen.Close();
                 fullScreenLoadingScreenVisible = false;
 
                 if (wasOnTop)
@@ -25454,13 +26206,13 @@ namespace SATSuma
             if (firstTimeLoadingScreen)
             {
                 firstTimeLoadingScreen = false;
-                await Task.Delay(9000).ConfigureAwait(true);
+                await Task.Delay(8000).ConfigureAwait(true);
                 preventSavingSettings = false;
                 SaveSettings();
             }
             else
             {
-                await Task.Delay(4500).ConfigureAwait(true);
+                await Task.Delay(3500).ConfigureAwait(true);
             }
         }
 
@@ -27972,7 +28724,7 @@ namespace SATSuma
                 var themes = ThemesManager.Themes;
 
                 // Find the index of the theme with the specified data
-                int index = themes.FindIndex(theme =>
+                int index = themes!.FindIndex(theme =>
                     String.Equals(theme.ThemeName, comboBoxCustomizeScreenThemeList.Texts, StringComparison.OrdinalIgnoreCase));
 
 
@@ -29597,15 +30349,15 @@ namespace SATSuma
             try
             {
                 var themes = ThemesManager.Themes;
-                List<string> themeNames = themes.Select(t => t.ThemeName).ToList();
+                List<string> themeNames = themes.Select(t => t.ThemeName).ToList()!;
                 themeNames.RemoveAll(theme => theme.Contains("(preset)")); // exclude the preset themes
                 comboBoxCustomizeScreenThemeList.DataSource = themeNames; // show all the themes in the combobox on customize screen
                 comboBoxCustomizeScreenThemeList.Texts = "select theme";
 
                 List<string> themeNamesWithSpaces = themes
     .Select(t => t.ThemeName)
-    .Where(theme => !theme.Contains("(preset)"))
-    .Select(theme => "   " + theme) // Add 3 preceding spaces to align the combobox text with the rest of the menu
+    .Where(theme => !theme!.Contains("(preset)"))
+    .Select(theme => $"   {theme}") // Add 3 preceding spaces to align the combobox text with the rest of the menu
     .ToList();
 
                 comboBoxHeaderCustomThemes.DataSource = themeNamesWithSpaces;
@@ -30363,7 +31115,7 @@ namespace SATSuma
             try
             {
                 ClearAlertAndErrorMessage(); // wipe anything that may be showing in the error area (it should be empty anyway)
-                await CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync().ConfigureAwait(true);
                 using (WebClient client = new WebClient())
                 {
                     try
@@ -30602,13 +31354,11 @@ namespace SATSuma
                 _transactionService = new TransactionService(NodeURL);
                 _hashrateAndDifficultyService = new HashrateAndDifficultyService(NodeURL);
                 _historicPriceDataService = new HistoricPriceDataService();
-                _blockFeeRatesDataService = new BlockFeeRatesDataService(NodeURL);
                 _bitcoinsInCirculationDataService = new BitcoinsInCirculationDataService();
                 _blockSizeAndWeightService = new BlockSizeAndWeightService(NodeURL);
                 _uniqueAddressesDataService = new UniqueAddressesDataService();
                 _utxoDataService = new UTXODataService();
                 _poolsRankingDataService = new PoolsRankingDataService(NodeURL);
-                _lightningNodesByCountryService = new LightningNodesByCountryService(NodeURL);
                 _marketCapDataService = new MarketCapDataService();
                 _miningPoolsListService = new MiningPoolsListService(NodeURL);
                 _blocksByPoolService = new BlocksByPoolService(NodeURL);
@@ -30631,9 +31381,8 @@ namespace SATSuma
             {
                 using HttpClient client = new HttpClient();
                 string BlockTipURL = $"{NodeURL}blocks/tip/height";
-                string BlockTip = await client.GetStringAsync(BlockTipURL).ConfigureAwait(false);
+                string BlockTip = await client.GetStringAsync(BlockTipURL).ConfigureAwait(true);
 
-                // Ensure that UI updates are performed on the UI thread
                 lblHeaderBlockNumber.Invoke((MethodInvoker)delegate
                 {
                     lblHeaderBlockNumber.Text = BlockTip;
@@ -30897,11 +31646,10 @@ namespace SATSuma
                 #region if we're looking at any other screen
                 if (!panelXpub.Visible)
                 {
-                    using var client = new HttpClient();
                     try
                     {
                         Ping pingSender = new Ping();
-                        string pingAddress = null;
+                        string? pingAddress = null;
                         if (String.Compare(NodeURL, "https://mempool.space/api/") == 0)
                         {
                             pingAddress = "mempool.space";
@@ -31345,157 +32093,164 @@ namespace SATSuma
 
         private async void DoTimerBasedStuffAsync()
         {
-            if (panelSettings.Visible && String.Compare(lblSettingsOwnNodeSelected.Text, "✔️") == 0)
+            try
             {
-                if (intDisplayCountdownToRefresh % 5 == 0)
+                if (panelSettings.Visible && String.Compare(lblSettingsOwnNodeSelected.Text, "✔️") == 0)
                 {
-                    await CheckNetworkStatusAsync();
-                }
-            }
-
-            if (intDisplayCountdownToRefresh <= 56)
-            {
-                gotMarketDataInLastFewSecs = false; // this flag prevented getting market data twice in quick succession during startup. Once false (after initial few secs), it stays false.
-            }
-
-            //increment timers for status lights and messages
-            intMempoolspaceTimeLightLit++;
-            intCoinbaseTimeLightLit++;
-            intCoingeckoTimeLightLit++;
-            intNodeStatusLightTimeLightLit++;
-            intSavingSettingsTimeLightLit++;
-            intThemeNameInUseMessageTimeShown++;
-            intThemeDeletedMessageTimeShown++;
-            intThemeSavedMessageTimeShown++;
-            intAddToBookmarksMessageTimeLightLit++;
-            if (bookmarkHasBeenAdded)
-            {
-                intHideAddToBookmarksTimeShown++;
-            }
-            if (xpubScanComplete)
-            {
-                intTimeUntilXpubProgressBarsHidden++;
-            }
-            intExternalLinkClickedFlagToFalse++;
-
-            // check whether price API indicators need turning off
-            if (intMempoolspaceTimeLightLit >= 2)
-            {
-                intMempoolspaceTimeLightLit = 0;
-                TurnOffMempoolspacePriceIndicator();
-            }
-            if (intCoinbaseTimeLightLit >= 2)
-            {
-                intCoinbaseTimeLightLit = 0;
-                TurnOffCoinbasePriceIndicator();
-            }
-            if (intCoingeckoTimeLightLit >= 2)
-            {
-                intCoingeckoTimeLightLit = 0;
-                TurnOffCoingeckoPriceIndicator();
-            }
-
-            //check whether node status light needs turning off
-            if (intNodeStatusLightTimeLightLit >= 2)
-            {
-                intNodeStatusLightTimeLightLit = 0;
-                headerSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
-                {
-                    headerSelectedNodeStatusLight.ForeColor = Color.OliveDrab;
-                });
-            }
-
-            //check whether 'saving settings' light needs turning off
-            if (intSavingSettingsTimeLightLit >= 2)
-            {
-                intSavingSettingsTimeLightLit = 0;
-                labelSettingsSaved.Invoke((MethodInvoker)delegate
-                {
-                    labelSettingsSaved.Text = "Settings saved";
-                });
-                lblSaveSettingsLight.Invoke((MethodInvoker)delegate
-                {
-                    lblSaveSettingsLight.ForeColor = Color.OliveDrab;
-                });
-            }
-
-            //check whether 'theme name in use' message needs removing
-            if (intThemeNameInUseMessageTimeShown >= 5)
-            {
-                intThemeNameInUseMessageTimeShown = 0;
-                lblThemeNameInUse.Invoke((MethodInvoker)delegate
-                {
-                    lblThemeNameInUse.Visible = false;
-                });
-            }
-
-            //check whether 'theme deleted' message needs removing
-            if (intThemeDeletedMessageTimeShown >= 5)
-            {
-                intThemeDeletedMessageTimeShown = 0;
-                lblThemeDeleted.Invoke((MethodInvoker)delegate
-                {
-                    lblThemeDeleted.Visible = false;
-                });
-            }
-
-            //check whether 'theme saved' message needs removing
-            if (intThemeSavedMessageTimeShown >= 5)
-            {
-                intThemeSavedMessageTimeShown = 0;
-                lblThemeSaved.Invoke((MethodInvoker)delegate
-                {
-                    lblThemeSaved.Visible = false;
-                });
-            }
-
-            //check whether bookmark message needs removing
-            if (intAddToBookmarksMessageTimeLightLit >= 5)
-            {
-                intAddToBookmarksMessageTimeLightLit = 0;
-                lblBookmarkStatusMessage.Invoke((MethodInvoker)delegate
-                {
-                    lblBookmarkStatusMessage.Visible = false;
-                });
-            }
-
-            //check whether 'add to bookmarks' panel needs hiding
-            if (intHideAddToBookmarksTimeShown >= 5)
-            {
-                panelAddToBookmarks.Invoke((MethodInvoker)delegate
-                {
-                    panelAddToBookmarks.Visible = false;
-
-                });
-                panelAddToBookmarksBorder.Invoke((MethodInvoker)delegate
-                {
-                    panelAddToBookmarksBorder.Visible = false;
-                });
-                intHideAddToBookmarksTimeShown = 0;
-                bookmarkHasBeenAdded = false;
-            }
-
-            //check whether xpub progrss bars need hiding
-            if (intTimeUntilXpubProgressBarsHidden >= 8)
-            {
-                intTimeUntilXpubProgressBarsHidden = 0;
-                if (xpubScanComplete)
-                {
-                    Control[] controlsToHide = { progressBarCheckAllAddressTypes, progressBarCheckEachAddressType, lblCheckAllAddressTypesCount, lblCheckEachAddressTypeCount, label140, label141 };
-                    foreach (Control control in controlsToHide)
+                    if (intDisplayCountdownToRefresh % 5 == 0)
                     {
-                        control.Invoke((MethodInvoker)delegate
-                        {
-                            control.Visible = false;
-                        });
+                        await CheckNetworkStatusAsync().ConfigureAwait(true);
                     }
                 }
-            }
 
-            //check whether external link clicked flag needs resetting to false
-            if (intExternalLinkClickedFlagToFalse >= 1)
+                if (intDisplayCountdownToRefresh <= 56)
+                {
+                    gotMarketDataInLastFewSecs = false; // this flag prevented getting market data twice in quick succession during startup. Once false (after initial few secs), it stays false.
+                }
+
+                //increment timers for status lights and messages
+                intMempoolspaceTimeLightLit++;
+                intCoinbaseTimeLightLit++;
+                intCoingeckoTimeLightLit++;
+                intNodeStatusLightTimeLightLit++;
+                intSavingSettingsTimeLightLit++;
+                intThemeNameInUseMessageTimeShown++;
+                intThemeDeletedMessageTimeShown++;
+                intThemeSavedMessageTimeShown++;
+                intAddToBookmarksMessageTimeLightLit++;
+                if (bookmarkHasBeenAdded)
+                {
+                    intHideAddToBookmarksTimeShown++;
+                }
+                if (xpubScanComplete)
+                {
+                    intTimeUntilXpubProgressBarsHidden++;
+                }
+                intExternalLinkClickedFlagToFalse++;
+
+                // check whether price API indicators need turning off
+                if (intMempoolspaceTimeLightLit >= 2)
+                {
+                    intMempoolspaceTimeLightLit = 0;
+                    TurnOffMempoolspacePriceIndicator();
+                }
+                if (intCoinbaseTimeLightLit >= 2)
+                {
+                    intCoinbaseTimeLightLit = 0;
+                    TurnOffCoinbasePriceIndicator();
+                }
+                if (intCoingeckoTimeLightLit >= 2)
+                {
+                    intCoingeckoTimeLightLit = 0;
+                    TurnOffCoingeckoPriceIndicator();
+                }
+
+                //check whether node status light needs turning off
+                if (intNodeStatusLightTimeLightLit >= 2)
+                {
+                    intNodeStatusLightTimeLightLit = 0;
+                    headerSelectedNodeStatusLight.Invoke((MethodInvoker)delegate
+                    {
+                        headerSelectedNodeStatusLight.ForeColor = Color.OliveDrab;
+                    });
+                }
+
+                //check whether 'saving settings' light needs turning off
+                if (intSavingSettingsTimeLightLit >= 2)
+                {
+                    intSavingSettingsTimeLightLit = 0;
+                    labelSettingsSaved.Invoke((MethodInvoker)delegate
+                    {
+                        labelSettingsSaved.Text = "Settings saved";
+                    });
+                    lblSaveSettingsLight.Invoke((MethodInvoker)delegate
+                    {
+                        lblSaveSettingsLight.ForeColor = Color.OliveDrab;
+                    });
+                }
+
+                //check whether 'theme name in use' message needs removing
+                if (intThemeNameInUseMessageTimeShown >= 5)
+                {
+                    intThemeNameInUseMessageTimeShown = 0;
+                    lblThemeNameInUse.Invoke((MethodInvoker)delegate
+                    {
+                        lblThemeNameInUse.Visible = false;
+                    });
+                }
+
+                //check whether 'theme deleted' message needs removing
+                if (intThemeDeletedMessageTimeShown >= 5)
+                {
+                    intThemeDeletedMessageTimeShown = 0;
+                    lblThemeDeleted.Invoke((MethodInvoker)delegate
+                    {
+                        lblThemeDeleted.Visible = false;
+                    });
+                }
+
+                //check whether 'theme saved' message needs removing
+                if (intThemeSavedMessageTimeShown >= 5)
+                {
+                    intThemeSavedMessageTimeShown = 0;
+                    lblThemeSaved.Invoke((MethodInvoker)delegate
+                    {
+                        lblThemeSaved.Visible = false;
+                    });
+                }
+
+                //check whether bookmark message needs removing
+                if (intAddToBookmarksMessageTimeLightLit >= 5)
+                {
+                    intAddToBookmarksMessageTimeLightLit = 0;
+                    lblBookmarkStatusMessage.Invoke((MethodInvoker)delegate
+                    {
+                        lblBookmarkStatusMessage.Visible = false;
+                    });
+                }
+
+                //check whether 'add to bookmarks' panel needs hiding
+                if (intHideAddToBookmarksTimeShown >= 5)
+                {
+                    panelAddToBookmarks.Invoke((MethodInvoker)delegate
+                    {
+                        panelAddToBookmarks.Visible = false;
+
+                    });
+                    panelAddToBookmarksBorder.Invoke((MethodInvoker)delegate
+                    {
+                        panelAddToBookmarksBorder.Visible = false;
+                    });
+                    intHideAddToBookmarksTimeShown = 0;
+                    bookmarkHasBeenAdded = false;
+                }
+
+                //check whether xpub progrss bars need hiding
+                if (intTimeUntilXpubProgressBarsHidden >= 8)
+                {
+                    intTimeUntilXpubProgressBarsHidden = 0;
+                    if (xpubScanComplete)
+                    {
+                        Control[] controlsToHide = { progressBarCheckAllAddressTypes, progressBarCheckEachAddressType, lblCheckAllAddressTypesCount, lblCheckEachAddressTypeCount, label140, label141 };
+                        foreach (Control control in controlsToHide)
+                        {
+                            control.Invoke((MethodInvoker)delegate
+                            {
+                                control.Visible = false;
+                            });
+                        }
+                    }
+                }
+
+                //check whether external link clicked flag needs resetting to false
+                if (intExternalLinkClickedFlagToFalse >= 1)
+                {
+                    linkClicked = false;
+                }
+            }
+            catch (Exception ex)
             {
-                linkClicked = false;
+                HandleException(ex, "DoTimerBasedStuffAsync");
             }
         }
         #endregion
@@ -31604,7 +32359,7 @@ namespace SATSuma
         private void ToolTip_Popup(object sender, PopupEventArgs e) // size the tooltip
         {
             // add some space before the text to make way for the icon
-            string toolTipText = $"       {(sender as ToolTip).GetToolTip(e.AssociatedControl)}";
+            string toolTipText = $"       {((ToolTip)sender).GetToolTip(e.AssociatedControl)}";
             using var g = e.AssociatedControl.CreateGraphics();
             var textSize = Size.Add(TextRenderer.MeasureText(
                 g, toolTipText, toolTipFont, Size.Empty, toolTipFlags), new Size(5, 10));
@@ -31695,7 +32450,7 @@ namespace SATSuma
                         control.Visible = false;
                     }
                 }
-            });
+            }).ConfigureAwait(true);
         }
 
         private async void BtnMenuBitcoinDashboard_ClickAsync(object sender, EventArgs e)
@@ -31703,7 +32458,7 @@ namespace SATSuma
             try
             {
                 #region display loading screen
-                Form loadingScreen = null;
+                Form? loadingScreen = null;
                 bool wasOnTop = false;
                 if (!fullScreenLoadingScreenVisible)
                 {
@@ -31746,7 +32501,7 @@ namespace SATSuma
                     lblMenuArrow.Visible = true;
                 });
 
-                await HideAllScreensAsync();
+                await HideAllScreensAsync().ConfigureAwait(true);
                 CloseCurrencyMenu();
                 CloseThemeMenu();
                 EnableAllMenuButtons();
@@ -31776,7 +32531,7 @@ namespace SATSuma
 
                 ResumeLayout(false);
                 ToggleLoadingAnimation("disable");
-                await CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync().ConfigureAwait(true);
             }
             catch (Exception ex)
             {
@@ -31790,7 +32545,7 @@ namespace SATSuma
             {
                 #region display loading screen
                 bool wasOnTop = false;
-                Form loadingScreen = null;
+                Form? loadingScreen = null;
                 if (!fullScreenLoadingScreenVisible)
                 {
                     if (this.TopMost == true)
@@ -31831,7 +32586,7 @@ namespace SATSuma
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuLightningDashboard.Location.Y);
                     lblMenuArrow.Visible = true;
                 });
-                await HideAllScreensAsync();
+                await HideAllScreensAsync().ConfigureAwait(true);
                 CloseCurrencyMenu();
                 CloseThemeMenu();
 
@@ -31861,7 +32616,7 @@ namespace SATSuma
                 }
                 ResumeLayout(false);
                 ToggleLoadingAnimation("disable");
-                await CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync().ConfigureAwait(true);
             }
             catch (Exception ex)
             {
@@ -31875,7 +32630,7 @@ namespace SATSuma
             {
                 #region display loading screen
                 bool wasOnTop = false;
-                Form loadingScreen = null;
+                Form? loadingScreen = null;
                 if (!fullScreenLoadingScreenVisible)
                 {
                     if (this.TopMost == true)
@@ -31917,7 +32672,7 @@ namespace SATSuma
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuCharts.Location.Y);
                     lblMenuArrow.Visible = true;
                 });
-                await HideAllScreensAsync();
+                await HideAllScreensAsync().ConfigureAwait(true);
                 CloseCurrencyMenu();
                 CloseThemeMenu();
 
@@ -31926,6 +32681,11 @@ namespace SATSuma
                 ResumeLayout(false);
                 ToggleLoadingAnimation("enable");
                 SuspendLayout();
+                if (!chartRendered)
+                {
+                    ChartFeeRatesAsync();
+                    previouslyShownChart = 0;
+                }
                 panelCharts.Invoke((MethodInvoker)delegate
                 {
                     panelCharts.Visible = true;
@@ -31946,7 +32706,7 @@ namespace SATSuma
                 }
                 ResumeLayout(false);
                 ToggleLoadingAnimation("disable");
-                await CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync().ConfigureAwait(true);
             }
             catch (Exception ex)
             {
@@ -31960,7 +32720,7 @@ namespace SATSuma
             {
                 #region display loading screen
                 bool wasOnTop = false;
-                Form loadingScreen = null;
+                Form? loadingScreen = null;
                 if (!fullScreenLoadingScreenVisible)
                 {
                     if (this.TopMost == true)
@@ -32001,7 +32761,7 @@ namespace SATSuma
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuAddress.Location.Y);
                     lblMenuArrow.Visible = true;
                 });
-                await HideAllScreensAsync();
+                await HideAllScreensAsync().ConfigureAwait(true);
                 CloseCurrencyMenu();
                 CloseThemeMenu();
 
@@ -32059,7 +32819,7 @@ namespace SATSuma
                 }
                 ResumeLayout(false);
                 ToggleLoadingAnimation("disable");
-                await CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync().ConfigureAwait(true);
             }
             catch (Exception ex)
             {
@@ -32073,7 +32833,7 @@ namespace SATSuma
             {
                 #region display loading screen
                 bool wasOnTop = false;
-                Form loadingScreen = null;
+                Form? loadingScreen = null;
                 if (!fullScreenLoadingScreenVisible)
                 {
                     if (this.TopMost == true)
@@ -32114,7 +32874,7 @@ namespace SATSuma
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuAddressUTXO.Location.Y);
                     lblMenuArrow.Visible = true;
                 });
-                await HideAllScreensAsync();
+                await HideAllScreensAsync().ConfigureAwait(true);
                 CloseCurrencyMenu();
                 CloseThemeMenu();
 
@@ -32165,7 +32925,7 @@ namespace SATSuma
                 ResumeLayout(false);
 
                 ToggleLoadingAnimation("disable");
-                await CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync().ConfigureAwait(true);
             }
             catch (Exception ex)
             {
@@ -32179,7 +32939,7 @@ namespace SATSuma
             {
                 #region display loading screen
                 bool wasOnTop = false;
-                Form loadingScreen = null;
+                Form? loadingScreen = null;
                 if (!fullScreenLoadingScreenVisible)
                 {
                     if (this.TopMost == true)
@@ -32220,7 +32980,7 @@ namespace SATSuma
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuBlock.Location.Y);
                     lblMenuArrow.Visible = true;
                 });
-                await HideAllScreensAsync();
+                await HideAllScreensAsync().ConfigureAwait(true);
                 CloseCurrencyMenu();
                 CloseThemeMenu();
 
@@ -32269,7 +33029,7 @@ namespace SATSuma
                     panelOwnNodeBlockTXInfo.Visible = true;
                 }
                 ResumeLayout(false);
-                await CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync().ConfigureAwait(true);
                 if (!fullScreenLoadingScreenVisible && loadingScreen != null)
                 {
                     #region close loading screen
@@ -32297,7 +33057,7 @@ namespace SATSuma
             {
                 #region display loading screen
                 bool wasOnTop = false;
-                Form loadingScreen = null;
+                Form? loadingScreen = null;
                 if (!fullScreenLoadingScreenVisible)
                 {
                     if (this.TopMost == true)
@@ -32338,7 +33098,7 @@ namespace SATSuma
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuXpub.Location.Y);
                     lblMenuArrow.Visible = true;
                 });
-                await HideAllScreensAsync();
+                await HideAllScreensAsync().ConfigureAwait(true);
 
                 CloseCurrencyMenu();
                 CloseThemeMenu();
@@ -32383,7 +33143,7 @@ namespace SATSuma
                 }
                 ResumeLayout(false);
                 ToggleLoadingAnimation("disable");
-                await CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync().ConfigureAwait(true);
             }
             catch (Exception ex)
             {
@@ -32397,7 +33157,7 @@ namespace SATSuma
             {
                 #region display loading screen
                 bool wasOnTop = false;
-                Form loadingScreen = null;
+                Form? loadingScreen = null;
                 if (!fullScreenLoadingScreenVisible)
                 {
                     if (this.TopMost == true)
@@ -32438,7 +33198,7 @@ namespace SATSuma
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuBlockList.Location.Y);
                     lblMenuArrow.Visible = true;
                 });
-                await HideAllScreensAsync();
+                await HideAllScreensAsync().ConfigureAwait(true);
                 CloseCurrencyMenu();
                 CloseThemeMenu();
 
@@ -32477,7 +33237,7 @@ namespace SATSuma
                     }
                 }
 
-                await CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync().ConfigureAwait(true);
                 if (!fullScreenLoadingScreenVisible && loadingScreen != null)
                 {
                     #region close loading screen
@@ -32506,7 +33266,7 @@ namespace SATSuma
             {
                 #region display loading screen
                 bool wasOnTop = false;
-                Form loadingScreen = null;
+                Form? loadingScreen = null;
                 if (!fullScreenLoadingScreenVisible)
                 {
                     if (this.TopMost == true)
@@ -32546,7 +33306,7 @@ namespace SATSuma
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuPoolsByBlocks.Location.Y);
                     lblMenuArrow.Visible = true;
                 });
-                await HideAllScreensAsync();
+                await HideAllScreensAsync().ConfigureAwait(true);
                 CloseCurrencyMenu();
                 CloseThemeMenu();
 
@@ -32583,7 +33343,7 @@ namespace SATSuma
                     }
                 }
 
-                await CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync().ConfigureAwait(true);
                 if (!fullScreenLoadingScreenVisible && loadingScreen != null)
                 {
                     #region close loading screen
@@ -32606,13 +33366,13 @@ namespace SATSuma
             }
         }
 
-        private async void BtnMenuPoolsByHashrate_ClickAsync(object sender, EventArgs e)
+        private async void BtnMenuPoolsByHashrate_ClickAsync()
         {
             try
             {
                 #region display loading screen
                 bool wasOnTop = false;
-                Form loadingScreen = null;
+                Form? loadingScreen = null;
                 if (!fullScreenLoadingScreenVisible)
                 {
                     if (this.TopMost == true)
@@ -32652,7 +33412,7 @@ namespace SATSuma
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuPoolsByBlocks.Location.Y);
                     lblMenuArrow.Visible = true;
                 });
-                await HideAllScreensAsync();
+                await HideAllScreensAsync().ConfigureAwait(true);
 
                 CloseCurrencyMenu();
                 CloseThemeMenu();
@@ -32687,7 +33447,7 @@ namespace SATSuma
                     }
                 }
 
-                await CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync().ConfigureAwait(true);
                 if (!fullScreenLoadingScreenVisible && loadingScreen != null)
                 {
                     #region close loading screen
@@ -32716,7 +33476,7 @@ namespace SATSuma
             {
                 #region display loading screen
                 bool wasOnTop = false;
-                Form loadingScreen = null;
+                Form? loadingScreen = null;
                 if (!fullScreenLoadingScreenVisible)
                 {
                     if (this.TopMost == true)
@@ -32756,7 +33516,7 @@ namespace SATSuma
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuMiningPools.Location.Y);
                     lblMenuArrow.Visible = true;
                 });
-                await HideAllScreensAsync();
+                await HideAllScreensAsync().ConfigureAwait(true);
                 CloseCurrencyMenu();
                 CloseThemeMenu();
 
@@ -32789,7 +33549,7 @@ namespace SATSuma
                     }
                 }
 
-                await CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync().ConfigureAwait(true);
                 if (!fullScreenLoadingScreenVisible && loadingScreen != null)
                 {
                     #region close loading screen
@@ -32818,7 +33578,7 @@ namespace SATSuma
             {
                 #region display loading screen
                 bool wasOnTop = false;
-                Form loadingScreen = null;
+                Form? loadingScreen = null;
                 if (!fullScreenLoadingScreenVisible)
                 {
                     if (this.TopMost == true)
@@ -32859,7 +33619,7 @@ namespace SATSuma
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuTransaction.Location.Y);
                     lblMenuArrow.Visible = true;
                 });
-                await HideAllScreensAsync();
+                await HideAllScreensAsync().ConfigureAwait(true);
                 CloseCurrencyMenu();
                 CloseThemeMenu();
 
@@ -32913,7 +33673,7 @@ namespace SATSuma
 
                 //ResumeLayout(false);
                 ToggleLoadingAnimation("disable");
-                await CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync().ConfigureAwait(true);
             }
             catch (Exception ex)
             {
@@ -32927,7 +33687,7 @@ namespace SATSuma
             {
                 #region display loading screen
                 bool wasOnTop = false;
-                Form loadingScreen = null;
+                Form? loadingScreen = null;
                 if (!fullScreenLoadingScreenVisible)
                 {
                     if (this.TopMost == true)
@@ -32968,7 +33728,7 @@ namespace SATSuma
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuBookmarks.Location.Y);
                     lblMenuArrow.Visible = true;
                 });
-                await HideAllScreensAsync();
+                await HideAllScreensAsync().ConfigureAwait(true);
                 CloseCurrencyMenu();
                 CloseThemeMenu();
 
@@ -33027,7 +33787,7 @@ namespace SATSuma
             {
                 #region display loading screen
                 bool wasOnTop = false;
-                Form loadingScreen = null;
+                Form? loadingScreen = null;
                 if (!fullScreenLoadingScreenVisible)
                 {
                     if (this.TopMost == true)
@@ -33068,7 +33828,7 @@ namespace SATSuma
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuPriceConverter.Location.Y);
                     lblMenuArrow.Visible = true;
                 });
-                await HideAllScreensAsync();
+                await HideAllScreensAsync().ConfigureAwait(true);
                 CloseCurrencyMenu();
                 CloseThemeMenu();
 
@@ -33077,7 +33837,7 @@ namespace SATSuma
                 ResumeLayout(false);
                 ToggleLoadingAnimation("enable");
                 SuspendLayout();
-                await CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync().ConfigureAwait(true);
                 PopulateConverterScreen();
                 panelPriceConverter.Invoke((MethodInvoker)delegate
                 {
@@ -33128,7 +33888,7 @@ namespace SATSuma
             {
                 #region display loading screen
                 bool wasOnTop = false;
-                Form loadingScreen = null;
+                Form? loadingScreen = null;
                 if (!fullScreenLoadingScreenVisible)
                 {
                     if (this.TopMost == true)
@@ -33169,7 +33929,7 @@ namespace SATSuma
                     lblMenuArrow.Location = new Point(lblMenuArrow.Location.X, btnMenuDCACalculator.Location.Y);
                     lblMenuArrow.Visible = true;
                 });
-                await HideAllScreensAsync();
+                await HideAllScreensAsync().ConfigureAwait(true);
                 CloseCurrencyMenu();
                 CloseThemeMenu();
 
@@ -33178,6 +33938,16 @@ namespace SATSuma
                 ResumeLayout(false);
                 ToggleLoadingAnimation("enable");
                 SuspendLayout();
+
+                if (!DCAChartRendered)
+                {
+                    // populate dca chart if the api is enabled
+                    if (OneBTCinSelectedCurrency > 0)
+                    {
+                        PopulateDCACalculatorAsync();
+                    }
+                }
+
                 panelDCACalculator.Invoke((MethodInvoker)delegate
                 {
                     panelDCACalculator.Visible = true;
@@ -33214,7 +33984,7 @@ namespace SATSuma
                 }
                 ResumeLayout(false);
                 ToggleLoadingAnimation("disable");
-                await CheckNetworkStatusAsync();
+                await CheckNetworkStatusAsync().ConfigureAwait(true);
             }
             catch (Exception ex)
             {
@@ -33228,7 +33998,7 @@ namespace SATSuma
             {
                 #region display loading screen
                 bool wasOnTop = false;
-                Form loadingScreen = null;
+                Form? loadingScreen = null;
                 if (!fullScreenLoadingScreenVisible)
                 {
                     if (this.TopMost == true)
@@ -33255,7 +34025,7 @@ namespace SATSuma
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
-                await HideAllScreensAsync();
+                await HideAllScreensAsync().ConfigureAwait(true);
                 SuspendLayout();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -33329,7 +34099,7 @@ namespace SATSuma
             {
                 #region display loading screen
                 bool wasOnTop = false;
-                Form loadingScreen = null;
+                Form? loadingScreen = null;
                 if (!fullScreenLoadingScreenVisible)
                 {
                     if (this.TopMost == true)
@@ -33356,7 +34126,7 @@ namespace SATSuma
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
-                await HideAllScreensAsync();
+                await HideAllScreensAsync().ConfigureAwait(true);
                 SuspendLayout();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -33424,7 +34194,7 @@ namespace SATSuma
 
         private void LblOpenPreferences_Click(object sender, EventArgs e)
         {
-            if (lblOpenPreferences.Text == "PREFERENCES ▼")
+            if (String.Compare(lblOpenPreferences.Text, "PREFERENCES ▼") == 0)
             {
                 lblOpenPreferences.Invoke((MethodInvoker)delegate
                 {
@@ -33658,7 +34428,7 @@ namespace SATSuma
                 });
                 #region update the market charts
                 //if either the price or marketcap charts were active, refresh them with the new currency, just in case they were visible at the time
-                if (comboBoxChartSelect.Texts == "💲 price")
+                if (String.Compare(comboBoxChartSelect.Texts, "💲 price") == 0)
                 {
                     if (!btnPriceChartScaleLog.Enabled)
                     {
@@ -33670,7 +34440,7 @@ namespace SATSuma
                     }
                     return;
                 }
-                if (comboBoxChartSelect.Texts == "💲 market cap.")
+                if (String.Compare(comboBoxChartSelect.Texts, "💲 market cap.") == 0)
                 {
                     if (!btnChartMarketCapScaleLog.Enabled)
                     {
@@ -33721,7 +34491,7 @@ namespace SATSuma
                 });
                 #region update the market charts
                 //if either the price or marketcap charts were active, refresh them with the new currency, just in case they were visible at the time
-                if (comboBoxChartSelect.Texts == "💲 price")
+                if (String.Compare(comboBoxChartSelect.Texts, "💲 price") == 0)
                 {
                     if (!btnPriceChartScaleLog.Enabled)
                     {
@@ -33733,7 +34503,7 @@ namespace SATSuma
                     }
                     return;
                 }
-                if (comboBoxChartSelect.Texts == "💲 market cap.")
+                if (String.Compare(comboBoxChartSelect.Texts, "💲 market cap.") == 0)
                 {
                     if (!btnChartMarketCapScaleLog.Enabled)
                     {
@@ -33784,7 +34554,7 @@ namespace SATSuma
                 });
                 #region update the market charts
                 //if either the price or marketcap charts were active, refresh them with the new currency, just in case they were visible at the time
-                if (comboBoxChartSelect.Texts == "💲 price")
+                if (String.Compare(comboBoxChartSelect.Texts, "💲 price") == 0)
                 {
                     if (!btnPriceChartScaleLog.Enabled)
                     {
@@ -33796,7 +34566,7 @@ namespace SATSuma
                     }
                     return;
                 }
-                if (comboBoxChartSelect.Texts == "💲 market cap.")
+                if (String.Compare(comboBoxChartSelect.Texts, "💲 market cap.") == 0)
                 {
                     if (!btnChartMarketCapScaleLog.Enabled)
                     {
@@ -33847,7 +34617,7 @@ namespace SATSuma
                 });
                 #region update the market charts
                 //if either the price or marketcap charts were active, refresh them with the new currency, just in case they were visible at the time
-                if (comboBoxChartSelect.Texts == "💲 price")
+                if (String.Compare(comboBoxChartSelect.Texts, "💲 price") == 0)
                 {
                     if (!btnPriceChartScaleLog.Enabled)
                     {
@@ -33859,7 +34629,8 @@ namespace SATSuma
                     }
                     return;
                 }
-                if (comboBoxChartSelect.Texts == "💲 market cap.")
+
+                if (String.Compare(comboBoxChartSelect.Texts, "💲 market cap.") == 0)
                 {
                     if (!btnChartMarketCapScaleLog.Enabled)
                     {
@@ -33999,7 +34770,7 @@ namespace SATSuma
                     }
                     if (AddressQRCodePicturebox.Visible)
                     {
-                        if (lblHeaderPrice.Text != "disabled")
+                        if (String.Compare(lblHeaderPrice.Text, "disabled") != 0)
                         {
                             lblAddressConfirmedReceivedFiat.Invoke((MethodInvoker)delegate
                             {
@@ -34048,7 +34819,7 @@ namespace SATSuma
                     }
                     if (AddressQRCodePictureboxUTXO.Visible)
                     {
-                        if (lblHeaderPrice.Text != "disabled")
+                        if (String.Compare(lblHeaderPrice.Text, "disabled") != 0)
                         {
                             lblAddressConfirmedSpentUTXOFiat.Invoke((MethodInvoker)delegate
                             {
@@ -34061,17 +34832,14 @@ namespace SATSuma
                         }
                         else
                         {
-                            if (lblHeaderPrice.Text != "disabled")
+                            lblAddressConfirmedSpentUTXOFiat.Invoke((MethodInvoker)delegate
                             {
-                                lblAddressConfirmedSpentUTXOFiat.Invoke((MethodInvoker)delegate
-                                {
-                                    lblAddressConfirmedSpentUTXOFiat.Visible = false;
-                                });
-                                lblAddressConfirmedUnspentUTXOFiat.Invoke((MethodInvoker)delegate
-                                {
-                                    lblAddressConfirmedUnspentUTXOFiat.Visible = false;
-                                });
-                            }
+                                lblAddressConfirmedSpentUTXOFiat.Visible = false;
+                            });
+                            lblAddressConfirmedUnspentUTXOFiat.Invoke((MethodInvoker)delegate
+                            {
+                                lblAddressConfirmedUnspentUTXOFiat.Visible = false;
+                            });
                         }
                     }
                     #endregion
@@ -34126,7 +34894,7 @@ namespace SATSuma
                     wasOnTop = true;
                     this.TopMost = false;
                 }
-                Form loadingTheme = new LoadingTheme(UIScale)
+                fullSizeLoadingScreen = new FullSizeLoadingScreen(UIScale)
                 {
                     Owner = this,
                     StartPosition = FormStartPosition.CenterParent,
@@ -34135,23 +34903,24 @@ namespace SATSuma
                     Opacity = 1,
                     BackgroundImage = Resources.Closing
                 };
-                loadingTheme.StartPosition = FormStartPosition.CenterParent;
+                fullSizeLoadingScreen.StartPosition = FormStartPosition.CenterParent;
 
                 // Calculate the overlay form's location to place it in the center of the parent form
-                loadingTheme.StartPosition = FormStartPosition.Manual;
+                fullSizeLoadingScreen.StartPosition = FormStartPosition.Manual;
                 int parentCenterX = this.Location.X + this.Width / 2;
                 int parentCenterY = this.Location.Y + this.Height / 2;
-                int overlayX = parentCenterX - loadingTheme.Width / 2;
-                int overlayY = parentCenterY - loadingTheme.Height / 2;
-                loadingTheme.Location = new Point(overlayX, overlayY);
-                loadingTheme.Show(this);
+                int overlayX = parentCenterX - fullSizeLoadingScreen.Width / 2;
+                int overlayY = parentCenterY - fullSizeLoadingScreen.Height / 2;
+                fullSizeLoadingScreen.Location = new Point(overlayX, overlayY);
+                fullSizeLoadingScreen.Show(this);
                 #endregion
-
+                fullSizeLoadingScreen.SetLoadingText("", "");
+                
                 // the closing screen exists only to hide the messy removal of all screen elements when closing the form
                 await BriefPauseAsync(1000).ConfigureAwait(true);
 
                 this.Close();
-                loadingTheme.Close();
+                fullSizeLoadingScreen.Close();
                 if (wasOnTop)
                 {
                     this.TopMost = true;
@@ -34206,7 +34975,7 @@ namespace SATSuma
             try
             {
                 var args = e as MouseEventArgs;
-                if (args.Button == MouseButtons.Right)
+                if (args!.Button == MouseButtons.Right)
                 {
                     return;
                 }
@@ -34358,6 +35127,10 @@ namespace SATSuma
                                 //check if its an xpub
                                 try
                                 {
+                                    if (string.Compare(textBoxUniversalSearch.Text, "block height, address, transaction ID or xpub...") == 0)
+                                    {
+                                        return;
+                                    }
                                     BitcoinExtPubKey xpub = new BitcoinExtPubKey(textBoxUniversalSearch.Text, Network.Main);
                                     _ = xpub.GetPublicKey();
                                 }
@@ -34702,7 +35475,7 @@ namespace SATSuma
 
         private void ClosePreferencesMenu()
         {
-            if (lblOpenPreferences.Text == "PREFERENCES ▲")
+            if (String.Compare(lblOpenPreferences.Text, "PREFERENCES ▲") == 0)
             {
                 CloseThemeMenu();
                 CloseCurrencyMenu();
@@ -34731,7 +35504,7 @@ namespace SATSuma
         #region read settings from file
         public static class SettingsManager
         {
-            public static Settings Settings { get; private set; }
+            public static Settings? Settings { get; private set; }
 
             public static void Initialize()
             {
@@ -34768,7 +35541,7 @@ namespace SATSuma
         #region themes from file
         public static class ThemesManager
         {
-            public static List<Theme> Themes { get; private set; }
+            public static List<Theme>? Themes { get; private set; }
 
             public static void Initialize()
             {
@@ -34805,18 +35578,18 @@ namespace SATSuma
         public class Bookmark
         {
             public DateTime DateAdded { get; set; }
-            public string Type { get; set; }
-            public string Data { get; set; }
-            public string Note { get; set; }
-            public bool Encrypted { get; set; }
-            public string KeyCheck { get; set; }
+            public string? Type { get; set; }
+            public string? Data { get; set; }
+            public string? Note { get; set; }
+            public bool? Encrypted { get; set; }
+            public string? KeyCheck { get; set; }
         }
         #endregion
 
         #region theme
         public class Theme
         {
-            public string ThemeName { get; set; }
+            public string? ThemeName { get; set; }
             public Color DataFields { get; set; }
             public Color Labels { get; set; }
             public Color Headings { get; set; }
@@ -34838,7 +35611,7 @@ namespace SATSuma
             public bool HeadingBGCustom { get; set; }
             public Color HeadingBackgrounds { get; set; }
             public Color WindowBackground { get; set; }
-            public string WindowImage { get; set; }
+            public string? WindowImage { get; set; }
             public bool BackgroundGenesis { get; set; }
             public bool BackgroundFranklin { get; set; }
             public bool BackgroundSatsuma { get; set; }
@@ -34848,36 +35621,36 @@ namespace SATSuma
             public bool BackgroundCustomColor { get; set; }
             public bool BackgroundCustomImage { get; set; }
             public Color Panels { get; set; }
-            public string ChartsDark { get; set; }
+            public string? ChartsDark { get; set; }
             public int OrangeInfinity { get; set; }
             public int BorderRadius { get; set; }
             public Color FiatConversionText { get; set; }
             public decimal Opacity { get; set; }
             public int TitlesBackgroundImage { get; set; }
-            public string ProgressBarStyle { get; set; }
+            public string? ProgressBarStyle { get; set; }
         }
         #endregion
 
         #region settings
         public class Settings
         {
-            public string SettingsCurrencySelected { get; set; }
-            public string SettingsSelectedNetwork { get; set; }
-            public string SettingsMessariJSONSelected { get; set; }
-            public string SettingsCoinbaseEnpointsSelected { get; set; }
-            public string SettingsBlockchainInfoEndpointsSelected { get; set; }
-            public string SettingsOfflineModeSelected { get; set; }
-            public string SettingsDirectoryEnabled { get; set; }
-            public string SettingsAlwaysOnTop { get; set; }
-            public string SettingsDataRefreshPeriod { get; set; }
-            public string SettingsNumberOfConsecutiveUnusedAddresses { get; set; }
-            public string SettingsNumberUpDownDerivationPathsToCheck { get; set; }
-            public string SettingsStartupScreen { get; set; }
-            public string SettingsUIScale { get; set; }
-            public string SettingsCoingeckoAPISelected { get; set; }
-            public string SettingsMempoolSpacePriceAPISelected { get; set; }
-            public string SettingsNode { get; set; }
-            public string SettingsDefaultTheme { get; set; }
+            public string? SettingsCurrencySelected { get; set; }
+            public string? SettingsSelectedNetwork { get; set; }
+            public string? SettingsMessariJSONSelected { get; set; }
+            public string? SettingsCoinbaseEnpointsSelected { get; set; }
+            public string? SettingsBlockchainInfoEndpointsSelected { get; set; }
+            public string? SettingsOfflineModeSelected { get; set; }
+            public string? SettingsDirectoryEnabled { get; set; }
+            public string? SettingsAlwaysOnTop { get; set; }
+            public string? SettingsDataRefreshPeriod { get; set; }
+            public string? SettingsNumberOfConsecutiveUnusedAddresses { get; set; }
+            public string? SettingsNumberUpDownDerivationPathsToCheck { get; set; }
+            public string? SettingsStartupScreen { get; set; }
+            public string? SettingsUIScale { get; set; }
+            public string? SettingsCoingeckoAPISelected { get; set; }
+            public string? SettingsMempoolSpacePriceAPISelected { get; set; }
+            public string? SettingsNode { get; set; }
+            public string? SettingsDefaultTheme { get; set; }
         }
         #endregion
 
@@ -34993,37 +35766,33 @@ namespace SATSuma
 
         public class AddressTransactions
         {
-            public string Txid { get; set; }
-            public Status_AddressTransactions Status { get; set; }
-            public List<Vout_AddressTransactions> Vout { get; set; }
-            public List<Vin_AddressTransactions> Vin { get; set; }
+            public string? Txid { get; set; }
+            public Status_AddressTransactions? Status { get; set; }
+            public List<Vout_AddressTransactions>? Vout { get; set; }
+            public List<Vin_AddressTransactions>? Vin { get; set; }
         }
 
         public class Vin_AddressTransactions
         {
-            public Prevout_AddressTransactions Prevout { get; set; }
-            //public decimal Value { get; set; }
-            //public decimal Amount { get; set; }
+            public Prevout_AddressTransactions? Prevout { get; set; }
         }
 
         public class Prevout_AddressTransactions
         {
-            public string Scriptpubkey_address { get; set; }
+            public string? Scriptpubkey_address { get; set; }
             public decimal Value { get; set; }
         }
 
         public class Vout_AddressTransactions
         {
             public double Value { get; set; }
-            // public decimal Amount { get; set; }
-            public string Scriptpubkey_address { get; set; }
-            // public string Scriptpubkey_asm { get; set; }
+            public string? Scriptpubkey_address { get; set; }
         }
 
         public class Status_AddressTransactions
         {
             public int Block_height { get; set; }
-            public string Confirmed { get; set; }
+            public string? Confirmed { get; set; }
         }
         #endregion
 
@@ -35068,14 +35837,13 @@ namespace SATSuma
 
         public class PoolsWrapper
         {
-            public List<PoolForList> Pools { get; set; }
+            public List<PoolForList>? Pools { get; set; }
         }
 
         public class PoolForList
         {
-            public string Name { get; set; }
-            public string Slug { get; set; }
-            public int Unique_id { get; set; }
+            public string? Name { get; set; }
+            public string? Slug { get; set; }
         }
         #endregion
 
@@ -35120,23 +35888,17 @@ namespace SATSuma
 
         public class PoolsBlocks
         {
-            public Pool[] Pools { get; set; }
-            public string BlockCount { get; set; }
-            public string LastEstimatedHashrate { get; set; }
+            public Pool[]? Pools { get; set; }
+            public string? BlockCount { get; set; }
         }
 
         public class Pool
         {
-            public string PoolId { get; set; }
-            public string Name { get; set; }
-            public string Link { get; set; }
-            public string BlockCount { get; set; }
-            public string Rank { get; set; }
-            public string EmptyBlocks { get; set; }
-            public string Slug { get; set; }
-            public string AvgMatchRate { get; set; }
-            public string AvgFeeDelta { get; set; }
-            public string PoolUniqueId { get; set; }
+            public string? Name { get; set; }
+            public string? Link { get; set; }
+            public string? BlockCount { get; set; }
+            public string? Rank { get; set; }
+            public string? EmptyBlocks { get; set; }
         }
         #endregion
 
@@ -35179,13 +35941,11 @@ namespace SATSuma
             }
         }
 
-        // Define a list of PoolH objects instead of PoolsHashrate class
         public class PoolHashrate
         {
-            public long Timestamp { get; set; }
             public double AvgHashrate { get; set; }
             public double Share { get; set; }
-            public string PoolName { get; set; }
+            public string? PoolName { get; set; }
         }
         #endregion
 
@@ -35231,32 +35991,19 @@ namespace SATSuma
 
         public class Extras
         {
-            public string CoinbaseRaw { get; set; }
-            public int MedianFee { get; set; }
             public long Reward { get; set; }
             public long TotalFees { get; set; }
-            public Pool Pool { get; set; }
         }
 
         public class PoolBlock
         {
-            public string Id { get; set; }
             public long Timestamp { get; set; }
             public int Height { get; set; }
-            public int Version { get; set; }
-            public long Bits { get; set; }
-            public long Nonce { get; set; }
-            public double Difficulty { get; set; }
-            [JsonProperty("merkle_root")]
-            public string MerkleRoot { get; set; }
             [JsonProperty("tx_count")]
             public int TxCount { get; set; }
             public int Size { get; set; }
-            public int Weight { get; set; }
-            public string Previousblockhash { get; set; }
-            public Extras Extras { get; set; }
+            public Extras? Extras { get; set; }
         }
-
 
         #endregion
 
@@ -35280,18 +36027,18 @@ namespace SATSuma
                     try
                     {
                         client.BaseAddress = new Uri(_nodeUrl);
-                        var response = await client.GetAsync($"v1/mining/pool/{slug}").ConfigureAwait(false);
+                        var response = await client.GetAsync($"v1/mining/pool/{slug}").ConfigureAwait(true);
                         if (response.IsSuccessStatusCode)
                         {
-                            return await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            return await response.Content.ReadAsStringAsync().ConfigureAwait(true);
                         }
                         retryCount--;
-                        await Task.Delay(3000).ConfigureAwait(false);
+                        await Task.Delay(3000).ConfigureAwait(true);
                     }
                     catch (HttpRequestException)
                     {
                         retryCount--;
-                        await Task.Delay(3000).ConfigureAwait(false);
+                        await Task.Delay(3000).ConfigureAwait(true);
                     }
                 }
                 return string.Empty;
@@ -35299,23 +36046,13 @@ namespace SATSuma
 
             public async Task<PoolData> GetPoolDataAsync(string slug)
             {
-                var json = await GetPoolDataJsonAsync(slug).ConfigureAwait(false);
+                var json = await GetPoolDataJsonAsync(slug).ConfigureAwait(true);
                 if (!string.IsNullOrEmpty(json))
                 {
-                    return JsonConvert.DeserializeObject<PoolData>(json);
+                    return JsonConvert.DeserializeObject<PoolData>(json)!;
                 }
-                return null;
+                return null!;
             }
-        }
-
-        public class SinglePool
-        {
-            public int Id { get; set; }
-            public string Name { get; set; }
-            public string Link { get; set; }
-            public List<string> Addresses { get; set; }
-            public List<string> Regexes { get; set; }
-            public string Slug { get; set; }
         }
 
         public class BlockCount
@@ -35338,11 +36075,10 @@ namespace SATSuma
 
         public class PoolData
         {
-            public Pool Pool { get; set; }
-            public BlockCount BlockCount { get; set; }
-            public BlockShare BlockShare { get; set; }
+            public Pool? Pool { get; set; }
+            public BlockCount? BlockCount { get; set; }
+            public BlockShare? BlockShare { get; set; }
             public double EstimatedHashrate { get; set; }
-            public object ReportedHashrate { get; set; } // Assuming this can be null
         }
 
         #endregion
@@ -35387,16 +36123,14 @@ namespace SATSuma
 
         public class AddressUTXOs
         {
-            public string Txid { get; set; }
-            public string Vout { get; set; }
-            public Status_AddressUTXOs Status { get; set; }
-            public string Value { get; set; }
+            public string? Txid { get; set; }
+            public Status_AddressUTXOs? Status { get; set; }
+            public string? Value { get; set; }
         }
 
 
         public class Status_AddressUTXOs
         {
-            public string Confirmed { get; set; }
             public int Block_height { get; set; }
         }
         #endregion
@@ -35445,40 +36179,33 @@ namespace SATSuma
 
         public class Block
         {
-            public Block_extras Extras { get; set; }
-            //  public string Id { get; set; }
-            public string Height { get; set; }
-            public string Version { get; set; }
-            public string Timestamp { get; set; }
-            //  public string Bits { get; set; }
-            public string Nonce { get; set; }
-            // public string Difficulty { get; set; }
-            // public string Merkle_root { get; set; }
+            public Block_extras? Extras { get; set; }
+            public string? Height { get; set; }
+            public string? Version { get; set; }
+            public string? Timestamp { get; set; }
+            public string? Nonce { get; set; }
             public int Tx_count { get; set; }
             public int Size { get; set; }
-            public string Weight { get; set; }
-            // public string Previousblockhash { get; set; }
+            public string? Weight { get; set; }
         }
 
         public class Block_extras
         {
-            public string Reward { get; set; }
+            public string? Reward { get; set; }
             public decimal MedianFee { get; set; }
-            public decimal[] FeeRange { get; set; }
+            public decimal[]? FeeRange { get; set; }
             public double TotalFees { get; set; }
-            public string AvgFee { get; set; }
-            //  public string AvgFeeRate { get; set; }
-            public string AvgTxSize { get; set; }
-            public string TotalInputs { get; set; }
-            public string TotalOutputs { get; set; }
-            // public string TotalOutputAmt { get; set; }
-            public Block_pool Pool { get; set; }
+            public string? AvgFee { get; set; }
+            public string? AvgTxSize { get; set; }
+            public string? TotalInputs { get; set; }
+            public string? TotalOutputs { get; set; }
+            public Block_pool? Pool { get; set; }
 
         }
 
         public class Block_pool
         {
-            public string Name { get; set; }
+            public string? Name { get; set; }
         }
         #endregion
 
@@ -35519,53 +36246,38 @@ namespace SATSuma
 
         public class Transaction
         {
-            //  public string Txid { get; set; }
             public int Version { get; set; }
             public int Locktime { get; set; }
-            public TransactionVin[] Vin { get; set; }
-            public TransactionVout[] Vout { get; set; }
+            public TransactionVin[]? Vin { get; set; }
+            public TransactionVout[]? Vout { get; set; }
             public int Size { get; set; }
             public int Weight { get; set; }
             public int Fee { get; set; }
-            public TransactionStatus Status { get; set; }
+            public TransactionStatus? Status { get; set; }
         }
 
         public class TransactionStatus
         {
-            //  public bool Confirmed { get; set; }
             public int Block_height { get; set; }
-            // public string Block_hash { get; set; }
             public int Block_time { get; set; }
         }
 
         public class TransactionVin
         {
-            //  public string Txid { get; set; }
-            //  public long Vout { get; set; }
-            public TransactionVinPrevout Prevout { get; set; }
-            // public string Scriptsig { get; set; }
-            // public string Scriptsig_asm { get; set; }
-            // public string[] Witness { get; set; }
+            public TransactionVinPrevout? Prevout { get; set; }
             public bool Is_coinbase { get; set; }
-            // public long Sequence { get; set; }
-            // public string Inner_redeemscript_asm { get; set; }
         }
 
         public class TransactionVinPrevout
         {
-            // public string Scriptpubkey { get; set; }
-            // public string Scriptpubkey_asm { get; set; }
-            // public string Scriptpubkey_type { get; set; }
-            public string Scriptpubkey_address { get; set; }
+            public string? Scriptpubkey_address { get; set; }
             public long Value { get; set; }
         }
 
         public class TransactionVout
         {
-            //  public string Scriptpubkey { get; set; }
-            public string Scriptpubkey_asm { get; set; }
-            //  public string Scriptpubkey_type { get; set; }
-            public string Scriptpubkey_address { get; set; }
+            public string? Scriptpubkey_asm { get; set; }
+            public string? Scriptpubkey_address { get; set; }
             public long Value { get; set; }
         }
         #endregion
@@ -35604,36 +36316,25 @@ namespace SATSuma
                         await Task.Delay(3000).ConfigureAwait(true);
                     }
                 }
-                return null;
+                return null!;
             }
         }
 
         public class Block_Transactions
         {
-            public string Txid { get; set; }
-            //      public string version { get; set; }
-            //     public string locktime { get; set; }
-            public List<Vin_BlockTransactions> Vin { get; set; }
-            public List<Vout_BlockTransactions> Vout { get; set; }
-            //      public string size { get; set; }
-            //      public string weight { get; set; }
-            public string Fee { get; set; }
-            //     public List<Status_BlockTransactions> status { get; set; }
+            public string? Txid { get; set; }
+            public List<Vin_BlockTransactions>? Vin { get; set; }
+            public List<Vout_BlockTransactions>? Vout { get; set; }
+            public string? Fee { get; set; }
         }
 
         public class Vin_BlockTransactions
         {
-            //public string Is_coinbase { get; set; }
-            //public string sequence { get; set; }
         }
 
         public class Vout_BlockTransactions
         {
-            //     public string scriptpubkey { get; set; }
-            //     public string scriptpubkey_asm { get; set; }
-            //    public string scriptpubkey_type { get; set; }
-            //    public string scriptpubkey_address { get; set; }
-            public string Value { get; set; }
+            public string? Value { get; set; }
         }
         #endregion
 
@@ -35652,7 +36353,7 @@ namespace SATSuma
         #region price chart
         public class PriceCoordinatesList
         {
-            public string X { get; set; }
+            public string? X { get; set; }
             public decimal Y { get; set; }
         }
 
@@ -35713,7 +36414,7 @@ namespace SATSuma
         #region market cap chart
         public class MarketCapCoordinatesList
         {
-            public string X { get; set; }
+            public string? X { get; set; }
             public decimal Y { get; set; }
         }
 
@@ -35774,34 +36475,28 @@ namespace SATSuma
         #region reward chart
         public class HistoricRewardsAndPrice
         {
-            //  public string AvgHeight { get; set; }
-            public string Timestamp { get; set; }
+            public string? Timestamp { get; set; }
             public decimal AvgRewards { get; set; }
-            //  public decimal USD { get; set; }
         }
         #endregion
         #region fees chart
         public class HistoricFeesAndPrice
         {
-            //   public string AvgHeight { get; set; }
-            public string Timestamp { get; set; }
+            public string? Timestamp { get; set; }
             public decimal AvgFees { get; set; }
-            //  public decimal USD { get; set; }
         }
         #endregion
         #region hashrate and difficulty charts
         public class HashrateSnapshot
         {
-            public string Timestamp { get; set; }
+            public string? Timestamp { get; set; }
             public decimal AvgHashrate { get; set; }
         }
 
         public class DifficultySnapshot
         {
-            public string Time { get; set; }
-            //   public long Height { get; set; }
+            public string? Time { get; set; }
             public decimal Difficulty { get; set; }
-            //  public decimal Adjustment { get; set; }
         }
 
         public class HashrateAndDifficultyService
@@ -35841,10 +36536,8 @@ namespace SATSuma
         #region pool hashrate
         public class PoolHashrateSnapshot
         {
-            public string Timestamp { get; set; }
+            public string? Timestamp { get; set; }
             public decimal AvgHashrate { get; set; }
-            public decimal Share { get; set; }
-            public string PoolName { get; set; }
         }
 
 
@@ -35885,8 +36578,7 @@ namespace SATSuma
         #region fee rates chart
         public class BlockFeeRates
         {
-            //  public string AvgHeight { get; set; }
-            public string Timestamp { get; set; }
+            public string? Timestamp { get; set; }
             public double AvgFee_0 { get; set; }
             public double AvgFee_10 { get; set; }
             public double AvgFee_25 { get; set; }
@@ -35933,7 +36625,7 @@ namespace SATSuma
         #region circulation chart
         public class BTCInCircChartCoordinates
         {
-            public string X { get; set; } // date
+            public string? X { get; set; } // date
             public decimal Y { get; set; } // BTC in circ
         }
 
@@ -35994,16 +36686,8 @@ namespace SATSuma
         #region block size chart
         public class Sizes
         {
-            //   public string AvgHeight { get; set; }
-            public string Timestamp { get; set; }
+            public string? Timestamp { get; set; }
             public decimal AvgSize { get; set; }
-        }
-
-        public class Weights
-        {
-            //   public string AvgHeight { get; set; }
-            //  public string Timestamp { get; set; }
-            //   public decimal AvgWeight { get; set; }
         }
 
         public class BlockSizeAndWeightService
@@ -36043,7 +36727,7 @@ namespace SATSuma
         #region unique addresses chart
         public class UniqueAddressesList
         {
-            public string X { get; set; }
+            public string? X { get; set; }
             public decimal Y { get; set; }
         }
 
@@ -36104,7 +36788,7 @@ namespace SATSuma
         #region utxo chart
         public class UTXOList
         {
-            public string X { get; set; }
+            public string? X { get; set; }
             public decimal Y { get; set; }
         }
 
@@ -36165,14 +36849,8 @@ namespace SATSuma
         #region pools ranking chart
         public class PoolsRanking
         {
-            // public string PoolId { get; set; } 
-            public string Name { get; set; }
-            //public string Link { get; set; }
-            public string BlockCount { get; set; }
-            //public string Rank { get; set; }
-            //public string EmptyBlocks { get; set; }
-            //public string Slug { get; set; }
-            //public string AvgMatchRate { get; set; }
+            public string? Name { get; set; }
+            public string? BlockCount { get; set; }
         }
 
         public class PoolsRankingDataService
@@ -36212,7 +36890,7 @@ namespace SATSuma
         #region nodes per network, channels and capacity charts
         public class NodesPerNetworkAndCapacity
         {
-            public string Added { get; set; }
+            public string? Added { get; set; }
             public double Channel_count { get; set; }
             public double Total_capacity { get; set; }
             public double Tor_nodes { get; set; }
@@ -36258,16 +36936,13 @@ namespace SATSuma
         #region nodes by country chart
         public class CountryName
         {
-            public string En { get; set; }
+            public string? En { get; set; }
         }
 
         public class LightningNodeCountry
         {
-            public CountryName Name { get; set; }
-            //   public string Iso { get; set; }
+            public CountryName? Name { get; set; }
             public decimal Count { get; set; }
-            //   public decimal Share { get; set; }
-            //   public decimal? Capacity { get; set; } // Nullable decimal
         }
 
         public class LightningNodesByCountryService
@@ -36391,62 +37066,23 @@ namespace SATSuma
 
         public class Rootobject
         {
-            public Market_Data Market_data { get; set; }
+            public Market_Data? Market_data { get; set; }
         }
 
         public class Market_Data
         {
-            public Current_Price Current_price { get; set; }
-            public object Total_value_locked { get; set; }
-            public object Mcap_to_tvl_ratio { get; set; }
-            public object Fdv_to_tvl_ratio { get; set; }
-            public object Roi { get; set; }
-            public Ath Ath { get; set; }
-            public Ath_Change_Percentage Ath_change_percentage { get; set; }
-            public Ath_Date Ath_date { get; set; }
-            public Atl Atl { get; set; }
-            public Atl_Change_Percentage Atl_change_percentage { get; set; }
-            public Atl_Date Atl_date { get; set; }
-            public Market_Cap Market_cap { get; set; }
-            public int Market_cap_rank { get; set; }
-            public Fully_Diluted_Valuation Fully_diluted_valuation { get; set; }
-            public float Market_cap_fdv_ratio { get; set; }
-            public Total_Volume Total_volume { get; set; }
-            public High_24H High_24h { get; set; }
-            public Low_24H Low_24h { get; set; }
-            public double Price_change_24h { get; set; }
-            public float Price_change_percentage_24h { get; set; }
-            public float Price_change_percentage_7d { get; set; }
-            public float Price_change_percentage_14d { get; set; }
-            public float Price_change_percentage_30d { get; set; }
-            public float Price_change_percentage_60d { get; set; }
-            public float Price_change_percentage_200d { get; set; }
-            public float Price_change_percentage_1y { get; set; }
-            public long Market_cap_change_24h { get; set; }
-            public float Market_cap_change_percentage_24h { get; set; }
-            public Price_Change_24H_In_Currency Price_change_24h_in_currency { get; set; }
-            public Price_Change_Percentage_1H_In_Currency Price_change_percentage_1h_in_currency { get; set; }
-            public Price_Change_Percentage_24H_In_Currency Price_change_percentage_24h_in_currency { get; set; }
-            public Price_Change_Percentage_7D_In_Currency Price_change_percentage_7d_in_currency { get; set; }
-            public Price_Change_Percentage_14D_In_Currency Price_change_percentage_14d_in_currency { get; set; }
-            public Price_Change_Percentage_30D_In_Currency Price_change_percentage_30d_in_currency { get; set; }
-            public Price_Change_Percentage_60D_In_Currency Price_change_percentage_60d_in_currency { get; set; }
-            public Price_Change_Percentage_200D_In_Currency Price_change_percentage_200d_in_currency { get; set; }
-            public Price_Change_Percentage_1Y_In_Currency Price_change_percentage_1y_in_currency { get; set; }
-            public Market_Cap_Change_24H_In_Currency Market_cap_change_24h_in_currency { get; set; }
-            public Market_Cap_Change_Percentage_24H_In_Currency Market_cap_change_percentage_24h_in_currency { get; set; }
-            public double Total_supply { get; set; }
-            public double Max_supply { get; set; }
-            public double Circulating_supply { get; set; }
-            public DateTime Last_updated { get; set; }
-        }
-
-        public class Current_Price
-        {
-            public double Eur { get; set; }
-            public double Gbp { get; set; }
-            public double Usd { get; set; }
-            public double Xau { get; set; }
+            public Ath? Ath { get; set; }
+            public Ath_Change_Percentage? Ath_change_percentage { get; set; }
+            public Ath_Date? Ath_date { get; set; }
+            public High_24H? High_24h { get; set; }
+            public Low_24H? Low_24h { get; set; }
+            public Price_Change_Percentage_24H_In_Currency? Price_change_percentage_24h_in_currency { get; set; }
+            public Price_Change_Percentage_7D_In_Currency? Price_change_percentage_7d_in_currency { get; set; }
+            public Price_Change_Percentage_14D_In_Currency? Price_change_percentage_14d_in_currency { get; set; }
+            public Price_Change_Percentage_30D_In_Currency? Price_change_percentage_30d_in_currency { get; set; }
+            public Price_Change_Percentage_60D_In_Currency? Price_change_percentage_60d_in_currency { get; set; }
+            public Price_Change_Percentage_200D_In_Currency? Price_change_percentage_200d_in_currency { get; set; }
+            public Price_Change_Percentage_1Y_In_Currency? Price_change_percentage_1y_in_currency { get; set; }
         }
 
         public class Ath
@@ -36473,54 +37109,6 @@ namespace SATSuma
             public DateTime Xau { get; set; }
         }
 
-        public class Atl
-        {
-            public float Eur { get; set; }
-            public float Gbp { get; set; }
-            public float Usd { get; set; }
-            public float Xau { get; set; }
-        }
-
-        public class Atl_Change_Percentage
-        {
-            public float Eur { get; set; }
-            public float Gbp { get; set; }
-            public float Usd { get; set; }
-            public float Xau { get; set; }
-        }
-
-        public class Atl_Date
-        {
-            public DateTime Eur { get; set; }
-            public DateTime Gbp { get; set; }
-            public DateTime Usd { get; set; }
-            public DateTime Xau { get; set; }
-        }
-
-        public class Market_Cap
-        {
-            public long Eur { get; set; }
-            public long Gbp { get; set; }
-            public long Usd { get; set; }
-            public int Xau { get; set; }
-        }
-
-        public class Fully_Diluted_Valuation
-        {
-            public long Eur { get; set; }
-            public long Gbp { get; set; }
-            public long Usd { get; set; }
-            public int Xau { get; set; }
-        }
-
-        public class Total_Volume
-        {
-            public long Eur { get; set; }
-            public long Gbp { get; set; }
-            public long Usd { get; set; }
-            public int Xau { get; set; }
-        }
-
         public class High_24H
         {
             public double Eur { get; set; }
@@ -36530,22 +37118,6 @@ namespace SATSuma
         }
 
         public class Low_24H
-        {
-            public double Eur { get; set; }
-            public double Gbp { get; set; }
-            public double Usd { get; set; }
-            public double Xau { get; set; }
-        }
-
-        public class Price_Change_24H_In_Currency
-        {
-            public double Eur { get; set; }
-            public double Gbp { get; set; }
-            public double Usd { get; set; }
-            public double Xau { get; set; }
-        }
-
-        public class Price_Change_Percentage_1H_In_Currency
         {
             public double Eur { get; set; }
             public double Gbp { get; set; }
@@ -36609,21 +37181,6 @@ namespace SATSuma
             public double Xau { get; set; }
         }
 
-        public class Market_Cap_Change_24H_In_Currency
-        {
-            public double Eur { get; set; }
-            public double Gbp { get; set; }
-            public double Usd { get; set; }
-            public double Xau { get; set; }
-        }
-
-        public class Market_Cap_Change_Percentage_24H_In_Currency
-        {
-            public double Eur { get; set; }
-            public double Gbp { get; set; }
-            public double Usd { get; set; }
-            public double Xau { get; set; }
-        }
         #endregion
 
         #region messari data
@@ -36667,256 +37224,46 @@ namespace SATSuma
 
         public class MessariRootobject
         {
-            public Status Status { get; set; }
-            public Data Data { get; set; }
-        }
-
-        public class Status
-        {
-            public int Elapsed { get; set; }
-            public string Timestamp { get; set; }
+            public Data? Data { get; set; }
         }
 
         public class Data
         {
-            public string id { get; set; }
-            public int serial_id { get; set; }
-            public string symbol { get; set; }
-            public string name { get; set; }
-            public string slug { get; set; }
-            public object contract_addresses { get; set; }
-            public string _internal_temp_agora_id { get; set; }
-            public Messari_Market_Data market_data { get; set; }
-            public Marketcap marketcap { get; set; }
-            public Supply supply { get; set; }
-            public Blockchain_Stats_24_Hours blockchain_stats_24_hours { get; set; }
-            public Market_Data_Liquidity market_data_liquidity { get; set; }
-            public All_Time_High all_time_high { get; set; }
-            public Cycle_Low cycle_low { get; set; }
-            public Mining_Stats mining_stats { get; set; }
-            public On_Chain_Data on_chain_data { get; set; }
-            public object alert_messages { get; set; }
-        }
-
-        public class Messari_Market_Data
-        {
-            public float price_usd { get; set; }
-            public int price_btc { get; set; }
-            public float price_eth { get; set; }
-            public float volume_last_24_hours { get; set; }
-            public float real_volume_last_24_hours { get; set; }
-            public object volume_last_24_hours_overstatement_multiple { get; set; }
-            public float percent_change_usd_last_1_hour { get; set; }
-            public int percent_change_btc_last_1_hour { get; set; }
-            public float percent_change_eth_last_1_hour { get; set; }
-            public float percent_change_usd_last_24_hours { get; set; }
-            public int percent_change_btc_last_24_hours { get; set; }
-            public float percent_change_eth_last_24_hours { get; set; }
-            public Ohlcv_Last_1_Hour ohlcv_last_1_hour { get; set; }
-            public Ohlcv_Last_24_Hour ohlcv_last_24_hour { get; set; }
-            public DateTime last_trade_at { get; set; }
-        }
-
-        public class Ohlcv_Last_1_Hour
-        {
-            public float open { get; set; }
-            public float high { get; set; }
-            public float low { get; set; }
-            public float close { get; set; }
-            public float volume { get; set; }
-        }
-
-        public class Ohlcv_Last_24_Hour
-        {
-            public float open { get; set; }
-            public float high { get; set; }
-            public float low { get; set; }
-            public float close { get; set; }
-            public float volume { get; set; }
-        }
-
-        public class Marketcap
-        {
-            public int rank { get; set; }
-            public float marketcap_dominance_percent { get; set; }
-            public float current_marketcap_usd { get; set; }
-            public object y_2050_marketcap_usd { get; set; }
-            public object y_plus10_marketcap_usd { get; set; }
-            public object liquid_marketcap_usd { get; set; }
-            public object volume_turnover_last_24_hours_percent { get; set; }
-            public float realized_marketcap_usd { get; set; }
-            public float outstanding_marketcap_usd { get; set; }
-        }
-
-        public class Supply
-        {
-            public object y_2050 { get; set; }
-            public object y_plus10 { get; set; }
-            public object liquid { get; set; }
-            public int circulating { get; set; }
-            public object y_2050_issued_percent { get; set; }
-            public object annual_inflation_percent { get; set; }
-            public object stock_to_flow { get; set; }
-            public object y_plus10_issued_percent { get; set; }
-            public float supply_revived_90d { get; set; }
+            public Blockchain_Stats_24_Hours? Blockchain_stats_24_hours { get; set; }
+            public Cycle_Low? Cycle_low { get; set; }
+            public On_Chain_Data? On_chain_data { get; set; }
         }
 
         public class Blockchain_Stats_24_Hours
         {
-            public int count_of_active_addresses { get; set; }
-            public float transaction_volume { get; set; }
-            public float adjusted_transaction_volume { get; set; }
-            public float adjusted_nvt { get; set; }
-            public float median_tx_value { get; set; }
-            public float median_tx_fee { get; set; }
-            public int count_of_tx { get; set; }
-            public int count_of_payments { get; set; }
-            public float new_issuance { get; set; }
-            public float average_difficulty { get; set; }
-            public object kilobytes_added { get; set; }
-            public int count_of_blocks_added { get; set; }
-        }
-
-        public class Market_Data_Liquidity
-        {
-            public object clearing_prices_to_sell { get; set; }
-            public object marketcap { get; set; }
-            public object asset_bid_depth { get; set; }
-            public object usd_bid_depth { get; set; }
-            public DateTime updated_at { get; set; }
-        }
-
-        public class All_Time_High
-        {
-            public float price { get; set; }
-            public DateTime at { get; set; }
-            public int days_since { get; set; }
-            public float percent_down { get; set; }
-            public float breakeven_multiple { get; set; }
+            public int Count_of_active_addresses { get; set; }
+            public int Count_of_tx { get; set; }
+            public int Count_of_blocks_added { get; set; }
         }
 
         public class Cycle_Low
         {
-            public float price { get; set; }
-            public DateTime at { get; set; }
-            public float percent_up { get; set; }
-            public int days_since { get; set; }
-        }
-
-        public class Mining_Stats
-        {
-            public string mining_algo { get; set; }
-            public string network_hash_rate { get; set; }
-            public float available_on_nicehash_percent { get; set; }
-            public object _1_hour_attack_cost { get; set; }
-            public object _24_hours_attack_cost { get; set; }
-            public object attack_appeal { get; set; }
-            public float hash_rate { get; set; }
-            public float hash_rate_30d_average { get; set; }
-            public float mining_revenue_per_hash_usd { get; set; }
-            public decimal mining_revenue_per_hash_native_units { get; set; }
-            public float mining_revenue_per_hash_per_second_usd { get; set; }
-            public decimal mining_revenue_per_hash_per_second_native_units { get; set; }
-            public float mining_revenue_from_fees_percent_last_24_hours { get; set; }
-            public decimal mining_revenue_native { get; set; }
-            public float mining_revenue_usd { get; set; }
-            public float mining_revenue_total { get; set; }
-            public float average_difficulty { get; set; }
-        }
-
-        public class Volatility_Stats
-        {
-            public float volatility_last_30_days { get; set; }
-            public float volatility_last_90_days { get; set; }
-            public float volatility_last_1_year { get; set; }
-            public float volatility_last_3_years { get; set; }
+            public float Percent_up { get; set; }
         }
 
         public class On_Chain_Data
         {
-            public int addresses_count { get; set; }
-            public int active_addresses { get; set; }
-            public int active_addresses_received_count { get; set; }
-            public int active_addresses_sent_count { get; set; }
-            public int addresses_balance_greater_0_001_native_units_count { get; set; }
-            public int addresses_balance_greater_0_01_native_units_count { get; set; }
-            public int addresses_balance_greater_0_1_native_units_count { get; set; }
-            public int addresses_balance_greater_1_usd_count { get; set; }
-            public int addresses_balance_greater_1_native_units_count { get; set; }
-            public int addresses_balance_greater_10_usd_count { get; set; }
-            public int addresses_balance_greater_10_native_units_count { get; set; }
-            public int addresses_balance_greater_100_usd_count { get; set; }
-            public int addresses_balance_greater_100_native_units_count { get; set; }
-            public int addresses_balance_greater_100k_usd_count { get; set; }
-            public int addresses_balance_greater_100k_native_units_count { get; set; }
-            public int addresses_balance_greater_10k_usd_count { get; set; }
-            public int addresses_balance_greater_10k_native_units_count { get; set; }
-            public int addresses_balance_greater_10m_usd_count { get; set; }
-            public int addresses_balance_greater_1k_usd_count { get; set; }
-            public int addresses_balance_greater_1k_native_units_count { get; set; }
-            public int addresses_balance_greater_1m_usd_count { get; set; }
-            public int addresses_balance_greater_1m_native_units_count { get; set; }
-            public object average_block_gas_limit { get; set; }
-            public int block_height { get; set; }
-            public float average_block_interval { get; set; }
-            public int blocks_added_last_24_hours { get; set; }
-            public int block_size_bytes_total { get; set; }
-            public float block_size_bytes_average { get; set; }
-            public object uncle_blocks_count_last_24_hours { get; set; }
-            public object uncle_rewards_last_24_hours_usd { get; set; }
-            public object uncle_rewards_last_24_hours_native_units { get; set; }
-            public object mining_revenue_from_uncle_blocks_percent_last_24_hours { get; set; }
-            public int block_weight { get; set; }
-            public float average_block_weight { get; set; }
-            public float total_fees_last_24_hours { get; set; }
-            public float total_fees_last_24_hours_usd { get; set; }
-            public float hash_rate { get; set; }
-            public decimal issuance_last_24_hours_native_units { get; set; }
-            public float issuance_rate_daily { get; set; }
-            public float issuance_total_usd { get; set; }
-            public decimal issuance_total_native_units { get; set; }
-            public float new_issuance { get; set; }
-            public float issuance_rate { get; set; }
-            public float realized_marketcap_usd { get; set; }
-            public float adjusted_nvt { get; set; }
-            public float adjusted_nvt_90d_moving_average { get; set; }
-            public float adjusted_rvt { get; set; }
-            public float adjusted_rvt_90d_moving_average { get; set; }
-            public int txn_count_last_24_hours { get; set; }
-            public object txn_contracts_calls_count_last_24_hours { get; set; }
-            public object txn_contracts_calls_success_count_last_24_hours { get; set; }
-            public object txn_contracts_creation_count_last_24_hours { get; set; }
-            public object txn_contracts_destruction_count_last_24_hours { get; set; }
-            public object txn_contracts_count_last_24_hours { get; set; }
-            public object txn_erc20_count_last_24_hours { get; set; }
-            public object txn_erc721_count_last_24_hours { get; set; }
-            public float txn_per_second_count { get; set; }
-            public object txn_token_count_last_24_hours { get; set; }
-            public float average_fee_usd { get; set; }
-            public decimal average_fee_native_units { get; set; }
-            public float median_fee_usd { get; set; }
-            public decimal median_fee_native_units { get; set; }
-            public object average_txn_gas_used { get; set; }
-            public object txn_gas_limit_last_24_hours { get; set; }
-            public object average_txn_gas_limit { get; set; }
-            public object txn_gas_used_last_24_hours { get; set; }
-            public int transfer_count_last_24_hours { get; set; }
-            public object transfer_erc_20_count_last_24_hours { get; set; }
-            public object transfer_erc721_count_last_24_hours { get; set; }
-            public float txn_volume_last_24_hours_usd { get; set; }
-            public float adjusted_txn_volume_last_24_hours_usd { get; set; }
-            public decimal adjusted_txn_volume_last_24_hours_native_units { get; set; }
-            public decimal txn_volume_last_24_hours_native_units { get; set; }
-            public float average_transfer_value_usd { get; set; }
-            public decimal average_transfer_value_native_units { get; set; }
-            public float median_transfer_value_usd { get; set; }
-            public decimal median_transfer_value_native_units { get; set; }
-            public float average_utxo_age { get; set; }
-            public float value_weighted_average_utxo_age { get; set; }
-            public int median_utxo_age { get; set; }
-            public int utxo_count_last_24_hours { get; set; }
-            public int utxo_in_loss_count { get; set; }
-            public int utxo_in_profit_count { get; set; }
+            public int Addresses_count { get; set; }
+            public int Addresses_balance_greater_0_001_native_units_count { get; set; }
+            public int Addresses_balance_greater_0_01_native_units_count { get; set; }
+            public int Addresses_balance_greater_0_1_native_units_count { get; set; }
+            public int Addresses_balance_greater_1_native_units_count { get; set; }
+            public int Addresses_balance_greater_10_native_units_count { get; set; }
+            public int Addresses_balance_greater_100_native_units_count { get; set; }
+            public int Addresses_balance_greater_100k_native_units_count { get; set; }
+            public int Addresses_balance_greater_10k_native_units_count { get; set; }
+            public int Addresses_balance_greater_1k_native_units_count { get; set; }
+            public int Addresses_balance_greater_1m_native_units_count { get; set; }
+            public decimal Issuance_last_24_hours_native_units { get; set; }
+            public decimal Txn_volume_last_24_hours_native_units { get; set; }
+            public float Average_utxo_age { get; set; }
+            public int Median_utxo_age { get; set; }
+            public int Utxo_count_last_24_hours { get; set; }
         }
         #endregion
 

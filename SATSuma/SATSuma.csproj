@@ -373,11 +373,11 @@
     <Compile Include="HelpScreen.Designer.cs">
       <DependentUpon>HelpScreen.cs</DependentUpon>
     </Compile>
-    <Compile Include="LoadingTheme.cs">
+    <Compile Include="FullSizeLoadingScreen.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="LoadingTheme.Designer.cs">
-      <DependentUpon>LoadingTheme.cs</DependentUpon>
+    <Compile Include="FullSizeLoadingScreen.Designer.cs">
+      <DependentUpon>FullSizeLoadingScreen.cs</DependentUpon>
     </Compile>
     <Compile Include="LoadingScreen.cs">
       <SubType>Form</SubType>
@@ -405,11 +405,11 @@
     <Compile Include="RJDatePicker.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="splash.cs">
+    <Compile Include="Splash.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="splash.Designer.cs">
-      <DependentUpon>splash.cs</DependentUpon>
+    <Compile Include="Splash.Designer.cs">
+      <DependentUpon>Splash.cs</DependentUpon>
     </Compile>
     <Compile Include="SATSuma.cs">
       <SubType>Form</SubType>
@@ -422,8 +422,8 @@
     <EmbeddedResource Include="HelpScreen.resx">
       <DependentUpon>HelpScreen.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="LoadingTheme.resx">
-      <DependentUpon>LoadingTheme.cs</DependentUpon>
+    <EmbeddedResource Include="FullSizeLoadingScreen.resx">
+      <DependentUpon>FullSizeLoadingScreen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LoadingScreen.resx">
       <DependentUpon>LoadingScreen.cs</DependentUpon>
@@ -431,8 +431,8 @@
     <EmbeddedResource Include="overlayForm.resx">
       <DependentUpon>overlayForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="splash.resx">
-      <DependentUpon>splash.cs</DependentUpon>
+    <EmbeddedResource Include="Splash.resx">
+      <DependentUpon>Splash.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SATSuma.resx">
       <DependentUpon>SATSuma.cs</DependentUpon>
@@ -473,6 +473,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="BTC48.ico" />
+    <None Include="Resources\FullScreenLoadingBG.png" />
     <None Include="Resources\tinylogo1trans.png" />
     <None Include="Resources\ApplyingTheme1.png" />
     <None Include="Resources\SatsumaButton-4.png" />

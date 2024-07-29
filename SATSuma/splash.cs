@@ -38,7 +38,7 @@ namespace SATSuma
         public Color LinksColor { get; set; }
         public Color ButtonBackColor { get; set; }
         public Color ButtonTextColor { get; set; }
-        public string CurrentVersion { get; set; }
+        public string CurrentVersion { get; set; } = string.Empty;
         public bool OfflineMode { get; set; }
         public int ButtonRadius { get; set; }
         public int ButtonBorderSize { get; set; }
@@ -245,7 +245,7 @@ namespace SATSuma
         #region handle links
         private void LinkLabelDownloadUpdate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            if (linkLabelDownloadUpdate.Text == "SATSuma WEBSITE")
+            if (string.Compare(linkLabelDownloadUpdate.Text, "SATSuma WEBSITE") == 0)
             {
                 System.Diagnostics.Process.Start("https://satsuma.btcdir.org");
             }
@@ -258,11 +258,6 @@ namespace SATSuma
         private void LinkLabelSupportProject_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start("https://satsuma.btcdir.org/support/");
-        }
-
-        private void LinkLabelSourceCode_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            System.Diagnostics.Process.Start("https://github.com/BXL909/SATSuma");
         }
 
         private void PictureBox1_Click(object sender, EventArgs e)

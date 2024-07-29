@@ -1,4 +1,5 @@
-﻿#region using
+﻿#nullable enable
+#region using
 using CustomControls.RJControls;
 using ScottPlot.Palettes;
 using System;
@@ -170,7 +171,6 @@ namespace SATSuma
             comboBoxDocumentation.ListBackColor = TextBoxBackColor;
             comboBoxDocumentation.ListTextColor = TextBoxForeColor;
             panel5.BackColor = WindowBackgroundColor;
-            //panel1.BackColor = MakeColorLighter(WindowBackgroundColor, 5);
             panel1.BackColor = WindowBackgroundColor;
             this.BackColor = WindowBackgroundColor;
 
@@ -316,7 +316,7 @@ namespace SATSuma
         }
         #endregion
         #region scroll help text
-        private Timer scrollTimer;
+        private Timer scrollTimer = new Timer();
         private readonly int scrollStep = 6;
         private void BtnHelpTextDown_MouseDown(object sender, MouseEventArgs e)
         {
@@ -624,7 +624,7 @@ namespace SATSuma
         {
             if (linkClicked) return; // If the link was already clicked less than a second ago, do nothing (linkClicked resets to false 1 sec after clicking link. Not doing this spawns multiple tabs)
 
-            HtmlElement linkElement = sender as HtmlElement;
+            HtmlElement? linkElement = sender as HtmlElement;
             if (linkElement != null)
             {
                 string url = linkElement.GetAttribute("href");

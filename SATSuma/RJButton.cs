@@ -14,8 +14,8 @@ namespace CustomControls.RJControls
     public class RJButton : Button
     {
         //Fields
-        private int borderSize = 0;
-        private int borderRadius = 0;
+        private int borderSize;
+        private int borderRadius;
         private Color borderColor = Color.PaleVioletRed;
 
         //Properties

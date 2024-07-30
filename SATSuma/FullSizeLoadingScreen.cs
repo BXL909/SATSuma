@@ -21,7 +21,7 @@ namespace SATSuma
         #endregion
 
         public Color LabelColor { get; set; }
-        public string Version { get; set; }
+        public string Version { get; set; } = string.Empty;
         public Color OtherText {  get; set; }
 
         public FullSizeLoadingScreen(double UIScale)

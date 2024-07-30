@@ -19033,7 +19033,7 @@
             // panelOpenHelpAboutMenu
             // 
             this.panelOpenHelpAboutMenu.BackColor = System.Drawing.Color.Transparent;
-            this.panelOpenHelpAboutMenu.BackgroundImage = global::SATSuma.Properties.Resources.MainMenuFade;
+            this.panelOpenHelpAboutMenu.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panelOpenHelpAboutMenu.BackgroundImage")));
             this.panelOpenHelpAboutMenu.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panelOpenHelpAboutMenu.Controls.Add(this.lblUpdateFlasher);
             this.panelOpenHelpAboutMenu.Controls.Add(this.lblOpenHelpAboutMenu);
@@ -19106,7 +19106,7 @@
             // panel79
             // 
             this.panel79.BackColor = System.Drawing.Color.Transparent;
-            this.panel79.BackgroundImage = global::SATSuma.Properties.Resources.MainMenuFade;
+            this.panel79.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel79.BackgroundImage")));
             this.panel79.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel79.Controls.Add(this.label218);
             this.panel79.Location = new System.Drawing.Point(8, 214);
@@ -19465,7 +19465,7 @@
             // panel131
             // 
             this.panel131.BackColor = System.Drawing.Color.Transparent;
-            this.panel131.BackgroundImage = global::SATSuma.Properties.Resources.MainMenuFade;
+            this.panel131.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel131.BackgroundImage")));
             this.panel131.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel131.Controls.Add(this.label216);
             this.panel131.Location = new System.Drawing.Point(8, 48);
@@ -19491,7 +19491,7 @@
             // panel130
             // 
             this.panel130.BackColor = System.Drawing.Color.Transparent;
-            this.panel130.BackgroundImage = global::SATSuma.Properties.Resources.MainMenuFade;
+            this.panel130.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel130.BackgroundImage")));
             this.panel130.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel130.Controls.Add(this.label215);
             this.panel130.Location = new System.Drawing.Point(8, 272);
@@ -19540,7 +19540,7 @@
             // panel129
             // 
             this.panel129.BackColor = System.Drawing.Color.Transparent;
-            this.panel129.BackgroundImage = global::SATSuma.Properties.Resources.MainMenuFade;
+            this.panel129.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel129.BackgroundImage")));
             this.panel129.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel129.Controls.Add(this.label214);
             this.panel129.Location = new System.Drawing.Point(8, 313);
@@ -19566,7 +19566,7 @@
             // panelOpenPreferences
             // 
             this.panelOpenPreferences.BackColor = System.Drawing.Color.Transparent;
-            this.panelOpenPreferences.BackgroundImage = global::SATSuma.Properties.Resources.MainMenuFade;
+            this.panelOpenPreferences.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panelOpenPreferences.BackgroundImage")));
             this.panelOpenPreferences.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panelOpenPreferences.Controls.Add(this.lblOpenPreferences);
             this.panelOpenPreferences.ForeColor = System.Drawing.Color.Transparent;
@@ -22586,10 +22586,10 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
-            this.Controls.Add(this.panelBlock);
-            this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelBitcoinDashboard);
             this.Controls.Add(this.panelAppearance);
+            this.Controls.Add(this.panelBlock);
+            this.Controls.Add(this.panelAddress);
             this.Controls.Add(this.panelMiningPools);
             this.Controls.Add(this.panelDCACalculator);
             this.Controls.Add(this.panelCharts);

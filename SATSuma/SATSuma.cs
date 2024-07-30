@@ -15,7 +15,8 @@
 //TODO documentation for new pools screens (code done, pages created, just do text)
 //TODO documentation for new btc dashboard fields
 //TODO cancellation tokens for all async tasks. add cancel button.
-//TODO new closing screen to match loading screen
+//TODO fix width of background image on partial loading screen (stretch or use new image)
+//TODO swap distribution and halving sections around on bitcoin dashboard
 //TODO testing
 //BUG LIST_______________________________________________________________________________________________
 //!_______________________________________________________________________________________________________
@@ -340,6 +341,8 @@ namespace SATSuma
         bool fullScreenLoadingScreenVisible; // if the full size loading screen is visible, the smaller one won't be shown on top of it
         decimal calculatedBTCInCirculation = 0;
         private FullSizeLoadingScreen? fullSizeLoadingScreen;
+        private LoadingScreen? loadingScreen;
+        bool partialLoadingScreenVisible; // flag for non-full size loading screen
         #endregion
         #region market variables
         bool gotMarketDataInLastFewSecs = true; // avoids running getmarketdata() twice at startup.
@@ -590,15 +593,15 @@ namespace SATSuma
                 #endregion
 
                 #region restore saved settings
-                fullSizeLoadingScreen.SetLoadingText("Restoring saved settings...", "Restoring preferences...");
+                UpdateLoadingScreenMessage("Restoring saved settings...", "Restoring preferences...");
                 RestoreSavedSettings(); // api choices, node, xpub node, theme
                 #endregion
                 #region check network
-                fullSizeLoadingScreen.SetLoadingText("Checking connection...", "Initialising...");
+                UpdateLoadingScreenMessage("Checking connection...", "Initialising...");
                 await CheckNetworkStatusAsync().ConfigureAwait(true);
                 #endregion
                 #region set/get some initial values (e.g block height, price)
-                fullSizeLoadingScreen.SetLoadingText("Getting block height and market data...", "Initialising...");
+                UpdateLoadingScreenMessage("Getting block height and market data...", "Initialising...");
                 panelErrorMessage.Invoke((MethodInvoker)delegate
                 {
                     panelErrorMessage.Width = 0;
@@ -624,12 +627,12 @@ namespace SATSuma
                 #region populate dashboards and start the timers ticking
 
                 #region Bitcoin dashboard
-                fullSizeLoadingScreen.SetLoadingText("Gatting dashboard data...", "Initialising...");
+                UpdateLoadingScreenMessage("Gatting dashboard data...", "Initialising...");
                 _ = UpdateBitcoinAndLightningDashboardsAsync(); // setting them now avoids waiting a whole minute for the first refresh
                 #endregion
 
                 #region start the timers
-                fullSizeLoadingScreen.SetLoadingText("Starting timers...", "Initialising...");
+                UpdateLoadingScreenMessage("Starting timers...", "Initialising...");
                 StartTheClocksTicking();
                 #endregion
                 #endregion
@@ -827,11 +830,7 @@ namespace SATSuma
             panelLightningDashboard.SuspendLayout();
             bool errorOccurred = false;
             #region determine network age
-            if (fullSizeLoadingScreen!.Visible)
-            {
-                fullSizeLoadingScreen.SetLoadingText("Determining network age...", "Initialising...");
-            }
-
+            UpdateLoadingScreenMessage("Determining network age...", "Initialising...");
             DateTime startDate = new DateTime(2009, 1, 3, 18, 15, 0); // Genesis block time
             DateTime currentDate = DateTime.Now; // Current date and time
 
@@ -859,11 +858,7 @@ namespace SATSuma
                 #region block height, no. of tx in block, time since block, block size
                 try
                 {
-                    if (fullSizeLoadingScreen.Visible)
-                    {
-                        fullSizeLoadingScreen.SetLoadingText("Gathering block data...", "Initialising...");
-                    }
-
+                    UpdateLoadingScreenMessage("Gathering block data...", "Initialising...");
                     var blocksJson = await _blockService.GetBlockDataAsync("000000").ConfigureAwait(true);  // don't pass a block to start from - we want the tip
                     var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
 
@@ -978,10 +973,7 @@ namespace SATSuma
                 #region fees
                 try
                 {
-                    if (fullSizeLoadingScreen.Visible)
-                    {
-                        fullSizeLoadingScreen.SetLoadingText("Getting fee priority data...", "Initialising...");
-                    }
+                    UpdateLoadingScreenMessage("Getting fee priority data...", "Initialising...");
                     var (fastestFee, halfHourFee, hourFee, economyFee) = MemSpGetFees();
                     UpdateLabelValueAsync(lblHeaderfeesHighPriority, fastestFee);
                     label15.Invoke((MethodInvoker)delegate
@@ -1030,10 +1022,7 @@ namespace SATSuma
                 #region hashrate
                 try
                 {
-                    if (fullSizeLoadingScreen!.Visible)
-                    {
-                        fullSizeLoadingScreen.SetLoadingText("Determining hashrate...", "Initialising...");
-                    }
+                    UpdateLoadingScreenMessage("Determining hashrate...", "Initialising...");
                     var currentHashrate = MemSpGetHashrate();
                     BigInteger currentHashrateFormatted = BigInteger.Parse(currentHashrate);
 
@@ -1058,10 +1047,7 @@ namespace SATSuma
 
                 #region determine block subsidy, subsidy after halving and fiat values of both
                 // determine current block subsidy by calculating it from most recent block
-                if (fullSizeLoadingScreen!.Visible)
-                {
-                    fullSizeLoadingScreen.SetLoadingText("Gathering block subsidy and halving data...", "Initialising...");
-                }
+                UpdateLoadingScreenMessage("Gathering block subsidy and halving data...", "Initialising...");
                 string blockSubsidy = MemSpGetRewardStats();
                 UpdateLabelValueAsync(lblBlockSubsidy, blockSubsidy);
 
@@ -1141,10 +1127,7 @@ namespace SATSuma
                 #region difficulty adjustment
                 try
                 {
-                    if (fullSizeLoadingScreen.Visible)
-                    {
-                        fullSizeLoadingScreen.SetLoadingText("Checking mining difficulty...", "Initialising...");
-                    }
+                    UpdateLoadingScreenMessage("Checking mining difficulty...", "Initialising...");
                     string truncatedPercent = "0%";
                     var (progressPercent, difficultyChange, estimatedRetargetDate, remainingBlocks, _, previousRetarget, nextRetargetHeight, timeAvg, _) = MemSpGetDifficultyAdjustment();
                     if (decimal.TryParse(progressPercent, out decimal progressValue2))
@@ -1232,10 +1215,7 @@ namespace SATSuma
                 {
                     if (!testNet)
                     {
-                        if (fullSizeLoadingScreen.Visible)
-                        {
-                            fullSizeLoadingScreen.SetLoadingText("Gettings fees and transactions in next block...", "Initialising...");
-                        }
+                        UpdateLoadingScreenMessage("Gettings fees and transactions in next block...", "Initialising...");
 
                         var (txInNextBlock, nextBlockMinFee, nextBlockMaxFee, nextBlockTotalFees) = MemSpNextBlock();
                         UpdateLabelValueAsync(lblTransInNextBlock, txInNextBlock);
@@ -1339,10 +1319,7 @@ namespace SATSuma
             {
                 try
                 {
-                    if (fullSizeLoadingScreen.Visible)
-                    {
-                        fullSizeLoadingScreen.SetLoadingText("Updating Lightning dashboard...", "Initialising...");
-                    }
+                    UpdateLoadingScreenMessage("Updating Lightning dashboard...", "Initialising...");
                     if (!testNet)
                     {
                         if (RunMempoolSpaceLightningAPI)
@@ -1594,10 +1571,7 @@ namespace SATSuma
             #region task 2 - coinbase.com / mempool.space (price) / coingecko.com api (price)
             Task task2 = Task.Run(() =>
             {
-                if (fullSizeLoadingScreen.Visible)
-                {
-                    fullSizeLoadingScreen.SetLoadingText("Getting current market data...", "Initialising...");
-                }
+                UpdateLoadingScreenMessage("Getting current market data...", "Initialising...");
                 if (!offlineMode)
                 {
                     try
@@ -1699,10 +1673,7 @@ namespace SATSuma
                     {
                         if (RunCoingeckoAPI)
                         {
-                            if (fullSizeLoadingScreen.Visible)
-                            {
-                                fullSizeLoadingScreen.SetLoadingText("Getting historic market stats...", "Initialising...");
-                            }
+                            UpdateLoadingScreenMessage("Getting historic market stats...", "Initialising...");
                             var CoinGeckoMarketDataJson = await _coinGeckoMarketDataService.GetCoinGeckoMarketDataAsync().ConfigureAwait(true);
                             var coinGeckoMarketData = JsonConvert.DeserializeObject<Rootobject>(CoinGeckoMarketDataJson);
 
@@ -2896,10 +2867,7 @@ namespace SATSuma
                     {
                         if (RunMessariAPI)
                         {
-                            if (fullSizeLoadingScreen.Visible)
-                            {
-                                fullSizeLoadingScreen.SetLoadingText("determining network usage...", "Initialising...");
-                            }
+                            UpdateLoadingScreenMessage("determining network usage...", "Initialising...");
                             var MessariMarketDataJson = await _MessariMarketDataService.GetMessariMarketDataAsync().ConfigureAwait(true);
                             var messariMarketData = JsonConvert.DeserializeObject<MessariRootobject>(MessariMarketDataJson);
 
@@ -21314,10 +21282,7 @@ namespace SATSuma
                 //var settings = ReadSettingsFromJsonFile();
 
                 #region determine startup screen (needs to occur before rest of settings screen is restored)
-                if (fullSizeLoadingScreen!.Visible)
-                {
-                    fullSizeLoadingScreen!.SetLoadingText("determining startup screen...", "Restoring preferences...");
-                }
+                UpdateLoadingScreenMessage("determining startup screen...", "Restoring preferences...");
                 // Define a dictionary to map strings to their corresponding values
                 Dictionary<string, string> screenMap = new Dictionary<string, string>
                 {
@@ -21379,10 +21344,7 @@ namespace SATSuma
                 #region restore remainder of settings
                 // check if settings are already saved in the file and either restore them or use defaults
                 #region restore default fiat currency
-                if (fullSizeLoadingScreen.Visible)
-                {
-                    fullSizeLoadingScreen.SetLoadingText("restoring default currency...", "Restoring preferences...");
-                }
+                UpdateLoadingScreenMessage("restoring default currency...", "Restoring preferences...");
                 if (String.Compare(Convert.ToString(SettingsManager.Settings.SettingsCurrencySelected), "P") == 0)
                 {
                     //GBP
@@ -21465,10 +21427,7 @@ namespace SATSuma
                 }
                 #endregion
                 #region restore offline mode settings
-                if (fullSizeLoadingScreen.Visible)
-                {
-                    fullSizeLoadingScreen.SetLoadingText("restoring offline mode selection...", "Restoring preferences...");
-                }
+                UpdateLoadingScreenMessage("restoring offline mode selection...", "Restoring preferences...");
                 if (String.Compare(Convert.ToString(SettingsManager.Settings.SettingsOfflineModeSelected), "1") == 0)
                 {
                     lblOfflineMode.Invoke((MethodInvoker)delegate
@@ -21505,10 +21464,7 @@ namespace SATSuma
                 }
                 #endregion
                 #region restore network
-                if (fullScreenLoadingScreenVisible)
-                {
-                    fullSizeLoadingScreen.SetLoadingText("restoring network settings...", "Restoring preferences...");
-                }
+                UpdateLoadingScreenMessage("restoring network settings...", "Restoring preferences...");
                 if (String.Compare(Convert.ToString(SettingsManager.Settings.SettingsSelectedNetwork), "M") == 0)
                 {
                     //mainnet
@@ -21583,10 +21539,7 @@ namespace SATSuma
                 }
                 #endregion
                 #region restore API settings
-                if (fullSizeLoadingScreen.Visible)
-                {
-                    fullSizeLoadingScreen.SetLoadingText("restoring API preferences...", "Restoring preferences...");
-                }
+                UpdateLoadingScreenMessage("restoring API preferences...", "Restoring preferences...");
                 if (!offlineMode)
                 {
                     if (String.Compare(Convert.ToString(SettingsManager.Settings.SettingsMessariJSONSelected), "1") == 0)
@@ -21696,10 +21649,7 @@ namespace SATSuma
 
                 #endregion
                 #region restore directory settings
-                if (fullSizeLoadingScreen.Visible)
-                {
-                    fullSizeLoadingScreen.SetLoadingText("restoring directory preferences...", "Restoring preferences...");
-                }
+                UpdateLoadingScreenMessage("restoring directory preferences...", "Restoring preferences...");
                 if (!offlineMode)
                 {
                     if (String.Compare(Convert.ToString(SettingsManager.Settings.SettingsDirectoryEnabled), "1") == 0)
@@ -21725,10 +21675,7 @@ namespace SATSuma
                 }
                 #endregion
                 #region restore always on top setting
-                if (fullSizeLoadingScreen.Visible)
-                {
-                    fullSizeLoadingScreen.SetLoadingText("restoring 'always on top' setting...", "Restoring preferences...");
-                }
+                UpdateLoadingScreenMessage("restoring 'always on top' setting...", "Restoring preferences...");
                 if (String.Compare(Convert.ToString(SettingsManager.Settings.SettingsAlwaysOnTop), "1") == 0)
                 {
                     lblAlwaysOnTop.Invoke((MethodInvoker)delegate
@@ -21754,10 +21701,7 @@ namespace SATSuma
                 numberUpDownDerivationPathsToCheck.Value = Convert.ToInt32(SettingsManager.Settings.SettingsNumberUpDownDerivationPathsToCheck);
                 #endregion
                 #region determine default theme
-                if (fullSizeLoadingScreen.Visible)
-                {
-                    fullSizeLoadingScreen.SetLoadingText("fetching default theme...", "Restoring preferences...");
-                }
+                UpdateLoadingScreenMessage("fetching default theme...", "Restoring preferences...");
                 // check if there is a default theme saved in the file
                 var themes = ThemesManager.Themes;
                 foreach (Theme theme in themes!)
@@ -22662,7 +22606,7 @@ namespace SATSuma
             {
                 #region display loading screen
                 bool wasOnTop = false;
-                Form? loadingScreen = null;
+                
                 if (!fullScreenLoadingScreenVisible)
                 {
                     if (this.TopMost == true)
@@ -22683,12 +22627,15 @@ namespace SATSuma
                         FormBorderStyle = FormBorderStyle.None,
                         BackColor = panel84.BackColor, // Set the background color to match panel colours
                         Opacity = 1, // Set the opacity to 100%
+                        LabelColor = label77.ForeColor,
                         Location = panelScreenLocation // Set the location of the loadingScreen form
                     };
                     loadingScreen.Show(this);
+                    partialLoadingScreenVisible = true;
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
+                UpdateLoadingScreenMessage("please wait...", "Preparing theme creator...");
                 CloseThemeMenu();
                 
                 SuspendLayout();
@@ -22734,6 +22681,7 @@ namespace SATSuma
                 //wait a moment to give time for screen to paint
                 await BriefPauseAsync(700).ConfigureAwait(true);
                 //close the loading screen
+                partialLoadingScreenVisible = false;
                 loadingScreen!.Close();
                 #endregion
                 if (wasOnTop)
@@ -29821,6 +29769,22 @@ namespace SATSuma
             }
         }
         #endregion
+        #region update loading status messages on loading screen
+        private void UpdateLoadingScreenMessage(string statusMessage, string headlineStatusMessage)
+        {
+            if (fullSizeLoadingScreen!.Visible)
+            {
+                fullSizeLoadingScreen.SetLoadingText(statusMessage, headlineStatusMessage);
+            }
+            else
+            {
+                if (partialLoadingScreenVisible)
+                {
+                    loadingScreen!.SetLoadingText(statusMessage, headlineStatusMessage);
+                }
+            }
+        }
+        #endregion
         #region colour change data if it's gone up or down since previous change
         /*
         private async void UpdateLabelValueAsync(Label label, string newValue)
@@ -32458,7 +32422,7 @@ namespace SATSuma
             try
             {
                 #region display loading screen
-                Form? loadingScreen = null;
+                //
                 bool wasOnTop = false;
                 if (!fullScreenLoadingScreenVisible)
                 {
@@ -32479,14 +32443,15 @@ namespace SATSuma
                         FormBorderStyle = FormBorderStyle.None,
                         BackColor = panel84.BackColor, // Set the background color to match panel colours
                         Opacity = 1, // Set the opacity to 100%
+                        LabelColor = label77.ForeColor,
                         Location = panelScreenLocation // Set the location of the loadingScreen form
                     };
-
                     loadingScreen.Show(this);
+                    partialLoadingScreenVisible = true;
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
-
+                UpdateLoadingScreenMessage("please wait...", "Preparing bitcoin dashboard...");
                 SuspendLayout();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -32509,7 +32474,6 @@ namespace SATSuma
                 ResumeLayout(false);
                 ToggleLoadingAnimation("enable");
                 SuspendLayout();
-
                 panelBitcoinDashboard.Invoke((MethodInvoker)delegate
                 {
                     panelBitcoinDashboard.Visible = true;
@@ -32520,6 +32484,7 @@ namespace SATSuma
                     #region close loading screen
                     //wait a moment to give time for screen to paint
                     await BriefPauseAsync(400).ConfigureAwait(true);
+                    partialLoadingScreenVisible = false;
                     //close the loading screen
                     loadingScreen.Close();
                     if (wasOnTop)
@@ -32545,7 +32510,7 @@ namespace SATSuma
             {
                 #region display loading screen
                 bool wasOnTop = false;
-                Form? loadingScreen = null;
+                
                 if (!fullScreenLoadingScreenVisible)
                 {
                     if (this.TopMost == true)
@@ -32566,13 +32531,15 @@ namespace SATSuma
                         FormBorderStyle = FormBorderStyle.None,
                         BackColor = panel84.BackColor, // Set the background color to match panel colours
                         Opacity = 1, // Set the opacity to 100%
+                        LabelColor = label77.ForeColor,
                         Location = panelScreenLocation // Set the location of the loadingScreen form
                     };
                     loadingScreen.Show(this);
+                    partialLoadingScreenVisible = true;
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
-
+                UpdateLoadingScreenMessage("please wait...", "Preparing lightning dashboard...");
                 SuspendLayout();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -32606,6 +32573,7 @@ namespace SATSuma
                     //wait a moment to give time for screen to paint
                     await BriefPauseAsync(400).ConfigureAwait(true);
                     //close the loading screen
+                    partialLoadingScreenVisible = false;
                     loadingScreen.Close();
 
                     if (wasOnTop)
@@ -32630,7 +32598,7 @@ namespace SATSuma
             {
                 #region display loading screen
                 bool wasOnTop = false;
-                Form? loadingScreen = null;
+                
                 if (!fullScreenLoadingScreenVisible)
                 {
                     if (this.TopMost == true)
@@ -32651,13 +32619,15 @@ namespace SATSuma
                         FormBorderStyle = FormBorderStyle.None,
                         BackColor = panel84.BackColor, // Set the background color to match panel colours
                         Opacity = 1, // Set the opacity to 100%
+                        LabelColor = label77.ForeColor,
                         Location = panelScreenLocation // Set the location of the loadingScreen form
                     };
                     loadingScreen.Show(this);
+                    partialLoadingScreenVisible = true;
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
-
+                UpdateLoadingScreenMessage("please wait...", "Preparing charts...");
                 SuspendLayout();
 
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -32697,6 +32667,7 @@ namespace SATSuma
                     //wait a moment to give time for screen to paint
                     await BriefPauseAsync(2000).ConfigureAwait(true);
                     //close the loading screen
+                    partialLoadingScreenVisible = false;
                     loadingScreen.Close();
                     if (wasOnTop)
                     {
@@ -32720,7 +32691,7 @@ namespace SATSuma
             {
                 #region display loading screen
                 bool wasOnTop = false;
-                Form? loadingScreen = null;
+                
                 if (!fullScreenLoadingScreenVisible)
                 {
                     if (this.TopMost == true)
@@ -32741,13 +32712,15 @@ namespace SATSuma
                         FormBorderStyle = FormBorderStyle.None,
                         BackColor = panel84.BackColor, // Set the background color to match panel colours
                         Opacity = 1, // Set the opacity to 100%
+                        LabelColor = label77.ForeColor,
                         Location = panelScreenLocation // Set the location of the loadingScreen form
                     };
                     loadingScreen.Show(this);
+                    partialLoadingScreenVisible = true;
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
-
+                UpdateLoadingScreenMessage("please wait...", "Preparing address (transactions)...");
                 SuspendLayout();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -32810,6 +32783,7 @@ namespace SATSuma
                     //wait a moment to give time for screen to paint
                     await BriefPauseAsync(400).ConfigureAwait(true);
                     //close the loading screen
+                    partialLoadingScreenVisible = false;
                     loadingScreen.Close();
                     if (wasOnTop)
                     {
@@ -32833,7 +32807,7 @@ namespace SATSuma
             {
                 #region display loading screen
                 bool wasOnTop = false;
-                Form? loadingScreen = null;
+                
                 if (!fullScreenLoadingScreenVisible)
                 {
                     if (this.TopMost == true)
@@ -32854,13 +32828,15 @@ namespace SATSuma
                         FormBorderStyle = FormBorderStyle.None,
                         BackColor = panel84.BackColor, // Set the background color to match panel colours
                         Opacity = 1, // Set the opacity to 100%
+                        LabelColor = label77.ForeColor,
                         Location = panelScreenLocation // Set the location of the loadingScreen form
                     };
                     loadingScreen.Show(this);
+                    partialLoadingScreenVisible = true;
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
-
+                UpdateLoadingScreenMessage("please wait...", "Preparing address (UTXO's)...");
                 SuspendLayout();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -32915,6 +32891,7 @@ namespace SATSuma
                     //wait a moment to give time for screen to paint
                     await BriefPauseAsync(400).ConfigureAwait(true);
                     //close the loading screen
+                    partialLoadingScreenVisible = false;
                     loadingScreen.Close();
                     if (wasOnTop)
                     {
@@ -32939,7 +32916,7 @@ namespace SATSuma
             {
                 #region display loading screen
                 bool wasOnTop = false;
-                Form? loadingScreen = null;
+                
                 if (!fullScreenLoadingScreenVisible)
                 {
                     if (this.TopMost == true)
@@ -32960,13 +32937,15 @@ namespace SATSuma
                         FormBorderStyle = FormBorderStyle.None,
                         BackColor = panel84.BackColor, // Set the background color to match panel colours
                         Opacity = 1, // Set the opacity to 100%
+                        LabelColor = label77.ForeColor,
                         Location = panelScreenLocation // Set the location of the loadingScreen form
                     };
                     loadingScreen.Show(this);
+                    partialLoadingScreenVisible = true;
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
-
+                UpdateLoadingScreenMessage("please wait...", "Preparing block view...");
                 SuspendLayout();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -33036,6 +33015,7 @@ namespace SATSuma
                     //wait a moment to give time for screen to paint
                     await BriefPauseAsync(400).ConfigureAwait(true);
                     //close the loading screen
+                    partialLoadingScreenVisible = false;
                     loadingScreen.Close();
                     if (wasOnTop)
                     {
@@ -33057,7 +33037,7 @@ namespace SATSuma
             {
                 #region display loading screen
                 bool wasOnTop = false;
-                Form? loadingScreen = null;
+                
                 if (!fullScreenLoadingScreenVisible)
                 {
                     if (this.TopMost == true)
@@ -33078,13 +33058,15 @@ namespace SATSuma
                         FormBorderStyle = FormBorderStyle.None,
                         BackColor = panel84.BackColor, // Set the background color to match panel colours
                         Opacity = 1, // Set the opacity to 100%
+                        LabelColor = label77.ForeColor,
                         Location = panelScreenLocation // Set the location of the loadingScreen form
                     };
                     loadingScreen.Show(this);
+                    partialLoadingScreenVisible = true;
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
-
+                UpdateLoadingScreenMessage("please wait...", "Preparing xpub view...");
                 SuspendLayout();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -33134,6 +33116,7 @@ namespace SATSuma
                     //wait a moment to give time for screen to paint
                     await BriefPauseAsync(400).ConfigureAwait(true);
                     //close the loading screen
+                    partialLoadingScreenVisible = false;
                     loadingScreen.Close();
                     if (wasOnTop)
                     {
@@ -33157,7 +33140,6 @@ namespace SATSuma
             {
                 #region display loading screen
                 bool wasOnTop = false;
-                Form? loadingScreen = null;
                 if (!fullScreenLoadingScreenVisible)
                 {
                     if (this.TopMost == true)
@@ -33178,13 +33160,15 @@ namespace SATSuma
                         FormBorderStyle = FormBorderStyle.None,
                         BackColor = panel84.BackColor, // Set the background color to match panel colours
                         Opacity = 1, // Set the opacity to 100%
+                        LabelColor = label77.ForeColor,
                         Location = panelScreenLocation // Set the location of the loadingScreen form
                     };
                     loadingScreen.Show(this);
+                    partialLoadingScreenVisible = true;
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
-
+                UpdateLoadingScreenMessage("please wait...", "Preparing block list view...");
                 SuspendLayout();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -33244,6 +33228,7 @@ namespace SATSuma
                     //wait a moment to give time for screen to paint
                     await BriefPauseAsync(400).ConfigureAwait(true);
                     //close the loading screen
+                    partialLoadingScreenVisible = false;
                     loadingScreen.Close();
                     if (wasOnTop)
                     {
@@ -33266,7 +33251,7 @@ namespace SATSuma
             {
                 #region display loading screen
                 bool wasOnTop = false;
-                Form? loadingScreen = null;
+                
                 if (!fullScreenLoadingScreenVisible)
                 {
                     if (this.TopMost == true)
@@ -33287,13 +33272,15 @@ namespace SATSuma
                         FormBorderStyle = FormBorderStyle.None,
                         BackColor = panel84.BackColor, // Set the background color to match panel colours
                         Opacity = 1, // Set the opacity to 100%
+                        LabelColor = label77.ForeColor,
                         Location = panelScreenLocation // Set the location of the loadingScreen form
                     };
                     loadingScreen.Show(this);
+                    partialLoadingScreenVisible = true;
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
-
+                UpdateLoadingScreenMessage("please wait...", "Preparing pool rankings (by blocks mined)...");
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Visible = true;
@@ -33350,6 +33337,7 @@ namespace SATSuma
                     //wait a moment to give time for screen to paint
                     await BriefPauseAsync(400).ConfigureAwait(true);
                     //close the loading screen
+                    partialLoadingScreenVisible = false;
                     loadingScreen.Close();
                     if (wasOnTop)
                     {
@@ -33372,7 +33360,7 @@ namespace SATSuma
             {
                 #region display loading screen
                 bool wasOnTop = false;
-                Form? loadingScreen = null;
+                
                 if (!fullScreenLoadingScreenVisible)
                 {
                     if (this.TopMost == true)
@@ -33393,13 +33381,15 @@ namespace SATSuma
                         FormBorderStyle = FormBorderStyle.None,
                         BackColor = panel84.BackColor, // Set the background color to match panel colours
                         Opacity = 1, // Set the opacity to 100%
+                        LabelColor = label77.ForeColor,
                         Location = panelScreenLocation // Set the location of the loadingScreen form
                     };
                     loadingScreen.Show(this);
+                    partialLoadingScreenVisible = true;
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
-
+                UpdateLoadingScreenMessage("please wait...", "Preparing pool rankings (by hashrate)...");
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Visible = true;
@@ -33454,6 +33444,7 @@ namespace SATSuma
                     //wait a moment to give time for screen to paint
                     await BriefPauseAsync(400).ConfigureAwait(true);
                     //close the loading screen
+                    partialLoadingScreenVisible = false;
                     loadingScreen.Close();
                     if (wasOnTop)
                     {
@@ -33476,7 +33467,7 @@ namespace SATSuma
             {
                 #region display loading screen
                 bool wasOnTop = false;
-                Form? loadingScreen = null;
+                
                 if (!fullScreenLoadingScreenVisible)
                 {
                     if (this.TopMost == true)
@@ -33497,13 +33488,15 @@ namespace SATSuma
                         FormBorderStyle = FormBorderStyle.None,
                         BackColor = panel84.BackColor, // Set the background color to match panel colours
                         Opacity = 1, // Set the opacity to 100%
+                        LabelColor = label77.ForeColor,
                         Location = panelScreenLocation // Set the location of the loadingScreen form
                     };
                     loadingScreen.Show(this);
+                    partialLoadingScreenVisible = true;
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
-
+                UpdateLoadingScreenMessage("please wait...", "Preparing mining pools list...");
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Visible = true;
@@ -33556,6 +33549,7 @@ namespace SATSuma
                     //wait a moment to give time for screen to paint
                     await BriefPauseAsync(400).ConfigureAwait(true);
                     //close the loading screen
+                    partialLoadingScreenVisible = false;
                     loadingScreen.Close();
                     if (wasOnTop)
                     {
@@ -33578,7 +33572,7 @@ namespace SATSuma
             {
                 #region display loading screen
                 bool wasOnTop = false;
-                Form? loadingScreen = null;
+                
                 if (!fullScreenLoadingScreenVisible)
                 {
                     if (this.TopMost == true)
@@ -33599,13 +33593,15 @@ namespace SATSuma
                         FormBorderStyle = FormBorderStyle.None,
                         BackColor = panel84.BackColor, // Set the background color to match panel colours
                         Opacity = 1, // Set the opacity to 100%
+                        LabelColor = label77.ForeColor,
                         Location = panelScreenLocation // Set the location of the loadingScreen form
                     };
                     loadingScreen.Show(this);
+                    partialLoadingScreenVisible = true;
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
-
+                UpdateLoadingScreenMessage("please wait...", "Preparing transaction view...");
                 SuspendLayout();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -33663,6 +33659,7 @@ namespace SATSuma
                     //wait a moment to give time for screen to paint
                     await BriefPauseAsync(1500).ConfigureAwait(true);
                     //close the loading screen
+                    partialLoadingScreenVisible = false;
                     loadingScreen.Close();
                     if (wasOnTop)
                     {
@@ -33687,7 +33684,7 @@ namespace SATSuma
             {
                 #region display loading screen
                 bool wasOnTop = false;
-                Form? loadingScreen = null;
+                
                 if (!fullScreenLoadingScreenVisible)
                 {
                     if (this.TopMost == true)
@@ -33708,13 +33705,15 @@ namespace SATSuma
                         FormBorderStyle = FormBorderStyle.None,
                         BackColor = panel84.BackColor, // Set the background color to match panel colours
                         Opacity = 1, // Set the opacity to 100%
+                        LabelColor = label77.ForeColor,
                         Location = panelScreenLocation // Set the location of the loadingScreen form
                     };
                     loadingScreen.Show(this);
+                    partialLoadingScreenVisible = true;
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
-
+                UpdateLoadingScreenMessage("please wait...", "Preparing bookmarks...");
                 SuspendLayout();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -33765,6 +33764,7 @@ namespace SATSuma
                     //wait a moment to give time for screen to paint
                     await BriefPauseAsync(700).ConfigureAwait(true);
                     //close the loading screen
+                    partialLoadingScreenVisible = false;
                     loadingScreen.Close();
                     if (wasOnTop)
                     {
@@ -33787,7 +33787,7 @@ namespace SATSuma
             {
                 #region display loading screen
                 bool wasOnTop = false;
-                Form? loadingScreen = null;
+                
                 if (!fullScreenLoadingScreenVisible)
                 {
                     if (this.TopMost == true)
@@ -33808,13 +33808,15 @@ namespace SATSuma
                         FormBorderStyle = FormBorderStyle.None,
                         BackColor = panel84.BackColor, // Set the background color to match panel colours
                         Opacity = 1, // Set the opacity to 100%
+                        LabelColor = label77.ForeColor,
                         Location = panelScreenLocation // Set the location of the loadingScreen form
                     };
                     loadingScreen.Show(this);
+                    partialLoadingScreenVisible = true;
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
-
+                UpdateLoadingScreenMessage("please wait...", "Preparing btc/fiat converter...");
                 SuspendLayout();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -33866,6 +33868,7 @@ namespace SATSuma
                     //wait a moment to give time for screen to paint
                     await BriefPauseAsync(700).ConfigureAwait(true);
                     //close the loading screen
+                    partialLoadingScreenVisible = false;
                     loadingScreen.Close();
                     if (wasOnTop)
                     {
@@ -33888,7 +33891,7 @@ namespace SATSuma
             {
                 #region display loading screen
                 bool wasOnTop = false;
-                Form? loadingScreen = null;
+                
                 if (!fullScreenLoadingScreenVisible)
                 {
                     if (this.TopMost == true)
@@ -33909,13 +33912,15 @@ namespace SATSuma
                         FormBorderStyle = FormBorderStyle.None,
                         BackColor = panel84.BackColor, // Set the background color to match panel colours
                         Opacity = 1, // Set the opacity to 100%
+                        LabelColor = label77.ForeColor,
                         Location = panelScreenLocation // Set the location of the loadingScreen form
                     };
                     loadingScreen.Show(this);
+                    partialLoadingScreenVisible = true;
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
-
+                UpdateLoadingScreenMessage("please wait...", "Preparing DCA calculator...");
                 SuspendLayout();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -33975,6 +33980,7 @@ namespace SATSuma
                     //wait a moment to give time for screen to paint
                     await BriefPauseAsync(2000).ConfigureAwait(true);
                     //close the loading screen
+                    partialLoadingScreenVisible = false;
                     loadingScreen.Close();
                     if (wasOnTop)
                     {
@@ -33998,7 +34004,7 @@ namespace SATSuma
             {
                 #region display loading screen
                 bool wasOnTop = false;
-                Form? loadingScreen = null;
+                
                 if (!fullScreenLoadingScreenVisible)
                 {
                     if (this.TopMost == true)
@@ -34019,12 +34025,15 @@ namespace SATSuma
                         FormBorderStyle = FormBorderStyle.None,
                         BackColor = panel84.BackColor, // Set the background color to match panel colours
                         Opacity = 1, // Set the opacity to 100%
+                        LabelColor = label77.ForeColor,
                         Location = panelScreenLocation // Set the location of the loadingScreen form
                     };
                     loadingScreen.Show(this);
+                    partialLoadingScreenVisible = true;
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
+                UpdateLoadingScreenMessage("please wait...", "Preparing directory...");
                 await HideAllScreensAsync().ConfigureAwait(true);
                 SuspendLayout();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -34077,6 +34086,7 @@ namespace SATSuma
                     //wait a moment to give time for screen to paint
                     await BriefPauseAsync(700).ConfigureAwait(true);
                     //close the loading screen
+                    partialLoadingScreenVisible = false;
                     loadingScreen.Close();
                     if (wasOnTop)
                     {
@@ -34099,7 +34109,7 @@ namespace SATSuma
             {
                 #region display loading screen
                 bool wasOnTop = false;
-                Form? loadingScreen = null;
+                
                 if (!fullScreenLoadingScreenVisible)
                 {
                     if (this.TopMost == true)
@@ -34120,12 +34130,15 @@ namespace SATSuma
                         FormBorderStyle = FormBorderStyle.None,
                         BackColor = panel84.BackColor, // Set the background color to match panel colours
                         Opacity = 1, // Set the opacity to 100%
+                        LabelColor = label77.ForeColor,
                         Location = panelScreenLocation // Set the location of the loadingScreen form
                     };
                     loadingScreen.Show(this);
+                    partialLoadingScreenVisible = true;
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
+                UpdateLoadingScreenMessage("please wait...", "Preparing settings screen...");
                 await HideAllScreensAsync().ConfigureAwait(true);
                 SuspendLayout();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -34176,6 +34189,7 @@ namespace SATSuma
                     //wait a moment to give time for screen to paint
                     await BriefPauseAsync(400).ConfigureAwait(true);
                     //close the loading screen
+                    partialLoadingScreenVisible = false;
                     loadingScreen.Close();
                     if (wasOnTop)
                     {
@@ -34901,7 +34915,9 @@ namespace SATSuma
                     FormBorderStyle = FormBorderStyle.None,
                     BackColor = panel84.BackColor, // Set the background color to match panel colours
                     Opacity = 1,
-                    BackgroundImage = Resources.Closing
+                    LabelColor = label77.ForeColor,
+                    Version = $"v{CurrentVersion}",
+                    OtherText = lblCurrentVersion.ForeColor
                 };
                 fullSizeLoadingScreen.StartPosition = FormStartPosition.CenterParent;
 
@@ -34914,10 +34930,10 @@ namespace SATSuma
                 fullSizeLoadingScreen.Location = new Point(overlayX, overlayY);
                 fullSizeLoadingScreen.Show(this);
                 #endregion
-                fullSizeLoadingScreen.SetLoadingText("", "");
-                
+                fullSizeLoadingScreen.SetLoadingText($"...at block height {lblHeaderBlockNumber.Text}", "Closing down...");
+
                 // the closing screen exists only to hide the messy removal of all screen elements when closing the form
-                await BriefPauseAsync(1000).ConfigureAwait(true);
+                await BriefPauseAsync(2000).ConfigureAwait(true);
 
                 this.Close();
                 fullSizeLoadingScreen.Close();

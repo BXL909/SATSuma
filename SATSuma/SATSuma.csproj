@@ -474,12 +474,9 @@
   <ItemGroup>
     <Content Include="BTC48.ico" />
     <None Include="Resources\FullScreenLoadingBG.png" />
-    <None Include="Resources\tinylogo1trans.png" />
-    <None Include="Resources\ApplyingTheme1.png" />
     <None Include="Resources\SatsumaButton-4.png" />
     <None Include="Resources\ezgif-1-275c0652c6.gif" />
     <None Include="Resources\tooltiplogo.bmp" />
-    <None Include="Resources\MainMenuFade.png" />
     <None Include="Resources\calendarWhite.png" />
     <None Include="Resources\calendarDark.png" />
     <None Include="Resources\Closing.png" />
@@ -496,7 +493,6 @@
     <None Include="Resources\OrangePaler.png" />
     <None Include="Resources\BlueFade.png" />
     <None Include="Resources\OrangeFade.png" />
-    <None Include="Resources\ApplyingTheme.png" />
     <None Include="Resources\CustomImage.png" />
     <None Include="Resources\SatsumaAnimatedWhite.gif" />
     <None Include="Resources\SatsumaAnimated.gif" />
@@ -511,8 +507,6 @@
     <None Include="Resources\Untitled-2.png" />
     <None Include="Resources\OrangeInfinity.gif" />
     <None Include="Resources\Satsuma.png" />
-    <None Include="Resources\graphIcondisabled.png" />
-    <None Include="Resources\graphIcon.png" />
     <None Include="Resources\Franklin.png" />
     <None Include="Resources\logoNoText.png" />
     <None Include="Resources\PnVlfRPD_400x400.png" />

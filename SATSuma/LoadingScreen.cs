@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Forms;
 
 namespace SATSuma
@@ -30,7 +23,7 @@ namespace SATSuma
          );
         #endregion
 
-       // public double UIScaleForOverlay { get; set; }
+        public Color LabelColor { get; set; }
 
         public LoadingScreen(double UIScale)
         {
@@ -64,5 +57,39 @@ namespace SATSuma
             }
         }
 
+        public void SetLoadingText(string text, string headlineText)
+        {
+
+            if (this.Visible)
+            {
+                if (text == "" && headlineText == "")
+                {
+                    panel1.Invoke((MethodInvoker)delegate
+                    {
+                        panel1.Visible = false;
+                    });
+                }
+                panel1.Invoke((MethodInvoker)delegate
+                {
+                    panel1.Location = new System.Drawing.Point((this.Width / 2) - (panel1.Width / 2), (this.Height / 2) - (panel1.Height / 2));
+                });
+                lblLoadingStatus.Invoke((MethodInvoker)delegate
+                {
+                    lblLoadingStatus.ForeColor = LabelColor;
+                    lblLoadingStatus.Text = text;
+                    lblLoadingStatus.Invalidate();
+                    lblLoadingStatus.Refresh();
+                    lblLoadingStatus.Location = new System.Drawing.Point((panel1.Width / 2) - (lblLoadingStatus.Width / 2), (panel1.Height / 2) - (lblLoadingStatus.Height / 2));
+                });
+                lblLoadingStatusHeadline.Invoke((MethodInvoker)delegate
+                {
+                    lblLoadingStatusHeadline.ForeColor = LabelColor;
+                    lblLoadingStatusHeadline.Text = headlineText;
+                    lblLoadingStatusHeadline.Invalidate();
+                    lblLoadingStatusHeadline.Refresh();
+                    lblLoadingStatusHeadline.Location = new System.Drawing.Point((panel1.Width / 2) - (lblLoadingStatusHeadline.Width / 2), (lblLoadingStatus.Location.Y - 33));
+                });
+            }
+        }
     }
 }

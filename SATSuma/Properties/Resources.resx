@@ -127,17 +127,8 @@
   <data name="GreenFade" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\GreenFade.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ezgif-1-275c0652c6" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ezgif-1-275c0652c6.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="graphIcon1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\graphIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="InfinityTrans" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\InfinityTrans.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="graphIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\graphIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="BlackFade" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BlackFade.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -163,17 +154,11 @@
   <data name="setupscreenDropdown" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\setupscreenDropdown.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Closing" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Closing.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Polygons" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Polygons.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="tinylogo1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\tinylogo1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="MainMenuFade" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\MainMenuFade.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="SpinningSatsuma" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SpinningSatsuma.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -199,9 +184,6 @@
   <data name="Genesis" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Genesis.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="graphIcondisabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\graphIcondisabled.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="helpselectDropdown" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\helpselectDropdown.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -213,9 +195,6 @@
   </data>
   <data name="Franklin" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Franklin.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ApplyingTheme" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ApplyingTheme.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="OrangeFade" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\OrangeFade.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -241,12 +220,6 @@
   <data name="SatsumaAnimated" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SatsumaAnimated.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="tinylogo1trans" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tinylogo1trans.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="CustomImage1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\CustomImage.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="HoneyBadger" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\HoneyBadger.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -271,9 +244,6 @@
   <data name="infinityspectrum" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\infinityspectrum.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ApplyingTheme1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ApplyingTheme1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="OrangeInfinity" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\OrangeInfinity.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -282,5 +252,8 @@
   </data>
   <data name="FullScreenLoadingBG" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\FullScreenLoadingBG.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MainMenuFade" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\MainMenuFade.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

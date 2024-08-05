@@ -12,12 +12,7 @@
 //
 //TODO LIST______________________________________________________________________________________________
 //TODO Taproot support on xpub screen 
-//TODO documentation for new pools screens (code done, pages created, just do text)
-//TODO documentation for new btc dashboard fields
-//TODO cancellation tokens for all async tasks. add cancel button.
-//TODO fix width of background image on partial loading screen (stretch or use new image)
-//TODO swap distribution and halving sections around on bitcoin dashboard
-//TODO testing
+//TODO Block screen - transactions list header slightly off alignment on right
 //BUG LIST_______________________________________________________________________________________________
 //!_______________________________________________________________________________________________________
 #nullable enable
@@ -460,8 +455,8 @@ namespace SATSuma
             #region rounded panels and form
             #region rounded panels
             Control[] panelsToRound = { panel194, panel198, panel192, panel193, panel7, panel109, panelXpubContainer, panelXpubScrollContainer, panel32, panel74, panel76, panel77, panel99, panel84, panel88, panel89, panel90, panel86, panel87, panel103, panel46, panel51, panel91, panel70, panel71, panel16, panel21, panel85, panel53, panel96, panel106, panel107, panel92, panelAddToBookmarks, panelAddToBookmarksBorder,
-                panelLeftPanel, panelOwnNodeAddressTXInfo, panelOwnNodeBlockTXInfo, panelTransactionMiddle, panelErrorMessage, panelSettingsUIScale, panelSettingsUIScaleContainer, panelDCAMessages, panelDCASummary, panelDCAInputs, panel119, panelPriceConvert, panelDCAChartContainer, panel117, panel121,
-                panel122, panel101, panel27, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panelAddressUTXOScrollContainer, panelBookmarksContainer, panelBookmarksScrollContainer, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panelPoolsBlocksScrollContainer, panel147, panel80, panel153, panel158, panelPoolsListScrollContainer,
+                panelLeftPanel, panelOwnNodeAddressTXInfo, panelOwnNodeBlockTXInfo, panelTransactionMiddle, panelErrorMessage, panelSettingsUIScale, panelSettingsUIScaleContainer, panelDCAMessages, panelDCASummary, panelDCAInputs, panel119, panelPriceConvert, panelDCAChartContainer, panel117, panel121, panel66, panel67, panel59, panel68,
+                panel122, panel101, panel27, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panelAddressUTXOScrollContainer, panelBookmarksContainer, panelBookmarksScrollContainer, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panelPoolsBlocksScrollContainer, panel147, panel80, panel153, panel158, 
                 panelTransactionInputs, panelTransactionOutputs, panelTXInScrollContainer, panelTXOutScrollContainer, panelAddressTxContainer, panel120, panel123, panel124, panelPriceSourceIndicatorsOuter, panelBookmarksScrollbarInner, panelTXInScrollbarInner, panelTXOutScrollbarInner, panelAddressUTXOScrollbarInner, panelPoolsBlocksScrollbarInner, panelXpubScrollbarInner, panelUTXOError, panel133, panel134, panel188, panel189, panel190, panel191 };
             foreach (Control control in panelsToRound)
             {
@@ -514,7 +509,7 @@ namespace SATSuma
 
                 #region restore UIScale labels on settings screen and disable/enable bigger/smaller buttons
 
-                Dictionary<string, string> scaleTextMap = new Dictionary<string, string> // Transalte saved UIScale value (1-5) to strings to display on the settings screen
+                Dictionary<string, string> scaleTextMap = new Dictionary<string, string> // Transalte saved UIScale value (1-5) to strings to display on the settings screen (1 & 2 was disabled)
                 {
                     //{ "1", "smallest" },
                     //{ "2", "small" },
@@ -593,15 +588,15 @@ namespace SATSuma
                 #endregion
 
                 #region restore saved settings
-                UpdateLoadingScreenMessage("Restoring saved settings...", "Restoring preferences...");
+                UpdateLoadingScreenMessage("Restoring saved settings...", "Restoring preferences");
                 RestoreSavedSettings(); // api choices, node, xpub node, theme
                 #endregion
                 #region check network
-                UpdateLoadingScreenMessage("Checking connection...", "Initialising...");
+                UpdateLoadingScreenMessage("Checking connection...", "Initialising");
                 await CheckNetworkStatusAsync().ConfigureAwait(true);
                 #endregion
                 #region set/get some initial values (e.g block height, price)
-                UpdateLoadingScreenMessage("Getting block height and market data...", "Initialising...");
+                UpdateLoadingScreenMessage("Getting block height and market data...", "Initialising");
                 panelErrorMessage.Invoke((MethodInvoker)delegate
                 {
                     panelErrorMessage.Width = 0;
@@ -627,12 +622,12 @@ namespace SATSuma
                 #region populate dashboards and start the timers ticking
 
                 #region Bitcoin dashboard
-                UpdateLoadingScreenMessage("Gatting dashboard data...", "Initialising...");
+                UpdateLoadingScreenMessage("Gatting dashboard data...", "Initialising");
                 _ = UpdateBitcoinAndLightningDashboardsAsync(); // setting them now avoids waiting a whole minute for the first refresh
                 #endregion
 
                 #region start the timers
-                UpdateLoadingScreenMessage("Starting timers...", "Initialising...");
+                UpdateLoadingScreenMessage("Starting timers...", "Initialising");
                 StartTheClocksTicking();
                 #endregion
                 #endregion
@@ -830,7 +825,7 @@ namespace SATSuma
             panelLightningDashboard.SuspendLayout();
             bool errorOccurred = false;
             #region determine network age
-            UpdateLoadingScreenMessage("Determining network age...", "Initialising...");
+            UpdateLoadingScreenMessage("Determining network age...", "Initialising");
             DateTime startDate = new DateTime(2009, 1, 3, 18, 15, 0); // Genesis block time
             DateTime currentDate = DateTime.Now; // Current date and time
 
@@ -858,7 +853,7 @@ namespace SATSuma
                 #region block height, no. of tx in block, time since block, block size
                 try
                 {
-                    UpdateLoadingScreenMessage("Gathering block data...", "Initialising...");
+                    UpdateLoadingScreenMessage("Gathering block data...", "Initialising");
                     var blocksJson = await _blockService.GetBlockDataAsync("000000").ConfigureAwait(true);  // don't pass a block to start from - we want the tip
                     var blocks = JsonConvert.DeserializeObject<List<Block>>(blocksJson);
 
@@ -973,7 +968,7 @@ namespace SATSuma
                 #region fees
                 try
                 {
-                    UpdateLoadingScreenMessage("Getting fee priority data...", "Initialising...");
+                    UpdateLoadingScreenMessage("Getting fee priority data...", "Initialising");
                     var (fastestFee, halfHourFee, hourFee, economyFee) = MemSpGetFees();
                     UpdateLabelValueAsync(lblHeaderfeesHighPriority, fastestFee);
                     label15.Invoke((MethodInvoker)delegate
@@ -1022,7 +1017,7 @@ namespace SATSuma
                 #region hashrate
                 try
                 {
-                    UpdateLoadingScreenMessage("Determining hashrate...", "Initialising...");
+                    UpdateLoadingScreenMessage("Determining hashrate...", "Initialising");
                     var currentHashrate = MemSpGetHashrate();
                     BigInteger currentHashrateFormatted = BigInteger.Parse(currentHashrate);
 
@@ -1047,7 +1042,7 @@ namespace SATSuma
 
                 #region determine block subsidy, subsidy after halving and fiat values of both
                 // determine current block subsidy by calculating it from most recent block
-                UpdateLoadingScreenMessage("Gathering block subsidy and halving data...", "Initialising...");
+                UpdateLoadingScreenMessage("Gathering block subsidy and halving data...", "Initialising");
                 string blockSubsidy = MemSpGetRewardStats();
                 UpdateLabelValueAsync(lblBlockSubsidy, blockSubsidy);
 
@@ -1127,7 +1122,7 @@ namespace SATSuma
                 #region difficulty adjustment
                 try
                 {
-                    UpdateLoadingScreenMessage("Checking mining difficulty...", "Initialising...");
+                    UpdateLoadingScreenMessage("Checking mining difficulty...", "Initialising");
                     string truncatedPercent = "0%";
                     var (progressPercent, difficultyChange, estimatedRetargetDate, remainingBlocks, _, previousRetarget, nextRetargetHeight, timeAvg, _) = MemSpGetDifficultyAdjustment();
                     if (decimal.TryParse(progressPercent, out decimal progressValue2))
@@ -1215,7 +1210,7 @@ namespace SATSuma
                 {
                     if (!testNet)
                     {
-                        UpdateLoadingScreenMessage("Gettings fees and transactions in next block...", "Initialising...");
+                        UpdateLoadingScreenMessage("Gettings fees and transactions in next block...", "Initialising");
 
                         var (txInNextBlock, nextBlockMinFee, nextBlockMaxFee, nextBlockTotalFees) = MemSpNextBlock();
                         UpdateLabelValueAsync(lblTransInNextBlock, txInNextBlock);
@@ -1319,7 +1314,7 @@ namespace SATSuma
             {
                 try
                 {
-                    UpdateLoadingScreenMessage("Updating Lightning dashboard...", "Initialising...");
+                    UpdateLoadingScreenMessage("Updating Lightning dashboard...", "Initialising");
                     if (!testNet)
                     {
                         if (RunMempoolSpaceLightningAPI)
@@ -1571,7 +1566,7 @@ namespace SATSuma
             #region task 2 - coinbase.com / mempool.space (price) / coingecko.com api (price)
             Task task2 = Task.Run(() =>
             {
-                UpdateLoadingScreenMessage("Getting current market data...", "Initialising...");
+                UpdateLoadingScreenMessage("Getting current market data...", "Initialising");
                 if (!offlineMode)
                 {
                     try
@@ -1673,7 +1668,7 @@ namespace SATSuma
                     {
                         if (RunCoingeckoAPI)
                         {
-                            UpdateLoadingScreenMessage("Getting historic market stats...", "Initialising...");
+                            UpdateLoadingScreenMessage("Getting historic market stats...", "Initialising");
                             var CoinGeckoMarketDataJson = await _coinGeckoMarketDataService.GetCoinGeckoMarketDataAsync().ConfigureAwait(true);
                             var coinGeckoMarketData = JsonConvert.DeserializeObject<Rootobject>(CoinGeckoMarketDataJson);
 
@@ -2867,7 +2862,7 @@ namespace SATSuma
                     {
                         if (RunMessariAPI)
                         {
-                            UpdateLoadingScreenMessage("determining network usage...", "Initialising...");
+                            UpdateLoadingScreenMessage("determining network usage...", "Initialising");
                             var MessariMarketDataJson = await _MessariMarketDataService.GetMessariMarketDataAsync().ConfigureAwait(true);
                             var messariMarketData = JsonConvert.DeserializeObject<MessariRootobject>(MessariMarketDataJson);
 
@@ -3144,52 +3139,52 @@ namespace SATSuma
             {
                 panelAddresses100kSats.Invoke((MethodInvoker)delegate
                 {
-                    panelAddresses100kSats.Width = (int)(102.0 * UIScale);
+                    panelAddresses100kSats.Width = (int)(121.0 * UIScale);
                 });
                 panelAddresses1mSats.Invoke((MethodInvoker)delegate
                 {
                     double ratio = (double)Convert.ToInt32(lblAddresses1mSats.Text) / Convert.ToInt32(lblAddresses100kSats.Text);
-                    panelAddresses1mSats.Width = Convert.ToInt32(ratio * (102.0 * UIScale));
+                    panelAddresses1mSats.Width = Convert.ToInt32(ratio * (121.0 * UIScale));
                 });
                 panelAddresses10mSats.Invoke((MethodInvoker)delegate
                 {
                     double ratio = (double)Convert.ToInt32(lblAddresses10mSats.Text) / Convert.ToInt32(lblAddresses100kSats.Text);
-                    panelAddresses10mSats.Width = Convert.ToInt32(ratio * (102.0 * UIScale));
+                    panelAddresses10mSats.Width = Convert.ToInt32(ratio * (121.0 * UIScale));
                 });
                 panelAddresses1BTC.Invoke((MethodInvoker)delegate
                 {
                     double ratio = (double)Convert.ToInt32(lblAddresses1BTC.Text) / Convert.ToInt32(lblAddresses100kSats.Text);
-                    panelAddresses1BTC.Width = Convert.ToInt32(ratio * (102.0 * UIScale));
+                    panelAddresses1BTC.Width = Convert.ToInt32(ratio * (121.0 * UIScale));
                 });
                 panelAddresses10BTC.Invoke((MethodInvoker)delegate
                 {
                     double ratio = (double)Convert.ToInt32(lblAddresses10BTC.Text) / Convert.ToInt32(lblAddresses100kSats.Text);
-                    panelAddresses10BTC.Width = Convert.ToInt32(ratio * (102.0 * UIScale));
+                    panelAddresses10BTC.Width = Convert.ToInt32(ratio * (121.0 * UIScale));
                 });
                 panelAddresses100BTC.Invoke((MethodInvoker)delegate
                 {
                     double ratio = (double)Convert.ToInt32(lblAddresses100BTC.Text) / Convert.ToInt32(lblAddresses100kSats.Text);
-                    panelAddresses100BTC.Width = Convert.ToInt32(ratio * (102.0 * UIScale));
+                    panelAddresses100BTC.Width = Convert.ToInt32(ratio * (121.0 * UIScale));
                 });
                 panelAddresses1000BTC.Invoke((MethodInvoker)delegate
                 {
                     double ratio = (double)Convert.ToInt32(lblAddresses1000BTC.Text) / Convert.ToInt32(lblAddresses100kSats.Text);
-                    panelAddresses1000BTC.Width = Convert.ToInt32(ratio * (102.0 * UIScale));
+                    panelAddresses1000BTC.Width = Convert.ToInt32(ratio * (121.0 * UIScale));
                 });
                 panelAddresses10000BTC.Invoke((MethodInvoker)delegate
                 {
                     double ratio = (double)Convert.ToInt32(lblAddresses10000BTC.Text) / Convert.ToInt32(lblAddresses100kSats.Text);
-                    panelAddresses10000BTC.Width = Convert.ToInt32(ratio * (102.0 * UIScale));
+                    panelAddresses10000BTC.Width = Convert.ToInt32(ratio * (121.0 * UIScale));
                 });
                 panelAddresses100kBTC.Invoke((MethodInvoker)delegate
                 {
                     double ratio = (double)Convert.ToInt32(lblAddresses100kBTC.Text) / Convert.ToInt32(lblAddresses100kSats.Text);
-                    panelAddresses100kBTC.Width = Convert.ToInt32(ratio * (102.0 * UIScale));
+                    panelAddresses100kBTC.Width = Convert.ToInt32(ratio * (121.0 * UIScale));
                 });
                 panelAddresses1mBTC.Invoke((MethodInvoker)delegate
                 {
                     double ratio = (double)Convert.ToInt32(lblAddresses1mBTC.Text) / Convert.ToInt32(lblAddresses100kSats.Text);
-                    panelAddresses1mBTC.Width = Convert.ToInt32(ratio * (102.0 * UIScale));
+                    panelAddresses1mBTC.Width = Convert.ToInt32(ratio * (121.0 * UIScale));
                 });
             }
             catch (Exception ex)
@@ -3206,69 +3201,69 @@ namespace SATSuma
 
                 panelAddresses100kSats.Invoke((MethodInvoker)delegate
                 {
-                    panelAddresses100kSats.Width = (int)(102.0 * UIScale);
+                    panelAddresses100kSats.Width = (int)(121.0 * UIScale);
                 });
                 panelAddresses1mSats.Invoke((MethodInvoker)delegate
                 {
                     double value1 = Convert.ToDouble(lblAddresses1mSats.Text);
                     double ratio = Math.Log(value1 > 0 ? value1 : 1) / Math.Log(value2 > 0 ? value2 : 1);
-                    panelAddresses1mSats.Width = Convert.ToInt32(ratio * (102.0 * UIScale));
+                    panelAddresses1mSats.Width = Convert.ToInt32(ratio * (121.0 * UIScale));
                 });
 
                 panelAddresses10mSats.Invoke((MethodInvoker)delegate
                 {
                     double value1 = Convert.ToDouble(lblAddresses10mSats.Text);
                     double ratio = Math.Log(value1 > 0 ? value1 : 1) / Math.Log(value2 > 0 ? value2 : 1);
-                    panelAddresses10mSats.Width = Convert.ToInt32(ratio * (102.0 * UIScale));
+                    panelAddresses10mSats.Width = Convert.ToInt32(ratio * (121.0 * UIScale));
                 });
 
                 panelAddresses1BTC.Invoke((MethodInvoker)delegate
                 {
                     double value1 = Convert.ToDouble(lblAddresses1BTC.Text);
                     double ratio = Math.Log(value1 > 0 ? value1 : 1) / Math.Log(value2 > 0 ? value2 : 1);
-                    panelAddresses1BTC.Width = Convert.ToInt32(ratio * (102.0 * UIScale));
+                    panelAddresses1BTC.Width = Convert.ToInt32(ratio * (121.0 * UIScale));
                 });
 
                 panelAddresses10BTC.Invoke((MethodInvoker)delegate
                 {
                     double value1 = Convert.ToDouble(lblAddresses10BTC.Text);
                     double ratio = Math.Log(value1 > 0 ? value1 : 1) / Math.Log(value2 > 0 ? value2 : 1);
-                    panelAddresses10BTC.Width = Convert.ToInt32(ratio * (102.0 * UIScale));
+                    panelAddresses10BTC.Width = Convert.ToInt32(ratio * (121.0 * UIScale));
                 });
 
                 panelAddresses100BTC.Invoke((MethodInvoker)delegate
                 {
                     double value1 = Convert.ToDouble(lblAddresses100BTC.Text);
                     double ratio = Math.Log(value1 > 0 ? value1 : 1) / Math.Log(value2 > 0 ? value2 : 1);
-                    panelAddresses100BTC.Width = Convert.ToInt32(ratio * (102.0 * UIScale));
+                    panelAddresses100BTC.Width = Convert.ToInt32(ratio * (121.0 * UIScale));
                 });
 
                 panelAddresses1000BTC.Invoke((MethodInvoker)delegate
                 {
                     double value1 = Convert.ToDouble(lblAddresses1000BTC.Text);
                     double ratio = Math.Log(value1 > 0 ? value1 : 1) / Math.Log(value2 > 0 ? value2 : 1);
-                    panelAddresses1000BTC.Width = Convert.ToInt32(ratio * (102.0 * UIScale));
+                    panelAddresses1000BTC.Width = Convert.ToInt32(ratio * (121.0 * UIScale));
                 });
 
                 panelAddresses10000BTC.Invoke((MethodInvoker)delegate
                 {
                     double value1 = Convert.ToDouble(lblAddresses10000BTC.Text);
                     double ratio = Math.Log(value1 > 0 ? value1 : 1) / Math.Log(value2 > 0 ? value2 : 1);
-                    panelAddresses10000BTC.Width = Convert.ToInt32(ratio * (102.0 * UIScale));
+                    panelAddresses10000BTC.Width = Convert.ToInt32(ratio * (121.0 * UIScale));
                 });
 
                 panelAddresses100kBTC.Invoke((MethodInvoker)delegate
                 {
                     double value1 = Convert.ToDouble(lblAddresses100kBTC.Text);
                     double ratio = Math.Log(value1 > 0 ? value1 : 1) / Math.Log(value2 > 0 ? value2 : 1);
-                    panelAddresses100kBTC.Width = Convert.ToInt32(ratio * (102.0 * UIScale));
+                    panelAddresses100kBTC.Width = Convert.ToInt32(ratio * (121.0 * UIScale));
                 });
 
                 panelAddresses1mBTC.Invoke((MethodInvoker)delegate
                 {
                     double value1 = Convert.ToDouble(lblAddresses1mBTC.Text);
                     double ratio = Math.Log(value1 > 0 ? value1 : 1) / Math.Log(value2 > 0 ? value2 : 1);
-                    panelAddresses1mBTC.Width = Convert.ToInt32(ratio * (102.0 * UIScale));
+                    panelAddresses1mBTC.Width = Convert.ToInt32(ratio * (121.0 * UIScale));
                 });
             }
             catch (Exception ex)
@@ -3830,7 +3825,6 @@ namespace SATSuma
                 var response = client.DownloadString("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd%2Ceur%2Cgbp%2Cxau&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true&include_last_updated_at=true&precision=2");
                 var data = JObject.Parse(response);
 
-                // Check if each key exists and assign its value, otherwise set it to "0"
                 string cgPriceUSD = data["bitcoin"]!["usd"] != null ? data["bitcoin"]!["usd"]!.ToString() : "0";
                 string cgPriceGBP = data["bitcoin"]!["gbp"] != null ? data["bitcoin"]!["gbp"]!.ToString() : "0";
                 string cgPriceEUR = data["bitcoin"]!["eur"] != null ? data["bitcoin"]!["eur"]!.ToString() : "0";
@@ -3861,7 +3855,7 @@ namespace SATSuma
                             int SecondsToHalving = int.Parse(secondsString);
                             if (SecondsToHalving > 0)
                             {
-                                SecondsToHalving--; // one second closer to the halvening!
+                                SecondsToHalving--; // one second closer to the halving!
                                 lblHalvingSecondsRemaining.Invoke((MethodInvoker)delegate
                                 {
                                     lblHalvingSecondsRemaining.Text = SecondsToHalving.ToString();
@@ -5102,11 +5096,6 @@ namespace SATSuma
                     btnNextAddressTransactions.Enabled = false;
                     btnFirstAddressTransaction.Enabled = false;
                 }
-                else
-                {
-                    btnNextAddressTransactions.Enabled = true;
-                    btnFirstAddressTransaction.Enabled = true;
-                }
 
                 Control[] controlsToShow = { lblAddressTXPositionInList, label59, label61, label67, label63, listViewAddressTransactions, lblAddressConfirmedUnspent, lblAddressConfirmedUnspentOutputs, lblAddressConfirmedTransactionCount, lblAddressConfirmedReceived, lblAddressConfirmedReceivedOutputs, lblAddressConfirmedSpent, lblAddressConfirmedSpentOutputs,
                     btnShowAllTX, btnShowConfirmedTX, btnShowUnconfirmedTX, lblAddressType, panel41, panel42, panel43, panel44, panel132, listViewAddressTransactions, btnViewUTXOsFromAddressTX, btnFirstAddressTransaction, btnNextAddressTransactions, panelAddressTxContainer };
@@ -5198,11 +5187,9 @@ namespace SATSuma
                     btnShowConfirmedAddressTXWasEnabled = btnShowConfirmedTX.Enabled;
                     btnShowUnconfirmedAddressTXWasEnabled = btnShowUnconfirmedTX.Enabled;
                     BtnViewTransactionFromAddressWasEnabled = BtnViewTransactionFromAddress.Enabled;
-                    //BtnViewBlockFromAddressWasEnabled = BtnViewBlockFromAddress.Enabled;
                     textBoxSubmittedAddressWasEnabled = textboxSubmittedAddress.Enabled;
 
                     //disable them all
-                    //Control[] controlsToDisable = { btnShowAllTX, btnShowConfirmedTX, btnShowUnconfirmedTX, BtnViewTransactionFromAddress, BtnViewBlockFromAddress, textboxSubmittedAddress };
                     Control[] controlsToDisable = { btnShowAllTX, btnShowConfirmedTX, btnShowUnconfirmedTX, BtnViewTransactionFromAddress, textboxSubmittedAddress };
                     foreach (Control control in controlsToDisable)
                     {
@@ -5219,7 +5206,6 @@ namespace SATSuma
                     btnShowConfirmedTX.Enabled = btnShowConfirmedAddressTXWasEnabled;
                     btnShowUnconfirmedTX.Enabled = btnShowUnconfirmedAddressTXWasEnabled;
                     BtnViewTransactionFromAddress.Enabled = BtnViewTransactionFromAddressWasEnabled;
-                    //BtnViewBlockFromAddress.Enabled = BtnViewBlockFromAddressWasEnabled;
                     textboxSubmittedAddress.Enabled = textBoxSubmittedAddressWasEnabled;
                 }
             }
@@ -5805,7 +5791,6 @@ namespace SATSuma
                 }
                 btnViewTransactionFromAddressUTXO.Visible = listViewAddressUTXOs.SelectedItems.Count > 0;
                 btnViewBlockFromAddressUTXO.Visible = listViewAddressUTXOs.SelectedItems.Count > 0;
-                //btnViewBlockFromAddressUTXO.BringToFront();
                 lblHeaderBlockAge.Focus();
             }
             catch (Exception ex)
@@ -8440,12 +8425,6 @@ namespace SATSuma
                     TransactionInputsScrollPosition = 0;
                 }
                 lblHeaderBlockAge.Focus();
-
-
-                //                if (btnViewAddressFromTXInput.Visible) // user must have clicked a row given that the button is visible
-                //               {
-                //                  panelTransactionInputs.VerticalScroll.Value = TransactionInputsScrollPosition; //return the scroll position to where it was when clicked (it jumps to top otherwise)
-                //             }
             }
             catch (Exception ex)
             {
@@ -8468,11 +8447,6 @@ namespace SATSuma
                     TransactionOutputsScrollPosition = 0;
                 }
                 lblHeaderBlockAge.Focus();
-
-                //if (btnViewAddressFromTXOutput.Visible) // user must have clicked a row given that the button is visible
-                // {
-                //    panelTransactionOutputs.VerticalScroll.Value = TransactionOutputsScrollPosition; //return the scroll position to where it was when clicked (it jumps to top otherwise)
-                // }
             }
             catch (Exception ex)
             {
@@ -8728,7 +8702,6 @@ namespace SATSuma
         {
             try
             {
-                //btnViewBlockFromBlockList.Visible = false;
                 if (int.TryParse(numericUpDownBlockHeightToStartListFrom.Text, out int _)) // check it's numeric
                 {
                     var blockNumber = Convert.ToString(numericUpDownBlockHeightToStartListFrom.Text);
@@ -10544,6 +10517,7 @@ namespace SATSuma
                     {
                         lblXpubStatus.Text = "Deriving P2PKH legacy addresses";
                     });
+
                     for (uint i = 0; i < 500; i++)
                     {
                         var pubkey = ExtPubKey.Parse(submittedXpub, Network.Main);
@@ -11539,7 +11513,6 @@ namespace SATSuma
                             }
                             btnViewAddressFromXpub.Invoke((MethodInvoker)delegate
                             {
-                                //btnViewAddressFromXpub.Location = new Point(panel101.Location.X - btnViewAddressFromXpub.Width + (int)(12 * UIScale), item.Position.Y + listViewXpubAddresses.Location.Y + panelXpubContainer.Location.Y);
                                 btnViewAddressFromXpub.Location = new Point(0, item.Position.Y + listViewXpubAddresses.Location.Y);
                                 btnViewAddressFromXpub.Height = item.Bounds.Height;
                             });
@@ -11717,7 +11690,11 @@ namespace SATSuma
         {
             try
             {
-                int rowHeight = listViewXpubAddresses.Margin.Vertical + listViewXpubAddresses.Padding.Vertical + listViewXpubAddresses.GetItemRect(0).Height;
+                int rowHeight = 1;
+                if (listViewXpubAddresses != null && listViewXpubAddresses.Items.Count > 0)
+                {
+                    rowHeight = listViewXpubAddresses.Margin.Vertical + listViewXpubAddresses.Padding.Vertical + listViewXpubAddresses.GetItemRect(0).Height;
+                }
                 if (XpubAddressesScrollPosition - rowHeight > 0)
                 {
                     panelXpubContainer.VerticalScroll.Value = XpubAddressesScrollPosition;
@@ -11781,7 +11758,7 @@ namespace SATSuma
         #endregion
         #endregion
         //![](resources\tinylogo1.png;;;0.04706,0.04877)
-        #region ⚡⚡ POOLS RANKINGS SCREENS AND CHARTS
+        #region ⚡⚡⚡ POOLS RANKINGS SCREENS AND CHARTS
 
         #region ⚡⚡MINING POOLS BY BLOCKS SCREEN⚡
 
@@ -12949,7 +12926,7 @@ namespace SATSuma
 
         #endregion
         //![](resources\tinylogo1.png;;;0.04706,0.04877)
-        #region ⚡⚡ POOL SCREEN
+        #region ⚡⚡⚡ POOL SCREEN
         private async void SetupPoolScreenAsync()
         {
             try
@@ -12962,15 +12939,11 @@ namespace SATSuma
                     #region get the pools list data
                     LightUpNodeLight();
                     var PoolsListJson = await _miningPoolsListService.GetMiningPoolsListAsync().ConfigureAwait(true);
-                    //var poolsList = JsonConvert.DeserializeObject<List<PoolForList>>(PoolsListJson); // Deserialize into a list
                     var poolsList = JsonConvert.DeserializeObject<PoolsWrapper>(PoolsListJson);
                     #endregion
                     #region ListView
                     if (poolsList != null)
                     {
-                        // poolsList = poolsList.OrderBy(pool => pool.Name).ToList();
-
-
                         listViewPoolsList.Invoke((MethodInvoker)delegate
                         {
                             listViewPoolsList.Items.Clear(); // remove any data that may be there already
@@ -12988,7 +12961,6 @@ namespace SATSuma
                         });
                         // Add the items to the ListView
                         int counter = 0;
-                        //foreach (var pool in poolsList)
                         foreach (var pool in poolsList.Pools!)
                         {
 
@@ -13525,7 +13497,6 @@ namespace SATSuma
 
                         // Add formatted date and time to SubItems
                         item.SubItems.Add(formattedDateTime);
-                        //item.SubItems.Add(Convert.ToString(block.Timestamp));
                         item.SubItems.Add(Convert.ToString(block.TxCount));
                         item.SubItems.Add(Convert.ToString(block.Size));
                         decimal rewardInBTC = Convert.ToDecimal(block.Extras!.Reward) / 100000000;
@@ -19794,7 +19765,7 @@ namespace SATSuma
                     var spanColor = btnTransactionOutputsUp.ForeColor;
                     var spanColorString = ColorTranslator.ToHtml(spanColor);
                     var spanElements = document.GetElementsByTagName("span");
-                    var adjustedFontSize = 8 * UIScale;
+                    var adjustedFontSize = 10 * UIScale;
                     foreach (HtmlElement spanElement in spanElements)
                     {
                         if (String.Compare(spanElement.GetAttribute("className"), "linklistcatclass") == 0)
@@ -21279,10 +21250,8 @@ namespace SATSuma
         {
             try
             {
-                //var settings = ReadSettingsFromJsonFile();
-
                 #region determine startup screen (needs to occur before rest of settings screen is restored)
-                UpdateLoadingScreenMessage("determining startup screen...", "Restoring preferences...");
+                UpdateLoadingScreenMessage("determining startup screen...", "Restoring preferences");
                 // Define a dictionary to map strings to their corresponding values
                 Dictionary<string, string> screenMap = new Dictionary<string, string>
                 {
@@ -21344,7 +21313,7 @@ namespace SATSuma
                 #region restore remainder of settings
                 // check if settings are already saved in the file and either restore them or use defaults
                 #region restore default fiat currency
-                UpdateLoadingScreenMessage("restoring default currency...", "Restoring preferences...");
+                UpdateLoadingScreenMessage("restoring default currency...", "Restoring preferences");
                 if (String.Compare(Convert.ToString(SettingsManager.Settings.SettingsCurrencySelected), "P") == 0)
                 {
                     //GBP
@@ -21427,7 +21396,7 @@ namespace SATSuma
                 }
                 #endregion
                 #region restore offline mode settings
-                UpdateLoadingScreenMessage("restoring offline mode selection...", "Restoring preferences...");
+                UpdateLoadingScreenMessage("restoring offline mode selection...", "Restoring preferences");
                 if (String.Compare(Convert.ToString(SettingsManager.Settings.SettingsOfflineModeSelected), "1") == 0)
                 {
                     lblOfflineMode.Invoke((MethodInvoker)delegate
@@ -21464,7 +21433,7 @@ namespace SATSuma
                 }
                 #endregion
                 #region restore network
-                UpdateLoadingScreenMessage("restoring network settings...", "Restoring preferences...");
+                UpdateLoadingScreenMessage("restoring network settings...", "Restoring preferences");
                 if (String.Compare(Convert.ToString(SettingsManager.Settings.SettingsSelectedNetwork), "M") == 0)
                 {
                     //mainnet
@@ -21539,7 +21508,7 @@ namespace SATSuma
                 }
                 #endregion
                 #region restore API settings
-                UpdateLoadingScreenMessage("restoring API preferences...", "Restoring preferences...");
+                UpdateLoadingScreenMessage("restoring API preferences...", "Restoring preferences");
                 if (!offlineMode)
                 {
                     if (String.Compare(Convert.ToString(SettingsManager.Settings.SettingsMessariJSONSelected), "1") == 0)
@@ -21649,7 +21618,7 @@ namespace SATSuma
 
                 #endregion
                 #region restore directory settings
-                UpdateLoadingScreenMessage("restoring directory preferences...", "Restoring preferences...");
+                UpdateLoadingScreenMessage("restoring directory preferences...", "Restoring preferences");
                 if (!offlineMode)
                 {
                     if (String.Compare(Convert.ToString(SettingsManager.Settings.SettingsDirectoryEnabled), "1") == 0)
@@ -21675,7 +21644,7 @@ namespace SATSuma
                 }
                 #endregion
                 #region restore always on top setting
-                UpdateLoadingScreenMessage("restoring 'always on top' setting...", "Restoring preferences...");
+                UpdateLoadingScreenMessage("restoring 'always on top' setting...", "Restoring preferences");
                 if (String.Compare(Convert.ToString(SettingsManager.Settings.SettingsAlwaysOnTop), "1") == 0)
                 {
                     lblAlwaysOnTop.Invoke((MethodInvoker)delegate
@@ -21701,7 +21670,7 @@ namespace SATSuma
                 numberUpDownDerivationPathsToCheck.Value = Convert.ToInt32(SettingsManager.Settings.SettingsNumberUpDownDerivationPathsToCheck);
                 #endregion
                 #region determine default theme
-                UpdateLoadingScreenMessage("fetching default theme...", "Restoring preferences...");
+                UpdateLoadingScreenMessage("fetching default theme...", "Restoring preferences");
                 // check if there is a default theme saved in the file
                 var themes = ThemesManager.Themes;
                 foreach (Theme theme in themes!)
@@ -22604,6 +22573,11 @@ namespace SATSuma
         {
             try
             {
+                if (partialLoadingScreenVisible)
+                {
+                    return;
+                }
+
                 #region display loading screen
                 bool wasOnTop = false;
                 
@@ -22635,7 +22609,7 @@ namespace SATSuma
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
-                UpdateLoadingScreenMessage("please wait...", "Preparing theme creator...");
+                UpdateLoadingScreenMessage("please wait...", "Preparing theme editor");
                 CloseThemeMenu();
                 
                 SuspendLayout();
@@ -26181,8 +26155,8 @@ namespace SATSuma
                 }
 
                 //bitcoin dashboard
-                btnDistributionLin.BorderRadius = (int)((radius - 4) * UIScale);
-                btnDistributionLog.BorderRadius = (int)((radius - 4) * UIScale);
+                btnDistributionLin.BorderRadius = (int)((radius - 6) * UIScale);
+                btnDistributionLog.BorderRadius = (int)((radius - 6) * UIScale);
 
                 // block
                 RJButton[] blockButtonBorders = { btnLookUpBlock, btnPreviousBlockTransactions, btnNextBlockTransactions, btnNextBlock, btnPreviousBlock };
@@ -26300,14 +26274,18 @@ namespace SATSuma
                 }
 
                 // chart
-                RJButton[] chartButtonBorders = { btnSaveChart, btnChartDifficultyLog, btnChartDifficultyLinear, btnHashrateScaleLog, btnHashrateScaleLinear, btnChartMarketCapScaleLog, btnChartMarketCapScaleLinear, btnPriceChartScaleLog, btnPriceChartScaleLinear, btnChartUTXOScaleLog, btnChartUTXOScaleLinear, btnChartAddressScaleLog, btnChartAddressScaleLinear };
+                RJButton[] chartButtonBorders = { btnChartDifficultyLog, btnChartDifficultyLinear, btnHashrateScaleLog, btnHashrateScaleLinear, btnChartMarketCapScaleLog, btnChartMarketCapScaleLinear, btnPriceChartScaleLog, btnPriceChartScaleLinear, btnChartUTXOScaleLog, btnChartUTXOScaleLinear, btnChartAddressScaleLog, btnChartAddressScaleLinear };
                 foreach (RJButton button in chartButtonBorders)
                 {
                     button.Invoke((MethodInvoker)delegate
                     {
-                        button.BorderRadius = (int)(radius * UIScale);
+                        button.BorderRadius = (int)((radius - 6) * UIScale);
                     });
                 }
+                btnSaveChart.Invoke((MethodInvoker)delegate
+                {
+                    btnSaveChart.BorderRadius = (int)(radius * UIScale);
+                });
 
                 // bookmarks
                 RJButton[] bookmarkButtonBorders = { btnBookmarkUnlock, btnDecryptBookmark, btnDeleteBookmark, btnViewBookmark, btnCommitToBookmarks, btnCancelAddToBookmarks, btnBookmarksListUp, btnBookmarksListDown };
@@ -26380,7 +26358,7 @@ namespace SATSuma
             {
                 #region rounded panels
                 Control[] panelsToInvalidate = { panel194, panel198, panel192, panel193, panel7, panel109, panelXpubContainer, panelXpubScrollContainer, panel92, panel32, panel74, panel76, panel77, panel99, panel84, panel88, panel89, panel90, panel86, panel87, panel103, panel46, panel51, panel91, panel70, panel71, panel16, panel21, panel85, panel53, panel96, panel106, panel107, panelAddToBookmarks,
-                    panelAddToBookmarksBorder, panelOwnNodeAddressTXInfo, panelOwnNodeBlockTXInfo, panelTransactionMiddle, panelErrorMessage, panelDCAMessages, panelDCASummary, panelDCAInputs, panel119, panelPriceConvert, panelDCAChartContainer, panel117, panel121, panel122, panel120, panelPoolsListScrollContainer,
+                    panelAddToBookmarksBorder, panelOwnNodeAddressTXInfo, panelOwnNodeBlockTXInfo, panelTransactionMiddle, panelErrorMessage, panelDCAMessages, panelDCASummary, panelDCAInputs, panel119, panelPriceConvert, panelDCAChartContainer, panel117, panel121, panel122, panel120, panel66, panel67, panel59, panel68,
                     panel101, panel132, panelPriceSourceIndicators, panelUTXOsContainer, panel137, panelAddressUTXOScrollContainer, panelBookmarksContainer, panelBookmarksScrollContainer, panelPoolsBlocksContainer, panelPoolsHashrateContainer, panelPoolsBlocksScrollContainer, panel147, panel80, panel153, panel158, panel160, panelUTXOError,
                 panelTransactionInputs, panelTransactionOutputs, panelTXInScrollContainer, panelTXOutScrollContainer, panelAddressTxContainer, panel123, panel124, panelPriceSourceIndicatorsOuter, panelPoolsListScrollbarInner, panelBookmarksScrollbarInner, panelTXInScrollbarInner, panelTXOutScrollbarInner, panelAddressUTXOScrollbarInner, panelPoolsBlocksScrollbarInner, panelXpubScrollbarInner, panel133, panel134, panel188, panel189, panel190, panel191 };
                 foreach (Control control in panelsToInvalidate)
@@ -29609,67 +29587,55 @@ namespace SATSuma
                     # region assign tooltip to controls
                     if (lblHeaderPrice.InvokeRequired)
                     {
-                        // Invoke the method on the UI thread
                         lblHeaderPrice.Invoke(new Action(() => toolTipForLblHeaderPrice.SetToolTip(lblHeaderPrice, sourceOfCurrentPrice)));
                     }
                     else
                     {
-                        // Set the tooltip directly (already on the UI thread)
                         toolTipForLblHeaderPrice.SetToolTip(lblHeaderPrice, sourceOfCurrentPrice);
                     }
 
                     if (panelPriceSourceIndicators.InvokeRequired)
                     {
-                        // Invoke the method on the UI thread
                         panelPriceSourceIndicators.Invoke(new Action(() => toolTipForLblHeaderPrice.SetToolTip(panelPriceSourceIndicators, sourceOfCurrentPrice)));
                     }
                     else
                     {
-                        // Set the tooltip directly (already on the UI thread)
                         toolTipForLblHeaderPrice.SetToolTip(panelPriceSourceIndicators, sourceOfCurrentPrice);
                     }
 
                     if (label226.InvokeRequired)
                     {
-                        // Invoke the method on the UI thread
                         label226.Invoke(new Action(() => toolTipForLblHeaderPrice.SetToolTip(label226, sourceOfCurrentPrice)));
                     }
                     else
                     {
-                        // Set the tooltip directly (already on the UI thread)
                         toolTipForLblHeaderPrice.SetToolTip(label226, sourceOfCurrentPrice);
                     }
 
                     if (CoinbasePriceIndicator.InvokeRequired)
                     {
-                        // Invoke the method on the UI thread
                         CoinbasePriceIndicator.Invoke(new Action(() => toolTipForLblHeaderPrice.SetToolTip(CoinbasePriceIndicator, sourceOfCurrentPrice)));
                     }
                     else
                     {
-                        // Set the tooltip directly (already on the UI thread)
                         toolTipForLblHeaderPrice.SetToolTip(CoinbasePriceIndicator, sourceOfCurrentPrice);
                     }
 
                     if (lblCoingeckoPriceIndicator.InvokeRequired)
                     {
-                        // Invoke the method on the UI thread
                         lblCoingeckoPriceIndicator.Invoke(new Action(() => toolTipForLblHeaderPrice.SetToolTip(lblCoingeckoPriceIndicator, sourceOfCurrentPrice)));
                     }
                     else
                     {
-                        // Set the tooltip directly (already on the UI thread)
                         toolTipForLblHeaderPrice.SetToolTip(lblCoingeckoPriceIndicator, sourceOfCurrentPrice);
                     }
 
                     if (lblMempoolSpacePriceIndicator.InvokeRequired)
                     {
-                        // Invoke the method on the UI thread
                         lblMempoolSpacePriceIndicator.Invoke(new Action(() => toolTipForLblHeaderPrice.SetToolTip(lblMempoolSpacePriceIndicator, sourceOfCurrentPrice)));
                     }
                     else
                     {
-                        // Set the tooltip directly (already on the UI thread)
                         toolTipForLblHeaderPrice.SetToolTip(lblMempoolSpacePriceIndicator, sourceOfCurrentPrice);
                     }
                     #endregion
@@ -29786,110 +29752,6 @@ namespace SATSuma
         }
         #endregion
         #region colour change data if it's gone up or down since previous change
-        /*
-        private async void UpdateLabelValueAsync(Label label, string newValue)
-        {
-            try
-            {
-                if (readyToShowRedAndGreenLabelsYet == true)
-                {
-                    double currentValueDouble;
-                    double newValueDouble = 0;
-                    // get the normal state colour. Will revert to this after making red or green
-                    Color currentColor;
-                    if (label == lblHeaderPrice || label == lblHeaderBlockNumber)
-                    {
-                        currentColor = label175.ForeColor;
-                    }
-                    else
-                    {
-                        if (label.Name.Contains("Fiat"))
-                        {
-                            currentColor = label288.ForeColor;
-                        }
-                        else
-                        {
-                            currentColor = label154.ForeColor;
-                        }
-                    }
-
-                    // Get the current value from the label so we know if it's gone up or down
-                    if (String.Compare(label.Text, "no data") == 0
-                    || String.Compare(label.Text, "disabled") == 0
-                    || String.Compare(label.Text, "0 (TestNet)") == 0
-                    || String.Compare(label.Text, "") == 0)
-                    {
-                        currentValueDouble = 0;
-                    }
-                    else
-                    {
-                        // Remove non-numeric characters except decimal point
-                        string cleanedText = Regex.Replace(label.Text, @"[^0-9.]", "");
-
-                        // Parse the cleaned text to double
-                        currentValueDouble = double.Parse(cleanedText);
-                    }
-
-                    string cleanedNewValue = Regex.Replace(newValue, @"[^0-9.]", "");
-
-                    if (cleanedNewValue != "")
-                    {
-                        newValueDouble = double.Parse(cleanedNewValue);
-                    }
-
-                    // Update the label text
-                    label.Invoke((MethodInvoker)delegate
-                    {
-                        label.Text = newValue.ToString();
-                    });
-
-                    // Change label color based on the comparison between old and new values
-                    if (newValueDouble > currentValueDouble)
-                    {
-                        label.ForeColor = Color.OliveDrab;
-                    }
-                    if (newValueDouble < currentValueDouble)
-                    {
-                        label.ForeColor = Color.IndianRed;
-                    }
-
-                    // Wait a moment
-                    await Task.Delay(5000).ConfigureAwait(true);
-
-                    // Restore original color (set currentColor again in case a theme change has occurred during the red/green value change)
-
-                    if (label == lblHeaderPrice || label == lblHeaderBlockNumber)
-                    {
-                        currentColor = label175.ForeColor;
-                    }
-                    else
-                    {
-                        if (label.Name.Contains("Fiat"))
-                        {
-                            currentColor = label288.ForeColor;
-                        }
-                        else
-                        {
-                            currentColor = label154.ForeColor;
-                        }
-                    }
-
-                    label.ForeColor = currentColor;
-                }
-                else
-                {
-                    label.Invoke((MethodInvoker)delegate
-                    {
-                        label.Text = newValue.ToString();
-                    });
-                }
-            }
-            catch (WebException ex)
-            {
-                HandleException(ex, "UpdateLabelValueAsync");
-            }
-        }
-        */
         private async void UpdateLabelValueAsync(Label label, string newValue)
         {
             try
@@ -29900,7 +29762,7 @@ namespace SATSuma
                     double newValueDouble = 0;
                     // get the normal state colour. Will revert to this after making red or green
                     Color currentColor;
-                    if (label == lblHeaderPrice || label == lblHeaderBlockNumber)
+                    if (label == lblHeaderPrice || label == lblHeaderBlockNumber || label == lblHeaderfeesHighPriority || label == lblHeaderFeesMediumPriority || label == lblHeaderFeesLowPriority || label == lblHeaderFeesNoPriority)
                     {
                         currentColor = label175.ForeColor;
                     }
@@ -29972,7 +29834,7 @@ namespace SATSuma
                     await Task.Delay(5000).ConfigureAwait(true);
 
                     // Restore original color (set currentColor again in case a theme change has occurred during the red/green value change)
-                    if (label == lblHeaderPrice || label == lblHeaderBlockNumber)
+                    if (label == lblHeaderPrice || label == lblHeaderBlockNumber || label == lblHeaderfeesHighPriority || label == lblHeaderFeesMediumPriority || label == lblHeaderFeesLowPriority || label == lblHeaderFeesNoPriority)
                     {
                         currentColor = label175.ForeColor;
                     }
@@ -30577,7 +30439,6 @@ namespace SATSuma
                         btnAddToBookmarks.Invoke((MethodInvoker)delegate
                         {
                             btnAddToBookmarks.Enabled = false;
-                            //btnAddToBookmarks.Text = "🤍";
                         });
                         lblNowViewing.Invoke((MethodInvoker)delegate
                         {
@@ -30601,7 +30462,6 @@ namespace SATSuma
                         btnAddToBookmarks.Invoke((MethodInvoker)delegate
                         {
                             btnAddToBookmarks.Enabled = false;
-                            //btnAddToBookmarks.Text = "🤍";
                         });
                         lblNowViewing.Invoke((MethodInvoker)delegate
                         {
@@ -30627,7 +30487,6 @@ namespace SATSuma
                         btnAddToBookmarks.Invoke((MethodInvoker)delegate
                         {
                             btnAddToBookmarks.Enabled = false;
-                            //btnAddToBookmarks.Text = "🤍";
                         });
                         lblNowViewing.Invoke((MethodInvoker)delegate
                         {
@@ -30651,7 +30510,6 @@ namespace SATSuma
                         btnAddToBookmarks.Invoke((MethodInvoker)delegate
                         {
                             btnAddToBookmarks.Enabled = false;
-                            //btnAddToBookmarks.Text = "🤍";
                         });
                         lblNowViewing.Invoke((MethodInvoker)delegate
                         {
@@ -30663,7 +30521,6 @@ namespace SATSuma
                         btnAddToBookmarks.Invoke((MethodInvoker)delegate
                         {
                             btnAddToBookmarks.Enabled = false;
-                            //btnAddToBookmarks.Text = "🤍";
                         });
                         lblNowViewing.Invoke((MethodInvoker)delegate
                         {
@@ -30779,7 +30636,6 @@ namespace SATSuma
                     btnAddToBookmarks.Invoke((MethodInvoker)delegate
                     {
                         btnAddToBookmarks.Enabled = false;
-                        //btnAddToBookmarks.Text = "🤍";
                     });
                 }
                 #endregion
@@ -30836,6 +30692,14 @@ namespace SATSuma
                             case "panelPriceSourceIndicators":
                             case "panel134":
                             case "panel133":
+                            case "panel188":
+                            case "panel189":
+                            case "panel192":
+                            case "panel193":
+                            case "panel194":
+                            case "panel198":
+                            case "panel190":
+                            case "panel191":
                             case "panelXpubScrollbarInner":
                             case "panelMiningBlocksScrollInner":
                             case "panelAddressUTXOScrollbarInner":
@@ -30952,19 +30816,16 @@ namespace SATSuma
 
                 cornerRadius *= 2;
                 // Upper-left corner
-                //path.AddArc(0, 0, cornerRadius, cornerRadius, 180, 90);
 
                 // Top side (extended)
                 path.AddLine(0, 0, panel.Width, 0);
 
                 // Upper-right corner
-                //path.AddArc(panel.Width - cornerRadius, 0, cornerRadius, cornerRadius, 270, 90);
 
                 // Slanted line to the lower-right corner
                 path.AddLine(panel.Width, 0, panel.Width - tabExtension, panel.Height);
 
                 // Lower-right corner
-                //path.AddArc(panel.Width - tabExtension - cornerRadius, panel.Height - cornerRadius, cornerRadius, cornerRadius, 0, 90);
 
                 // Bottom side
                 path.AddLine(panel.Width - tabExtension - cornerRadius, panel.Height, cornerRadius, panel.Height);
@@ -32421,6 +32282,11 @@ namespace SATSuma
         {
             try
             {
+                if (partialLoadingScreenVisible)
+                {
+                    return;
+                }
+
                 #region display loading screen
                 //
                 bool wasOnTop = false;
@@ -32451,7 +32317,7 @@ namespace SATSuma
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
-                UpdateLoadingScreenMessage("please wait...", "Preparing bitcoin dashboard...");
+                UpdateLoadingScreenMessage("please wait...", "Preparing bitcoin dashboard");
                 SuspendLayout();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -32508,6 +32374,11 @@ namespace SATSuma
         {
             try
             {
+                if (partialLoadingScreenVisible)
+                {
+                    return;
+                }
+
                 #region display loading screen
                 bool wasOnTop = false;
                 
@@ -32539,7 +32410,7 @@ namespace SATSuma
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
-                UpdateLoadingScreenMessage("please wait...", "Preparing lightning dashboard...");
+                UpdateLoadingScreenMessage("please wait...", "Preparing lightning dashboard");
                 SuspendLayout();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -32596,6 +32467,11 @@ namespace SATSuma
         {
             try
             {
+                if (partialLoadingScreenVisible)
+                {
+                    return;
+                }
+
                 #region display loading screen
                 bool wasOnTop = false;
                 
@@ -32627,7 +32503,7 @@ namespace SATSuma
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
-                UpdateLoadingScreenMessage("please wait...", "Preparing charts...");
+                UpdateLoadingScreenMessage("please wait...", "Preparing charts");
                 SuspendLayout();
 
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -32689,6 +32565,11 @@ namespace SATSuma
         {
             try
             {
+                if (partialLoadingScreenVisible)
+                {
+                    return;
+                }
+
                 #region display loading screen
                 bool wasOnTop = false;
                 
@@ -32720,7 +32601,7 @@ namespace SATSuma
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
-                UpdateLoadingScreenMessage("please wait...", "Preparing address (transactions)...");
+                UpdateLoadingScreenMessage("please wait...", "Preparing address (transactions)");
                 SuspendLayout();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -32805,6 +32686,11 @@ namespace SATSuma
         {
             try
             {
+                if (partialLoadingScreenVisible)
+                {
+                    return;
+                }
+
                 #region display loading screen
                 bool wasOnTop = false;
                 
@@ -32836,7 +32722,7 @@ namespace SATSuma
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
-                UpdateLoadingScreenMessage("please wait...", "Preparing address (UTXO's)...");
+                UpdateLoadingScreenMessage("please wait...", "Preparing address (UTXO's)");
                 SuspendLayout();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -32914,6 +32800,11 @@ namespace SATSuma
         {
             try
             {
+                if (partialLoadingScreenVisible)
+                {
+                    return;
+                }
+
                 #region display loading screen
                 bool wasOnTop = false;
                 
@@ -32945,7 +32836,7 @@ namespace SATSuma
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
-                UpdateLoadingScreenMessage("please wait...", "Preparing block view...");
+                UpdateLoadingScreenMessage("please wait...", "Preparing block view");
                 SuspendLayout();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -33035,6 +32926,11 @@ namespace SATSuma
         {
             try
             {
+                if (partialLoadingScreenVisible)
+                {
+                    return;
+                }
+
                 #region display loading screen
                 bool wasOnTop = false;
                 
@@ -33066,7 +32962,7 @@ namespace SATSuma
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
-                UpdateLoadingScreenMessage("please wait...", "Preparing xpub view...");
+                UpdateLoadingScreenMessage("please wait...", "Preparing xpub view");
                 SuspendLayout();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -33138,6 +33034,11 @@ namespace SATSuma
         {
             try
             {
+                if (partialLoadingScreenVisible)
+                {
+                    return;
+                }
+
                 #region display loading screen
                 bool wasOnTop = false;
                 if (!fullScreenLoadingScreenVisible)
@@ -33168,7 +33069,7 @@ namespace SATSuma
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
-                UpdateLoadingScreenMessage("please wait...", "Preparing block list view...");
+                UpdateLoadingScreenMessage("please wait...", "Preparing block list view");
                 SuspendLayout();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -33249,6 +33150,11 @@ namespace SATSuma
         {
             try
             {
+                if (partialLoadingScreenVisible)
+                {
+                    return;
+                }
+
                 #region display loading screen
                 bool wasOnTop = false;
                 
@@ -33280,7 +33186,7 @@ namespace SATSuma
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
-                UpdateLoadingScreenMessage("please wait...", "Preparing pool rankings (by blocks mined)...");
+                UpdateLoadingScreenMessage("please wait...", "Preparing pool rankings (by blocks mined)");
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Visible = true;
@@ -33358,6 +33264,11 @@ namespace SATSuma
         {
             try
             {
+                if (partialLoadingScreenVisible)
+                {
+                    return;
+                }
+
                 #region display loading screen
                 bool wasOnTop = false;
                 
@@ -33389,7 +33300,7 @@ namespace SATSuma
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
-                UpdateLoadingScreenMessage("please wait...", "Preparing pool rankings (by hashrate)...");
+                UpdateLoadingScreenMessage("please wait...", "Preparing pool rankings (by hashrate)");
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Visible = true;
@@ -33465,6 +33376,11 @@ namespace SATSuma
         {
             try
             {
+                if (partialLoadingScreenVisible)
+                {
+                    return;
+                }
+
                 #region display loading screen
                 bool wasOnTop = false;
                 
@@ -33496,7 +33412,7 @@ namespace SATSuma
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
-                UpdateLoadingScreenMessage("please wait...", "Preparing mining pools list...");
+                UpdateLoadingScreenMessage("please wait...", "Preparing mining pools list");
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
                     lblMenuHighlightedButtonText.Visible = true;
@@ -33570,6 +33486,11 @@ namespace SATSuma
         {
             try
             {
+                if (partialLoadingScreenVisible)
+                {
+                    return;
+                }
+
                 #region display loading screen
                 bool wasOnTop = false;
                 
@@ -33601,7 +33522,7 @@ namespace SATSuma
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
-                UpdateLoadingScreenMessage("please wait...", "Preparing transaction view...");
+                UpdateLoadingScreenMessage("please wait...", "Preparing transaction view");
                 SuspendLayout();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -33631,10 +33552,6 @@ namespace SATSuma
                 });
 
                 ResumeLayout(false);
-
-
-
-
 
                 Control[] controlsToRefresh = { panelTransactionMiddle, panelTransactionInputs, panelTransactionOutputs, panelTransactionInTab, panelTransactionOutTab, panelTXOutScrollContainer, panelTransactionIDContainer, panelTXInScrollContainer, panelTransactionResults, panelTransaction };
                 foreach (Control control in controlsToRefresh)
@@ -33682,6 +33599,11 @@ namespace SATSuma
         {
             try
             {
+                if (partialLoadingScreenVisible)
+                {
+                    return;
+                }
+
                 #region display loading screen
                 bool wasOnTop = false;
                 
@@ -33713,7 +33635,7 @@ namespace SATSuma
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
-                UpdateLoadingScreenMessage("please wait...", "Preparing bookmarks...");
+                UpdateLoadingScreenMessage("please wait...", "Preparing bookmarks");
                 SuspendLayout();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -33785,6 +33707,11 @@ namespace SATSuma
         {
             try
             {
+                if (partialLoadingScreenVisible)
+                {
+                    return;
+                }
+
                 #region display loading screen
                 bool wasOnTop = false;
                 
@@ -33816,7 +33743,7 @@ namespace SATSuma
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
-                UpdateLoadingScreenMessage("please wait...", "Preparing btc/fiat converter...");
+                UpdateLoadingScreenMessage("please wait...", "Preparing btc/fiat converter");
                 SuspendLayout();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -33889,6 +33816,11 @@ namespace SATSuma
         {
             try
             {
+                if (partialLoadingScreenVisible)
+                {
+                    return;
+                }
+
                 #region display loading screen
                 bool wasOnTop = false;
                 
@@ -33920,7 +33852,7 @@ namespace SATSuma
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
-                UpdateLoadingScreenMessage("please wait...", "Preparing DCA calculator...");
+                UpdateLoadingScreenMessage("please wait...", "Preparing DCA calculator");
                 SuspendLayout();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
                 {
@@ -34002,6 +33934,11 @@ namespace SATSuma
         {
             try
             {
+                if (partialLoadingScreenVisible)
+                {
+                    return;
+                }
+
                 #region display loading screen
                 bool wasOnTop = false;
                 
@@ -34033,7 +33970,7 @@ namespace SATSuma
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
-                UpdateLoadingScreenMessage("please wait...", "Preparing directory...");
+                UpdateLoadingScreenMessage("please wait...", "Preparing directory");
                 await HideAllScreensAsync().ConfigureAwait(true);
                 SuspendLayout();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -34107,6 +34044,11 @@ namespace SATSuma
         {
             try
             {
+                if (partialLoadingScreenVisible)
+                {
+                    return;
+                }
+
                 #region display loading screen
                 bool wasOnTop = false;
                 
@@ -34138,7 +34080,7 @@ namespace SATSuma
                     await BriefPauseAsync(100).ConfigureAwait(true);
                 }
                 #endregion
-                UpdateLoadingScreenMessage("please wait...", "Preparing settings screen...");
+                UpdateLoadingScreenMessage("please wait...", "Preparing settings screen");
                 await HideAllScreensAsync().ConfigureAwait(true);
                 SuspendLayout();
                 lblMenuHighlightedButtonText.Invoke((MethodInvoker)delegate
@@ -34930,7 +34872,7 @@ namespace SATSuma
                 fullSizeLoadingScreen.Location = new Point(overlayX, overlayY);
                 fullSizeLoadingScreen.Show(this);
                 #endregion
-                fullSizeLoadingScreen.SetLoadingText($"...at block height {lblHeaderBlockNumber.Text}", "Closing down...");
+                fullSizeLoadingScreen.SetLoadingText($"at block height {lblHeaderBlockNumber.Text}", "Closing down");
 
                 // the closing screen exists only to hide the messy removal of all screen elements when closing the form
                 await BriefPauseAsync(2000).ConfigureAwait(true);

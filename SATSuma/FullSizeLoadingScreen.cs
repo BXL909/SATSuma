@@ -39,6 +39,7 @@ namespace SATSuma
             // Create and set the rounded region
             GraphicsPath path = RoundedRectangle.Create(0, 0, Width, Height, 30);
             this.Region = new Region(path);
+
         }
 
         public static class RoundedRectangle
@@ -85,6 +86,7 @@ namespace SATSuma
                 {
                     panel1.Location = new Point((this.Width / 2) - (panel1.Width / 2), (this.Height / 2) - (panel1.Height / 2));
                 });
+
                 lblLoadingStatus.Invoke((MethodInvoker)delegate
                 {
                     lblLoadingStatus.ForeColor = LabelColor;

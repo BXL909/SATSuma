@@ -1186,6 +1186,7 @@
             this.label251 = new System.Windows.Forms.Label();
             this.panelThemeMenu = new System.Windows.Forms.Panel();
             this.panelThemeMenuBackdrop = new System.Windows.Forms.Panel();
+            this.lblThemeMenuHighlightedButtonText = new System.Windows.Forms.Label();
             this.panelThemeMenuFiller = new System.Windows.Forms.Panel();
             this.lblApplyThemeButtonDisabledMask = new System.Windows.Forms.Label();
             this.comboBoxHeaderCustomThemes = new CustomControls.RJControls.RJComboBox();
@@ -1195,7 +1196,6 @@
             this.panelCustomThemeMenuTitleBG = new System.Windows.Forms.Panel();
             this.label281 = new System.Windows.Forms.Label();
             this.BtnMenuThemeGenesis = new System.Windows.Forms.Button();
-            this.lblThemeMenuHighlightedButtonText = new System.Windows.Forms.Label();
             this.btnMenuApplyCustomTheme = new System.Windows.Forms.Button();
             this.panelPresetThemeMenuTitleBG = new System.Windows.Forms.Panel();
             this.label60 = new System.Windows.Forms.Label();
@@ -14652,7 +14652,7 @@
             this.label186.BackColor = System.Drawing.Color.Transparent;
             this.label186.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label186.ForeColor = System.Drawing.Color.Silver;
-            this.label186.Location = new System.Drawing.Point(4, 0);
+            this.label186.Location = new System.Drawing.Point(4, 2);
             this.label186.Name = "label186";
             this.label186.Size = new System.Drawing.Size(38, 17);
             this.label186.TabIndex = 277;
@@ -18323,6 +18323,18 @@
             this.panelThemeMenuBackdrop.Size = new System.Drawing.Size(120, 275);
             this.panelThemeMenuBackdrop.TabIndex = 261;
             // 
+            // lblThemeMenuHighlightedButtonText
+            // 
+            this.lblThemeMenuHighlightedButtonText.BackColor = System.Drawing.Color.Transparent;
+            this.lblThemeMenuHighlightedButtonText.Font = new System.Drawing.Font("Century Gothic", 8F);
+            this.lblThemeMenuHighlightedButtonText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.lblThemeMenuHighlightedButtonText.Location = new System.Drawing.Point(24, 41);
+            this.lblThemeMenuHighlightedButtonText.Name = "lblThemeMenuHighlightedButtonText";
+            this.lblThemeMenuHighlightedButtonText.Size = new System.Drawing.Size(106, 18);
+            this.lblThemeMenuHighlightedButtonText.TabIndex = 165;
+            this.lblThemeMenuHighlightedButtonText.Text = "genesis";
+            this.lblThemeMenuHighlightedButtonText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // panelThemeMenuFiller
             // 
             this.panelThemeMenuFiller.BackColor = System.Drawing.Color.Black;
@@ -18485,18 +18497,6 @@
             this.BtnMenuThemeGenesis.Click += new System.EventHandler(this.BtnMenuThemeGenesis_Click);
             this.BtnMenuThemeGenesis.MouseEnter += new System.EventHandler(this.BtnMenuButtons_MouseEnter);
             this.BtnMenuThemeGenesis.MouseLeave += new System.EventHandler(this.BtnMenuButtons_MouseLeave);
-            // 
-            // lblThemeMenuHighlightedButtonText
-            // 
-            this.lblThemeMenuHighlightedButtonText.BackColor = System.Drawing.Color.Transparent;
-            this.lblThemeMenuHighlightedButtonText.Font = new System.Drawing.Font("Century Gothic", 8F);
-            this.lblThemeMenuHighlightedButtonText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.lblThemeMenuHighlightedButtonText.Location = new System.Drawing.Point(24, 41);
-            this.lblThemeMenuHighlightedButtonText.Name = "lblThemeMenuHighlightedButtonText";
-            this.lblThemeMenuHighlightedButtonText.Size = new System.Drawing.Size(106, 18);
-            this.lblThemeMenuHighlightedButtonText.TabIndex = 165;
-            this.lblThemeMenuHighlightedButtonText.Text = "genesis";
-            this.lblThemeMenuHighlightedButtonText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // btnMenuApplyCustomTheme
             // 

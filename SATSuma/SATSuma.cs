@@ -12,7 +12,7 @@
 //
 //TODO LIST______________________________________________________________________________________________
 //TODO Taproot support on xpub screen 
-//TODO Block screen - transactions list header slightly off alignment on right
+//TODO Web exception - RefreshScreens: The remote name could not be resolved: 'umbrel.local' .... Resolve NodeURL once as soon as it's known? Allow for multiple retries? Or at least allow multiple retries in the RefreshScreens method. 
 //BUG LIST_______________________________________________________________________________________________
 //!_______________________________________________________________________________________________________
 #nullable enable
@@ -13232,6 +13232,12 @@ namespace SATSuma
                     int rowHeight = listViewPoolsList.Margin.Vertical + listViewPoolsList.Padding.Vertical + listViewPoolsList.GetItemRect(0).Height;
                     if (poolsListScrollPosition - rowHeight > 0)
                     {
+                        if (poolsListScrollPosition < panelPoolsListContainer.VerticalScroll.Minimum || poolsListScrollPosition > panelPoolsListContainer.VerticalScroll.Maximum)
+                        {
+                            panelPoolsListContainer.VerticalScroll.Value = 0;
+                            poolsListScrollPosition = 0;
+                            return;
+                        }
                         panelPoolsListContainer.VerticalScroll.Value = poolsListScrollPosition;
                     }
                     else
@@ -13666,6 +13672,11 @@ namespace SATSuma
                 {
                     List<PoolHashrateSnapshot>? hashratesList = JsonConvert.DeserializeObject<List<PoolHashrateSnapshot>>(HashrateJson);
 
+                    if (hashratesList.Count() < 2)
+                    {
+                        formsPlotPoolHashrate.Visible = false;
+                        return;
+                    }
                     // create arrays of doubles of the hashrates and the dates
                     double[] yValues = hashratesList.Select(h => (double)(h.AvgHashrate / (decimal)1E18)).ToArray(); // divide by 1E18 to get exahash
                                                                                                                      // create a new list of the dates, this time in DateTime format
@@ -19724,7 +19735,7 @@ namespace SATSuma
                             navElement.Style = $"width: {categoryWidth}px;";
                         }
                     }
-
+                    var backgroundColor = panel88.BackColor;
                     var spanElements2 = document.GetElementsByTagName("div");
                     var linksPadding = (int)(170 * UIScale);
                     foreach (HtmlElement spanElement in spanElements2)
@@ -19735,6 +19746,11 @@ namespace SATSuma
                             spanElement.Style = "font-family: Century Gothic;";
                         }
 
+                        if (String.Compare(spanElement.GetAttribute("id"), "page") == 0)
+                        {
+                            spanElement.Style = "border-left:0px !important;";
+                        }
+
                         // set width of links column
                         if (String.Compare(spanElement.GetAttribute("className"), "linklist") == 0)
                         {
@@ -19743,9 +19759,9 @@ namespace SATSuma
                     }
 
                     // Modify background color
-                    var backgroundColor = panel88.BackColor;
+                    
                     var backgroundColorString = ColorTranslator.ToHtml(backgroundColor);
-                    document.Body.Style = $"background-color: {backgroundColorString};";
+                    document.Body.Style = $"background-color: {backgroundColorString}; background-image: none;";
 
                     // Modify links color
                     var linkColor = lblHeaderMarketCap.ForeColor;
@@ -29738,16 +29754,23 @@ namespace SATSuma
         #region update loading status messages on loading screen
         private void UpdateLoadingScreenMessage(string statusMessage, string headlineStatusMessage)
         {
-            if (fullSizeLoadingScreen!.Visible)
+            try
             {
-                fullSizeLoadingScreen.SetLoadingText(statusMessage, headlineStatusMessage);
-            }
-            else
-            {
-                if (partialLoadingScreenVisible)
+                if (fullSizeLoadingScreen!.Visible)
                 {
-                    loadingScreen!.SetLoadingText(statusMessage, headlineStatusMessage);
+                    fullSizeLoadingScreen.SetLoadingText(statusMessage, headlineStatusMessage);
                 }
+                else
+                {
+                    if (partialLoadingScreenVisible)
+                    {
+                        loadingScreen!.SetLoadingText(statusMessage, headlineStatusMessage);
+                    }
+                }
+            }
+            catch
+            {
+                return;
             }
         }
         #endregion
@@ -30935,29 +30958,48 @@ namespace SATSuma
             }
         }
 
+        private async Task<string> GetBlockTipUrlWithRetryAsync(string nodeUrl, int maxRetries = 3, int delayMilliseconds = 1000)
+        {
+            string blockTipUrl = $"{nodeUrl}blocks/tip/height";
+            int retryCount = 0;
+
+            while (retryCount < maxRetries)
+            {
+                try
+                {
+                    using (WebClient client = new WebClient())
+                    {
+                        string BlockTip = client.DownloadString(blockTipUrl); // get current block tip
+                        if (decimal.TryParse(BlockTip, out decimal blockTipValue))
+                        {
+                            numericUpDownSubmittedBlockNumber.Maximum = blockTipValue;
+                            numericUpDownBlockHeightToStartListFrom.Maximum = blockTipValue;
+                        }
+                        return BlockTip; 
+                    }
+                }
+                catch (WebException ex) when (ex.Status == WebExceptionStatus.NameResolutionFailure)
+                {
+                    retryCount++;
+                    if (retryCount >= maxRetries)
+                    {
+                        HandleException(ex, "GettingBlockTip retries exceeded");
+                        throw; 
+                    }
+                    await Task.Delay(delayMilliseconds); // Wait before retrying
+                }
+            }
+
+            throw new InvalidOperationException("This should never be reached.");
+        }
+
         private async void RefreshScreensAsync()
         {
             try
             {
                 ClearAlertAndErrorMessage(); // wipe anything that may be showing in the error area (it should be empty anyway)
                 await CheckNetworkStatusAsync().ConfigureAwait(true);
-                using (WebClient client = new WebClient())
-                {
-                    try
-                    {
-                        string BlockTipURL = $"{NodeURL}blocks/tip/height";
-                        string BlockTip = client.DownloadString(BlockTipURL); // get current block tip
-                        if (decimal.TryParse(BlockTip, out decimal blockTipValue))
-                        {
-                            numericUpDownSubmittedBlockNumber.Maximum = blockTipValue;
-                            numericUpDownBlockHeightToStartListFrom.Maximum = blockTipValue;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        HandleException(ex, "RefreshScreens");
-                    }
-                }
+                await GetBlockTipUrlWithRetryAsync(NodeURL, 3, 1000);
                 await UpdateBitcoinAndLightningDashboardsAsync().ConfigureAwait(true); // fetch data and populate fields for dashboards (+ a few for block list screen)
 
                 if (!testNet)
@@ -31041,7 +31083,7 @@ namespace SATSuma
             }
             catch (WebException ex)
             {
-                HandleException(ex, "RefreshScreens");
+                HandleException(ex, "RefreshScreens2");
             }
         }
 
@@ -31204,9 +31246,7 @@ namespace SATSuma
         {
             try
             {
-                using HttpClient client = new HttpClient();
-                string BlockTipURL = $"{NodeURL}blocks/tip/height";
-                string BlockTip = await client.GetStringAsync(BlockTipURL).ConfigureAwait(true);
+                string BlockTip = await GetBlockTipUrlWithRetryAsync(NodeURL, 3, 1000);
 
                 lblHeaderBlockNumber.Invoke((MethodInvoker)delegate
                 {
@@ -33208,6 +33248,7 @@ namespace SATSuma
                 ToggleLoadingAnimation("enable");
                 SuspendLayout();
 
+                SetupPoolScreenAsync();
                 SetupPoolsByBlocksScreenAsync();
 
                 panelMiningBlocks.Invoke((MethodInvoker)delegate

@@ -8589,7 +8589,7 @@
             this.panel121.Controls.Add(this.panel125);
             this.panel121.Location = new System.Drawing.Point(0, 70);
             this.panel121.Name = "panel121";
-            this.panel121.Size = new System.Drawing.Size(529, 57);
+            this.panel121.Size = new System.Drawing.Size(528, 57);
             this.panel121.TabIndex = 277;
             // 
             // panel125
@@ -8612,7 +8612,7 @@
             this.panel102.Location = new System.Drawing.Point(0, 0);
             this.panel102.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.panel102.Name = "panel102";
-            this.panel102.Size = new System.Drawing.Size(532, 23);
+            this.panel102.Size = new System.Drawing.Size(528, 23);
             this.panel102.TabIndex = 210;
             // 
             // label330
@@ -22589,6 +22589,7 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
+            this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelXpub);
             this.Controls.Add(this.panelBitcoinDashboard);
@@ -22605,7 +22606,6 @@
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelAddressUTXO);
             this.Controls.Add(this.panelAddress);
-            this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.lblHeaderBlockFeesChart);
             this.Controls.Add(this.lblHeaderNextBlockTotalFees);

@@ -6274,6 +6274,13 @@ XXimpractical or result in timeouts.</value>
   <metadata name="openFileDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>244, 17</value>
   </metadata>
+  <data name="panel189.ToolTip" xml:space="preserve">
+    <value>Chart controls:
+XXMouse-wheel to zoom in and out.
+XXRight-click and hold while dragging horizontally to stretch scale horizontally.
+XXRight-click and hold while dragging vertically to stretch scale vertically.
+XXLeft-click and hold and drag any direction to move chart, unless the entire chart is already visible.</value>
+  </data>
   <data name="label350.ToolTip" xml:space="preserve">
     <value>Chart controls:
 XXMouse-wheel to zoom in and out.
@@ -6282,13 +6289,6 @@ XXRight-click and hold while dragging vertically to stretch scale vertically.
 XXLeft-click and hold and drag any direction to move chart, unless the entire chart is already visible.</value>
   </data>
   <data name="label362.ToolTip" xml:space="preserve">
-    <value>Chart controls:
-XXMouse-wheel to zoom in and out.
-XXRight-click and hold while dragging horizontally to stretch scale horizontally.
-XXRight-click and hold while dragging vertically to stretch scale vertically.
-XXLeft-click and hold and drag any direction to move chart, unless the entire chart is already visible.</value>
-  </data>
-  <data name="panel189.ToolTip" xml:space="preserve">
     <value>Chart controls:
 XXMouse-wheel to zoom in and out.
 XXRight-click and hold while dragging horizontally to stretch scale horizontally.
@@ -14109,6 +14109,13 @@ XXLeft-click and hold and drag any direction to move chart, unless the entire ch
         DCgB4ywIEoJxFoLU+eDPs+SgFYJEKwVTORgt+z9dJsIyRntmzgAAAABJRU5ErkJggg==
 </value>
   </data>
+  <data name="panel191.ToolTip" xml:space="preserve">
+    <value>Chart controls:
+XXMouse-wheel to zoom in and out.
+XXRight-click and hold while dragging horizontally to stretch scale horizontally.
+XXRight-click and hold while dragging vertically to stretch scale vertically.
+XXLeft-click and hold and drag any direction to move chart, unless the entire chart is already visible.</value>
+  </data>
   <data name="label363.ToolTip" xml:space="preserve">
     <value>Chart controls:
 XXMouse-wheel to zoom in and out.
@@ -14117,13 +14124,6 @@ XXRight-click and hold while dragging vertically to stretch scale vertically.
 XXLeft-click and hold and drag any direction to move chart, unless the entire chart is already visible.</value>
   </data>
   <data name="label364.ToolTip" xml:space="preserve">
-    <value>Chart controls:
-XXMouse-wheel to zoom in and out.
-XXRight-click and hold while dragging horizontally to stretch scale horizontally.
-XXRight-click and hold while dragging vertically to stretch scale vertically.
-XXLeft-click and hold and drag any direction to move chart, unless the entire chart is already visible.</value>
-  </data>
-  <data name="panel191.ToolTip" xml:space="preserve">
     <value>Chart controls:
 XXMouse-wheel to zoom in and out.
 XXRight-click and hold while dragging horizontally to stretch scale horizontally.
@@ -21585,6 +21585,19 @@ XXLeft-click and hold and drag any direction to move chart, unless the entire ch
   <data name="labelDCADefinition.Text" xml:space="preserve">
     <value>Dollar-cost averaging (DCA) involves using a fixed amount of fiat money to purchase bitcoin over time at fixed regular intervals, regardless of its price fluctuations. This strategy helps mitigate the impact of volatility and can potentially lower the average cost per bitcoin purchased, thus reducing the risk associated with timing the market.</value>
   </data>
+  <metadata name="toolTipForLblHeaderPrice.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>383, 17</value>
+  </metadata>
+  <metadata name="toolTipGeneralUse.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>571, 17</value>
+  </metadata>
+  <data name="panel193.ToolTip" xml:space="preserve">
+    <value>Chart controls:
+XXMouse-wheel to zoom in and out.
+XXRight-click and hold while dragging horizontally to stretch scale horizontally.
+XXRight-click and hold while dragging vertically to stretch scale vertically.
+XXLeft-click and hold and drag any direction to move chart, unless the entire chart is already visible.</value>
+  </data>
   <data name="label365.ToolTip" xml:space="preserve">
     <value>Chart controls:
 XXMouse-wheel to zoom in and out.
@@ -21599,7 +21612,7 @@ XXRight-click and hold while dragging horizontally to stretch scale horizontally
 XXRight-click and hold while dragging vertically to stretch scale vertically.
 XXLeft-click and hold and drag any direction to move chart, unless the entire chart is already visible.</value>
   </data>
-  <data name="panel193.ToolTip" xml:space="preserve">
+  <data name="panel198.ToolTip" xml:space="preserve">
     <value>Chart controls:
 XXMouse-wheel to zoom in and out.
 XXRight-click and hold while dragging horizontally to stretch scale horizontally.
@@ -21614,13 +21627,6 @@ XXRight-click and hold while dragging vertically to stretch scale vertically.
 XXLeft-click and hold and drag any direction to move chart, unless the entire chart is already visible.</value>
   </data>
   <data name="label371.ToolTip" xml:space="preserve">
-    <value>Chart controls:
-XXMouse-wheel to zoom in and out.
-XXRight-click and hold while dragging horizontally to stretch scale horizontally.
-XXRight-click and hold while dragging vertically to stretch scale vertically.
-XXLeft-click and hold and drag any direction to move chart, unless the entire chart is already visible.</value>
-  </data>
-  <data name="panel198.ToolTip" xml:space="preserve">
     <value>Chart controls:
 XXMouse-wheel to zoom in and out.
 XXRight-click and hold while dragging horizontally to stretch scale horizontally.

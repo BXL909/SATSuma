@@ -62,6 +62,11 @@ namespace SATSuma
 
         public void SetLoadingText(string text, string headlineText)
         {
+            if (this.IsDisposed || !this.IsHandleCreated)
+            {
+                return; 
+            }
+
             lblCurrentVersion.Invoke((MethodInvoker)delegate
             {
                 lblCurrentVersion.Text = Version;

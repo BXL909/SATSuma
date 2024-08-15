@@ -1186,6 +1186,8 @@
             this.label251 = new System.Windows.Forms.Label();
             this.panelThemeMenu = new System.Windows.Forms.Panel();
             this.panelThemeMenuBackdrop = new System.Windows.Forms.Panel();
+            this.lblCreateThemeMarker = new System.Windows.Forms.Label();
+            this.lblCreateThemeMask = new System.Windows.Forms.Label();
             this.lblThemeMenuHighlightedButtonText = new System.Windows.Forms.Label();
             this.panelThemeMenuFiller = new System.Windows.Forms.Panel();
             this.lblApplyThemeButtonDisabledMask = new System.Windows.Forms.Label();
@@ -4036,9 +4038,9 @@
             this.label357.Font = new System.Drawing.Font("Century Gothic", 7F);
             this.label357.ForeColor = System.Drawing.Color.Silver;
             this.label357.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label357.Location = new System.Drawing.Point(11, 321);
+            this.label357.Location = new System.Drawing.Point(1, 321);
             this.label357.Name = "label357";
-            this.label357.Size = new System.Drawing.Size(52, 15);
+            this.label357.Size = new System.Drawing.Size(62, 15);
             this.label357.TabIndex = 323;
             this.label357.Text = "200 days";
             this.label357.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -4214,9 +4216,9 @@
             this.label353.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.label353.Location = new System.Drawing.Point(3, 241);
             this.label353.Name = "label353";
-            this.label353.Size = new System.Drawing.Size(207, 16);
+            this.label353.Size = new System.Drawing.Size(112, 16);
             this.label353.TabIndex = 307;
-            this.label353.Text = "Periodical price percentage change:";
+            this.label353.Text = "Price change since:";
             // 
             // lblPrice24Hours
             // 
@@ -18298,12 +18300,14 @@
             this.panelThemeMenu.ForeColor = System.Drawing.Color.Transparent;
             this.panelThemeMenu.Location = new System.Drawing.Point(8, 458);
             this.panelThemeMenu.Name = "panelThemeMenu";
-            this.panelThemeMenu.Size = new System.Drawing.Size(122, 0);
+            this.panelThemeMenu.Size = new System.Drawing.Size(122, 400);
             this.panelThemeMenu.TabIndex = 160;
             // 
             // panelThemeMenuBackdrop
             // 
             this.panelThemeMenuBackdrop.BackColor = System.Drawing.Color.White;
+            this.panelThemeMenuBackdrop.Controls.Add(this.lblCreateThemeMarker);
+            this.panelThemeMenuBackdrop.Controls.Add(this.lblCreateThemeMask);
             this.panelThemeMenuBackdrop.Controls.Add(this.lblThemeMenuHighlightedButtonText);
             this.panelThemeMenuBackdrop.Controls.Add(this.panelThemeMenuFiller);
             this.panelThemeMenuBackdrop.Controls.Add(this.lblApplyThemeButtonDisabledMask);
@@ -18322,6 +18326,32 @@
             this.panelThemeMenuBackdrop.Name = "panelThemeMenuBackdrop";
             this.panelThemeMenuBackdrop.Size = new System.Drawing.Size(120, 275);
             this.panelThemeMenuBackdrop.TabIndex = 261;
+            this.panelThemeMenuBackdrop.Paint += new System.Windows.Forms.PaintEventHandler(this.PanelThemeMenuBackdrop_Paint);
+            // 
+            // lblCreateThemeMarker
+            // 
+            this.lblCreateThemeMarker.BackColor = System.Drawing.Color.Transparent;
+            this.lblCreateThemeMarker.Font = new System.Drawing.Font("Consolas", 11F);
+            this.lblCreateThemeMarker.ForeColor = System.Drawing.Color.Orange;
+            this.lblCreateThemeMarker.Location = new System.Drawing.Point(0, 152);
+            this.lblCreateThemeMarker.Name = "lblCreateThemeMarker";
+            this.lblCreateThemeMarker.Size = new System.Drawing.Size(14, 18);
+            this.lblCreateThemeMarker.TabIndex = 280;
+            this.lblCreateThemeMarker.Text = "▪";
+            this.lblCreateThemeMarker.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblCreateThemeMask
+            // 
+            this.lblCreateThemeMask.AutoSize = true;
+            this.lblCreateThemeMask.BackColor = System.Drawing.Color.Transparent;
+            this.lblCreateThemeMask.Font = new System.Drawing.Font("Century Gothic", 8F);
+            this.lblCreateThemeMask.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.lblCreateThemeMask.Location = new System.Drawing.Point(13, 154);
+            this.lblCreateThemeMask.Name = "lblCreateThemeMask";
+            this.lblCreateThemeMask.Size = new System.Drawing.Size(83, 16);
+            this.lblCreateThemeMask.TabIndex = 261;
+            this.lblCreateThemeMask.Text = "create/delete";
+            this.lblCreateThemeMask.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblThemeMenuHighlightedButtonText
             // 
@@ -19024,13 +19054,13 @@
             // lblMenuArrow
             // 
             this.lblMenuArrow.BackColor = System.Drawing.Color.Transparent;
-            this.lblMenuArrow.Font = new System.Drawing.Font("Consolas", 8F);
+            this.lblMenuArrow.Font = new System.Drawing.Font("Consolas", 11F);
             this.lblMenuArrow.ForeColor = System.Drawing.Color.Orange;
             this.lblMenuArrow.Location = new System.Drawing.Point(6, 66);
             this.lblMenuArrow.Name = "lblMenuArrow";
             this.lblMenuArrow.Size = new System.Drawing.Size(14, 18);
             this.lblMenuArrow.TabIndex = 279;
-            this.lblMenuArrow.Text = "▶️";
+            this.lblMenuArrow.Text = "▪";
             this.lblMenuArrow.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // panelOpenHelpAboutMenu
@@ -22589,24 +22619,24 @@
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(940, 754);
+            this.Controls.Add(this.panelBitcoinDashboard);
+            this.Controls.Add(this.panelBlockList);
+            this.Controls.Add(this.panelCharts);
+            this.Controls.Add(this.panelSettings);
+            this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.panelBlock);
             this.Controls.Add(this.panelAppearance);
             this.Controls.Add(this.panelXpub);
-            this.Controls.Add(this.panelBitcoinDashboard);
-            this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.panelMiningPools);
             this.Controls.Add(this.panelDCACalculator);
             this.Controls.Add(this.panelChartsForPoolsScreen);
             this.Controls.Add(this.panelMiningBlocks);
-            this.Controls.Add(this.panelCharts);
             this.Controls.Add(this.panelBookmarks);
-            this.Controls.Add(this.panelLightningDashboard);
             this.Controls.Add(this.panelPriceConverter);
             this.Controls.Add(this.panelMiningHashrate);
             this.Controls.Add(this.panelTransaction);
             this.Controls.Add(this.panelAddressUTXO);
             this.Controls.Add(this.panelAddress);
-            this.Controls.Add(this.panelBlockList);
             this.Controls.Add(this.lblHeaderBlockFeesChart);
             this.Controls.Add(this.lblHeaderNextBlockTotalFees);
             this.Controls.Add(this.lblHeaderFeeRangeChart);
@@ -24553,6 +24583,8 @@
         private System.Windows.Forms.Panel panel198;
         private System.Windows.Forms.Label label370;
         private System.Windows.Forms.Label label371;
+        private System.Windows.Forms.Label lblCreateThemeMask;
+        private System.Windows.Forms.Label lblCreateThemeMarker;
     }
 }
 

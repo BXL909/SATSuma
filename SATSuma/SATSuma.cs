@@ -12,7 +12,6 @@
 //
 //TODO LIST______________________________________________________________________________________________
 //TODO Taproot support on xpub screen 
-//TODO Web exception - RefreshScreens: The remote name could not be resolved: 'umbrel.local' .... Resolve NodeURL once as soon as it's known? Allow for multiple retries? Or at least allow multiple retries in the RefreshScreens method. 
 //BUG LIST_______________________________________________________________________________________________
 //!_______________________________________________________________________________________________________
 #nullable enable
@@ -44,7 +43,6 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static SATSuma.SATSuma;
@@ -304,6 +302,7 @@ namespace SATSuma
         Color tableTextColor = Color.FromArgb(255, 153, 0);
         #endregion
         #region variables specific to chart screen
+        bool lightningChartsEnabled = true; //true when connected to public mempool.space api, otherwise false.
         private int LastHighlightedIndex = -1; // used by charts for mousemove events to highlight plots closest to pointer
         private ScottPlot.Plottable.ScatterPlot? scatter; // chart data gets plotted onto this
         private ScottPlot.Plottable.MarkerPlot? HighlightedPoint; // highlighted (closest to pointer) plot gets plotted onto this
@@ -14091,6 +14090,14 @@ namespace SATSuma
         {
             try
             {
+                if (!lightningChartsEnabled)
+                {
+                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
+                    {
+                        comboBoxChartSelect.SelectedIndex = previouslyShownChart;
+                    });
+                    return;
+                }
                 comboBoxChartSelect.Invoke((MethodInvoker)delegate
                 {
                     comboBoxChartSelect.Texts = "⚡ nodes by network";
@@ -14441,6 +14448,15 @@ namespace SATSuma
         {
             try
             {
+                if (!lightningChartsEnabled)
+                {
+                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
+                    {
+                        comboBoxChartSelect.SelectedIndex = previouslyShownChart;
+                    });
+                    return;
+                }
+
                 comboBoxChartSelect.Invoke((MethodInvoker)delegate
                 {
                     comboBoxChartSelect.Texts = "⚡ nodes by capacity";
@@ -14546,6 +14562,15 @@ namespace SATSuma
         {
             try
             {
+                if (!lightningChartsEnabled)
+                {
+                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
+                    {
+                        comboBoxChartSelect.SelectedIndex = previouslyShownChart;
+                    });
+                    return;
+                }
+
                 comboBoxChartSelect.Invoke((MethodInvoker)delegate
                 {
                     comboBoxChartSelect.Texts = "⚡ channels";
@@ -14650,6 +14675,15 @@ namespace SATSuma
         {
             try
             {
+                if (!lightningChartsEnabled)
+                {
+                    comboBoxChartSelect.Invoke((MethodInvoker)delegate
+                    {
+                        comboBoxChartSelect.SelectedIndex = previouslyShownChart;
+                    });
+                    return;
+                }
+
                 comboBoxChartSelect.Invoke((MethodInvoker)delegate
                 {
                     comboBoxChartSelect.Texts = "⚡ nodes by country";
@@ -16773,6 +16807,58 @@ namespace SATSuma
             catch (Exception ex)
             {
                 HandleException(ex, "Enabling non-mempool.space charts");
+            }
+        }
+
+        private void DisableLightningCharts()
+        {
+            try
+            {
+                Control[] disableTheseControls = { lblLightningCapacityChart, lblLightningChannelsChart, lblLightningNodesChart };
+                foreach (Control control in disableTheseControls)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.Enabled = false;
+                    });
+                }
+
+                comboBoxChartSelect.Items[10] = "⚡ nodes by network (disabled)";
+                comboBoxChartSelect.Items[11] = "⚡ nodes by country (disabled)";
+                comboBoxChartSelect.Items[12] = "⚡ nodes by capacity (disabled)";
+                comboBoxChartSelect.Items[13] = "⚡ channels (disabled)";
+
+                lightningChartsEnabled = false;
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "Disabling lightning charts");
+            }
+        }
+
+        private void EnableLightningCharts()
+        {
+            try
+            {
+                Control[] enableTheseControls = { lblLightningCapacityChart, lblLightningChannelsChart, lblLightningNodesChart };
+                foreach (Control control in enableTheseControls)
+                {
+                    control.Invoke((MethodInvoker)delegate
+                    {
+                        control.Enabled = true;
+                    });
+                }
+
+                comboBoxChartSelect.Items[10] = "⚡ nodes by network";
+                comboBoxChartSelect.Items[11] = "⚡ nodes by country";
+                comboBoxChartSelect.Items[12] = "⚡ nodes by capacity";
+                comboBoxChartSelect.Items[13] = "⚡ channels";
+
+                lightningChartsEnabled = true;
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex, "Disabling lightning charts");
             }
         }
 
@@ -20153,6 +20239,7 @@ namespace SATSuma
                         lblSettingsNodeMainnetSelected.ForeColor = Color.Green;
                         lblSettingsNodeMainnetSelected.Text = "✔️";
                     });
+                    EnableLightningCharts();
                     testNet = false;
                     lblSettingsNodeTestnetSelected.Invoke((MethodInvoker)delegate
                     {
@@ -20203,6 +20290,7 @@ namespace SATSuma
                         lblSettingsNodeMainnetSelected.ForeColor = Color.IndianRed;
                         lblSettingsNodeMainnetSelected.Text = "❌";
                     });
+                    DisableLightningCharts();
                     lblSettingsOwnNodeSelected.Invoke((MethodInvoker)delegate
                     {
                         lblSettingsOwnNodeSelected.ForeColor = Color.IndianRed;
@@ -20243,6 +20331,7 @@ namespace SATSuma
                         lblSettingsNodeMainnetSelected.ForeColor = Color.IndianRed;
                         lblSettingsNodeMainnetSelected.Text = "❌";
                     });
+                    DisableLightningCharts();
                     lblSettingsNodeTestnetSelected.Invoke((MethodInvoker)delegate
                     {
                         lblSettingsNodeTestnetSelected.ForeColor = Color.IndianRed;
@@ -20742,6 +20831,7 @@ namespace SATSuma
                     lblSettingsNodeMainnetSelected.ForeColor = Color.IndianRed;
                     lblSettingsNodeMainnetSelected.Enabled = true;
                 });
+                DisableLightningCharts();
                 ShowAllFiatConversionFields();
             }
             catch (Exception ex)
@@ -20875,6 +20965,7 @@ namespace SATSuma
                     lblSettingsNodeMainnetSelected.Text = "❌";
                     lblSettingsNodeMainnetSelected.Enabled = false;
                 });
+                DisableLightningCharts();
                 DisableChartsThatUseBlockchainInfoAPI();
                 HideAllFiatConversionFields();
             }
@@ -21462,6 +21553,7 @@ namespace SATSuma
                         lblSettingsNodeMainnetSelected.Text = "✔️";
                         lblSettingsNodeMainnetSelected.ForeColor = Color.Green;
                     });
+                    EnableLightningCharts();
                     lblSettingsNodeTestnetSelected.Invoke((MethodInvoker)delegate
                     {
                         lblSettingsNodeTestnetSelected.Text = "❌";
@@ -21487,6 +21579,7 @@ namespace SATSuma
                         lblSettingsNodeMainnetSelected.Text = "❌";
                         lblSettingsNodeMainnetSelected.ForeColor = Color.IndianRed;
                     });
+                    DisableLightningCharts();
                     lblSettingsNodeTestnetSelected.Invoke((MethodInvoker)delegate
                     {
                         lblSettingsNodeTestnetSelected.Text = "✔️";
@@ -21510,6 +21603,7 @@ namespace SATSuma
                         lblSettingsNodeMainnetSelected.Text = "❌";
                         lblSettingsNodeMainnetSelected.ForeColor = Color.IndianRed;
                     });
+                    DisableLightningCharts();
                     lblSettingsNodeTestnetSelected.Invoke((MethodInvoker)delegate
                     {
                         lblSettingsNodeTestnetSelected.Text = "❌";
@@ -22212,6 +22306,20 @@ namespace SATSuma
             catch (Exception ex)
             {
                 HandleException(ex, "BtnThemeMenu_Click");
+            }
+        }
+
+        private void PanelThemeMenuBackdrop_Paint(object sender, PaintEventArgs e)
+        {
+            if (panelAppearance.Visible)
+            {
+                lblCreateThemeMarker.Visible = true;
+                lblCreateThemeMask.Visible = true;
+            }
+            else
+            {
+                lblCreateThemeMarker.Visible = false;
+                lblCreateThemeMask.Visible = false;
             }
         }
 
@@ -23645,6 +23753,7 @@ namespace SATSuma
                     lblMenuHighlightedButtonText.ForeColor = Color.DimGray;
                     lblThemeMenuHighlightedButtonText.ForeColor = Color.DimGray;
                     lblApplyThemeButtonDisabledMask.ForeColor = Color.DimGray;
+                    lblCreateThemeMask.ForeColor = Color.DimGray;
                 }
                 else
                 {
@@ -23663,6 +23772,7 @@ namespace SATSuma
                     lblMenuHighlightedButtonText.ForeColor = Color.Silver;
                     lblThemeMenuHighlightedButtonText.ForeColor = Color.Silver;
                     lblApplyThemeButtonDisabledMask.ForeColor = Color.Silver;
+                    lblCreateThemeMask.ForeColor = Color.Silver;
                 }
 
                 //wait 2 secs 
@@ -26449,6 +26559,7 @@ namespace SATSuma
                     lblMenuHighlightedButtonText.ForeColor = Color.DimGray;
                     lblThemeMenuHighlightedButtonText.ForeColor = Color.DimGray;
                     lblApplyThemeButtonDisabledMask.ForeColor = Color.DimGray;
+                    lblCreateThemeMask.ForeColor = Color.DimGray;
                 }
                 else
                 {
@@ -26467,6 +26578,7 @@ namespace SATSuma
                     lblMenuHighlightedButtonText.ForeColor = Color.Silver;
                     lblThemeMenuHighlightedButtonText.ForeColor = Color.Silver;
                     lblApplyThemeButtonDisabledMask.ForeColor = Color.Silver;
+                    lblCreateThemeMask.ForeColor = Color.Silver;
                 }
                 btnUniversalSearch.ForeColor = thiscolor;
 
@@ -30967,16 +31079,14 @@ namespace SATSuma
             {
                 try
                 {
-                    using (WebClient client = new WebClient())
+                    using WebClient client = new WebClient();
+                    string BlockTip = client.DownloadString(blockTipUrl); // get current block tip
+                    if (decimal.TryParse(BlockTip, out decimal blockTipValue))
                     {
-                        string BlockTip = client.DownloadString(blockTipUrl); // get current block tip
-                        if (decimal.TryParse(BlockTip, out decimal blockTipValue))
-                        {
-                            numericUpDownSubmittedBlockNumber.Maximum = blockTipValue;
-                            numericUpDownBlockHeightToStartListFrom.Maximum = blockTipValue;
-                        }
-                        return BlockTip; 
+                        numericUpDownSubmittedBlockNumber.Maximum = blockTipValue;
+                        numericUpDownBlockHeightToStartListFrom.Maximum = blockTipValue;
                     }
+                    return BlockTip;
                 }
                 catch (WebException ex) when (ex.Status == WebExceptionStatus.NameResolutionFailure)
                 {
@@ -30986,7 +31096,7 @@ namespace SATSuma
                         HandleException(ex, "GettingBlockTip retries exceeded");
                         throw; 
                     }
-                    await Task.Delay(delayMilliseconds); // Wait before retrying
+                    await Task.Delay(delayMilliseconds).ConfigureAwait(true); // Wait before retrying
                 }
             }
 
@@ -30999,7 +31109,7 @@ namespace SATSuma
             {
                 ClearAlertAndErrorMessage(); // wipe anything that may be showing in the error area (it should be empty anyway)
                 await CheckNetworkStatusAsync().ConfigureAwait(true);
-                await GetBlockTipUrlWithRetryAsync(NodeURL, 3, 1000);
+                await GetBlockTipUrlWithRetryAsync(NodeURL, 3, 1000).ConfigureAwait(true); 
                 await UpdateBitcoinAndLightningDashboardsAsync().ConfigureAwait(true); // fetch data and populate fields for dashboards (+ a few for block list screen)
 
                 if (!testNet)
@@ -31246,7 +31356,7 @@ namespace SATSuma
         {
             try
             {
-                string BlockTip = await GetBlockTipUrlWithRetryAsync(NodeURL, 3, 1000);
+                string BlockTip = await GetBlockTipUrlWithRetryAsync(NodeURL, 3, 1000).ConfigureAwait(true); 
 
                 lblHeaderBlockNumber.Invoke((MethodInvoker)delegate
                 {
@@ -33133,14 +33243,20 @@ namespace SATSuma
                 ResumeLayout(false);
                 ToggleLoadingAnimation("enable");
                 SuspendLayout();
-                if (String.Compare(numericUpDownBlockHeightToStartListFrom.Text, "673298") == 0)
+
+
+                if (listViewBlockList.Items.Count >= 1)
                 {
-                    numericUpDownBlockHeightToStartListFrom.Invoke((MethodInvoker)delegate
+                    if (String.Compare(listViewBlockList.Items[0].SubItems[0].Text, "673298") == 0) //673298 was the initial value of the numericupdown control at launch
                     {
-                        numericUpDownBlockHeightToStartListFrom.Text = lblHeaderBlockNumber.Text; // pre-populate the block field on the Block screen)
-                    });
-                    LookupBlockListAsync(); // fetch the first 15 blocks automatically for the initial view.
+                        numericUpDownBlockHeightToStartListFrom.Invoke((MethodInvoker)delegate
+                        {
+                            numericUpDownBlockHeightToStartListFrom.Text = lblHeaderBlockNumber.Text; // pre-populate the block field on the Block screen)
+                        });
+                        LookupBlockListAsync(); // fetch the first 15 blocks automatically for the initial view.
+                    }
                 }
+
                 panelBlockList.Invoke((MethodInvoker)delegate
                 {
                     panelBlockList.Visible = true;
@@ -34211,6 +34327,10 @@ namespace SATSuma
                 btnMenuSettings.Visible = true;
                 btnThemeMenu.Visible = true;
                 btnCurrency.Visible = true;
+                if (panelSettings.Visible)
+                {
+                    lblMenuArrow.Visible = true;
+                }
             }
             else
             {
@@ -35485,6 +35605,10 @@ namespace SATSuma
                 btnMenuSettings.Visible = false;
                 btnThemeMenu.Visible = false;
                 btnCurrency.Visible = false;
+                if (panelSettings.Visible)
+                {
+                    lblMenuArrow.Visible = false;
+                }
                 panelOpenHelpAboutMenu.Invoke((MethodInvoker)delegate
                 {
                     panelOpenHelpAboutMenu.Location = new Point(panelOpenHelpAboutMenu.Location.X, panelOpenHelpAboutMenu.Location.Y - (int)(54 * UIScale));
